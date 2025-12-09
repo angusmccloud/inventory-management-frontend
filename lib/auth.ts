@@ -208,11 +208,12 @@ export const handleLogin = (idToken: string, refreshToken: string): void => {
  */
 export const login = async (
   email: string,
-  password: string
+  _password: string
 ): Promise<{ success: boolean; message?: string }> => {
   try {
     // TODO: Implement Cognito authentication
     // For now, return mock response for development
+    // Note: _password is prefixed with underscore as it's unused in mock implementation
     console.log('Login attempt:', email);
     
     // Mock successful login
@@ -254,11 +255,12 @@ export const login = async (
  */
 export const register = async (
   email: string,
-  password: string,
+  _password: string,
   name: string
 ): Promise<void> => {
   try {
     // TODO: Implement Cognito user registration
+    // Note: _password is prefixed with underscore as it's unused in mock implementation
     console.log('Register attempt:', email, name);
     
     // Mock registration - in production, this would call Cognito

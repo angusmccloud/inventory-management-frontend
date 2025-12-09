@@ -1,14 +1,15 @@
 /**
  * Dashboard Layout - Family Inventory Management System
- * 
+ *
  * Protected layout for authenticated users with navigation.
  */
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated, getUserContext, handleLogout } from '@/lib/auth';
+import { getActiveNotificationCount } from '@/lib/api/notifications';
 import { UserContext } from '@/types/entities';
 
 export default function DashboardLayout({
@@ -19,6 +20,18 @@ export default function DashboardLayout({
   const router = useRouter();
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [activeNotificationCount, setActiveNotificationCount] = useState<number>(0);
+
+  // Fetch active notification count
+  const fetchNotificationCount = useCallback(async (familyId: string) => {
+    try {
+      const count = await getActiveNotificationCount(familyId);
+      setActiveNotificationCount(count);
+    } catch {
+      // Silently fail - notification count is not critical
+      setActiveNotificationCount(0);
+    }
+  }, []);
 
   useEffect(() => {
     // Check authentication
@@ -31,7 +44,12 @@ export default function DashboardLayout({
     const context = getUserContext();
     setUserContext(context);
     setLoading(false);
-  }, [router]);
+
+    // Fetch notification count if we have a family ID
+    if (context?.familyId) {
+      fetchNotificationCount(context.familyId);
+    }
+  }, [router, fetchNotificationCount]);
 
   if (loading) {
     return (
@@ -67,6 +85,38 @@ export default function DashboardLayout({
                   className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >
                   Inventory
+                </a>
+                <a
+                  href="/dashboard/notifications"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                >
+                  <span className="relative">
+                    {/* Bell icon */}
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                      />
+                    </svg>
+                    {/* Notification badge */}
+                    {activeNotificationCount > 0 && (
+                      <span
+                        className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+                        data-testid="notification-badge"
+                      >
+                        {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                      </span>
+                    )}
+                  </span>
+                  <span className="ml-1">Notifications</span>
                 </a>
               </div>
             </div>
