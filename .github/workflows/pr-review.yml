@@ -20,6 +20,8 @@ jobs:
     with:
       repository-type: frontend
       copilot-enabled: false  # Set to true when GitHub Copilot action becomes available
+    secrets:
+      context-repo-token: ${{ secrets.CONTEXT_REPO_TOKEN }}
     permissions:
       contents: read
       pull-requests: write
