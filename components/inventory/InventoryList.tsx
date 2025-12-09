@@ -23,7 +23,7 @@ export default function InventoryList({
   onArchive,
   onDelete,
 }: InventoryListProps) {
-  if (items.length === 0) {
+  if (!items || items.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">No inventory items found.</p>

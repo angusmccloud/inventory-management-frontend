@@ -8,6 +8,23 @@ import { apiClient } from '../api-client';
 import { Family, CreateFamilyRequest, UpdateFamilyRequest } from '@/types/entities';
 
 /**
+ * User family membership info
+ */
+export interface UserFamilyMembership {
+  familyId: string;
+  role: string;
+  status: string;
+}
+
+/**
+ * List all families the current user is a member of
+ */
+export const listUserFamilies = async (): Promise<UserFamilyMembership[]> => {
+  const response = await apiClient.get<{ families: UserFamilyMembership[] }>('/user/families', true);
+  return response.families;
+};
+
+/**
  * Create a new family
  */
 export const createFamily = async (data: CreateFamilyRequest): Promise<Family> => {

@@ -10,7 +10,7 @@ import { ApiError, ApiSuccess } from '@/types/entities';
 /**
  * API client configuration
  */
-const API_BASE_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3000/v1';
+const API_BASE_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3001';
 
 /**
  * HTTP methods

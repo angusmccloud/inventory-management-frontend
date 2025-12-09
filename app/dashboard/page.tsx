@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
-import { getFamily } from '@/lib/api/families';
+import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 
@@ -25,17 +25,31 @@ export default function DashboardPage() {
   }, []);
 
   const loadFamily = async (): Promise<void> => {
-    const userContext = getUserContext();
-    
-    if (!userContext?.familyId) {
-      // No family yet, show create form
-      setShowCreateFamily(true);
-      setLoading(false);
-      return;
-    }
-
     try {
-      const familyData = await getFamily(userContext.familyId);
+      // First, fetch all families the user is a member of
+      const families = await listUserFamilies();
+      
+      if (!families || families.length === 0) {
+        // No families found, show create form
+        setShowCreateFamily(true);
+        setLoading(false);
+        return;
+      }
+
+      // Get the first family (for MVP, users can only be in one family)
+      const userFamilyId = families[0].familyId;
+      
+      // Update user context with familyId
+      const userContext = getUserContext();
+      if (userContext) {
+        userContext.familyId = userFamilyId;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user_context', JSON.stringify(userContext));
+        }
+      }
+
+      // Fetch full family details
+      const familyData = await getFamily(userFamilyId);
       setFamily(familyData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load family');

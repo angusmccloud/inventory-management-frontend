@@ -58,13 +58,7 @@ export default function Home() {
             href="/login"
             className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors text-center"
           >
-            Sign In
-          </a>
-          <a
-            href="/register"
-            className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg border-2 border-blue-600 hover:bg-blue-50 transition-colors text-center"
-          >
-            Create Account
+            Sign In / Create Account
           </a>
         </div>
         

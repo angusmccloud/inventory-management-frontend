@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
+import { listUserFamilies } from '@/lib/api/families';
 import {
   listInventoryItems,
   archiveInventoryItem,
@@ -35,11 +36,39 @@ export default function InventoryPage() {
   const [familyId, setFamilyId] = useState<string>('');
 
   useEffect(() => {
-    const userContext = getUserContext();
-    if (userContext?.familyId) {
-      setFamilyId(userContext.familyId);
-    }
+    loadFamilyId();
   }, []);
+
+  const loadFamilyId = async (): Promise<void> => {
+    try {
+      const userContext = getUserContext();
+      
+      if (userContext?.familyId) {
+        // Use cached familyId from localStorage
+        setFamilyId(userContext.familyId);
+      } else {
+        // Fetch from backend
+        const families = await listUserFamilies();
+        
+        if (families && families.length > 0) {
+          const userFamilyId = families[0].familyId;
+          setFamilyId(userFamilyId);
+          
+          // Cache it in localStorage
+          if (userContext && typeof window !== 'undefined') {
+            userContext.familyId = userFamilyId;
+            localStorage.setItem('user_context', JSON.stringify(userContext));
+          }
+        } else {
+          // No families, stop loading
+          setLoading(false);
+        }
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load family');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (familyId) {
@@ -63,9 +92,10 @@ export default function InventoryPage() {
 
     try {
       const response = await listInventoryItems(familyId, { archived: false });
-      setItems(response.items);
+      setItems(response.items || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load inventory');
+      setItems([]); // Reset to empty array on error
     } finally {
       setLoading(false);
     }
@@ -109,6 +139,20 @@ export default function InventoryPage() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-600">Loading inventory...</p>
+      </div>
+    );
+  }
+
+  if (!familyId) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600">Please create a family first from the dashboard.</p>
+        <a
+          href="/dashboard"
+          className="mt-4 inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+        >
+          Go to Dashboard
+        </a>
       </div>
     );
   }

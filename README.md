@@ -24,15 +24,38 @@ Modern web application for family inventory management built with Next.js 15 (Ap
 npm install
 ```
 
-### 2. Configure Environment
+### 2. Configure Environment (Optional)
 
-Copy the environment template and fill in your values:
+The `.env.local` is already configured to connect to the local backend. The default configuration is:
 
-```bash
-cp .env.example .env.local
+```
+NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-### 3. Run Development Server
+To change the API endpoint, create/edit `.env.local`:
+
+```bash
+# For local development (default)
+NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# For deployed backend
+# NEXT_PUBLIC_API_URL=https://your-api-gateway-url.amazonaws.com/dev
+```
+
+### 3. Start the Backend (Required)
+
+The frontend requires the backend API to be running. Navigate to the backend directory and start it:
+
+```bash
+cd ../inventory-management-backend
+./start-local.sh
+```
+
+Wait for the message: `Running on http://127.0.0.1:3001`
+
+### 4. Run Development Server
+
+In a new terminal, start the frontend:
 
 ```bash
 npm run dev
@@ -40,7 +63,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 4. Run Tests
+### 5. Test the Application
+
+1. **Create Account**: Click "Sign In / Create Account" and register
+2. **Create Family**: Fill in your family name
+3. **Add Inventory**: Navigate to "Inventory" and add items
+4. **Adjust Quantities**: Use +/- buttons to track usage
+
+### 6. Run Tests
 
 ```bash
 # Run all tests
@@ -53,11 +83,78 @@ npm run test:watch
 npm run test:coverage
 ```
 
-### 5. Build for Production
+### 7. Build for Production
 
 ```bash
 npm run build
 npm start
+```
+
+## Local Development Architecture
+
+```
+┌─────────────────────────────────┐
+│  Browser                        │
+│  http://localhost:3000          │
+└────────────┬────────────────────┘
+             │
+             │ React/Next.js UI
+             │
+┌────────────▼────────────────────┐
+│  Frontend (Next.js)             │
+│  Port: 3000                     │
+│  - Pages & Components           │
+│  - API Client                   │
+│  - Mock Authentication          │
+└────────────┬────────────────────┘
+             │
+             │ HTTP Requests
+             │ API calls to localhost:3001
+             ▼
+┌─────────────────────────────────┐
+│  Backend (SAM Local)            │
+│  Port: 3001                     │
+│  - Lambda Functions             │
+│  - Mock Authorizer              │
+└────────────┬────────────────────┘
+             │
+             │ DynamoDB Calls
+             ▼
+┌─────────────────────────────────┐
+│  DynamoDB Local (Docker)        │
+│  Port: 8000                     │
+│  - InventoryTable               │
+└─────────────────────────────────┘
+```
+
+## Troubleshooting
+
+### Cannot connect to backend API
+
+**Error**: `Failed to fetch` or `Network error`
+
+**Solution**:
+1. Verify backend is running: `curl http://localhost:3001/health`
+2. Check `.env.local` has correct `NEXT_PUBLIC_API_URL`
+3. Ensure no CORS issues (backend CORS is set to allow all origins in dev)
+
+### Authentication not working
+
+**Issue**: Cannot create family or access protected routes
+
+**Explanation**: We're using mock authentication for local development. Real Cognito authentication will be configured during deployment (Task T030).
+
+**Current Behavior**: 
+- Login accepts any email/password
+- Creates a mock JWT token stored in localStorage
+- All API requests use mock authorization
+
+### Styles not loading
+
+**Solution**:
+```bash
+rm -rf .next
+npm run dev
 ```
 
 ## Project Structure
