@@ -202,6 +202,74 @@ export const handleLogin = (idToken: string, refreshToken: string): void => {
 };
 
 /**
+ * Login with email and password
+ * 
+ * Authenticates user via Cognito and stores tokens
+ */
+export const login = async (
+  email: string,
+  password: string
+): Promise<{ success: boolean; message?: string }> => {
+  try {
+    // TODO: Implement Cognito authentication
+    // For now, return mock response for development
+    console.log('Login attempt:', email);
+    
+    // Mock successful login
+    const mockIdToken = btoa(JSON.stringify({
+      sub: 'mock-user-id',
+      email,
+      name: 'Test User',
+      exp: Math.floor(Date.now() / 1000) + 3600,
+    }));
+    
+    const mockRefreshToken = 'mock-refresh-token';
+    
+    setAuthTokens(mockIdToken, mockRefreshToken);
+    
+    const userContext: UserContext = {
+      memberId: 'mock-user-id',
+      familyId: '',
+      role: 'admin',
+      email,
+      name: 'Test User',
+    };
+    
+    setUserContext(userContext);
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Login error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Login failed',
+    };
+  }
+};
+
+/**
+ * Register new user
+ * 
+ * Creates new user account in Cognito
+ */
+export const register = async (
+  email: string,
+  password: string,
+  name: string
+): Promise<void> => {
+  try {
+    // TODO: Implement Cognito user registration
+    console.log('Register attempt:', email, name);
+    
+    // Mock registration - in production, this would call Cognito
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  } catch (error) {
+    console.error('Registration error:', error);
+    throw error instanceof Error ? error : new Error('Registration failed');
+  }
+};
+
+/**
  * Handle logout
  * 
  * Clears all auth data and redirects to login

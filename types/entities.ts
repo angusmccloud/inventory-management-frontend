@@ -268,6 +268,11 @@ export interface ReviewSuggestionRequest {
  * API Response Types
  */
 
+export interface ListInventoryResponse {
+  items: InventoryItem[];
+  total: number;
+}
+
 export interface ApiError {
   error: {
     code: string;
