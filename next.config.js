@@ -8,11 +8,6 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   
-  // ESLint configuration
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
-  
   // Environment variables
   env: {
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,

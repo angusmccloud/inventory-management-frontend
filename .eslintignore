@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Testing
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# Generated files
+*.d.ts
+next-env.d.ts
+
+# Logs
+*.log
+
+# Temp
+.cache/
+*.tmp

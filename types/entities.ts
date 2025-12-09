@@ -21,14 +21,24 @@ export type MemberStatus = 'active' | 'removed';
 export type ItemStatus = 'active' | 'archived';
 
 /**
- * Notification type
+ * Notification type (legacy - for general notifications)
  */
 export type NotificationType = 'low_stock' | 'system' | 'suggestion_response';
 
 /**
- * Notification status
+ * Notification status (legacy - for general notifications)
  */
 export type NotificationStatus = 'unread' | 'read';
+
+/**
+ * Low-stock notification type
+ */
+export type LowStockNotificationType = 'low_stock';
+
+/**
+ * Low-stock notification status
+ */
+export type LowStockNotificationStatus = 'active' | 'resolved' | 'acknowledged';
 
 /**
  * Suggestion status
@@ -132,7 +142,7 @@ export interface ShoppingListItem {
 }
 
 /**
- * Notification Entity
+ * Notification Entity (legacy - for general notifications)
  */
 export interface Notification {
   notificationId: string;
@@ -146,6 +156,32 @@ export interface Notification {
   relatedItemType?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+/**
+ * Low-Stock Notification Entity
+ * Represents an alert when inventory items fall below thresholds
+ */
+export interface LowStockNotification {
+  notificationId: string;
+  familyId: string;
+  itemId: string;
+  itemName: string;
+  type: LowStockNotificationType;
+  status: LowStockNotificationStatus;
+  currentQuantity: number;
+  threshold: number;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt: string | null;
+}
+
+/**
+ * List notifications response
+ */
+export interface ListNotificationsResponse {
+  notifications: LowStockNotification[];
+  total: number;
 }
 
 /**
@@ -267,6 +303,11 @@ export interface ReviewSuggestionRequest {
 /**
  * API Response Types
  */
+
+export interface ListInventoryResponse {
+  items: InventoryItem[];
+  total: number;
+}
 
 export interface ApiError {
   error: {
