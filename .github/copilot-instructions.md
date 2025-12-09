@@ -5,7 +5,7 @@
 > | Field | Value |
 > |-------|-------|
 > | Constitution Version | 1.1.0 |
-> | Generated | 2025-12-09T18:05:20Z |
+> | Generated | 2025-12-09T20:20:50Z |
 > | Source | [inventory-management-context](https://github.com/Slalom/inventory-management-context) |
 
 ---
@@ -233,4 +233,4 @@ function processData(data: ItemData): ProcessedResult { ... }
 ---
 
 *This file is automatically synced from the central context repository.*
-*Last sync: 2025-12-09T18:05:20Z*
+*Last sync: 2025-12-09T20:20:50Z*
