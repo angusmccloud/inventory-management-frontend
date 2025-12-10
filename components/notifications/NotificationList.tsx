@@ -12,6 +12,8 @@ import NotificationItem from './NotificationItem';
 interface NotificationListProps {
   notifications: LowStockNotification[];
   onAcknowledge: (notificationId: string) => void;
+  onResolve: (notificationId: string) => void;
+  onAddToShoppingList: (notification: LowStockNotification) => void;
   isAdmin: boolean;
   statusFilter?: LowStockNotificationStatus | 'all';
 }
@@ -43,6 +45,8 @@ const sortNotifications = (
 export default function NotificationList({
   notifications,
   onAcknowledge,
+  onResolve,
+  onAddToShoppingList,
   isAdmin,
   statusFilter,
 }: NotificationListProps) {
@@ -84,6 +88,8 @@ export default function NotificationList({
             key={notification.notificationId}
             notification={notification}
             onAcknowledge={onAcknowledge}
+            onResolve={onResolve}
+            onAddToShoppingList={onAddToShoppingList}
             isAdmin={isAdmin}
           />
         ))}

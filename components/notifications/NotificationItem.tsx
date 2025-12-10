@@ -12,6 +12,8 @@ import { LowStockNotification, LowStockNotificationStatus } from '@/types/entiti
 interface NotificationItemProps {
   notification: LowStockNotification;
   onAcknowledge: (notificationId: string) => void;
+  onResolve: (notificationId: string) => void;
+  onAddToShoppingList: (notification: LowStockNotification) => void;
   isAdmin: boolean;
 }
 
@@ -64,10 +66,13 @@ const getStatusDisplayText = (status: LowStockNotificationStatus): string => {
 export default function NotificationItem({
   notification,
   onAcknowledge,
+  onResolve,
+  onAddToShoppingList,
   isAdmin,
 }: NotificationItemProps) {
   const statusBadgeStyles = getStatusBadgeStyles(notification.status);
   const canAcknowledge = isAdmin && notification.status === 'active';
+  const canResolve = isAdmin && (notification.status === 'active' || notification.status === 'acknowledged');
 
   return (
     <li className="px-4 py-4 sm:px-6" data-testid="notification-item">
@@ -129,9 +134,34 @@ export default function NotificationItem({
           </div>
         </div>
         
-        {/* Acknowledge button - only for admins on active notifications */}
-        {canAcknowledge && (
-          <div className="ml-4 flex-shrink-0">
+        {/* Action buttons */}
+        <div className="ml-4 flex-shrink-0 flex gap-2">
+          {/* Add to Shopping List button - show for active and acknowledged notifications */}
+          {(notification.status === 'active' || notification.status === 'acknowledged') && (
+            <button
+              onClick={() => onAddToShoppingList(notification)}
+              className="rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-purple-700 hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              data-testid="add-to-shopping-list-button"
+              title="Add to Shopping List"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </button>
+          )}
+          
+          {/* Acknowledge button - only for admins on active notifications */}
+          {canAcknowledge && (
             <button
               onClick={() => onAcknowledge(notification.notificationId)}
               className="rounded-md bg-yellow-50 px-3 py-2 text-sm font-semibold text-yellow-700 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
@@ -139,8 +169,19 @@ export default function NotificationItem({
             >
               Acknowledge
             </button>
-          </div>
-        )}
+          )}
+          
+          {/* Resolve button - only for admins on active or acknowledged notifications */}
+          {canResolve && (
+            <button
+              onClick={() => onResolve(notification.notificationId)}
+              className="rounded-md bg-green-50 px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              data-testid="resolve-button"
+            >
+              Resolve
+            </button>
+          )}
+        </div>
       </div>
     </li>
   );
