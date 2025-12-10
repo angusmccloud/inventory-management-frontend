@@ -25,9 +25,9 @@ export default function StoreFilter({
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <label htmlFor="store-filter" className="block text-sm font-medium text-gray-700">
-        Filter by Store:
+    <div className="flex flex-col">
+      <label htmlFor="store-filter" className="block text-sm font-medium text-gray-700 mb-1">
+        Filter by Store
       </label>
       <select
         id="store-filter"
@@ -42,7 +42,7 @@ export default function StoreFilter({
             onStoreChange(value);
           }
         }}
-        className="block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+        className="block rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
       >
         <option value="all">All Stores ({stores.reduce((sum, s) => sum + s.itemCount, 0)} items)</option>
         {stores.map((store) => (

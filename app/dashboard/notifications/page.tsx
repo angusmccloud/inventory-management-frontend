@@ -7,9 +7,11 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { getUserContext } from '@/lib/auth';
-import { listNotifications, acknowledgeNotification } from '@/lib/api/notifications';
-import { getErrorMessage } from '@/lib/api-client';
+import { getUserContext, setUserContext as saveUserContext } from '@/lib/auth';
+import { listNotifications, acknowledgeNotification, resolveNotification } from '@/lib/api/notifications';
+import { addToShoppingList } from '@/lib/api/shoppingList';
+import { listUserFamilies } from '@/lib/api/families';
+import { getErrorMessage, isApiClientError } from '@/lib/api-client';
 import { LowStockNotification, LowStockNotificationStatus, UserContext } from '@/types/entities';
 import NotificationList from '@/components/notifications/NotificationList';
 
@@ -27,6 +29,27 @@ export default function NotificationsPage() {
   useEffect(() => {
     const context = getUserContext();
     setUserContext(context);
+    
+    // Fetch the actual role from family membership
+    const loadUserRole = async () => {
+      try {
+        const families = await listUserFamilies();
+        if (families && families.length > 0 && families[0] && context) {
+          const family = families[0];
+          const updatedContext = {
+            ...context,
+            familyId: family.familyId,
+            role: family.role as 'admin' | 'suggester',
+          };
+          saveUserContext(updatedContext);
+          setUserContext(updatedContext);
+        }
+      } catch (error) {
+        console.error('Failed to load user role:', error);
+      }
+    };
+    
+    loadUserRole();
   }, []);
 
   // Fetch notifications
@@ -87,6 +110,91 @@ export default function NotificationsPage() {
     }
   };
 
+  // Handle resolve notification
+  const handleResolve = async (notificationId: string) => {
+    if (!userContext?.familyId) {
+      return;
+    }
+
+    setAcknowledging(notificationId);
+
+    try {
+      const updatedNotification = await resolveNotification(
+        userContext.familyId,
+        notificationId
+      );
+
+      // Update the notification in the list
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.notificationId === notificationId ? updatedNotification : n
+        )
+      );
+    } catch (err) {
+      const errorMessage = getErrorMessage(err);
+      setError(`Failed to resolve notification: ${errorMessage}`);
+    } finally {
+      setAcknowledging(null);
+    }
+  };
+
+  // Handle add to shopping list
+  const handleAddToShoppingList = async (notification: LowStockNotification) => {
+    if (!userContext?.familyId) {
+      return;
+    }
+
+    setAcknowledging(notification.notificationId);
+
+    try {
+      // Add to shopping list
+      await addToShoppingList(userContext.familyId, {
+        itemId: notification.itemId,
+        name: notification.itemName,
+        quantity: 1,
+        notes: null,
+      });
+
+      // Automatically resolve the notification (whether it was added or already existed)
+      const updatedNotification = await resolveNotification(
+        userContext.familyId,
+        notification.notificationId
+      );
+
+      // Update the notification in the list
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.notificationId === notification.notificationId ? updatedNotification : n
+        )
+      );
+    } catch (err) {
+      // If it's a duplicate (409 conflict), still resolve the notification
+      if (isApiClientError(err) && err.statusCode === 409) {
+        try {
+          const updatedNotification = await resolveNotification(
+            userContext.familyId,
+            notification.notificationId
+          );
+          
+          // Update the notification in the list
+          setNotifications((prev) =>
+            prev.map((n) =>
+              n.notificationId === notification.notificationId ? updatedNotification : n
+            )
+          );
+        } catch (resolveErr) {
+          const errorMessage = getErrorMessage(resolveErr);
+          setError(`Failed to resolve notification: ${errorMessage}`);
+        }
+      } else {
+        const errorMessage = getErrorMessage(err);
+        setError(`Failed to add to shopping list: ${errorMessage}`);
+      }
+    } finally {
+      setAcknowledging(null);
+    }
+  };
+
   // Handle status filter change
   const handleStatusFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusFilter(event.target.value as StatusFilterOption);
@@ -112,15 +220,15 @@ export default function NotificationsPage() {
         
         {/* Status filter */}
         <div className="mt-4 sm:mt-0">
-          <label htmlFor="status-filter" className="sr-only">
-            Filter by status
+          <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            Filter by Status
           </label>
           <select
             id="status-filter"
             name="status-filter"
             value={statusFilter}
             onChange={handleStatusFilterChange}
-            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
             data-testid="status-filter"
           >
             <option value="all">All Notifications ({notifications.length})</option>
@@ -224,6 +332,8 @@ export default function NotificationsPage() {
           <NotificationList
             notifications={notifications}
             onAcknowledge={handleAcknowledge}
+            onResolve={handleResolve}
+            onAddToShoppingList={handleAddToShoppingList}
             isAdmin={isAdmin}
             statusFilter={statusFilter}
           />

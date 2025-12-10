@@ -52,6 +52,23 @@ export const acknowledgeNotification = async (
 };
 
 /**
+ * Resolve a notification (admin only)
+ * @param familyId - The family ID
+ * @param notificationId - The notification ID to resolve
+ * @returns Promise with the updated notification
+ */
+export const resolveNotification = async (
+  familyId: string,
+  notificationId: string
+): Promise<LowStockNotification> => {
+  return apiClient.post<LowStockNotification>(
+    `/families/${familyId}/notifications/${notificationId}/resolve`,
+    undefined,
+    true
+  );
+};
+
+/**
  * Get count of active notifications for a family
  * @param familyId - The family ID
  * @returns Promise with count of active notifications

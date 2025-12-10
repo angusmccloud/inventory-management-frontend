@@ -15,6 +15,8 @@ import {
   archiveInventoryItem,
   deleteInventoryItem,
 } from '@/lib/api/inventory';
+import { addToShoppingList } from '@/lib/api/shoppingList';
+import { isApiClientError } from '@/lib/api-client';
 import { InventoryItem } from '@/types/entities';
 import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
@@ -145,6 +147,28 @@ export default function InventoryPage() {
     }
   };
 
+  const handleAddToShoppingList = async (item: InventoryItem): Promise<void> => {
+    try {
+      await addToShoppingList(familyId, {
+        itemId: item.itemId,
+        name: item.name,
+        storeId: item.preferredStoreId || null,
+        quantity: 1,
+        notes: null,
+      });
+      // Show success message
+      setError('');
+      // Could show a success toast here instead
+    } catch (err) {
+      // If it's a duplicate (409 conflict), treat it as success
+      if (isApiClientError(err) && err.statusCode === 409) {
+        setError(''); // Clear any existing errors - item is already in list
+        return;
+      }
+      setError(err instanceof Error ? err.message : 'Failed to add item to shopping list');
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-center py-12">
@@ -198,6 +222,7 @@ export default function InventoryPage() {
         onAdjustQuantity={(item) => setModalState({ type: 'adjust', item })}
         onArchive={handleArchive}
         onDelete={handleDelete}
+        onAddToShoppingList={handleAddToShoppingList}
       />
 
       {/* Modals */}
