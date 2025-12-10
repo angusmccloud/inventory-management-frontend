@@ -5,7 +5,33 @@
  * token management, and user context access.
  */
 
+import { Amplify } from 'aws-amplify';
+import {
+  signIn,
+  signUp,
+  confirmSignUp,
+  signOut,
+  getCurrentUser,
+  fetchAuthSession,
+} from 'aws-amplify/auth';
 import { UserContext } from '@/types/entities';
+
+// Configure Amplify
+if (typeof window !== 'undefined') {
+  Amplify.configure({
+    Auth: {
+      Cognito: {
+        userPoolId: process.env['NEXT_PUBLIC_USER_POOL_ID'] || '',
+        userPoolClientId: process.env['NEXT_PUBLIC_USER_POOL_CLIENT_ID'] || '',
+        loginWith: {
+          email: true,
+        },
+      },
+    },
+  }, {
+    ssr: true,
+  });
+}
 
 /**
  * Token storage keys
@@ -18,8 +44,8 @@ const USER_CONTEXT_KEY = 'user_context';
  * Cognito configuration (from environment variables)
  */
 export const cognitoConfig = {
-  userPoolId: process.env['NEXT_PUBLIC_COGNITO_USER_POOL_ID'] || '',
-  clientId: process.env['NEXT_PUBLIC_COGNITO_CLIENT_ID'] || '',
+  userPoolId: process.env['NEXT_PUBLIC_USER_POOL_ID'] || '',
+  clientId: process.env['NEXT_PUBLIC_USER_POOL_CLIENT_ID'] || '',
   region: process.env['NEXT_PUBLIC_AWS_REGION'] || 'us-east-1',
 };
 
@@ -208,37 +234,45 @@ export const handleLogin = (idToken: string, refreshToken: string): void => {
  */
 export const login = async (
   email: string,
-  _password: string
-): Promise<{ success: boolean; message?: string }> => {
+  password: string
+): Promise<{ success: boolean; message?: string; requiresVerification?: boolean }> => {
   try {
-    // TODO: Implement Cognito authentication
-    // For now, return mock response for development
-    // Note: _password is prefixed with underscore as it's unused in mock implementation
-    console.log('Login attempt:', email);
+    const { isSignedIn, nextStep } = await signIn({
+      username: email,
+      password,
+    });
     
-    // Mock successful login
-    const mockIdToken = btoa(JSON.stringify({
-      sub: 'mock-user-id',
-      email,
-      name: 'Test User',
-      exp: Math.floor(Date.now() / 1000) + 3600,
-    }));
+    if (!isSignedIn && nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+      return {
+        success: false,
+        requiresVerification: true,
+        message: 'Please verify your email address first',
+      };
+    }
     
-    const mockRefreshToken = 'mock-refresh-token';
+    if (isSignedIn) {
+      // Get session tokens
+      const session = await fetchAuthSession();
+      const idToken = session.tokens?.idToken?.toString();
+      const accessToken = session.tokens?.accessToken?.toString();
+      
+      if (idToken && accessToken) {
+        setAuthTokens(idToken, accessToken);
+        
+        // Extract user context from ID token
+        const userContext = extractUserContext(idToken);
+        if (userContext) {
+          setUserContext(userContext);
+        }
+      }
+      
+      return { success: true };
+    }
     
-    setAuthTokens(mockIdToken, mockRefreshToken);
-    
-    const userContext: UserContext = {
-      memberId: 'mock-user-id',
-      familyId: '',
-      role: 'admin',
-      email,
-      name: 'Test User',
+    return {
+      success: false,
+      message: 'Sign in incomplete. Please try again.',
     };
-    
-    setUserContext(userContext);
-    
-    return { success: true };
   } catch (error) {
     console.error('Login error:', error);
     return {
@@ -255,32 +289,114 @@ export const login = async (
  */
 export const register = async (
   email: string,
-  _password: string,
+  password: string,
   name: string
-): Promise<void> => {
+): Promise<{ success: boolean; message?: string; requiresVerification?: boolean }> => {
   try {
-    // TODO: Implement Cognito user registration
-    // Note: _password is prefixed with underscore as it's unused in mock implementation
-    console.log('Register attempt:', email, name);
+    const { isSignUpComplete, userId, nextStep } = await signUp({
+      username: email,
+      password,
+      options: {
+        userAttributes: {
+          email,
+          name,
+        },
+        autoSignIn: false,
+      },
+    });
     
-    // Mock registration - in production, this would call Cognito
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    console.log('Sign up result:', { isSignUpComplete, userId, nextStep });
+    
+    if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
+      return {
+        success: true,
+        requiresVerification: true,
+        message: 'Account created! Please check your email for a verification code.',
+      };
+    }
+    
+    return {
+      success: true,
+      message: 'Account created successfully!',
+    };
   } catch (error) {
     console.error('Registration error:', error);
-    throw error instanceof Error ? error : new Error('Registration failed');
+    const errorMessage = error instanceof Error ? error.message : 'Registration failed';
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};
+
+/**
+ * Confirm email verification code
+ * 
+ * Verifies user email with code sent by Cognito
+ */
+export const confirmEmail = async (
+  email: string,
+  code: string
+): Promise<{ success: boolean; message?: string }> => {
+  try {
+    await confirmSignUp({
+      username: email,
+      confirmationCode: code,
+    });
+    
+    return {
+      success: true,
+      message: 'Email verified successfully! You can now log in.',
+    };
+  } catch (error) {
+    console.error('Verification error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Verification failed',
+    };
   }
 };
 
 /**
  * Handle logout
  * 
- * Clears all auth data and redirects to login
+ * Signs out from Cognito and clears all auth data
  */
-export const handleLogout = (): void => {
-  clearAuth();
-  
-  if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+export const handleLogout = async (): Promise<void> => {
+  try {
+    await signOut();
+    clearAuth();
+    
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+    // Clear local data even if Cognito signout fails
+    clearAuth();
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+  }
+};
+
+/**
+ * Get current authenticated user
+ * 
+ * Returns current user from Cognito session
+ */
+export const getCurrentAuthUser = async (): Promise<{
+  userId: string;
+  email?: string;
+} | null> => {
+  try {
+    const user = await getCurrentUser();
+    return {
+      userId: user.userId,
+      email: user.signInDetails?.loginId,
+    };
+  } catch {
+    return null;
   }
 };
 
