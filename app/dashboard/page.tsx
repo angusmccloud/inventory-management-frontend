@@ -37,7 +37,14 @@ export default function DashboardPage() {
       }
 
       // Get the first family (for MVP, users can only be in one family)
-      const userFamilyId = families[0].familyId;
+      const firstFamily = families[0];
+      if (!firstFamily) {
+        setShowCreateFamily(true);
+        setLoading(false);
+        return;
+      }
+      
+      const userFamilyId = firstFamily.familyId;
       
       // Update user context with familyId
       const userContext = getUserContext();
@@ -146,13 +153,13 @@ export default function DashboardPage() {
         </button>
 
         <button
-          disabled
-          className="relative rounded-lg border border-gray-300 bg-gray-50 px-6 py-5 opacity-50"
+          onClick={() => router.push('/dashboard/shopping-list')}
+          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <div className="text-center">
             <h3 className="text-lg font-medium text-gray-900">Shopping List</h3>
             <p className="mt-2 text-sm text-gray-500">
-              Coming soon
+              Manage your shopping list
             </p>
           </div>
         </button>

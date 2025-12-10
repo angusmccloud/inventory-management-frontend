@@ -20,6 +20,7 @@ import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import AdjustQuantity from '@/components/inventory/AdjustQuantity';
+import Dialog from '@/components/common/Dialog';
 
 type ModalState =
   | { type: 'none' }
@@ -27,12 +28,17 @@ type ModalState =
   | { type: 'edit'; item: InventoryItem }
   | { type: 'adjust'; item: InventoryItem };
 
+type DialogState =
+  | { type: 'none' }
+  | { type: 'confirm'; item: InventoryItem; action: 'archive' | 'delete' };
+
 export default function InventoryPage() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [modalState, setModalState] = useState<ModalState>({ type: 'none' });
+  const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
   const [familyId, setFamilyId] = useState<string>('');
 
   useEffect(() => {
@@ -113,25 +119,29 @@ export default function InventoryPage() {
     setModalState({ type: 'none' });
   };
 
-  const handleArchive = async (item: InventoryItem): Promise<void> => {
-    if (!confirm(`Archive ${item.name}?`)) return;
-
-    try {
-      await archiveInventoryItem(familyId, item.itemId);
-      setItems(items.filter((i) => i.itemId !== item.itemId));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to archive item');
-    }
+  const handleArchive = (item: InventoryItem): void => {
+    setDialogState({ type: 'confirm', item, action: 'archive' });
   };
 
-  const handleDelete = async (item: InventoryItem): Promise<void> => {
-    if (!confirm(`Permanently delete ${item.name}?`)) return;
+  const handleDelete = (item: InventoryItem): void => {
+    setDialogState({ type: 'confirm', item, action: 'delete' });
+  };
+
+  const confirmAction = async (): Promise<void> => {
+    if (dialogState.type !== 'confirm') return;
+
+    const { item, action } = dialogState;
+    setDialogState({ type: 'none' });
 
     try {
-      await deleteInventoryItem(familyId, item.itemId);
+      if (action === 'archive') {
+        await archiveInventoryItem(familyId, item.itemId);
+      } else {
+        await deleteInventoryItem(familyId, item.itemId);
+      }
       setItems(items.filter((i) => i.itemId !== item.itemId));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete item');
+      setError(err instanceof Error ? err.message : `Failed to ${action} item`);
     }
   };
 
@@ -238,6 +248,24 @@ export default function InventoryPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Dialogs */}
+      {dialogState.type === 'confirm' && (
+        <Dialog
+          isOpen={true}
+          type="confirm"
+          title={dialogState.action === 'archive' ? 'Archive Item' : 'Delete Item'}
+          message={
+            dialogState.action === 'archive'
+              ? `Archive ${dialogState.item.name}? You can restore it later.`
+              : `Permanently delete ${dialogState.item.name}? This cannot be undone.`
+          }
+          confirmLabel={dialogState.action === 'archive' ? 'Archive' : 'Delete'}
+          cancelLabel="Cancel"
+          onConfirm={confirmAction}
+          onCancel={() => setDialogState({ type: 'none' })}
+        />
       )}
     </div>
   );
