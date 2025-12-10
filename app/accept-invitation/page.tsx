@@ -69,10 +69,15 @@ function AcceptInvitationContent() {
 
       setSuccess(true);
 
-      // Store auth info (in production, this would come from Cognito auth)
-      localStorage.setItem('familyId', response.family.familyId);
-      localStorage.setItem('userId', response.member.memberId);
-      localStorage.setItem('userRole', response.member.role);
+      // Store auth info in user context (in production, this would come from Cognito auth)
+      const userContext = {
+        memberId: response.member.memberId,
+        familyId: response.family.familyId,
+        role: response.member.role,
+        email: response.member.email,
+        name: response.member.name,
+      };
+      localStorage.setItem('user_context', JSON.stringify(userContext));
 
       // Redirect to dashboard after 2 seconds
       setTimeout(() => {

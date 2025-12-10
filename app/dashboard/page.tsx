@@ -46,10 +46,11 @@ export default function DashboardPage() {
       
       const userFamilyId = firstFamily.familyId;
       
-      // Update user context with familyId
+      // Update user context with familyId AND role from the family member relationship
       const userContext = getUserContext();
       if (userContext) {
         userContext.familyId = userFamilyId;
+        userContext.role = firstFamily.role; // Store the role from the families endpoint
         if (typeof window !== 'undefined') {
           localStorage.setItem('user_context', JSON.stringify(userContext));
         }
@@ -69,10 +70,11 @@ export default function DashboardPage() {
     setFamily(newFamily);
     setShowCreateFamily(false);
     
-    // Update user context with familyId
+    // Update user context with familyId and role (creator is always admin)
     const userContext = getUserContext();
     if (userContext) {
       userContext.familyId = newFamily.familyId;
+      userContext.role = 'admin'; // Creator is always admin
       // Save updated context
       if (typeof window !== 'undefined') {
         localStorage.setItem('user_context', JSON.stringify(userContext));

@@ -62,13 +62,22 @@ export default function MembersPage() {
     setError(null);
 
     try {
-      // Get family ID from localStorage (set during auth)
-      const storedFamilyId = localStorage.getItem('familyId');
-      const storedUserId = localStorage.getItem('userId');
-      const storedRole = localStorage.getItem('userRole') as MemberRole;
+      // Get family ID from user context
+      const userContextStr = localStorage.getItem('user_context');
+      if (!userContextStr) {
+        setError('No family selected. Please go to the dashboard first.');
+        setIsLoading(false);
+        return;
+      }
+
+      const userContext = JSON.parse(userContextStr);
+      const storedFamilyId = userContext.familyId;
+      const storedUserId = userContext.memberId;
+      const storedRole = userContext.role as MemberRole;
 
       if (!storedFamilyId) {
-        setError('No family selected. Please select a family first.');
+        setError('No family selected. Please go to the dashboard to select a family.');
+        setIsLoading(false);
         return;
       }
 
@@ -170,11 +179,9 @@ export default function MembersPage() {
     try {
       await removeMember(familyId, memberToRemove.memberId, memberToRemove.version);
 
-      // If removing self, redirect to family selection
+      // If removing self, clear user context and redirect
       if (memberToRemove.memberId === currentUserId) {
-        localStorage.removeItem('familyId');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userRole');
+        localStorage.removeItem('user_context');
         router.push('/dashboard');
         return;
       }
