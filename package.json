@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "dev:local": "dotenv -e .env.local -- next dev",
+    "dev:live": "dotenv -e .env.dev -- next dev",
     "build": "next build",
+    "build:dev": "dotenv -e .env.dev -- next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
@@ -37,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "autoprefixer": "^10.4.20",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9.16.0",
     "eslint-config-next": "^15.1.0",
     "eslint-config-prettier": "^9.1.0",

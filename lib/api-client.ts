@@ -62,8 +62,10 @@ const request = async <T>(
 ): Promise<T> => {
   const { method, headers = {}, body, requireAuth = true } = options;
   
-  // Build URL
-  const url = `${API_BASE_URL}${endpoint}`;
+  // Build URL (remove trailing slash from base and leading slash from endpoint to avoid double slashes)
+  const baseUrl = API_BASE_URL.replace(/\/$/, '');
+  const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${baseUrl}${path}`;
   
   // Build headers
   const requestHeaders: Record<string, string> = {
