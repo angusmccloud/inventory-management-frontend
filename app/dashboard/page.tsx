@@ -29,7 +29,7 @@ export default function DashboardPage() {
       // First, fetch all families the user is a member of
       const families = await listUserFamilies();
       
-      if (!families || families.length === 0) {
+      if (!families || families.length === 0 || !families[0]) {
         // No families found, show create form
         setShowCreateFamily(true);
         setLoading(false);

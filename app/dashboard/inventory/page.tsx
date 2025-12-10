@@ -50,7 +50,7 @@ export default function InventoryPage() {
         // Fetch from backend
         const families = await listUserFamilies();
         
-        if (families && families.length > 0) {
+        if (families && families.length > 0 && families[0]) {
           const userFamilyId = families[0].familyId;
           setFamilyId(userFamilyId);
           

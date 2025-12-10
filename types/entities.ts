@@ -71,6 +71,32 @@ export interface Member {
   name: string;
   role: MemberRole;
   status: MemberStatus;
+  version: number; // Optimistic locking
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Invitation Status
+ */
+export type InvitationStatus = 'pending' | 'accepted' | 'expired' | 'revoked';
+
+/**
+ * Invitation Entity
+ */
+export interface Invitation {
+  invitationId: string;
+  familyId: string;
+  email: string;
+  role: MemberRole;
+  status: InvitationStatus;
+  expiresAt: string;
+  invitedBy: string;
+  invitedByName?: string;
+  acceptedBy: string | null;
+  acceptedAt: string | null;
+  revokedBy: string | null;
+  revokedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -224,6 +250,27 @@ export interface AddMemberRequest {
   role: MemberRole;
 }
 
+export interface CreateInvitationRequest {
+  email: string;
+  role: MemberRole;
+}
+
+export interface AcceptInvitationRequest {
+  token: string;
+  name: string;
+  password?: string;
+}
+
+export interface UpdateMemberRequest {
+  name?: string;
+  role?: MemberRole;
+  version: number;
+}
+
+export interface RemoveMemberRequest {
+  version: number;
+}
+
 export interface CreateInventoryItemRequest {
   name: string;
   quantity: number;
@@ -307,6 +354,24 @@ export interface ReviewSuggestionRequest {
 export interface ListInventoryResponse {
   items: InventoryItem[];
   total: number;
+}
+
+export interface ListMembersResponse {
+  members: Member[];
+  summary: {
+    total: number;
+    admins: number;
+    suggesters: number;
+  };
+}
+
+export interface ListInvitationsResponse {
+  invitations: Invitation[];
+}
+
+export interface AcceptInvitationResponse {
+  member: Member;
+  family: Family;
 }
 
 export interface ApiError {
