@@ -5,15 +5,21 @@
  */
 
 import { apiClient } from '../api-client';
-import { Family, CreateFamilyRequest, UpdateFamilyRequest } from '@/types/entities';
+import {
+  Family,
+  CreateFamilyRequest,
+  UpdateFamilyRequest,
+  MemberRole,
+  MemberStatus,
+} from '@/types/entities';
 
 /**
  * User family membership info
  */
 export interface UserFamilyMembership {
   familyId: string;
-  role: string;
-  status: string;
+  role: MemberRole;
+  status: MemberStatus;
 }
 
 /**

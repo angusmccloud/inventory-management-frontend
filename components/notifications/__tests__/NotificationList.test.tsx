@@ -62,6 +62,14 @@ const createMockNotifications = (): LowStockNotification[] => [
 
 describe('NotificationList', () => {
   const mockOnAcknowledge = jest.fn();
+  const mockOnResolve = jest.fn();
+  const mockOnAddToShoppingList = jest.fn();
+  const defaultProps = {
+    onAcknowledge: mockOnAcknowledge,
+    onResolve: mockOnResolve,
+    onAddToShoppingList: mockOnAddToShoppingList,
+    isAdmin: false,
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -74,8 +82,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -92,8 +99,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -107,8 +113,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -126,8 +131,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={[]}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -146,8 +150,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
           statusFilter="resolved"
         />
       );
@@ -160,8 +163,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={[]}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -176,8 +178,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
           statusFilter="all"
         />
       );
@@ -192,8 +193,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -207,8 +207,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
           statusFilter="active"
         />
       );
@@ -227,8 +226,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
           statusFilter="acknowledged"
         />
       );
@@ -244,8 +242,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
           statusFilter="resolved"
         />
       );
@@ -265,7 +262,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
+          {...defaultProps}
           isAdmin={true}
         />
       );
@@ -285,7 +282,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
+          {...defaultProps}
           isAdmin={true}
         />
       );
@@ -304,8 +301,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
@@ -318,8 +314,7 @@ describe('NotificationList', () => {
       render(
         <NotificationList
           notifications={notifications}
-          onAcknowledge={mockOnAcknowledge}
-          isAdmin={false}
+          {...defaultProps}
         />
       );
 
