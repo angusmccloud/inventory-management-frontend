@@ -1,5 +1,5 @@
 /**
- * Dashboard Layout - Family Inventory Management System
+ * Dashboard Layout - Inventory HQ
  *
  * Protected layout for authenticated users with navigation.
  */
@@ -96,7 +96,7 @@ export default function DashboardLayout({
             <div className="flex flex-1">
               <div className="flex flex-shrink-0 items-center">
                 <h1 className="text-xl font-bold text-blue-600">
-                  Family Inventory
+                  Inventory HQ
                 </h1>
               </div>
               

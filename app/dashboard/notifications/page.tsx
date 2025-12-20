@@ -1,5 +1,5 @@
 /**
- * Notifications Page - Family Inventory Management System
+ * Notifications Page - Inventory HQ
  * 
  * Displays low-stock notifications with filtering and acknowledge functionality.
  */

@@ -1,5 +1,5 @@
 /**
- * Login Page - Family Inventory Management System
+ * Login Page - Inventory HQ
  * 
  * Provides authentication interface for users to sign in or register.
  * Uses Cognito for authentication via API endpoints.
@@ -9,9 +9,9 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { login, register, confirmEmail } from '@/lib/auth';
+import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
 
-type ViewMode = 'login' | 'register' | 'verify';
+type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,6 +20,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,6 +65,41 @@ export default function LoginPage() {
         } else {
           setError(response.message || 'Verification failed');
         }
+      } else if (viewMode === 'forgot-password') {
+        // Handle forgot password - send reset code
+        const response = await forgotPassword(email);
+        
+        if (response.success) {
+          setSuccess(response.message || 'Password reset code sent to your email!');
+          setViewMode('reset-password');
+        } else {
+          setError(response.message || 'Failed to send reset code');
+        }
+      } else if (viewMode === 'reset-password') {
+        // Handle password reset with code
+        if (newPassword !== confirmPassword) {
+          setError('Passwords do not match');
+          setLoading(false);
+          return;
+        }
+        
+        if (newPassword.length < 8) {
+          setError('Password must be at least 8 characters');
+          setLoading(false);
+          return;
+        }
+        
+        const response = await confirmForgotPassword(email, verificationCode, newPassword);
+        
+        if (response.success) {
+          setSuccess(response.message || 'Password reset successful! You can now log in.');
+          setViewMode('login');
+          setVerificationCode('');
+          setNewPassword('');
+          setConfirmPassword('');
+        } else {
+          setError(response.message || 'Failed to reset password');
+        }
       } else {
         // Handle login
         const response = await login(email, password);
@@ -103,6 +140,19 @@ export default function LoginPage() {
     setPassword('');
     setName('');
     setVerificationCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  const switchToForgotPassword = (): void => {
+    setViewMode('forgot-password');
+    setError('');
+    setSuccess('');
+    setPassword('');
+    setName('');
+    setVerificationCode('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
 
   const getTitle = (): string => {
@@ -111,6 +161,10 @@ export default function LoginPage() {
         return 'Create your account';
       case 'verify':
         return 'Verify your email';
+      case 'forgot-password':
+        return 'Reset your password';
+      case 'reset-password':
+        return 'Enter new password';
       default:
         return 'Sign in to your account';
     }
@@ -121,7 +175,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-            Family Inventory Manager
+            Inventory HQ
           </h1>
           <h2 className="mt-6 text-center text-2xl font-semibold text-gray-900">
             {getTitle()}
@@ -130,7 +184,7 @@ export default function LoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="-space-y-px rounded-md shadow-sm">
-            {viewMode === 'verify' ? (
+            {viewMode === 'verify' || viewMode === 'reset-password' ? (
               // Verification code input
               <>
                 <div className="mb-4 text-sm text-gray-600">
@@ -153,7 +207,63 @@ export default function LoginPage() {
                     maxLength={6}
                   />
                 </div>
+                {viewMode === 'reset-password' && (
+                  <>
+                    <div className="mt-4">
+                      <label htmlFor="new-password" className="sr-only">
+                        New Password
+                      </label>
+                      <input
+                        id="new-password"
+                        name="new-password"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        className="relative block w-full rounded-t-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        placeholder="New Password (min 8 chars)"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        minLength={8}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="confirm-password" className="sr-only">
+                        Confirm Password
+                      </label>
+                      <input
+                        id="confirm-password"
+                        name="confirm-password"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        className="relative block w-full rounded-b-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        placeholder="Confirm New Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        minLength={8}
+                      />
+                    </div>
+                  </>
+                )}
               </>
+            ) : viewMode === 'forgot-password' ? (
+              // Forgot password - email only
+              <div>
+                <label htmlFor="email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
             ) : (
               // Login or Register form
               <>
@@ -235,12 +345,30 @@ export default function LoginPage() {
                   ? 'Create Account'
                   : viewMode === 'verify'
                     ? 'Verify Email'
-                    : 'Sign In'}
+                    : viewMode === 'forgot-password'
+                      ? 'Send Reset Code'
+                      : viewMode === 'reset-password'
+                        ? 'Reset Password'
+                        : 'Sign In'}
             </button>
           </div>
 
+          {viewMode === 'login' && (
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                <button
+                  type="button"
+                  onClick={switchToForgotPassword}
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Forgot your password?
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="text-center text-sm">
-            {viewMode === 'verify' ? (
+            {viewMode === 'verify' || viewMode === 'forgot-password' || viewMode === 'reset-password' ? (
               <button
                 type="button"
                 onClick={switchToLogin}

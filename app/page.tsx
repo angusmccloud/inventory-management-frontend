@@ -1,5 +1,5 @@
 /**
- * Landing Page - Family Inventory Management System
+ * Landing Page - Inventory HQ
  * 
  * Public home page with authentication options
  */
@@ -26,7 +26,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center space-y-4">
           <h1 className="text-5xl font-bold text-gray-900">
-            Family Inventory Management
+            Inventory HQ
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Keep track of household items, manage shopping lists, and coordinate with your family - all in one place.

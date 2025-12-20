@@ -1,5 +1,5 @@
 /**
- * Validation Utilities - Family Inventory Management System Frontend
+ * Validation Utilities - Inventory HQ Frontend
  * 
  * Client-side validation helpers using Zod schemas.
  * Provides form validation and error formatting.

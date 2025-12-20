@@ -1,5 +1,5 @@
 /**
- * Entity Type Definitions - Family Inventory Management System Frontend
+ * Entity Type Definitions - Inventory HQ Frontend
  * 
  * Shared TypeScript types for frontend components.
  * These mirror the backend entity types but are simplified for client use.

@@ -1,5 +1,5 @@
 /**
- * Dashboard Home Page - Family Inventory Management System
+ * Dashboard Home Page - Inventory HQ
  * 
  * Main dashboard with overview and family setup.
  */

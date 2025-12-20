@@ -1,5 +1,5 @@
 /**
- * Inventory Page - Family Inventory Management System
+ * Inventory Page - Inventory HQ
  * 
  * Main page for managing family inventory items.
  */

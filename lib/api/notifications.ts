@@ -1,5 +1,5 @@
 /**
- * Notifications API Client - Family Inventory Management System Frontend
+ * Notifications API Client - Inventory HQ Frontend
  * 
  * API client methods for low-stock notification operations.
  */

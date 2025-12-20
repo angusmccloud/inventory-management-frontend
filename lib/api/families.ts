@@ -1,5 +1,5 @@
 /**
- * Family API Client - Family Inventory Management System Frontend
+ * Family API Client - Inventory HQ Frontend
  * 
  * API client methods for family management operations.
  */

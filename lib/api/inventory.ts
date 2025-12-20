@@ -1,5 +1,5 @@
 /**
- * Inventory API Client - Family Inventory Management System Frontend
+ * Inventory API Client - Inventory HQ Frontend
  * 
  * API client methods for inventory management operations.
  */

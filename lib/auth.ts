@@ -1,5 +1,5 @@
 /**
- * Authentication Helpers - Family Inventory Management System Frontend
+ * Authentication Helpers - Inventory HQ Frontend
  * 
  * Provides authentication utilities for Cognito integration,
  * token management, and user context access.
@@ -13,6 +13,8 @@ import {
   signOut,
   getCurrentUser,
   fetchAuthSession,
+  resetPassword,
+  confirmResetPassword,
 } from 'aws-amplify/auth';
 import { UserContext } from '@/types/entities';
 
@@ -434,4 +436,68 @@ export const requireAdmin = (): boolean => {
   }
   
   return true;
+};
+
+/**
+ * Initiate forgot password flow
+ * 
+ * Sends password reset code to user's email via Cognito
+ */
+export const forgotPassword = async (
+  email: string
+): Promise<{ success: boolean; message?: string }> => {
+  try {
+    const output = await resetPassword({ username: email });
+    
+    const { nextStep } = output;
+    
+    if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
+      const codeDeliveryDetails = nextStep.codeDeliveryDetails;
+      return {
+        success: true,
+        message: `Password reset code sent to ${codeDeliveryDetails.deliveryMedium === 'EMAIL' ? codeDeliveryDetails.destination : 'your email'}`,
+      };
+    }
+    
+    return {
+      success: false,
+      message: 'Unable to initiate password reset. Please try again.',
+    };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Failed to send reset code',
+    };
+  }
+};
+
+/**
+ * Confirm forgot password with code and new password
+ * 
+ * Completes password reset using verification code from email
+ */
+export const confirmForgotPassword = async (
+  email: string,
+  code: string,
+  newPassword: string
+): Promise<{ success: boolean; message?: string }> => {
+  try {
+    await confirmResetPassword({
+      username: email,
+      confirmationCode: code,
+      newPassword,
+    });
+    
+    return {
+      success: true,
+      message: 'Password reset successful! You can now log in with your new password.',
+    };
+  } catch (error) {
+    console.error('Confirm forgot password error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Failed to reset password',
+    };
+  }
 };

@@ -1,5 +1,5 @@
 /**
- * API Client Base - Family Inventory Management System Frontend
+ * API Client Base - Inventory HQ Frontend
  * 
  * Centralized HTTP client with error handling, authentication,
  * and standardized request/response processing.

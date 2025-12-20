@@ -1,5 +1,5 @@
 /**
- * Shopping List API Client - Family Inventory Management System Frontend
+ * Shopping List API Client - Inventory HQ Frontend
  * Feature: 002-shopping-lists
  * 
  * API client methods for shopping list management operations.
