@@ -2,15 +2,22 @@
  * API Client Base - Inventory HQ Frontend
  * 
  * Centralized HTTP client with error handling, authentication,
- * and standardized request/response processing.
+ * and standardized request/response processing with automatic token refresh.
  */
 
 import { ApiError, ApiSuccess } from '@/types/entities';
+import { refreshAccessToken, clearAuth, isTokenExpired, decodeToken } from './auth';
 
 /**
  * API client configuration
  */
 const API_BASE_URL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3001';
+
+/**
+ * Token refresh buffer in seconds (5 minutes)
+ * Refresh token if it expires within this time window
+ */
+const TOKEN_REFRESH_BUFFER = 5 * 60;
 
 /**
  * HTTP methods
@@ -54,13 +61,53 @@ const getAuthToken = (): string | null => {
 };
 
 /**
+ * Check if token needs refresh (expired or expiring soon)
+ */
+const shouldRefreshToken = (token: string): boolean => {
+  const payload = decodeToken(token);
+  if (!payload || !payload['exp']) {
+    return true;
+  }
+  
+  const expiration = payload['exp'] as number;
+  const now = Math.floor(Date.now() / 1000);
+  
+  // Refresh if expired or expiring within the buffer window
+  return expiration <= (now + TOKEN_REFRESH_BUFFER);
+};
+
+/**
  * Make an HTTP request to the API
  */
 const request = async <T>(
   endpoint: string,
-  options: RequestOptions
+  options: RequestOptions,
+  isRetry = false
 ): Promise<T> => {
   const { method, headers = {}, body, requireAuth = true } = options;
+  
+  // Proactively check and refresh token before making the request
+  if (requireAuth && !isRetry) {
+    const token = getAuthToken();
+    if (token && shouldRefreshToken(token)) {
+      console.log('Token expired or expiring soon, refreshing proactively...');
+      const refreshSuccess = await refreshAccessToken();
+      
+      if (!refreshSuccess) {
+        console.log('Proactive token refresh failed, logging out...');
+        clearAuth();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login?reason=session_expired';
+        }
+        throw new ApiClientError(
+          'Your session has expired. Please log in again.',
+          401,
+          'SESSION_EXPIRED'
+        );
+      }
+      console.log('Proactive token refresh successful');
+    }
+  }
   
   // Build URL (remove trailing slash from base and leading slash from endpoint to avoid double slashes)
   const baseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -101,7 +148,32 @@ const request = async <T>(
     // Make request
     const response = await fetch(url, config);
     
-    // Handle non-2xx responses
+    // Handle 401 Unauthorized - attempt token refresh (fallback/safety net)
+    if (response.status === 401 && requireAuth && !isRetry) {
+      console.log('Received 401 despite proactive check, attempting token refresh as fallback...');
+      
+      const refreshSuccess = await refreshAccessToken();
+      
+      if (refreshSuccess) {
+        console.log('Fallback token refresh successful, retrying request...');
+        // Retry the request with the new token
+        return request<T>(endpoint, options, true);
+      } else {
+        console.log('Fallback token refresh failed, logging out...');
+        // Refresh failed - clear auth and redirect to login
+        clearAuth();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login?reason=session_expired';
+        }
+        throw new ApiClientError(
+          'Your session has expired. Please log in again.',
+          401,
+          'SESSION_EXPIRED'
+        );
+      }
+    }
+    
+    // Handle other non-2xx responses
     if (!response.ok) {
       await handleErrorResponse(response);
     }

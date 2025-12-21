@@ -191,6 +191,40 @@ export const isTokenExpired = (token: string): boolean => {
 };
 
 /**
+ * Refresh the access token using AWS Amplify
+ * 
+ * Attempts to refresh the current session and update stored tokens.
+ * Returns true if successful, false if refresh fails.
+ */
+export const refreshAccessToken = async (): Promise<boolean> => {
+  try {
+    // Force refresh of the session
+    const session = await fetchAuthSession({ forceRefresh: true });
+    
+    const idToken = session.tokens?.idToken?.toString();
+    const accessToken = session.tokens?.accessToken?.toString();
+    
+    if (idToken && accessToken) {
+      // Update stored tokens
+      setAuthTokens(idToken, accessToken);
+      
+      // Update user context from new token
+      const userContext = extractUserContext(idToken);
+      if (userContext) {
+        setUserContext(userContext);
+      }
+      
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    return false;
+  }
+};
+
+/**
  * Extract user context from ID token
  */
 export const extractUserContext = (idToken: string): UserContext | null => {
