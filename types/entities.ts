@@ -131,6 +131,7 @@ export interface StorageLocation {
   familyId: string;
   name: string;
   description?: string;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -144,6 +145,7 @@ export interface Store {
   name: string;
   address?: string;
   notes?: string;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -304,6 +306,7 @@ export interface CreateStorageLocationRequest {
 export interface UpdateStorageLocationRequest {
   name?: string;
   description?: string;
+  version: number;
 }
 
 export interface CreateStoreRequest {
@@ -316,6 +319,7 @@ export interface UpdateStoreRequest {
   name?: string;
   address?: string;
   notes?: string;
+  version: number;
 }
 
 export interface AddToShoppingListRequest {

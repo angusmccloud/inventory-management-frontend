@@ -174,6 +174,18 @@ export default function DashboardLayout({
                 >
                   Members
                 </a>
+                {userContext?.role === 'admin' && (
+                  <a
+                    href="/dashboard/settings/reference-data"
+                    className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
+                      pathname?.startsWith('/dashboard/settings')
+                        ? 'border-blue-500 text-gray-900'
+                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    }`}
+                  >
+                    Settings
+                  </a>
+                )}
               </div>
 
               {/* Mobile menu button */}
@@ -288,6 +300,28 @@ export default function DashboardLayout({
                     </span>
                   )}
                 </a>
+                <a
+                  href="/dashboard/members"
+                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                    pathname === '/dashboard/members'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                  }`}
+                >
+                  Members
+                </a>
+                {userContext?.role === 'admin' && (
+                  <a
+                    href="/dashboard/settings/reference-data"
+                    className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                      pathname?.startsWith('/dashboard/settings')
+                        ? 'border-blue-500 bg-blue-50 text-blue-700'
+                        : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                    }`}
+                  >
+                    Settings
+                  </a>
+                )}
               </div>
               <div className="border-t border-gray-200 pt-4 mt-3">
                 <div className="flex items-center px-4">
