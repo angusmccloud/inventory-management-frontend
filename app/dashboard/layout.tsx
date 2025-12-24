@@ -88,112 +88,136 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-white shadow">
+      <nav className="bg-white dark:bg-gray-800 shadow">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 justify-between">
-            <div className="flex flex-1">
-              <div className="flex flex-shrink-0 items-center">
-                <h1 className="text-xl font-bold text-blue-600">
-                  Inventory HQ
-                </h1>
-              </div>
-              
-              {/* Desktop Navigation */}
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <a
-                  href="/dashboard"
-                  className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                    pathname === '/dashboard'
-                      ? 'border-blue-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
-                  Dashboard
-                </a>
-                <a
-                  href="/dashboard/inventory"
-                  className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                    pathname === '/dashboard/inventory'
-                      ? 'border-blue-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
-                  Inventory
-                </a>
-                <a
-                  href="/dashboard/shopping-list"
-                  className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                    pathname === '/dashboard/shopping-list'
-                      ? 'border-blue-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
-                  Shopping List
-                </a>
-                <a
-                  href="/dashboard/notifications"
-                  className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                    pathname === '/dashboard/notifications'
-                      ? 'border-blue-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
-                  <span className="relative">
-                    {/* Bell icon */}
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-                    {/* Notification badge */}
-                    {activeNotificationCount > 0 && (
-                      <span
-                        className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
-                        data-testid="notification-badge"
-                      >
-                        {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
-                      </span>
-                    )}
-                  </span>
-                  <span className="ml-1">Notifications</span>
-                </a>
-                <a
-                  href="/dashboard/members"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  Members
-                </a>
-                {userContext?.role === 'admin' && (
-                  <a
-                    href="/dashboard/settings/reference-data"
-                    className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                      pathname?.startsWith('/dashboard/settings')
-                        ? 'border-blue-500 text-gray-900'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                    }`}
+          <div className="flex h-16 items-center justify-between">
+            {/* Brand */}
+            <div className="flex flex-shrink-0 items-center">
+              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                Inventory HQ
+              </h1>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex md:space-x-2 lg:space-x-4">
+              <a
+                href="/dashboard"
+                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
+                  pathname === '/dashboard'
+                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Dashboard
+              </a>
+              <a
+                href="/dashboard/inventory"
+                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
+                  pathname === '/dashboard/inventory'
+                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Inventory
+              </a>
+              <a
+                href="/dashboard/shopping-list"
+                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium whitespace-nowrap ${
+                  pathname === '/dashboard/shopping-list'
+                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Shopping
+              </a>
+              <a
+                href="/dashboard/notifications"
+                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
+                  pathname === '/dashboard/notifications'
+                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <span className="relative">
+                  {/* Bell icon */}
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
                   >
-                    Settings
-                  </a>
-                )}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                  {/* Notification badge */}
+                  {activeNotificationCount > 0 && (
+                    <span
+                      className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+                      data-testid="notification-badge"
+                    >
+                      {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                    </span>
+                  )}
+                </span>
+                <span className="ml-1 hidden lg:inline">Notifications</span>
+              </a>
+              <a
+                href="/dashboard/members"
+                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
+                  pathname === '/dashboard/members'
+                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Members
+              </a>
+              {userContext?.role === 'admin' && (
+                <a
+                  href="/dashboard/settings/reference-data"
+                  className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
+                    pathname?.startsWith('/dashboard/settings')
+                      ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                  }`}
+                >
+                  Settings
+                </a>
+              )}
+            </div>
+            
+            {/* Right side container */}
+            <div className="flex items-center space-x-3">
+              {/* Desktop User Info */}
+              <div className="hidden md:flex md:items-center md:space-x-3">
+                <div className="hidden lg:flex lg:flex-col lg:items-end">
+                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[150px]">
+                    {userContext?.name || userContext?.email}
+                  </span>
+                  <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
+                    {userContext?.role}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  Logout
+                </button>
               </div>
 
               {/* Mobile menu button */}
-              <div className="flex items-center sm:hidden ml-auto">
+              <div className="flex items-center md:hidden">
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                  className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                   aria-expanded="false"
                 >
                   <span className="sr-only">Open main menu</span>
@@ -231,36 +255,18 @@ export default function DashboardLayout({
                 </button>
               </div>
             </div>
-
-            {/* Desktop User Menu */}
-            <div className="hidden sm:flex sm:items-center">
-              <div className="flex-shrink-0">
-                <span className="text-sm text-gray-700">
-                  {userContext?.name || userContext?.email}
-                </span>
-                <span className="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                  {userContext?.role}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="ml-4 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Logout
-              </button>
-            </div>
           </div>
 
           {/* Mobile menu */}
           {mobileMenuOpen && (
-            <div className="sm:hidden pb-3">
+            <div className="md:hidden pb-3">
               <div className="space-y-1">
                 <a
                   href="/dashboard"
                   className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     pathname === '/dashboard'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
                   Dashboard
@@ -269,8 +275,8 @@ export default function DashboardLayout({
                   href="/dashboard/inventory"
                   className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     pathname === '/dashboard/inventory'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
                   Inventory
@@ -279,8 +285,8 @@ export default function DashboardLayout({
                   href="/dashboard/shopping-list"
                   className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     pathname === '/dashboard/shopping-list'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
                   Shopping List
@@ -289,8 +295,8 @@ export default function DashboardLayout({
                   href="/dashboard/notifications"
                   className={`flex items-center border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     pathname === '/dashboard/notifications'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
                   <span>Notifications</span>
@@ -304,8 +310,8 @@ export default function DashboardLayout({
                   href="/dashboard/members"
                   className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     pathname === '/dashboard/members'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
                   Members
@@ -315,29 +321,27 @@ export default function DashboardLayout({
                     href="/dashboard/settings/reference-data"
                     className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                       pathname?.startsWith('/dashboard/settings')
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800'
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                        : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                     }`}
                   >
                     Settings
                   </a>
                 )}
               </div>
-              <div className="border-t border-gray-200 pt-4 mt-3">
-                <div className="flex items-center px-4">
-                  <div className="flex-shrink-0">
-                    <span className="text-base font-medium text-gray-800">
-                      {userContext?.name || userContext?.email}
-                    </span>
-                    <span className="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                      {userContext?.role}
-                    </span>
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-3">
+                <div className="px-4 mb-3">
+                  <div className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
+                    {userContext?.name || userContext?.email}
                   </div>
+                  <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
+                    {userContext?.role}
+                  </span>
                 </div>
-                <div className="mt-3 px-2">
+                <div className="px-2">
                   <button
                     onClick={handleLogout}
-                    className="block w-full rounded-md bg-white px-3 py-2 text-base font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    className="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-base font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
                     Logout
                   </button>

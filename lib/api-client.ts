@@ -6,7 +6,7 @@
  */
 
 import { ApiError, ApiSuccess } from '@/types/entities';
-import { refreshAccessToken, clearAuth, isTokenExpired, decodeToken } from './auth';
+import { refreshAccessToken, clearAuth, decodeToken } from './auth';
 
 /**
  * API client configuration

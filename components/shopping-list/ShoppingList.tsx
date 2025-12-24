@@ -183,6 +183,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   // Group items by store for display
   const groupedItems: Record<string, ShoppingListItem[]> = {};
   items.forEach((item) => {
+    // Keep purchased items in their original store, don't move to Unassigned
     const storeKey = item.storeName || 'Unassigned';
     if (!groupedItems[storeKey]) {
       groupedItems[storeKey] = [];
@@ -190,14 +191,29 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     groupedItems[storeKey].push(item);
   });
 
+  // Sort items within each store alphabetically by name
+  Object.keys(groupedItems).forEach((storeKey) => {
+    const items = groupedItems[storeKey];
+    if (items) {
+      items.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  });
+
+  // Get sorted store names: alphabetically, with 'Unassigned' at the end
+  const sortedStoreNames = Object.keys(groupedItems).sort((a, b) => {
+    if (a === 'Unassigned') return 1;
+    if (b === 'Unassigned') return -1;
+    return a.localeCompare(b);
+  });
+
   if (isLoading) {
-    return <div className="text-center py-12">Loading shopping list...</div>;
+    return <div className="text-center py-12 text-gray-600 dark:text-gray-400">Loading shopping list...</div>;
   }
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4">
-        <p className="text-sm text-red-800">{error}</p>
+      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
+        <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
       </div>
     );
   }
@@ -207,8 +223,8 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {/* Header */}
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Shopping List</h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Shopping List</h2>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {items.length} {items.length === 1 ? 'item' : 'items'} total
           </p>
         </div>
@@ -220,7 +236,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           />
           <button
             onClick={() => setModalState({ type: 'add' })}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+            className="rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           >
             Add Item
           </button>
@@ -230,17 +246,20 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {/* Shopping List Items */}
       {items.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500">Your shopping list is empty.</p>
-          <p className="text-sm text-gray-400 mt-2">Add items to get started.</p>
+          <p className="text-gray-500 dark:text-gray-400">Your shopping list is empty.</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Add items to get started.</p>
         </div>
       ) : selectedStore === 'all' && Object.keys(groupedItems).length > 1 ? (
-        // Grouped by store view
-        <div className="space-y-6">
-          {Object.entries(groupedItems).map(([storeName, storeItems]) => (
-            <div key={storeName}>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{storeName}</h3>
-              <div className="overflow-hidden bg-white shadow sm:rounded-md">
-                <ul role="list" className="divide-y divide-gray-200">
+        // Grouped by store view with responsive grid
+        <div className="space-y-8">
+          {sortedStoreNames.map((storeName) => {
+            const storeItems = groupedItems[storeName];
+            if (!storeItems) return null;
+            
+            return (
+              <div key={storeName}>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{storeName}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {storeItems.map((item) => (
                     <ShoppingListItemComponent
                       key={item.shoppingItemId}
@@ -250,25 +269,23 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
                       onRemove={handleRemoveItem}
                     />
                   ))}
-                </ul>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
-        // Single list view
-        <div className="overflow-hidden bg-white shadow sm:rounded-md">
-          <ul role="list" className="divide-y divide-gray-200">
-            {items.map((item) => (
-              <ShoppingListItemComponent
-                key={item.shoppingItemId}
-                item={item}
-                onToggleStatus={handleToggleStatus}
-                onEdit={() => setModalState({ type: 'edit', item })}
-                onRemove={handleRemoveItem}
-              />
-            ))}
-          </ul>
+        // Single store view with responsive grid
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
+            <ShoppingListItemComponent
+              key={item.shoppingItemId}
+              item={item}
+              onToggleStatus={handleToggleStatus}
+              onEdit={() => setModalState({ type: 'edit', item })}
+              onRemove={handleRemoveItem}
+            />
+          ))}
         </div>
       )}
 
@@ -278,20 +295,21 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity"
               onClick={() => setModalState({ type: 'none' })}
             />
 
             {/* Modal panel */}
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}
                   {modalState.type === 'edit' && 'Edit Shopping List Item'}
                 </h3>
 
                 {modalState.type === 'add' && (
                   <AddItemForm
+                    familyId={familyId}
                     onSubmit={handleAddItem}
                     onCancel={() => setModalState({ type: 'none' })}
                   />
@@ -299,6 +317,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
 
                 {modalState.type === 'edit' && (
                   <EditShoppingListItemForm
+                    familyId={familyId}
                     item={modalState.item}
                     onSubmit={handleEditItem}
                     onCancel={() => setModalState({ type: 'none' })}

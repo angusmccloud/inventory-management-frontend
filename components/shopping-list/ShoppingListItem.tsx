@@ -37,74 +37,58 @@ export default function ShoppingListItemComponent({
   const isPurchased = item.status === 'purchased';
 
   return (
-    <li className={`px-4 py-4 sm:px-6 ${isPurchased ? 'bg-gray-50' : ''}`}>
-      <div className="flex items-center gap-4">
-        {/* Checkbox */}
+    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border ${isPurchased ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800' : 'border-gray-300 dark:border-gray-600'} p-4 flex flex-col h-full`}>
+      {/* Header with checkbox and status */}
+      <div className="flex items-start gap-3 mb-3">
         <input
           type="checkbox"
           checked={isPurchased}
           onChange={handleToggle}
           disabled={isToggling}
-          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-600 disabled:opacity-50"
+          className="mt-1 h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-600 disabled:opacity-50 flex-shrink-0"
         />
-
-        {/* Item Details */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className={`text-lg font-medium truncate ${isPurchased ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
-              {item.name}
-            </h3>
-            {isPurchased && (
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                Purchased
-              </span>
-            )}
-          </div>
-          
-          <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500">
-            {item.quantity && (
-              <div>
-                <span className="font-semibold text-gray-900">Quantity:</span>{' '}
-                {item.quantity}
-              </div>
-            )}
-            {item.storeName && (
-              <div>
-                <span className="font-semibold text-gray-900">Store:</span>{' '}
-                {item.storeName}
-              </div>
-            )}
-            {!item.storeName && (
-              <div>
-                <span className="text-gray-400 italic">Unassigned</span>
-              </div>
-            )}
-          </div>
-          
-          {item.notes && (
-            <p className="mt-2 text-sm text-gray-600">{item.notes}</p>
+          <h3 className={`text-base font-semibold ${isPurchased ? 'text-gray-500 dark:text-gray-500 line-through' : 'text-gray-900 dark:text-gray-100'}`}>
+            {item.name}
+          </h3>
+          {isPurchased && (
+            <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300 mt-1">
+              Purchased
+            </span>
           )}
         </div>
+      </div>
 
-        {/* Actions */}
-        {!isPurchased && (
-          <div className="ml-4 flex flex-shrink-0 gap-2">
-            <button
-              onClick={() => onEdit(item)}
-              className="rounded-md bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => onRemove(item)}
-              className="rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
-            >
-              Remove
-            </button>
+      {/* Item Details */}
+      <div className="flex-1 space-y-2 text-sm">
+        {item.quantity && (
+          <div className="text-gray-700 dark:text-gray-300">
+            <span className="font-medium">Qty:</span> {item.quantity}
           </div>
         )}
+        {item.notes && (
+          <p className="text-gray-600 dark:text-gray-400 text-sm">{item.notes}</p>
+        )}
       </div>
-    </li>
+
+      {/* Actions */}
+      {!isPurchased && (
+        <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => onEdit(item)}
+            className="flex-1 rounded-md bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 text-sm font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => onRemove(item)}
+            className="flex-1 rounded-md bg-red-50 dark:bg-red-900/30 px-3 py-1.5 text-sm font-semibold text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
+          >
+            Remove
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 

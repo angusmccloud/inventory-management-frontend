@@ -172,7 +172,7 @@ export default function InventoryPage() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Loading inventory...</p>
+        <p className="text-gray-600 dark:text-gray-400">Loading inventory...</p>
       </div>
     );
   }
@@ -180,10 +180,10 @@ export default function InventoryPage() {
   if (!familyId) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Please create a family first from the dashboard.</p>
+        <p className="text-gray-600 dark:text-gray-400">Please create a family first from the dashboard.</p>
         <a
           href="/dashboard"
-          className="mt-4 inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+          className="mt-4 inline-block rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600"
         >
           Go to Dashboard
         </a>
@@ -196,14 +196,14 @@ export default function InventoryPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Inventory</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Inventory</h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             Manage your family's inventory items
           </p>
         </div>
         <button
           onClick={() => setModalState({ type: 'add' })}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+          className="rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
         >
           Add Item
         </button>
@@ -231,14 +231,14 @@ export default function InventoryPage() {
           <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity"
               onClick={() => setModalState({ type: 'none' })}
             />
 
             {/* Modal panel */}
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
                   {modalState.type === 'adjust' && 'Adjust Quantity'}

@@ -60,14 +60,14 @@ export default function AdjustQuantity({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
-        <p className="mt-1 text-sm text-gray-600">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{item.name}</h3>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           Current quantity: <span className="font-semibold">{item.quantity}</span> {item.unit || 'units'}
         </p>
       </div>
 
       <div>
-        <label htmlFor="adjustment" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="adjustment" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Adjustment Amount
         </label>
         <div className="mt-1 flex gap-2">
@@ -75,7 +75,7 @@ export default function AdjustQuantity({
             type="button"
             onClick={() => setAdjustment(adjustment - 1)}
             disabled={loading}
-            className="rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+            className="rounded-md bg-gray-100 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50"
           >
             -1
           </button>
@@ -84,26 +84,26 @@ export default function AdjustQuantity({
             type="number"
             value={adjustment}
             onChange={(e) => setAdjustment(Number(e.target.value))}
-                className="block w-full rounded-md border-0 px-3 py-2 text-center text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+                className="block w-full rounded-md border-0 px-3 py-2 text-center text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
             disabled={loading}
           />
           <button
             type="button"
             onClick={() => setAdjustment(adjustment + 1)}
             disabled={loading}
-            className="rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+            className="rounded-md bg-gray-100 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50"
           >
             +1
           </button>
         </div>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           New quantity will be: <span className="font-semibold">{newQuantity}</span> {item.unit || 'units'}
         </p>
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
+          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
         </div>
       )}
 
@@ -111,7 +111,7 @@ export default function AdjustQuantity({
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
+          className="flex-1 rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
         >
           {loading ? 'Adjusting...' : 'Apply Adjustment'}
         </button>
@@ -120,7 +120,7 @@ export default function AdjustQuantity({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="rounded-md bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+            className="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
           >
             Cancel
           </button>

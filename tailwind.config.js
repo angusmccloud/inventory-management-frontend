@@ -5,20 +5,57 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class', // Use class-based dark mode for manual control
   theme: {
     extend: {
       colors: {
+        // Primary colors - main brand color
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+          contrast: 'rgb(var(--color-primary-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-primary-hover) / <alpha-value>)',
+        },
+        // Secondary colors - accent color
+        secondary: {
+          DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
+          contrast: 'rgb(var(--color-secondary-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-secondary-hover) / <alpha-value>)',
+        },
+        // Surface colors - backgrounds for cards, panels, etc.
+        surface: {
+          DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
+          elevated: 'rgb(var(--color-surface-elevated) / <alpha-value>)',
+          hover: 'rgb(var(--color-surface-hover) / <alpha-value>)',
+        },
+        // Background color - main page background
+        background: 'rgb(var(--color-background) / <alpha-value>)',
+        // Text colors
+        text: {
+          primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
+          secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)',
+          disabled: 'rgb(var(--color-text-disabled) / <alpha-value>)',
+        },
+        // Border colors
+        border: {
+          DEFAULT: 'rgb(var(--color-border) / <alpha-value>)',
+          focus: 'rgb(var(--color-border-focus) / <alpha-value>)',
+        },
+        // Semantic colors
+        success: {
+          DEFAULT: 'rgb(var(--color-success) / <alpha-value>)',
+          contrast: 'rgb(var(--color-success-contrast) / <alpha-value>)',
+        },
+        warning: {
+          DEFAULT: 'rgb(var(--color-warning) / <alpha-value>)',
+          contrast: 'rgb(var(--color-warning-contrast) / <alpha-value>)',
+        },
+        error: {
+          DEFAULT: 'rgb(var(--color-error) / <alpha-value>)',
+          contrast: 'rgb(var(--color-error-contrast) / <alpha-value>)',
+        },
+        info: {
+          DEFAULT: 'rgb(var(--color-info) / <alpha-value>)',
+          contrast: 'rgb(var(--color-info-contrast) / <alpha-value>)',
         },
       },
     },

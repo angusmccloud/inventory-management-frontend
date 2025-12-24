@@ -212,15 +212,15 @@ export default function NotificationsPage() {
       {/* Page header */}
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Notifications</h1>
+          <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
             Low-stock alerts for your inventory items.
           </p>
         </div>
         
         {/* Status filter */}
         <div className="mt-4 sm:mt-0">
-          <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Filter by Status
           </label>
           <select
@@ -228,7 +228,7 @@ export default function NotificationsPage() {
             name="status-filter"
             value={statusFilter}
             onChange={handleStatusFilterChange}
-            className="block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+            className="block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
             data-testid="status-filter"
           >
             <option value="all">All Notifications ({notifications.length})</option>
@@ -241,21 +241,21 @@ export default function NotificationsPage() {
 
       {/* Status summary cards */}
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="overflow-hidden rounded-lg bg-red-50 px-4 py-5 shadow sm:p-6">
-          <dt className="truncate text-sm font-medium text-red-800">Active Alerts</dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-red-900">
+        <div className="overflow-hidden rounded-lg bg-red-50 dark:bg-red-900/30 px-4 py-5 shadow sm:p-6">
+          <dt className="truncate text-sm font-medium text-red-800 dark:text-red-200">Active Alerts</dt>
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-red-900 dark:text-red-100">
             {activeCount}
           </dd>
         </div>
-        <div className="overflow-hidden rounded-lg bg-yellow-50 px-4 py-5 shadow sm:p-6">
-          <dt className="truncate text-sm font-medium text-yellow-800">Acknowledged</dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-yellow-900">
+        <div className="overflow-hidden rounded-lg bg-yellow-50 dark:bg-yellow-900/30 px-4 py-5 shadow sm:p-6">
+          <dt className="truncate text-sm font-medium text-yellow-800 dark:text-yellow-200">Acknowledged</dt>
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-yellow-900 dark:text-yellow-100">
             {acknowledgedCount}
           </dd>
         </div>
-        <div className="overflow-hidden rounded-lg bg-green-50 px-4 py-5 shadow sm:p-6">
-          <dt className="truncate text-sm font-medium text-green-800">Resolved</dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-green-900">
+        <div className="overflow-hidden rounded-lg bg-green-50 dark:bg-green-900/30 px-4 py-5 shadow sm:p-6">
+          <dt className="truncate text-sm font-medium text-green-800 dark:text-green-200">Resolved</dt>
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-green-900 dark:text-green-100">
             {resolvedCount}
           </dd>
         </div>
@@ -263,11 +263,11 @@ export default function NotificationsPage() {
 
       {/* Error message */}
       {error && (
-        <div className="mt-6 rounded-md bg-red-50 p-4" data-testid="error-message">
+        <div className="mt-6 rounded-md bg-red-50 dark:bg-red-900/20 p-4" data-testid="error-message">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg
-                className="h-5 w-5 text-red-400"
+                className="h-5 w-5 text-red-400 dark:text-red-300"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -280,15 +280,15 @@ export default function NotificationsPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Error</h3>
-              <div className="mt-2 text-sm text-red-700">
+              <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Error</h3>
+              <div className="mt-2 text-sm text-red-700 dark:text-red-300">
                 <p>{error}</p>
               </div>
               <div className="mt-4">
                 <button
                   type="button"
                   onClick={fetchNotifications}
-                  className="rounded-md bg-red-50 px-2 py-1.5 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50"
+                  className="rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1.5 text-sm font-medium text-red-800 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-900/50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50 dark:focus:ring-offset-red-900"
                 >
                   Retry
                 </button>
@@ -321,7 +321,7 @@ export default function NotificationsPage() {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            <p className="mt-2 text-sm text-gray-500">Loading notifications...</p>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Loading notifications...</p>
           </div>
         </div>
       )}
@@ -342,10 +342,10 @@ export default function NotificationsPage() {
 
       {/* Acknowledging indicator */}
       {acknowledging && (
-        <div className="fixed bottom-4 right-4 rounded-md bg-blue-50 p-4 shadow-lg">
+        <div className="fixed bottom-4 right-4 rounded-md bg-blue-50 dark:bg-blue-900/30 p-4 shadow-lg">
           <div className="flex items-center">
             <svg
-              className="h-5 w-5 animate-spin text-blue-600"
+              className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -363,7 +363,7 @@ export default function NotificationsPage() {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            <span className="ml-2 text-sm text-blue-700">Acknowledging...</span>
+            <span className="ml-2 text-sm text-blue-700 dark:text-blue-200">Acknowledging...</span>
           </div>
         </div>
       )}

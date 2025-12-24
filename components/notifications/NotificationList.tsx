@@ -81,8 +81,8 @@ export default function NotificationList({
   }
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-md" data-testid="notification-list">
-      <ul role="list" className="divide-y divide-gray-200">
+    <div className="overflow-hidden bg-white dark:bg-gray-800 shadow sm:rounded-md" data-testid="notification-list">
+      <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
         {sortedNotifications.map((notification) => (
           <NotificationItem
             key={notification.notificationId}

@@ -85,7 +85,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Loading...</p>
+        <p className="text-gray-600 dark:text-gray-400">Loading...</p>
       </div>
     );
   }
@@ -93,12 +93,12 @@ export default function DashboardPage() {
   if (showCreateFamily) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white shadow sm:rounded-lg">
+        <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-lg font-medium text-gray-900">
+            <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
               Welcome! Let's create your family
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               To get started, create a family account. You'll be the administrator and can invite other family members later.
             </p>
             <div className="mt-5">
@@ -114,10 +114,10 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           Welcome to {family?.name || 'your family'}
         </h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Manage your family's inventory and shopping lists
         </p>
       </div>
@@ -132,11 +132,11 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <button
           onClick={() => router.push('/dashboard/inventory')}
-          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="relative rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-6 py-5 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900">View Inventory</h3>
-            <p className="mt-2 text-sm text-gray-500">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">View Inventory</h3>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               See all your family's items
             </p>
           </div>
@@ -144,11 +144,11 @@ export default function DashboardPage() {
 
         <button
           onClick={() => router.push('/dashboard/inventory?action=add')}
-          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="relative rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-6 py-5 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900">Add Item</h3>
-            <p className="mt-2 text-sm text-gray-500">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Add Item</h3>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Add a new inventory item
             </p>
           </div>
@@ -156,11 +156,11 @@ export default function DashboardPage() {
 
         <button
           onClick={() => router.push('/dashboard/shopping-list')}
-          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="relative rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-6 py-5 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900">Shopping List</h3>
-            <p className="mt-2 text-sm text-gray-500">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Shopping List</h3>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Manage your shopping list
             </p>
           </div>
@@ -168,19 +168,19 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="bg-white shadow sm:rounded-lg">
+      <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg font-medium text-gray-900">Family Information</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Family Information</h3>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <dt className="text-sm font-medium text-gray-500">Family Name</dt>
-              <dd className="mt-1 text-lg font-semibold text-gray-900">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Family Name</dt>
+              <dd className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {family?.name}
               </dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-gray-500">Created</dt>
-              <dd className="mt-1 text-lg font-semibold text-gray-900">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Created</dt>
+              <dd className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {family?.createdAt ? new Date(family.createdAt).toLocaleDateString() : 'N/A'}
               </dd>
             </div>

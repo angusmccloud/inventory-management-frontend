@@ -37,20 +37,20 @@ export default function Dialog({
       <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-80 transition-opacity"
           onClick={onCancel}
         />
 
         {/* Dialog panel */}
-        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        <div className="inline-block align-bottom bg-surface-elevated rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
           <div>
             {/* Icon */}
             <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${
-              isError ? 'bg-red-100' : 'bg-blue-100'
+              isError ? 'bg-error/10' : 'bg-primary/10'
             }`}>
               {isError ? (
                 <svg
-                  className="h-6 w-6 text-red-600"
+                  className="h-6 w-6 text-error"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -64,7 +64,7 @@ export default function Dialog({
                 </svg>
               ) : (
                 <svg
-                  className="h-6 w-6 text-blue-600"
+                  className="h-6 w-6 text-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -81,11 +81,11 @@ export default function Dialog({
 
             {/* Content */}
             <div className="mt-3 text-center sm:mt-5">
-              <h3 className="text-lg font-semibold leading-6 text-gray-900">
+              <h3 className="text-lg font-semibold leading-6 text-text-primary">
                 {title}
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">{message}</p>
+                <p className="text-sm text-text-secondary">{message}</p>
               </div>
             </div>
           </div>
@@ -97,10 +97,10 @@ export default function Dialog({
                 <button
                   type="button"
                   onClick={onConfirm}
-                  className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 sm:col-start-2 ${
+                  className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 sm:col-start-2 ${
                     isError
-                      ? 'bg-red-600 hover:bg-red-500 focus:ring-red-600'
-                      : 'bg-blue-600 hover:bg-blue-500 focus:ring-blue-600'
+                      ? 'bg-error text-error-contrast hover:opacity-90 focus:ring-error'
+                      : 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary'
                   }`}
                 >
                   {confirmLabel}
@@ -108,7 +108,7 @@ export default function Dialog({
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-surface px-3 py-2 text-sm font-semibold text-text-primary shadow-sm ring-1 ring-inset ring-border hover:bg-surface-hover sm:col-start-1 sm:mt-0"
                 >
                   {cancelLabel}
                 </button>
@@ -117,10 +117,10 @@ export default function Dialog({
               <button
                 type="button"
                 onClick={onConfirm}
-                className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                   isError
-                    ? 'bg-red-600 hover:bg-red-500 focus:ring-red-600'
-                    : 'bg-blue-600 hover:bg-blue-500 focus:ring-blue-600'
+                    ? 'bg-error text-error-contrast hover:opacity-90 focus:ring-error'
+                    : 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary'
                 }`}
               >
                 {confirmLabel}

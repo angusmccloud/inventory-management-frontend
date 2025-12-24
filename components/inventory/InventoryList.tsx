@@ -28,15 +28,15 @@ export default function InventoryList({
   if (!items || items.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">No inventory items found.</p>
-        <p className="text-sm text-gray-400 mt-2">Add your first item to get started.</p>
+        <p className="text-gray-500 dark:text-gray-400">No inventory items found.</p>
+        <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Add your first item to get started.</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-md">
-      <ul role="list" className="divide-y divide-gray-200">
+    <div className="overflow-hidden bg-white dark:bg-gray-800 shadow sm:rounded-md">
+      <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
         {items.map((item) => {
           const isLowStock = item.quantity <= item.lowStockThreshold;
           
@@ -45,7 +45,7 @@ export default function InventoryList({
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-medium text-gray-900 truncate">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 truncate">
                       {item.name}
                     </h3>
                     {isLowStock && (
@@ -54,31 +54,31 @@ export default function InventoryList({
                       </span>
                     )}
                     {item.status === 'archived' && (
-                      <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                      <span className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:text-gray-200">
                         Archived
                       </span>
                     )}
                   </div>
-                  <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500">
+                  <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500 dark:text-gray-400">
                     <div>
-                      <span className="font-semibold text-gray-900">Quantity:</span>{' '}
+                      <span className="font-semibold text-gray-900 dark:text-gray-100">Quantity:</span>{' '}
                       {item.quantity} {item.unit || 'units'}
                     </div>
                     {item.locationName && (
                       <div>
-                        <span className="font-semibold text-gray-900">Location:</span>{' '}
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">Location:</span>{' '}
                         {item.locationName}
                       </div>
                     )}
                     {item.preferredStoreName && (
                       <div>
-                        <span className="font-semibold text-gray-900">Store:</span>{' '}
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">Store:</span>{' '}
                         {item.preferredStoreName}
                       </div>
                     )}
                   </div>
                   {item.notes && (
-                    <p className="mt-2 text-sm text-gray-600">{item.notes}</p>
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{item.notes}</p>
                   )}
                 </div>
                 
@@ -117,7 +117,7 @@ export default function InventoryList({
                   {item.status === 'active' ? (
                     <button
                       onClick={() => onArchive(item)}
-                      className="rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100"
+                      className="rounded-md bg-gray-50 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                     >
                       Archive
                     </button>

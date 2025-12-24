@@ -25,10 +25,10 @@ export default function Home() {
       <div className="max-w-4xl w-full space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">
-          <h1 className="text-5xl font-bold text-gray-900">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">
             Inventory HQ
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Keep track of household items, manage shopping lists, and coordinate with your family - all in one place.
           </p>
         </div>
@@ -63,8 +63,8 @@ export default function Home() {
         </div>
         
         {/* Key Benefits */}
-        <div className="mt-16 bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <div className="mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
             Why Choose Our System?
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -104,10 +104,10 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 text-center space-y-3">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center space-y-3">
       <div className="text-4xl">{icon}</div>
-      <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+      <p className="text-gray-600 dark:text-gray-400">{description}</p>
     </div>
   );
 }
@@ -140,8 +140,8 @@ function BenefitItem({
         </svg>
       </div>
       <div>
-        <h4 className="font-semibold text-gray-900">{title}</h4>
-        <p className="text-gray-600 text-sm">{description}</p>
+        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{title}</h4>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">{description}</p>
       </div>
     </div>
   );

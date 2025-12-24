@@ -17,7 +17,7 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
     return (
       <div className="text-center py-12">
         <svg
-          className="mx-auto h-12 w-12 text-gray-400"
+          className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -29,8 +29,8 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
           />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900">No pending invitations</h3>
-        <p className="mt-1 text-sm text-gray-500">
+        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No pending invitations</h3>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Invite new members to start collaborating
         </p>
       </div>
@@ -60,12 +60,12 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
         return (
           <div
             key={invitation.invitationId}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="text-sm font-semibold text-gray-900">
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {invitation.email}
                   </h4>
                   <span
@@ -88,17 +88,17 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                   </span>
 
                   {invitation.status === 'pending' && !isExpired && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       Expires in {expiresIn} day{expiresIn !== 1 ? 's' : ''}
                     </span>
                   )}
 
                   {invitation.status === 'pending' && isExpired && (
-                    <span className="text-xs text-red-600 font-medium">Expired</span>
+                    <span className="text-xs text-red-600 dark:text-red-400 font-medium">Expired</span>
                   )}
                 </div>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Invited by {invitation.invitedByName || 'Unknown'} on{' '}
                   {new Date(invitation.createdAt).toLocaleDateString()}
                 </p>
@@ -107,7 +107,7 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
               {invitation.status === 'pending' && !isExpired && onRevoke && (
                 <button
                   onClick={() => onRevoke(invitation.invitationId)}
-                  className="ml-4 text-sm px-3 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-colors"
+                  className="ml-4 text-sm px-3 py-1 rounded border border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                 >
                   Revoke
                 </button>

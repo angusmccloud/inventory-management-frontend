@@ -33,19 +33,19 @@ export function MemberCard({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {member.name}
               {isCurrentUser && (
-                <span className="ml-2 text-sm text-gray-500">(You)</span>
+                <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">(You)</span>
               )}
             </h3>
           </div>
 
-          <p className="text-sm text-gray-600 mb-3">{member.email}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{member.email}</p>
 
           <div className="flex items-center gap-2">
             <span
@@ -65,7 +65,7 @@ export function MemberCard({
             </span>
           </div>
 
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
             Joined {new Date(member.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -80,7 +80,7 @@ export function MemberCard({
                     member.role === 'admin' ? 'suggester' : 'admin'
                   )
                 }
-                className="text-sm px-3 py-1 rounded border border-blue-300 text-blue-700 hover:bg-blue-50 transition-colors"
+                className="text-sm px-3 py-1 rounded border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                 disabled={isCurrentUser}
                 title={isCurrentUser ? 'Cannot change your own role' : 'Toggle role'}
               >
@@ -91,7 +91,7 @@ export function MemberCard({
             {onRemove && (
               <button
                 onClick={() => onRemove(member.memberId)}
-                className="text-sm px-3 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-sm px-3 py-1 rounded border border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={isCurrentUser ? 'Remove yourself from family' : 'Remove member'}
               >
                 Remove

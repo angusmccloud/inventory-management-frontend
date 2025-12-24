@@ -2,19 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light Theme (Default) */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  /* Primary - Blue brand color */
+  --color-primary: 14 165 233; /* #0ea5e9 */
+  --color-primary-contrast: 255 255 255; /* white text on primary */
+  --color-primary-hover: 2 132 199; /* #0284c7 */
+
+  /* Secondary - Indigo accent color */
+  --color-secondary: 99 102 241; /* #6366f1 */
+  --color-secondary-contrast: 255 255 255; /* white text on secondary */
+  --color-secondary-hover: 79 70 229; /* #4f46e5 */
+
+  /* Surface - Card and panel backgrounds */
+  --color-surface: 255 255 255; /* white */
+  --color-surface-elevated: 249 250 251; /* gray-50 */
+  --color-surface-hover: 243 244 246; /* gray-100 */
+
+  /* Background - Main page background */
+  --color-background: 249 250 251; /* gray-50 */
+
+  /* Text colors */
+  --color-text-primary: 17 24 39; /* gray-900 */
+  --color-text-secondary: 107 114 128; /* gray-500 */
+  --color-text-disabled: 209 213 219; /* gray-300 */
+
+  /* Border colors */
+  --color-border: 229 231 235; /* gray-200 */
+  --color-border-focus: 14 165 233; /* primary color */
+
+  /* Semantic colors */
+  --color-success: 34 197 94; /* green-500 */
+  --color-success-contrast: 255 255 255;
+  
+  --color-warning: 245 158 11; /* amber-500 */
+  --color-warning-contrast: 255 255 255;
+  
+  --color-error: 239 68 68; /* red-500 */
+  --color-error-contrast: 255 255 255;
+  
+  --color-info: 59 130 246; /* blue-500 */
+  --color-info-contrast: 255 255 255;
 }
 
+/* Dark Theme (System Preference) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 10, 10, 10;
+    /* Primary - Brighter blue for dark backgrounds */
+    --color-primary: 56 189 248; /* #38bdf8 */
+    --color-primary-contrast: 17 24 39; /* dark text on primary */
+    --color-primary-hover: 125 211 252; /* #7dd3fc */
+
+    /* Secondary - Brighter indigo for dark backgrounds */
+    --color-secondary: 129 140 248; /* #818cf8 */
+    --color-secondary-contrast: 17 24 39; /* dark text on secondary */
+    --color-secondary-hover: 165 180 252; /* #a5b4fc */
+
+    /* Surface - Dark card and panel backgrounds */
+    --color-surface: 31 41 55; /* gray-800 */
+    --color-surface-elevated: 55 65 81; /* gray-700 */
+    --color-surface-hover: 75 85 99; /* gray-600 */
+
+    /* Background - Dark page background */
+    --color-background: 17 24 39; /* gray-900 */
+
+    /* Text colors */
+    --color-text-primary: 243 244 246; /* gray-100 */
+    --color-text-secondary: 156 163 175; /* gray-400 */
+    --color-text-disabled: 75 85 99; /* gray-600 */
+
+    /* Border colors */
+    --color-border: 55 65 81; /* gray-700 */
+    --color-border-focus: 56 189 248; /* primary color */
+
+    /* Semantic colors - Slightly adjusted for dark mode visibility */
+    --color-success: 74 222 128; /* green-400 */
+    --color-success-contrast: 17 24 39;
+    
+    --color-warning: 251 191 36; /* amber-400 */
+    --color-warning-contrast: 17 24 39;
+    
+    --color-error: 248 113 113; /* red-400 */
+    --color-error-contrast: 17 24 39;
+    
+    --color-info: 96 165 250; /* blue-400 */
+    --color-info-contrast: 17 24 39;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  color: rgb(var(--color-text-primary));
+  background: rgb(var(--color-background));
 }
