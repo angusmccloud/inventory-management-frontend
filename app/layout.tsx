@@ -1,11 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import ThemeProvider from '@/components/common/ThemeProvider';
 
 export const metadata: Metadata = {
   title: 'Inventory HQ',
   description: 'Manage your household inventory, shopping lists, and notifications with your family',
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: '#3b82f6',
 };
 

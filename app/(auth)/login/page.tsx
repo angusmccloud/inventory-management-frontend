@@ -7,13 +7,13 @@
 
 'use client';
 
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
 
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [viewMode, setViewMode] = useState<ViewMode>('login');
@@ -400,5 +400,17 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
