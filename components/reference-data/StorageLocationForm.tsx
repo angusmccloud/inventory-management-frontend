@@ -46,10 +46,6 @@ export default function StorageLocationForm({
     }
   }
 
-  function getNameInputClass(): string {
-    return 'mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 sm:text-sm';
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <Input
@@ -60,7 +56,7 @@ export default function StorageLocationForm({
         maxLength={50}
         placeholder="e.g., Pantry, Fridge, Garage"
         required
-        helperText={`${name.length}/50 characters`}
+        helpText={`${name.length}/50 characters`}
         autoFocus
       />
 

@@ -35,10 +35,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {icon && (
         <div className="mb-4 text-gray-400 dark:text-gray-500">
           {React.isValidElement(icon) 
-            ? React.cloneElement(icon as React.ReactElement, { 
+            ? React.cloneElement(icon as React.ReactElement<{ className?: string }>, { 
                 className: cn(
                   'h-12 w-12 mx-auto',
-                  (icon as React.ReactElement).props.className
+                  (icon as React.ReactElement<{ className?: string }>).props.className
                 )
               })
             : icon

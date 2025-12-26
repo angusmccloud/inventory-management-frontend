@@ -7,7 +7,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/cn';
-import type { SelectProps, SelectOption } from './Select.types';
+import type { SelectProps } from './Select.types';
 import type { InputSize, InputValidationState } from '../Input/Input.types';
 
 /**

@@ -16,7 +16,8 @@ export type BadgeVariant =
   | 'success'    // Green (positive status)
   | 'warning'    // Yellow (caution status)
   | 'error'      // Red (negative status)
-  | 'info';      // Light blue (informational)
+  | 'info'       // Light blue (informational)
+  | 'neutral';   // Alternative gray (alias for default)
 
 /**
  * Badge size variants

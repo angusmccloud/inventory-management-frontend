@@ -19,6 +19,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   warning: 'bg-warning/10 text-warning border border-warning/20',
   error: 'bg-error/10 text-error border border-error/20',
   info: 'bg-info/10 text-info border border-info/20',
+  neutral: 'bg-surface-elevated text-text-secondary border border-border',
 };
 
 /**
@@ -40,6 +41,7 @@ const dotStyles: Record<BadgeVariant, string> = {
   warning: 'bg-warning',
   error: 'bg-error',
   info: 'bg-info',
+  neutral: 'bg-surface-elevated border-border',
 };
 
 /**

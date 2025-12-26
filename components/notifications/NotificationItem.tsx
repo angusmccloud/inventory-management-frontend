@@ -97,7 +97,7 @@ export default function NotificationItem({
               />
             </svg>
             
-            <Text as="h3" variant="lg" weight="medium" className="truncate">
+            <Text as="h3" variant="body" weight="medium" className="truncate text-lg">
               {notification.itemName}
             </Text>
             

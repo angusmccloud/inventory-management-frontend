@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import type { Store } from '../../types/entities';
-import { Input, Button, Alert, Text } from '@/components/common';
+import { Input, Button, Alert } from '@/components/common';
 
 interface StoreFormProps {
   familyId: string;
@@ -46,10 +46,6 @@ export default function StoreForm({
     }
   }
 
-  function getNameInputClass(): string {
-    return 'mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 sm:text-sm';
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <Input
@@ -60,7 +56,7 @@ export default function StoreForm({
         maxLength={100}
         placeholder="e.g., Walmart, Target, Costco"
         required
-        helperText={`${name.length}/100 characters`}
+        helpText={`${name.length}/100 characters`}
         autoFocus
       />
 

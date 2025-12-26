@@ -27,7 +27,9 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent, currentIndex: number) => {
     const enabledTabs = tabs.filter(tab => !tab.disabled);
-    const currentTabIndex = enabledTabs.findIndex(tab => tab.id === tabs[currentIndex].id);
+    const currentTab = tabs[currentIndex];
+    if (!currentTab) return;
+    const currentTabIndex = enabledTabs.findIndex(tab => tab.id === currentTab.id);
     
     let nextIndex = currentTabIndex;
     
@@ -59,8 +61,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
     
     if (nextIndex !== currentTabIndex) {
       const nextTab = enabledTabs[nextIndex];
-      onChange(nextTab.id);
-      tabRefs.current.get(nextTab.id)?.focus();
+      if (nextTab) {
+        onChange(nextTab.id);
+        tabRefs.current.get(nextTab.id)?.focus();
+      }
     }
   };
   
@@ -114,7 +118,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               <span className="flex-shrink-0">
                 {React.isValidElement(tab.icon)
                   ? React.cloneElement(tab.icon as React.ReactElement, {
-                      className: cn('h-5 w-5', (tab.icon as React.ReactElement).props.className),
+                      className: cn('h-5 w-5', (tab.icon as React.ReactElement<{ className?: string }>).props.className),
                     })
                   : tab.icon}
               </span>
