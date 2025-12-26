@@ -135,7 +135,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             // Appearance for dropdown arrow
             'appearance-none bg-no-repeat',
             'bg-[right_0.75rem_center] bg-[length:1.25rem] pr-10',
-            // Custom arrow using data URL (chevron down)
+            // Custom arrow using data URL (chevron down) - uses currentColor for dark theme compatibility
+            'dark:bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%23d1d5db\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
             'bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
             // Custom classes
             className
