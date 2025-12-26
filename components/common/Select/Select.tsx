@@ -105,10 +105,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label 
             htmlFor={selectId}
-            className="block text-sm font-semibold text-text-primary mb-1.5"
+            className="block text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1.5"
           >
             {label}
-            {required && <span className="text-error ml-1">*</span>}
+            {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
           </label>
         )}
         
@@ -123,19 +123,22 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           onChange={handleChange}
           className={cn(
             // Base styles
-            'block w-full rounded-md border bg-surface',
-            'text-text-primary',
+            'block w-full rounded-md border-0',
+            'bg-white dark:bg-gray-800',
+            'text-gray-900 dark:text-gray-100',
+            'ring-1 ring-inset ring-gray-300 dark:ring-gray-600',
             'transition-colors duration-200',
-            'focus:outline-none focus:ring-2 focus:ring-offset-0',
-            'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-surface-elevated',
+            'focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-500',
+            'disabled:cursor-not-allowed disabled:opacity-60',
             // Size styles
             sizeStyles[size],
-            // Validation styles
-            validationStyles[effectiveValidationState],
+            // Validation styles (for error/success states)
+            error && 'ring-red-500 dark:ring-red-400 focus:ring-red-500 dark:focus:ring-red-400',
+            success && 'ring-green-500 dark:ring-green-400 focus:ring-green-500 dark:focus:ring-green-400',
             // Appearance for dropdown arrow
             'appearance-none bg-no-repeat',
             'bg-[right_0.75rem_center] bg-[length:1.25rem] pr-10',
-            // Custom arrow using data URL (chevron down) - uses currentColor for dark theme compatibility
+            // Custom arrow using data URL (chevron down)
             'dark:bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%23d1d5db\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
             'bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
             // Custom classes
@@ -175,9 +178,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={feedbackId}
             className={cn(
               'mt-1.5 text-sm',
-              error && 'text-error',
-              success && 'text-success',
-              !error && !success && 'text-text-secondary'
+              error && 'text-red-600 dark:text-red-400',
+              success && 'text-green-600 dark:text-green-400',
+              !error && !success && 'text-gray-600 dark:text-gray-400'
             )}
           >
             {feedbackMessage}
