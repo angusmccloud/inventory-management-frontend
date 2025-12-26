@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import type { Store } from '../../types/entities';
+import { Input, Button, Alert, Text } from '@/components/common';
 
 interface StoreFormProps {
   familyId: string;
@@ -51,26 +52,17 @@ export default function StoreForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Store Name <span className="text-red-500 dark:text-red-400">*</span>
-        </label>
-        <div className="mt-1">
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={100}
-            className={getNameInputClass()}
-            placeholder="e.g., Walmart, Target, Costco"
-            autoFocus
-          />
-        </div>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {name.length}/100 characters
-        </p>
-      </div>
+      <Input
+        id="name"
+        label="Store Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={100}
+        placeholder="e.g., Walmart, Target, Costco"
+        required
+        helperText={`${name.length}/100 characters`}
+        autoFocus
+      />
 
       <div>
         <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300">

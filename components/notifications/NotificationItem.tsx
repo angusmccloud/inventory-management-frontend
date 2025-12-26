@@ -8,6 +8,8 @@
 'use client';
 
 import { LowStockNotification, LowStockNotificationStatus } from '@/types/entities';
+import { Badge, Button, Text } from '@/components/common';
+import type { BadgeVariant } from '@/components/common/Badge/Badge.types';
 
 interface NotificationItemProps {
   notification: LowStockNotification;
@@ -18,18 +20,18 @@ interface NotificationItemProps {
 }
 
 /**
- * Get status badge styling based on notification status
+ * Get status badge variant based on notification status
  */
-const getStatusBadgeStyles = (status: LowStockNotificationStatus): string => {
+const getStatusBadgeVariant = (status: LowStockNotificationStatus): BadgeVariant => {
   switch (status) {
     case 'active':
-      return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200';
+      return 'error';
     case 'acknowledged':
-      return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200';
+      return 'warning';
     case 'resolved':
-      return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200';
+      return 'success';
     default:
-      return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
+      return 'neutral';
   }
 };
 
@@ -70,7 +72,7 @@ export default function NotificationItem({
   onAddToShoppingList,
   isAdmin,
 }: NotificationItemProps) {
-  const statusBadgeStyles = getStatusBadgeStyles(notification.status);
+  const statusVariant = getStatusBadgeVariant(notification.status);
   const canAcknowledge = isAdmin && notification.status === 'active';
   const canResolve = isAdmin && (notification.status === 'active' || notification.status === 'acknowledged');
 
@@ -95,17 +97,14 @@ export default function NotificationItem({
               />
             </svg>
             
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 truncate">
+            <Text as="h3" variant="lg" weight="medium" className="truncate">
               {notification.itemName}
-            </h3>
+            </Text>
             
             {/* Status badge */}
-            <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadgeStyles}`}
-              data-testid="status-badge"
-            >
+            <Badge variant={statusVariant} data-testid="status-badge">
               {getStatusDisplayText(notification.status)}
-            </span>
+            </Badge>
           </div>
           
           <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500 dark:text-gray-400">
@@ -138,11 +137,13 @@ export default function NotificationItem({
         <div className="ml-4 flex-shrink-0 flex gap-2">
           {/* Add to Shopping List button - show for active and acknowledged notifications */}
           {(notification.status === 'active' || notification.status === 'acknowledged') && (
-            <button
+            <Button
               onClick={() => onAddToShoppingList(notification)}
-              className="rounded-md bg-purple-50 dark:bg-purple-900/30 px-3 py-2 text-sm font-semibold text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              variant="secondary"
+              size="sm"
               data-testid="add-to-shopping-list-button"
               title="Add to Shopping List"
+              className="bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 focus:ring-purple-500"
             >
               <svg
                 className="h-5 w-5"
@@ -157,29 +158,33 @@ export default function NotificationItem({
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                 />
               </svg>
-            </button>
+            </Button>
           )}
           
           {/* Acknowledge button - only for admins on active notifications */}
           {canAcknowledge && (
-            <button
+            <Button
               onClick={() => onAcknowledge(notification.notificationId)}
-              className="rounded-md bg-yellow-50 dark:bg-yellow-900/30 px-3 py-2 text-sm font-semibold text-yellow-700 dark:text-yellow-300 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              variant="secondary"
+              size="sm"
               data-testid="acknowledge-button"
+              className="bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 focus:ring-yellow-500"
             >
               Acknowledge
-            </button>
+            </Button>
           )}
           
           {/* Resolve button - only for admins on active or acknowledged notifications */}
           {canResolve && (
-            <button
+            <Button
               onClick={() => onResolve(notification.notificationId)}
-              className="rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-2 text-sm font-semibold text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              variant="secondary"
+              size="sm"
               data-testid="resolve-button"
+              className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 focus:ring-green-500"
             >
               Resolve
-            </button>
+            </Button>
           )}
         </div>
       </div>
