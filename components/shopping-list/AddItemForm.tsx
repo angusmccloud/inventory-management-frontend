@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { AddToShoppingListRequest } from '@/lib/api/shoppingList';
 import { listStores } from '@/lib/api/reference-data';
 import type { Store } from '@/types/entities';
+import { Input, Select, Button } from '@/components/common';
 
 interface AddItemFormProps {
   familyId: string;
@@ -79,68 +80,52 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-4">
         {/* Item Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Item Name *
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-            placeholder="e.g., Paper Towels, Birthday Cake"
-            maxLength={100}
-            required
-            disabled={isSubmitting}
-          />
-        </div>
+        <Input
+          id="name"
+          label="Item Name *"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g., Paper Towels, Birthday Cake"
+          maxLength={100}
+          required
+          disabled={isSubmitting}
+        />
 
         {/* Quantity */}
-        <div>
-          <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Quantity (optional)
-          </label>
-          <input
-            type="number"
-            id="quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value === '' ? '' : Number(e.target.value))}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-            placeholder="1"
-            min="1"
-            disabled={isSubmitting}
-          />
-        </div>
+        <Input
+          type="number"
+          id="quantity"
+          label="Quantity (optional)"
+          value={quantity === '' ? '' : String(quantity)}
+          onChange={(e) => setQuantity(e.target.value === '' ? '' : Number(e.target.value))}
+          placeholder="1"
+          min={1}
+          disabled={isSubmitting}
+        />
 
         {/* Store */}
-        <div>
-          <label htmlFor="store" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Store (optional)
-          </label>
-          <select
-            id="store"
-            value={storeId}
-            onChange={(e) => setStoreId(e.target.value)}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-            disabled={isSubmitting || loadingStores}
-          >
-            <option value="">Select a store</option>
-            {stores.map((store) => (
-              <option key={store.storeId} value={store.storeId}>
-                {store.name}
-              </option>
-            ))}
-          </select>
-          {!loadingStores && stores.length === 0 && (
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              No stores available. Add them in{' '}
-              <a href="/dashboard/settings/reference-data" className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
-                Settings
-              </a>
-            </p>
-          )}
-        </div>
+        <Select
+          id="store"
+          label="Store (optional)"
+          value={storeId}
+          onChange={(e) => setStoreId(e.target.value)}
+          disabled={isSubmitting || loadingStores}
+        >
+          <option value="">Select a store</option>
+          {stores.map((store) => (
+            <option key={store.storeId} value={store.storeId}>
+              {store.name}
+            </option>
+          ))}
+        </Select>
+        {!loadingStores && stores.length === 0 && (
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            No stores available. Add them in{' '}
+            <a href="/dashboard/settings/reference-data" className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+              Settings
+            </a>
+          </p>
+        )}
 
         {/* Notes */}
         <div>
@@ -168,21 +153,22 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
 
       {/* Actions */}
       <div className="flex gap-3">
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={isSubmitting}
-          className="flex-1 rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
+          className="flex-1"
         >
           {isSubmitting ? 'Adding...' : 'Add Item'}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="secondary"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );
