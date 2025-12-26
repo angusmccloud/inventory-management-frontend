@@ -113,7 +113,7 @@ export default function EditShoppingListItemForm({
           id="edit-store"
           label="Store (optional)"
           value={storeId}
-          onChange={(e) => setStoreId(e.target.value)}
+          onChange={(value) => setStoreId(value)}
           disabled={isSubmitting || loadingStores}
         >
           <option value="">Select a store</option>

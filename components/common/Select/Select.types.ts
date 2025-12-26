@@ -54,9 +54,9 @@ export interface SelectProps<T = string>
   extends BaseInputProps, 
     Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'onChange' | 'value'> {
   /**
-   * Select options
+   * Select options (optional if using children pattern)
    */
-  options: SelectOption<T>[];
+  options?: SelectOption<T>[];
   
   /**
    * Placeholder option (shown when no value selected)

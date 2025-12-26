@@ -74,6 +74,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       value,
       onChange,
       id,
+      children,
       ...props
     },
     ref
@@ -141,23 +142,30 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           )}
           {...props}
         >
-          {/* Placeholder option */}
-          {placeholder && (
-            <option value="" disabled>
-              {placeholder}
-            </option>
+          {/* Render children if provided, otherwise render options */}
+          {children ? (
+            children
+          ) : (
+            <>
+              {/* Placeholder option */}
+              {placeholder && (
+                <option value="" disabled>
+                  {placeholder}
+                </option>
+              )}
+              
+              {/* Options from props */}
+              {options?.map((option) => (
+                <option 
+                  key={String(option.value)} 
+                  value={option.value as any}
+                  disabled={option.disabled}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </>
           )}
-          
-          {/* Options */}
-          {options.map((option) => (
-            <option 
-              key={String(option.value)} 
-              value={option.value as any}
-              disabled={option.disabled}
-            >
-              {option.label}
-            </option>
-          ))}
         </select>
         
         {/* Feedback message (help text, error, or success) */}

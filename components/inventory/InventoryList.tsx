@@ -93,7 +93,6 @@ export default function InventoryList({
                     variant="secondary"
                     size="sm"
                     leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
-                    className="bg-purple-50 text-purple-700 hover:bg-purple-100 focus:ring-purple-500"
                     title="Add to Shopping List"
                   >
                     Add
@@ -102,7 +101,6 @@ export default function InventoryList({
                     onClick={() => onAdjustQuantity(item)}
                     variant="secondary"
                     size="sm"
-                    className="bg-green-50 text-green-700 hover:bg-green-100 focus:ring-green-500"
                   >
                     Adjust
                   </Button>
@@ -111,7 +109,6 @@ export default function InventoryList({
                     variant="secondary"
                     size="sm"
                     leftIcon={<PencilIcon className="h-4 w-4" />}
-                    className="bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-500"
                   >
                     Edit
                   </Button>
@@ -121,7 +118,6 @@ export default function InventoryList({
                       variant="secondary"
                       size="sm"
                       leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
-                      className="bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                     >
                       Archive
                     </Button>

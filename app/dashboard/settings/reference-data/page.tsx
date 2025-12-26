@@ -18,6 +18,7 @@ import StorageLocationForm from '@/components/reference-data/StorageLocationForm
 import StoreList from '@/components/reference-data/StoreList';
 import StoreForm from '@/components/reference-data/StoreForm';
 import ReferenceDataEmptyState from '@/components/reference-data/ReferenceDataEmptyState';
+import { LoadingSpinner, Text } from '@/components/common';
 import type { UserContext, StorageLocation, Store } from '@/types/entities';
 import {
   listStorageLocations,
@@ -152,8 +153,11 @@ export default function ReferenceDataPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Loading...</p>
+        <div className="flex flex-col items-center">
+          <LoadingSpinner size="lg" />
+          <Text variant="body" className="mt-4 text-text-secondary">
+            Loading reference data...
+          </Text>
         </div>
       </div>
     );
@@ -220,8 +224,11 @@ export default function ReferenceDataPage() {
       {/* Tab Content */}
       <div className="mt-6">
         {loadingData ? (
-          <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+          <div className="flex flex-col items-center justify-center py-12">
+            <LoadingSpinner size="lg" />
+            <Text variant="body" className="mt-4 text-text-secondary">
+              Loading data...
+            </Text>
           </div>
         ) : (
           <>
