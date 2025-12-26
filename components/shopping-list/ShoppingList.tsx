@@ -22,6 +22,7 @@ import AddItemForm from './AddItemForm';
 import EditShoppingListItemForm from './EditShoppingListItemForm';
 import StoreFilter from './StoreFilter';
 import Dialog from '../common/Dialog';
+import { Button } from '@/components/common';
 
 interface ShoppingListProps {
   familyId: string;
@@ -234,12 +235,13 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             selectedStoreId={selectedStore}
             onStoreChange={setSelectedStore}
           />
-          <button
+          <Button
+            variant="primary"
+            size="md"
             onClick={() => setModalState({ type: 'add' })}
-            className="rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           >
             Add Item
-          </button>
+          </Button>
         </div>
       </div>
 
