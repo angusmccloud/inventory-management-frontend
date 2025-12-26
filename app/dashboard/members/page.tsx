@@ -26,6 +26,7 @@ import { MemberList } from '@/components/members/MemberList';
 import { InvitationList } from '@/components/members/InvitationList';
 import { InviteMemberForm } from '@/components/members/InviteMemberForm';
 import { RemoveMemberDialog } from '@/components/members/RemoveMemberDialog';
+import { Text, Button, Alert, PageHeader, TabNavigation, LoadingSpinner } from '@/components/common';
 
 export default function MembersPage() {
   const router = useRouter();
@@ -203,13 +204,11 @@ export default function MembersPage() {
   if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
-          <div className="space-y-4">
-            <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          </div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <LoadingSpinner size="lg" />
+          <Text variant="body" className="mt-4 text-gray-600 dark:text-gray-400">
+            Loading members...
+          </Text>
         </div>
       </div>
     );
@@ -218,9 +217,9 @@ export default function MembersPage() {
   if (error && !familyId) {
     return (
       <div className="max-w-6xl mx-auto p-6">
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-          <p className="text-red-800 dark:text-red-200">{error}</p>
-        </div>
+        <Alert severity="error">
+          {error}
+        </Alert>
       </div>
     );
   }
@@ -228,48 +227,41 @@ export default function MembersPage() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Family Members</h1>
-          {isAdmin && !showInviteForm && (
-            <button
+      <PageHeader
+        title="Family Members"
+        description={summary ? `${summary.total} member${summary.total !== 1 ? 's' : ''} (${summary.admins} admin${summary.admins !== 1 ? 's' : ''}, ${summary.suggesters} suggester${summary.suggesters !== 1 ? 's' : ''})` : undefined}
+        action={
+          isAdmin && !showInviteForm ? (
+            <Button
+              variant="primary"
               onClick={() => setShowInviteForm(true)}
-              className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-medium"
             >
               + Invite Member
-            </button>
-          )}
-        </div>
-
-        {summary && (
-          <p className="text-gray-600 dark:text-gray-400">
-            {summary.total} member{summary.total !== 1 ? 's' : ''} ({summary.admins} admin
-            {summary.admins !== 1 ? 's' : ''}, {summary.suggesters} suggester
-            {summary.suggesters !== 1 ? 's' : ''})
-          </p>
-        )}
-      </div>
+            </Button>
+          ) : undefined
+        }
+      />
 
       {/* Success Message */}
       {successMessage && (
-        <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-green-800 dark:text-green-200">{successMessage}</p>
-        </div>
+        <Alert severity="success" dismissible onDismiss={() => setSuccessMessage(null)} className="mb-6">
+          {successMessage}
+        </Alert>
       )}
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-red-800 dark:text-red-200">{error}</p>
-        </div>
+        <Alert severity="error" dismissible onDismiss={() => setError(null)} className="mb-6">
+          {error}
+        </Alert>
       )}
 
       {/* Invite Form */}
       {isAdmin && showInviteForm && (
         <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <Text variant="h2" className="text-gray-900 dark:text-gray-100 mb-4">
             Invite New Member
-          </h2>
+          </Text>
           <InviteMemberForm
             onSubmit={handleInviteMember}
             onCancel={() => setShowInviteForm(false)}
@@ -278,34 +270,15 @@ export default function MembersPage() {
       )}
 
       {/* Tabs */}
-      <div className="mb-6">
-        <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('members')}
-              className={`${
-                activeTab === 'members'
-                  ? 'border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
-            >
-              Active Members ({members.length})
-            </button>
-            {isAdmin && (
-              <button
-                onClick={() => setActiveTab('invitations')}
-                className={`${
-                  activeTab === 'invitations'
-                    ? 'border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
-              >
-                Pending Invitations ({invitations.length})
-              </button>
-            )}
-          </nav>
-        </div>
-      </div>
+      <TabNavigation
+        tabs={[
+          { id: 'members', label: 'Active Members', badge: members.length },
+          ...(isAdmin ? [{ id: 'invitations', label: 'Pending Invitations', badge: invitations.length }] : [])
+        ]}
+        activeTab={activeTab}
+        onChange={(tabId) => setActiveTab(tabId as 'members' | 'invitations')}
+        className="mb-6"
+      />
 
       {/* Content */}
       {activeTab === 'members' && (
