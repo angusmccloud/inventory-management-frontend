@@ -153,7 +153,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             <>
               {/* Placeholder option */}
               {placeholder && (
-                <option value="" disabled>
+                <option value="" disabled className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                   {placeholder}
                 </option>
               )}
@@ -164,6 +164,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   key={String(option.value)} 
                   value={option.value as any}
                   disabled={option.disabled}
+                  className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   {option.label}
                 </option>

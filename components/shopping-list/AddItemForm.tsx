@@ -111,9 +111,9 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
           onChange={(value) => setStoreId(value)}
           disabled={isSubmitting || loadingStores}
         >
-          <option value="">Select a store</option>
+          <option value="" className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">Select a store</option>
           {stores.map((store) => (
-            <option key={store.storeId} value={store.storeId}>
+            <option key={store.storeId} value={store.storeId} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
               {store.name}
             </option>
           ))}
