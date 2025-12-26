@@ -23,6 +23,7 @@ import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import AdjustQuantity from '@/components/inventory/AdjustQuantity';
 import Dialog from '@/components/common/Dialog';
+import { Text, Button, Alert, PageHeader } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
@@ -180,13 +181,16 @@ export default function InventoryPage() {
   if (!familyId) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600 dark:text-gray-400">Please create a family first from the dashboard.</p>
-        <a
-          href="/dashboard"
-          className="mt-4 inline-block rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600"
+        <Text variant="body" className="text-gray-600 dark:text-gray-400">
+          Please create a family first from the dashboard.
+        </Text>
+        <Button
+          variant="primary"
+          onClick={() => window.location.href = '/dashboard'}
+          className="mt-4"
         >
           Go to Dashboard
-        </a>
+        </Button>
       </div>
     );
   }
@@ -194,25 +198,23 @@ export default function InventoryPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Inventory</h1>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Manage your family's inventory items
-          </p>
-        </div>
-        <button
-          onClick={() => setModalState({ type: 'add' })}
-          className="rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-        >
-          Add Item
-        </button>
-      </div>
+      <PageHeader
+        title="Inventory"
+        description="Manage your family's inventory items"
+        action={
+          <Button
+            variant="primary"
+            onClick={() => setModalState({ type: 'add' })}
+          >
+            Add Item
+          </Button>
+        }
+      />
 
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
-        </div>
+        <Alert severity="error" dismissible onDismiss={() => setError('')}>
+          {error}
+        </Alert>
       )}
 
       {/* Inventory List */}
@@ -238,11 +240,11 @@ export default function InventoryPage() {
             {/* Modal panel */}
             <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
                   {modalState.type === 'adjust' && 'Adjust Quantity'}
-                </h3>
+                </Text>
 
                 {modalState.type === 'add' && (
                   <AddItemForm

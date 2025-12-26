@@ -6,6 +6,7 @@
 'use client';
 
 import { Member } from '@/types/entities';
+import { Button } from '@/components/common';
 
 interface RemoveMemberDialogProps {
   member: Member | null;
@@ -86,24 +87,25 @@ export function RemoveMemberDialog({
 
           <div className="flex gap-3">
             {!isLastAdmin && (
-              <button
+              <Button
+                variant="danger"
                 onClick={onConfirm}
                 disabled={isRemoving}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                loading={isRemoving}
+                className="flex-1"
               >
                 {isRemoving ? 'Removing...' : isSelfRemoval ? 'Leave Family' : 'Remove Member'}
-              </button>
+              </Button>
             )}
 
-            <button
+            <Button
+              variant="secondary"
               onClick={onCancel}
               disabled={isRemoving}
-              className={`${
-                isLastAdmin ? 'flex-1' : ''
-              } px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors`}
+              className={isLastAdmin ? 'flex-1' : ''}
             >
               {isLastAdmin ? 'Close' : 'Cancel'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

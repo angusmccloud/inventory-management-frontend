@@ -9,6 +9,7 @@
 
 import { ShoppingListItem } from '@/lib/api/shoppingList';
 import { useState } from 'react';
+import { Badge, Button } from '@/components/common';
 
 interface ShoppingListItemProps {
   item: ShoppingListItem;
@@ -52,9 +53,9 @@ export default function ShoppingListItemComponent({
             {item.name}
           </h3>
           {isPurchased && (
-            <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300 mt-1">
+            <Badge variant="success" size="sm" className="mt-1">
               Purchased
-            </span>
+            </Badge>
           )}
         </div>
       </div>
@@ -74,18 +75,22 @@ export default function ShoppingListItemComponent({
       {/* Actions */}
       {!isPurchased && (
         <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => onEdit(item)}
-            className="flex-1 rounded-md bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 text-sm font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+            className="flex-1"
           >
             Edit
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
             onClick={() => onRemove(item)}
-            className="flex-1 rounded-md bg-red-50 dark:bg-red-900/30 px-3 py-1.5 text-sm font-semibold text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
+            className="flex-1"
           >
             Remove
-          </button>
+          </Button>
         </div>
       )}
     </div>

@@ -45,7 +45,51 @@
   --color-info-contrast: 255 255 255;
 }
 
-/* Dark Theme (System Preference) */
+/* Dark Theme (Class-based and Media Query for compatibility) */
+.dark,
+:root:has(.dark) {
+  /* Primary - Brighter blue for dark backgrounds */
+  --color-primary: 56 189 248; /* #38bdf8 */
+  --color-primary-contrast: 17 24 39; /* dark text on primary */
+  --color-primary-hover: 125 211 252; /* #7dd3fc */
+
+  /* Secondary - Brighter indigo for dark backgrounds */
+  --color-secondary: 129 140 248; /* #818cf8 */
+  --color-secondary-contrast: 17 24 39; /* dark text on secondary */
+  --color-secondary-hover: 165 180 252; /* #a5b4fc */
+
+  /* Surface - Dark card and panel backgrounds */
+  --color-surface: 31 41 55; /* gray-800 */
+  --color-surface-elevated: 55 65 81; /* gray-700 */
+  --color-surface-hover: 75 85 99; /* gray-600 */
+
+  /* Background - Dark page background */
+  --color-background: 17 24 39; /* gray-900 */
+
+  /* Text colors */
+  --color-text-primary: 243 244 246; /* gray-100 */
+  --color-text-secondary: 156 163 175; /* gray-400 */
+  --color-text-disabled: 75 85 99; /* gray-600 */
+
+  /* Border colors */
+  --color-border: 55 65 81; /* gray-700 */
+  --color-border-focus: 56 189 248; /* primary color */
+
+  /* Semantic colors - Slightly adjusted for dark mode visibility */
+  --color-success: 74 222 128; /* green-400 */
+  --color-success-contrast: 17 24 39;
+  
+  --color-warning: 251 191 36; /* amber-400 */
+  --color-warning-contrast: 17 24 39;
+  
+  --color-error: 248 113 113; /* red-400 */
+  --color-error-contrast: 17 24 39;
+  
+  --color-info: 96 165 250; /* blue-400 */
+  --color-info-contrast: 17 24 39;
+}
+
+/* Also support system preference directly for immediate feedback */
 @media (prefers-color-scheme: dark) {
   :root {
     /* Primary - Brighter blue for dark backgrounds */

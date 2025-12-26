@@ -22,6 +22,8 @@ import AddItemForm from './AddItemForm';
 import EditShoppingListItemForm from './EditShoppingListItemForm';
 import StoreFilter from './StoreFilter';
 import Dialog from '../common/Dialog';
+import { Button, Text, EmptyState, Alert, PageHeader, LoadingSpinner } from '@/components/common';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 interface ShoppingListProps {
   familyId: string;
@@ -207,48 +209,57 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   });
 
   if (isLoading) {
-    return <div className="text-center py-12 text-gray-600 dark:text-gray-400">Loading shopping list...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <LoadingSpinner size="lg" />
+        <Text variant="body" className="mt-4 text-gray-600 dark:text-gray-400">
+          Loading shopping list...
+        </Text>
+      </div>
+    );
   }
 
   if (error) {
-    return (
-      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-        <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
-      </div>
-    );
+    return <Alert severity="error">{error}</Alert>;
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Shopping List</h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {items.length} {items.length === 1 ? 'item' : 'items'} total
-          </p>
-        </div>
-        <div className="mt-4 sm:mt-0 flex gap-3">
+      <PageHeader
+        title="Shopping List"
+        description={`${items.length} ${items.length === 1 ? 'item' : 'items'} total`}
+        action={
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => setModalState({ type: 'add' })}
+          >
+            Add Item
+          </Button>
+        }
+        secondaryActions={[
           <StoreFilter
+            key="store-filter"
             stores={stores}
             selectedStoreId={selectedStore}
             onStoreChange={setSelectedStore}
           />
-          <button
-            onClick={() => setModalState({ type: 'add' })}
-            className="rounded-md bg-blue-600 dark:bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-          >
-            Add Item
-          </button>
-        </div>
-      </div>
+        ]}
+      />
 
       {/* Shopping List Items */}
       {items.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">Your shopping list is empty.</p>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Add items to get started.</p>
-        </div>
+        <EmptyState
+          icon={<ShoppingCartIcon />}
+          title="Your shopping list is empty."
+          description="Add items to get started."
+          action={{
+            label: "Add Item",
+            onClick: () => setModalState({ type: 'add' }),
+            variant: "primary"
+          }}
+        />
       ) : selectedStore === 'all' && Object.keys(groupedItems).length > 1 ? (
         // Grouped by store view with responsive grid
         <div className="space-y-8">
@@ -258,7 +269,9 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             
             return (
               <div key={storeName}>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{storeName}</h3>
+                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
+                  {storeName}
+                </Text>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {storeItems.map((item) => (
                     <ShoppingListItemComponent
@@ -302,10 +315,10 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             {/* Modal panel */}
             <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}
                   {modalState.type === 'edit' && 'Edit Shopping List Item'}
-                </h3>
+                </Text>
 
                 {modalState.type === 'add' && (
                   <AddItemForm

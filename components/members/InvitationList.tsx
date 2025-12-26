@@ -6,6 +6,8 @@
 'use client';
 
 import { Invitation } from '@/types/entities';
+import { Badge, Button } from '@/components/common';
+import type { BadgeVariant } from '@/components/common';
 
 interface InvitationListProps {
   invitations: Invitation[];
@@ -37,16 +39,16 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
     );
   }
 
-  const statusColors = {
-    pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    accepted: 'bg-green-100 text-green-800 border-green-200',
-    expired: 'bg-gray-100 text-gray-800 border-gray-200',
-    revoked: 'bg-red-100 text-red-800 border-red-200',
+  const statusVariants: Record<string, BadgeVariant> = {
+    pending: 'warning',
+    accepted: 'success',
+    expired: 'default',
+    revoked: 'error',
   };
 
-  const roleColors = {
-    admin: 'bg-blue-100 text-blue-800',
-    suggester: 'bg-purple-100 text-purple-800',
+  const roleVariants: Record<string, BadgeVariant> = {
+    admin: 'primary',
+    suggester: 'info',
   };
 
   return (
@@ -68,24 +70,16 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {invitation.email}
                   </h4>
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                      roleColors[invitation.role]
-                    }`}
-                  >
+                  <Badge variant={roleVariants[invitation.role]} size="sm">
                     {invitation.role}
-                  </span>
+                  </Badge>
                 </div>
 
                 <div className="flex items-center gap-2 mb-2">
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                      statusColors[invitation.status]
-                    }`}
-                  >
+                  <Badge variant={statusVariants[invitation.status]} size="sm">
                     {invitation.status.charAt(0).toUpperCase() +
                       invitation.status.slice(1)}
-                  </span>
+                  </Badge>
 
                   {invitation.status === 'pending' && !isExpired && (
                     <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -105,12 +99,14 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
               </div>
 
               {invitation.status === 'pending' && !isExpired && onRevoke && (
-                <button
+                <Button
+                  variant="danger"
+                  size="sm"
                   onClick={() => onRevoke(invitation.invitationId)}
-                  className="ml-4 text-sm px-3 py-1 rounded border border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                  className="ml-4"
                 >
                   Revoke
-                </button>
+                </Button>
               )}
             </div>
           </div>

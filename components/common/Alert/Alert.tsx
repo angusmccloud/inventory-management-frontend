@@ -1,0 +1,131 @@
+/**
+ * Alert Component
+ * Feature: 008-common-components
+ * 
+ * Contextual message display for notifications and feedback with severity variants.
+ */
+
+'use client';
+
+import * as React from 'react';
+import { 
+  InformationCircleIcon, 
+  CheckCircleIcon, 
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  XMarkIcon 
+} from '@heroicons/react/24/outline';
+import { AlertProps, AlertSeverity } from './Alert.types';
+import { cn } from '@/lib/cn';
+
+/**
+ * Get severity-specific styles and icon
+ */
+const getSeverityConfig = (severity: AlertSeverity) => {
+  const configs = {
+    info: {
+      container: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
+      icon: 'text-blue-500 dark:text-blue-400',
+      title: 'text-blue-800 dark:text-blue-200',
+      text: 'text-blue-700 dark:text-blue-300',
+      iconComponent: InformationCircleIcon,
+      role: 'status' as const,
+    },
+    success: {
+      container: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+      icon: 'text-green-500 dark:text-green-400',
+      title: 'text-green-800 dark:text-green-200',
+      text: 'text-green-700 dark:text-green-300',
+      iconComponent: CheckCircleIcon,
+      role: 'status' as const,
+    },
+    warning: {
+      container: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
+      icon: 'text-yellow-500 dark:text-yellow-400',
+      title: 'text-yellow-800 dark:text-yellow-200',
+      text: 'text-yellow-700 dark:text-yellow-300',
+      iconComponent: ExclamationTriangleIcon,
+      role: 'alert' as const,
+    },
+    error: {
+      container: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
+      icon: 'text-red-500 dark:text-red-400',
+      title: 'text-red-800 dark:text-red-200',
+      text: 'text-red-700 dark:text-red-300',
+      iconComponent: XCircleIcon,
+      role: 'alert' as const,
+    },
+  };
+  
+  return configs[severity];
+};
+
+/**
+ * Alert component
+ */
+export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  ({ 
+    severity, 
+    title, 
+    children, 
+    dismissible = false, 
+    onDismiss,
+    className,
+    ...props 
+  }, ref) => {
+    const config = getSeverityConfig(severity);
+    const IconComponent = config.iconComponent;
+    
+    return (
+      <div
+        ref={ref}
+        role={config.role}
+        aria-live={severity === 'error' || severity === 'warning' ? 'assertive' : 'polite'}
+        className={cn(
+          'rounded-lg border p-4',
+          config.container,
+          className
+        )}
+        {...props}
+      >
+        <div className="flex items-start gap-3">
+          {/* Icon */}
+          <IconComponent className={cn('h-5 w-5 flex-shrink-0 mt-0.5', config.icon)} />
+          
+          {/* Content */}
+          <div className="flex-1 space-y-1">
+            {title && (
+              <p className={cn('text-sm font-semibold', config.title)}>
+                {title}
+              </p>
+            )}
+            <div className={cn('text-sm', config.text)}>
+              {children}
+            </div>
+          </div>
+          
+          {/* Dismiss button */}
+          {dismissible && onDismiss && (
+            <button
+              type="button"
+              onClick={onDismiss}
+              className={cn(
+                'flex-shrink-0 rounded-md p-1 inline-flex',
+                'hover:bg-black/5 dark:hover:bg-white/10',
+                'focus:outline-none focus:ring-2 focus:ring-offset-2',
+                config.icon
+              )}
+              aria-label="Dismiss alert"
+            >
+              <XMarkIcon className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+);
+
+Alert.displayName = 'Alert';
+
+export default Alert;

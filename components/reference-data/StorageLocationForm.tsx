@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import type { StorageLocation } from '../../types/entities';
+import { Input, Button, Alert } from '@/components/common';
 
 interface StorageLocationFormProps {
   familyId: string;
@@ -45,32 +46,19 @@ export default function StorageLocationForm({
     }
   }
 
-  function getNameInputClass(): string {
-    return 'mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 sm:text-sm';
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Location Name <span className="text-red-500 dark:text-red-400">*</span>
-        </label>
-        <div className="mt-1">
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={50}
-            className={getNameInputClass()}
-            placeholder="e.g., Pantry, Fridge, Garage"
-            autoFocus
-          />
-        </div>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {name.length}/50 characters
-        </p>
-      </div>
+      <Input
+        id="name"
+        label="Location Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={50}
+        placeholder="e.g., Pantry, Fridge, Garage"
+        required
+        helpText={`${name.length}/50 characters`}
+        autoFocus
+      />
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -87,36 +75,27 @@ export default function StorageLocationForm({
       </div>
 
       {submitError && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400 dark:text-red-300" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-800 dark:text-red-200">{submitError}</p>
-            </div>
-          </div>
-        </div>
+        <Alert severity="error">
+          {submitError}
+        </Alert>
       )}
 
       <div className="flex justify-end space-x-3">
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
+          variant="primary"
           disabled={!canSubmit}
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Saving...' : initialData ? 'Update Location' : 'Add Location'}
-        </button>
+        </Button>
       </div>
     </form>
   );

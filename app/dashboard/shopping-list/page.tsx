@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import ShoppingList from '@/components/shopping-list/ShoppingList';
+import { LoadingSpinner, Text } from '@/components/common';
 
 export default function ShoppingListPage() {
   const router = useRouter();
@@ -34,7 +35,12 @@ export default function ShoppingListPage() {
   if (isLoading) {
     return (
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="text-center py-12">Loading...</div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <LoadingSpinner size="lg" />
+          <Text variant="body" className="mt-4 text-text-secondary">
+            Loading shopping list...
+          </Text>
+        </div>
       </div>
     );
   }

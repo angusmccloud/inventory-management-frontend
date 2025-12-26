@@ -8,6 +8,8 @@
 'use client';
 
 import { StoreGroupSummary } from '@/lib/api/shoppingList';
+import { Select } from '@/components/common';
+import type { SelectOption } from '@/components/common/Select/Select.types';
 
 interface StoreFilterProps {
   stores: StoreGroupSummary[];
@@ -31,37 +33,39 @@ export default function StoreFilter({
     return a.storeName.localeCompare(b.storeName);
   });
 
+  // Build options array for Select component
+  const options: SelectOption<string>[] = [
+    {
+      label: `All Stores (${stores.reduce((sum, s) => sum + s.itemCount, 0)} items)`,
+      value: 'all',
+    },
+    ...sortedStores.map((store) => ({
+      label: `${store.storeName} (${store.itemCount} items, ${store.pendingCount} pending)`,
+      value: store.storeId || 'unassigned',
+    })),
+  ];
+
+  // Convert between internal state (null for unassigned) and select value (string)
+  const selectValue = selectedStoreId === null ? 'unassigned' : selectedStoreId;
+
+  const handleChange = (value: string) => {
+    if (value === 'all') {
+      onStoreChange('all');
+    } else if (value === 'unassigned') {
+      onStoreChange(null);
+    } else {
+      onStoreChange(value);
+    }
+  };
+
   return (
-    <div className="flex flex-col">
-      <label htmlFor="store-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-        Filter by Store
-      </label>
-      <select
-        id="store-filter"
-        value={selectedStoreId === null ? 'unassigned' : selectedStoreId}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (value === 'all') {
-            onStoreChange('all');
-          } else if (value === 'unassigned') {
-            onStoreChange(null);
-          } else {
-            onStoreChange(value);
-          }
-        }}
-        className="block rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-      >
-        <option value="all">All Stores ({stores.reduce((sum, s) => sum + s.itemCount, 0)} items)</option>
-        {sortedStores.map((store) => (
-          <option 
-            key={store.storeId || 'unassigned'} 
-            value={store.storeId || 'unassigned'}
-          >
-            {store.storeName} ({store.itemCount} items, {store.pendingCount} pending)
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select
+      id="store-filter"
+      label="Filter by Store"
+      options={options}
+      value={selectValue}
+      onChange={handleChange}
+    />
   );
 }
 

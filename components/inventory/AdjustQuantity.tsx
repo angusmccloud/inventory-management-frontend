@@ -9,6 +9,7 @@
 import { useState, FormEvent } from 'react';
 import { adjustInventoryQuantity } from '@/lib/api/inventory';
 import { InventoryItem } from '@/types/entities';
+import { Input, Button } from '@/components/common';
 
 interface AdjustQuantityProps {
   familyId: string;
@@ -71,30 +72,32 @@ export default function AdjustQuantity({
           Adjustment Amount
         </label>
         <div className="mt-1 flex gap-2">
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="md"
             onClick={() => setAdjustment(adjustment - 1)}
             disabled={loading}
-            className="rounded-md bg-gray-100 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50"
           >
             -1
-          </button>
-          <input
+          </Button>
+          <Input
             id="adjustment"
             type="number"
             value={adjustment}
             onChange={(e) => setAdjustment(Number(e.target.value))}
-                className="block w-full rounded-md border-0 px-3 py-2 text-center text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+            className="text-center"
             disabled={loading}
           />
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="md"
             onClick={() => setAdjustment(adjustment + 1)}
             disabled={loading}
-            className="rounded-md bg-gray-100 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50"
           >
             +1
-          </button>
+          </Button>
         </div>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           New quantity will be: <span className="font-semibold">{newQuantity}</span> {item.unit || 'units'}
@@ -108,22 +111,24 @@ export default function AdjustQuantity({
       )}
 
       <div className="flex gap-3">
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={loading}
-          className="flex-1 rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
+          loading={loading}
+          className="flex-1"
         >
           {loading ? 'Adjusting...' : 'Apply Adjustment'}
-        </button>
+        </Button>
         {onCancel && (
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={onCancel}
             disabled={loading}
-            className="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
           >
             Cancel
-          </button>
+          </Button>
         )}
       </div>
     </form>
