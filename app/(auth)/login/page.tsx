@@ -10,6 +10,7 @@
 import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
+import { Button, Alert } from '@/components/common';
 
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
@@ -331,35 +332,35 @@ function LoginForm() {
           </div>
 
           {success && (
-            <div className="rounded-md bg-green-50 p-4">
-              <p className="text-sm text-green-800">{success}</p>
-            </div>
+            <Alert severity="success">
+              {success}
+            </Alert>
           )}
 
           {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
+            <Alert severity="error">
+              {error}
+            </Alert>
           )}
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
+              loading={loading}
+              variant="primary"
+              fullWidth
             >
-              {loading
-                ? 'Please wait...'
-                : viewMode === 'register'
-                  ? 'Create Account'
-                  : viewMode === 'verify'
-                    ? 'Verify Email'
-                    : viewMode === 'forgot-password'
-                      ? 'Send Reset Code'
-                      : viewMode === 'reset-password'
-                        ? 'Reset Password'
-                        : 'Sign In'}
-            </button>
+              {viewMode === 'register'
+                ? 'Create Account'
+                : viewMode === 'verify'
+                  ? 'Verify Email'
+                  : viewMode === 'forgot-password'
+                    ? 'Send Reset Code'
+                    : viewMode === 'reset-password'
+                      ? 'Reset Password'
+                      : 'Sign In'}
+            </Button>
           </div>
 
           {viewMode === 'login' && (
@@ -368,7 +369,7 @@ function LoginForm() {
                 <button
                   type="button"
                   onClick={switchToForgotPassword}
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-primary hover:text-primary-hover"
                 >
                   Forgot your password?
                 </button>
@@ -381,7 +382,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={switchToLogin}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-primary hover:text-primary-hover"
               >
                 Back to sign in
               </button>
@@ -389,7 +390,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={viewMode === 'login' ? switchToRegister : switchToLogin}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-primary hover:text-primary-hover"
               >
                 {viewMode === 'login'
                   ? "Don't have an account? Create one"

@@ -11,6 +11,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { acceptInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
+import { Button, Input, Alert } from '@/components/common';
 
 function AcceptInvitationContent() {
   const router = useRouter();
@@ -136,9 +137,9 @@ function AcceptInvitationContent() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-800">{error}</p>
-          </div>
+          <Alert severity="error" className="mb-6">
+            {error}
+          </Alert>
         )}
 
         {!token ? (
@@ -150,75 +151,56 @@ function AcceptInvitationContent() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Your Name *
-              </label>
-              <input
+              <Input
                 type="text"
                 id="name"
+                label="Your Name *"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Enter your full name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isSubmitting}
+                helperText="This name will be visible to other family members"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                This name will be visible to other family members
-              </p>
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password (Optional)
-              </label>
-              <input
+              <Input
                 type="password"
                 id="password"
+                label="Password (Optional)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isSubmitting}
+                helperText="Leave blank to use email-based authentication"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Leave blank to use email-based authentication
-              </p>
             </div>
 
             {password && (
               <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Confirm Password
-                </label>
-                <input
+                <Input
                   type="password"
                   id="confirmPassword"
+                  label="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your password"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled={isSubmitting}
                 />
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting || !token}
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+              loading={isSubmitting}
+              variant="primary"
+              size="lg"
+              fullWidth
             >
-              {isSubmitting ? 'Accepting...' : 'Accept Invitation'}
-            </button>
+              Accept Invitation
+            </Button>
           </form>
         )}
 

@@ -12,6 +12,7 @@ import { isAuthenticated, getUserContext, handleLogout, setUserContext as saveUs
 import { getActiveNotificationCount } from '@/lib/api/notifications';
 import { listUserFamilies } from '@/lib/api/families';
 import { UserContext } from '@/types/entities';
+import { LoadingSpinner } from '@/components/common';
 
 export default function DashboardLayout({
   children,
@@ -80,9 +81,7 @@ export default function DashboardLayout({
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Loading...</p>
-        </div>
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
