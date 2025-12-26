@@ -7,6 +7,8 @@
 'use client';
 
 import { InventoryItem } from '@/types/entities';
+import { Button } from '@/components/common';
+import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -83,51 +85,52 @@ export default function InventoryList({
                 </div>
                 
                 <div className="ml-4 flex flex-shrink-0 gap-2">
-                  <button
+                  <Button
                     onClick={() => onAddToShoppingList(item)}
-                    className="rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-purple-700 hover:bg-purple-100"
+                    variant="secondary"
+                    size="sm"
+                    leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
+                    className="bg-purple-50 text-purple-700 hover:bg-purple-100 focus:ring-purple-500"
                     title="Add to Shopping List"
                   >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                  </button>
-                  <button
+                    Add
+                  </Button>
+                  <Button
                     onClick={() => onAdjustQuantity(item)}
-                    className="rounded-md bg-green-50 px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-100"
+                    variant="secondary"
+                    size="sm"
+                    className="bg-green-50 text-green-700 hover:bg-green-100 focus:ring-green-500"
                   >
                     Adjust
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => onEdit(item)}
-                    className="rounded-md bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
+                    variant="secondary"
+                    size="sm"
+                    leftIcon={<PencilIcon className="h-4 w-4" />}
+                    className="bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-500"
                   >
                     Edit
-                  </button>
+                  </Button>
                   {item.status === 'active' ? (
-                    <button
+                    <Button
                       onClick={() => onArchive(item)}
-                      className="rounded-md bg-gray-50 dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
+                      className="bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                     >
                       Archive
-                    </button>
+                    </Button>
                   ) : (
-                    <button
+                    <Button
                       onClick={() => onDelete(item)}
-                      className="rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
+                      variant="danger"
+                      size="sm"
+                      leftIcon={<TrashIcon className="h-4 w-4" />}
                     >
                       Delete
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
