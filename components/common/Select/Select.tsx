@@ -124,6 +124,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={cn(
             // Base styles
             'block w-full rounded-md border-0',
+            '[color-scheme:light] dark:[color-scheme:dark]',
             'bg-white dark:bg-gray-800',
             'text-gray-900 dark:text-gray-100',
             'ring-1 ring-inset ring-gray-300 dark:ring-gray-600',
