@@ -121,24 +121,24 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           aria-describedby={feedbackId}
           value={value as any} // Type assertion for generic value
           onChange={handleChange}
+          style={{
+            backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+            backgroundPosition: 'right 0.75rem center',
+            backgroundSize: '1.25rem',
+            backgroundRepeat: 'no-repeat',
+          }}
           className={cn(
             // Base styles - match textarea/input exactly
             'block w-full rounded-md border-0',
-            '[color-scheme:light] dark:[color-scheme:dark]',
-            'px-3 py-2',
+            'px-3 py-2 pr-10',
             'text-gray-900 dark:text-gray-100',
-            'bg-white dark:bg-gray-800',
+            '!bg-white dark:!bg-gray-800',
             'ring-1 ring-inset ring-gray-300 dark:ring-gray-600',
             'placeholder:text-gray-400 dark:placeholder:text-gray-500',
             'focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-500',
             'disabled:cursor-not-allowed disabled:opacity-60',
             'transition-colors duration-200',
-            // Appearance for dropdown arrow
-            'appearance-none bg-no-repeat',
-            'bg-[right_0.75rem_center] bg-[length:1.25rem] pr-10',
-            // Custom arrow using data URL (chevron down)
-            'dark:bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%239ca3af\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
-            'bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")]',
+            'appearance-none',
             // Error/success states
             error && 'ring-red-500 dark:ring-red-400 focus:ring-red-500 dark:focus:ring-red-400',
             success && 'ring-green-500 dark:ring-green-400 focus:ring-green-500 dark:focus:ring-green-400',
