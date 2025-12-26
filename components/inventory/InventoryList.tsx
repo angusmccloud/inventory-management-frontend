@@ -7,7 +7,7 @@
 'use client';
 
 import { InventoryItem } from '@/types/entities';
-import { Button } from '@/components/common';
+import { Button, Text, EmptyState } from '@/components/common';
 import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface InventoryListProps {
@@ -29,10 +29,11 @@ export default function InventoryList({
 }: InventoryListProps) {
   if (!items || items.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 dark:text-gray-400">No inventory items found.</p>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Add your first item to get started.</p>
-      </div>
+      <EmptyState
+        icon={<ArchiveBoxIcon />}
+        title="No inventory items found."
+        description="Add your first item to get started."
+      />
     );
   }
 
@@ -47,9 +48,9 @@ export default function InventoryList({
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 truncate">
+                    <Text variant="h3" className="text-gray-900 dark:text-gray-100 truncate">
                       {item.name}
-                    </h3>
+                    </Text>
                     {isLowStock && (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
                         Low Stock
@@ -80,7 +81,9 @@ export default function InventoryList({
                     )}
                   </div>
                   {item.notes && (
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{item.notes}</p>
+                    <Text variant="body" className="mt-2 text-gray-600 dark:text-gray-400">
+                      {item.notes}
+                    </Text>
                   )}
                 </div>
                 
