@@ -6,6 +6,8 @@
 'use client';
 
 import { Member } from '@/types/entities';
+import { Badge, Button } from '@/components/common';
+import type { BadgeVariant } from '@/components/common';
 
 interface MemberCardProps {
   member: Member;
@@ -22,14 +24,14 @@ export function MemberCard({
   onRemove,
   canManage = false,
 }: MemberCardProps) {
-  const roleColors = {
-    admin: 'bg-blue-100 text-blue-800 border-blue-200',
-    suggester: 'bg-purple-100 text-purple-800 border-purple-200',
+  const roleVariants: Record<string, BadgeVariant> = {
+    admin: 'primary',
+    suggester: 'info',
   };
 
-  const statusColors = {
-    active: 'bg-green-100 text-green-800',
-    removed: 'bg-red-100 text-red-800',
+  const statusVariants: Record<string, BadgeVariant> = {
+    active: 'success',
+    removed: 'error',
   };
 
   return (
@@ -48,21 +50,13 @@ export function MemberCard({
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{member.email}</p>
 
           <div className="flex items-center gap-2">
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-                roleColors[member.role]
-              }`}
-            >
+            <Badge variant={roleVariants[member.role]} size="sm">
               {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
-            </span>
+            </Badge>
 
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                statusColors[member.status]
-              }`}
-            >
+            <Badge variant={statusVariants[member.status]} size="sm">
               {member.status.charAt(0).toUpperCase() + member.status.slice(1)}
-            </span>
+            </Badge>
           </div>
 
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -73,29 +67,32 @@ export function MemberCard({
         {canManage && member.status === 'active' && (
           <div className="flex flex-col gap-2 ml-4">
             {onUpdateRole && (
-              <button
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() =>
                   onUpdateRole(
                     member.memberId,
                     member.role === 'admin' ? 'suggester' : 'admin'
                   )
                 }
-                className="text-sm px-3 py-1 rounded border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                 disabled={isCurrentUser}
                 title={isCurrentUser ? 'Cannot change your own role' : 'Toggle role'}
               >
                 {member.role === 'admin' ? 'Make Suggester' : 'Make Admin'}
-              </button>
+              </Button>
             )}
 
             {onRemove && (
-              <button
+              <Button
+                variant="danger"
+                size="sm"
                 onClick={() => onRemove(member.memberId)}
-                className="text-sm px-3 py-1 rounded border border-red-300 dark:border-red-600 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isCurrentUser}
                 title={isCurrentUser ? 'Remove yourself from family' : 'Remove member'}
               >
                 Remove
-              </button>
+              </Button>
             )}
           </div>
         )}
