@@ -8,7 +8,7 @@
 
 import { InventoryItem } from '@/types/entities';
 import { Button, Text, EmptyState } from '@/components/common';
-import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon, QrCodeIcon } from '@heroicons/react/24/outline';
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -17,6 +17,8 @@ interface InventoryListProps {
   onArchive: (item: InventoryItem) => void;
   onDelete: (item: InventoryItem) => void;
   onAddToShoppingList: (item: InventoryItem) => void;
+  onViewDetails?: (item: InventoryItem) => void;
+  isAdmin?: boolean;
 }
 
 export default function InventoryList({
@@ -26,6 +28,8 @@ export default function InventoryList({
   onArchive,
   onDelete,
   onAddToShoppingList,
+  onViewDetails,
+  isAdmin = false,
 }: InventoryListProps) {
   if (!items || items.length === 0) {
     return (
@@ -104,6 +108,17 @@ export default function InventoryList({
                   >
                     Adjust
                   </Button>
+                  {isAdmin && onViewDetails && (
+                    <Button
+                      onClick={() => onViewDetails(item)}
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={<QrCodeIcon className="h-4 w-4" />}
+                      title="Manage NFC URLs"
+                    >
+                      NFC URLs
+                    </Button>
+                  )}
                   <Button
                     onClick={() => onEdit(item)}
                     variant="secondary"

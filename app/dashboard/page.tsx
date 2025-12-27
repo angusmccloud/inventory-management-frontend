@@ -12,6 +12,7 @@ import { getUserContext } from '@/lib/auth';
 import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
+import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
 import { LoadingSpinner, Text } from '@/components/common';
 
 export default function DashboardPage() {
@@ -191,6 +192,9 @@ export default function DashboardPage() {
           </dl>
         </div>
       </div>
+
+      {/* NFC URL Statistics (Admin Only) */}
+      {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
     </div>
   );
 }

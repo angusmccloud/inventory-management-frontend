@@ -7,7 +7,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
 import {
@@ -36,6 +36,7 @@ type DialogState =
   | { type: 'confirm'; item: InventoryItem; action: 'archive' | 'delete' };
 
 export default function InventoryPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,6 +44,7 @@ export default function InventoryPage() {
   const [modalState, setModalState] = useState<ModalState>({ type: 'none' });
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
   const [familyId, setFamilyId] = useState<string>('');
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     loadFamilyId();
@@ -51,6 +53,11 @@ export default function InventoryPage() {
   const loadFamilyId = async (): Promise<void> => {
     try {
       const userContext = getUserContext();
+      
+      // Check user role
+      if (userContext?.role === 'admin') {
+        setIsAdmin(true);
+      }
       
       if (userContext?.familyId) {
         // Use cached familyId from localStorage
@@ -225,6 +232,8 @@ export default function InventoryPage() {
         onArchive={handleArchive}
         onDelete={handleDelete}
         onAddToShoppingList={handleAddToShoppingList}
+        onViewDetails={(item) => router.push(`/dashboard/inventory/${item.itemId}`)}
+        isAdmin={isAdmin}
       />
 
       {/* Modals */}

@@ -57,7 +57,6 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
           <Link
             href="/login"
-            variant="button"
             className="px-8 py-3 bg-primary text-primary-contrast font-semibold rounded-lg hover:bg-primary-hover transition-colors text-center"
           >
             Sign In / Create Account

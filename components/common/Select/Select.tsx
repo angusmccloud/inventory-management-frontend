@@ -8,25 +8,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/cn';
 import type { SelectProps } from './Select.types';
-import type { InputSize, InputValidationState } from '../Input/Input.types';
-
-/**
- * Size-specific styles mapping (matches Input component)
- */
-const sizeStyles: Record<InputSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-4 py-3 text-lg',
-};
-
-/**
- * Validation state-specific border colors (matches Input component)
- */
-const validationStyles: Record<InputValidationState, string> = {
-  default: 'border-border focus:border-border-focus focus:ring-border-focus',
-  success: 'border-success focus:border-success focus:ring-success',
-  error: 'border-error focus:border-error focus:ring-error',
-};
+import type { InputValidationState } from '../Input/Input.types';
 
 /**
  * Select component for dropdown selections

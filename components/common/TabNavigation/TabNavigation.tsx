@@ -117,9 +117,9 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
             {tab.icon && (
               <span className="flex-shrink-0">
                 {React.isValidElement(tab.icon)
-                  ? React.cloneElement(tab.icon as React.ReactElement, {
-                      className: cn('h-5 w-5', (tab.icon as React.ReactElement<{ className?: string }>).props.className),
-                    })
+                  ? React.cloneElement(tab.icon, {
+                      className: cn('h-5 w-5', (tab.icon.props as { className?: string }).className),
+                    } as React.HTMLAttributes<HTMLElement>)
                   : tab.icon}
               </span>
             )}

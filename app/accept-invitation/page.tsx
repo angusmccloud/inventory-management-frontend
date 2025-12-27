@@ -160,7 +160,7 @@ function AcceptInvitationContent() {
                 required
                 placeholder="Enter your full name"
                 disabled={isSubmitting}
-                helperText="This name will be visible to other family members"
+                helpText="This name will be visible to other family members"
               />
             </div>
 
@@ -173,7 +173,7 @@ function AcceptInvitationContent() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 disabled={isSubmitting}
-                helperText="Leave blank to use email-based authentication"
+                helpText="Leave blank to use email-based authentication"
               />
             </div>
 
