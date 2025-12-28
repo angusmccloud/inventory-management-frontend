@@ -167,32 +167,32 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
   if (state.isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+      <div className="bg-surface rounded-lg shadow p-6">
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600 dark:text-gray-300">Loading NFC URLs...</span>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <span className="ml-3 text-text-secondary">Loading NFC URLs...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div className="bg-surface rounded-lg shadow">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="px-6 py-4 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-text-default">
               NFC URLs
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               Manage scannable URLs for {itemName}
             </p>
           </div>
           <button
             onClick={handleGenerate}
             disabled={state.isGenerating}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-primary/30 disabled:cursor-not-allowed"
             aria-label="Generate new NFC URL"
           >
             {state.isGenerating ? (
@@ -212,14 +212,14 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
       {/* Error Message */}
       {state.error && (
-        <div className="mx-6 mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4" role="alert">
+        <div className="mx-6 mt-4 bg-error/10 border border-error/30 rounded-lg p-4" role="alert">
           <div className="flex items-start">
-            <svg className="w-5 h-5 text-red-600 dark:text-red-400 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-error mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <h4 className="text-sm font-medium text-red-800 dark:text-red-300">Error</h4>
-              <p className="text-sm text-red-700 dark:text-red-400 mt-1">{state.error}</p>
+              <h4 className="text-sm font-medium text-error">Error</h4>
+              <p className="text-sm text-error mt-1">{state.error}</p>
             </div>
           </div>
         </div>
@@ -229,11 +229,11 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
       <div className="p-6">
         {state.urls.length === 0 ? (
           <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mx-auto h-12 w-12 text-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No NFC URLs</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <h3 className="mt-2 text-sm font-medium text-text-default">No NFC URLs</h3>
+            <p className="mt-1 text-sm text-text-secondary">
               Generate your first NFC URL to enable tap-to-adjust functionality
             </p>
           </div>
@@ -244,8 +244,8 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                 key={url.urlId}
                 className={`border rounded-lg p-4 ${
                   url.isActive
-                    ? 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20'
-                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50'
+                    ? 'border-secondary/30 bg-secondary/10'
+                    : 'border-border bg-surface-elevated'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -255,14 +255,14 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           url.isActive
-                            ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                            ? 'bg-secondary/20 text-secondary-contrast'
+                            : 'bg-surface-elevated text-text-default'
                         }`}
                       >
                         {url.isActive ? 'Active' : 'Inactive'}
                       </span>
                       {url.accessCount > 0 && (
-                        <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                        <span className="ml-2 text-xs text-text-secondary">
                           {url.accessCount} {url.accessCount === 1 ? 'access' : 'accesses'}
                         </span>
                       )}
@@ -270,13 +270,13 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
                     {/* URL Display */}
                     <div className="flex items-center mb-2">
-                      <code className="text-sm font-mono text-gray-900 dark:text-white bg-white dark:bg-gray-800 px-3 py-1 rounded border border-gray-300 dark:border-gray-600 truncate">
+                      <code className="text-sm font-mono text-text-default bg-surface px-3 py-1 rounded border border-border truncate">
                         {nfcUrlsApi.getFullUrl(url.urlId)}
                       </code>
                     </div>
 
                     {/* Metadata */}
-                    <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                    <div className="text-xs text-text-secondary space-y-1">
                       <p>Created: {formatDate(url.createdAt)}</p>
                       {url.lastAccessedAt && (
                         <p>Last accessed: {formatDate(url.lastAccessedAt)}</p>
@@ -289,11 +289,11 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                     {/* Copy Button */}
                     <button
                       onClick={() => handleCopy(url.urlId)}
-                      className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-3 py-1 text-sm bg-surface-elevated hover:bg-surface text-text-default rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
                       aria-label="Copy URL to clipboard"
                     >
                       {state.copiedUrlId === url.urlId ? (
-                        <span className="flex items-center text-green-600 dark:text-green-400">
+                        <span className="flex items-center text-secondary-contrast">
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
@@ -314,7 +314,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                       <button
                         onClick={() => setRotateConfirmUrlId(url.urlId)}
                         disabled={state.isRotating === url.urlId}
-                        className="px-3 py-1 text-sm bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:hover:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1 text-sm bg-tertiary/20 hover:bg-tertiary/30 text-tertiary-contrast rounded transition-colors focus:outline-none focus:ring-2 focus:ring-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-label="Rotate URL (deactivate and create new)"
                       >
                         {state.isRotating === url.urlId ? (
@@ -346,23 +346,23 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
       {/* Rotate Confirmation Dialog */}
       {rotateConfirmUrlId && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="rotate-dialog-title">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 id="rotate-dialog-title" className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <div className="bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 id="rotate-dialog-title" className="text-lg font-semibold text-text-default mb-2">
               Rotate NFC URL?
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-sm text-text-secondary mb-4">
               This will deactivate the current URL and generate a new one. The old URL will stop working immediately. You'll need to update any physical NFC tags with the new URL.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setRotateConfirmUrlId(null)}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-4 py-2 text-sm bg-surface-elevated hover:bg-surface text-text-default rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleRotate(rotateConfirmUrlId)}
-                className="px-4 py-2 text-sm bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="px-4 py-2 text-sm bg-tertiary hover:bg-tertiary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-tertiary"
               >
                 Rotate URL
               </button>

@@ -31,8 +31,8 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
           />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No pending invitations</h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <h3 className="mt-2 text-sm font-medium text-text-default">No pending invitations</h3>
+        <p className="mt-1 text-sm text-text-secondary">
           Invite new members to start collaborating
         </p>
       </div>
@@ -62,12 +62,12 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
         return (
           <div
             key={invitation.invitationId}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4"
+            className="bg-surface rounded-lg shadow-sm border border-border p-4"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  <h4 className="text-sm font-semibold text-text-default">
                     {invitation.email}
                   </h4>
                   <Badge variant={roleVariants[invitation.role]} size="sm">
@@ -82,17 +82,17 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                   </Badge>
 
                   {invitation.status === 'pending' && !isExpired && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-text-secondary">
                       Expires in {expiresIn} day{expiresIn !== 1 ? 's' : ''}
                     </span>
                   )}
 
                   {invitation.status === 'pending' && isExpired && (
-                    <span className="text-xs text-red-600 dark:text-red-400 font-medium">Expired</span>
+                    <span className="text-xs text-error font-medium">Expired</span>
                   )}
                 </div>
 
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-text-secondary">
                   Invited by {invitation.invitedByName || 'Unknown'} on{' '}
                   {new Date(invitation.createdAt).toLocaleDateString()}
                 </p>

@@ -119,9 +119,9 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
           ))}
         </Select>
         {!loadingStores && stores.length === 0 && (
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-text-secondary">
             No stores available. Add them in{' '}
-            <a href="/dashboard/settings/reference-data" className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+            <a href="/dashboard/settings/reference-data" className="text-primary hover:text-primary-hover">
               Settings
             </a>
           </p>
@@ -129,7 +129,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
 
         {/* Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="notes" className="block text-sm font-medium text-text-default">
             Notes (optional)
           </label>
           <textarea
@@ -137,7 +137,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
             placeholder="Add any notes..."
             maxLength={500}
             disabled={isSubmitting}
@@ -146,8 +146,8 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="rounded-md bg-error/10 p-4">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 

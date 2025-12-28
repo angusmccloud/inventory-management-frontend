@@ -93,8 +93,8 @@ export default function NFCStatsWidget() {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+      <div className="bg-surface shadow sm:rounded-lg p-6">
+        <h3 className="text-lg font-medium text-text-default mb-4">
           NFC URL Statistics
         </h3>
         <div className="flex justify-center py-8">
@@ -106,60 +106,60 @@ export default function NFCStatsWidget() {
 
   if (error) {
     return (
-      <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+      <div className="bg-surface shadow sm:rounded-lg p-6">
+        <h3 className="text-lg font-medium text-text-default mb-4">
           NFC URL Statistics
         </h3>
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-sm text-error">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+    <div className="bg-surface shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+        <h3 className="text-lg font-medium text-text-default mb-4">
           NFC URL Statistics
         </h3>
         
         {stats && (
           <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {/* Total URLs */}
-            <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
                 Total NFC URLs
               </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+              <dd className="mt-1 text-3xl font-semibold text-text-default">
                 {stats.totalUrls}
               </dd>
             </div>
 
             {/* Active URLs */}
-            <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
                 Active URLs
               </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+              <dd className="mt-1 text-3xl font-semibold text-text-default">
                 {stats.activeUrls}
               </dd>
             </div>
 
             {/* Items with URLs */}
-            <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
                 Items with URLs
               </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100">
+              <dd className="mt-1 text-3xl font-semibold text-text-default">
                 {stats.itemsWithUrls}
               </dd>
             </div>
 
             {/* Most Accessed Item */}
-            <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
                 Most Accessed Item
               </dt>
-              <dd className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <dd className="mt-1 text-lg font-semibold text-text-default">
                 {stats.mostAccessedItem || 'N/A'}
               </dd>
             </div>
@@ -171,7 +171,7 @@ export default function NFCStatsWidget() {
           <button
             onClick={loadStats}
             disabled={isLoading}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg
               className="mr-2 h-4 w-4"

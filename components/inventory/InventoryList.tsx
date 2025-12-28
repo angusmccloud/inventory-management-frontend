@@ -50,7 +50,7 @@ export default function InventoryList({
   }
 
   return (
-    <div className="overflow-hidden bg-white dark:bg-gray-800 shadow sm:rounded-md">
+    <div className="overflow-hidden bg-surface shadow sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
         {items.map((item) => {
           const isLowStock = item.quantity <= item.lowStockThreshold;
@@ -60,7 +60,7 @@ export default function InventoryList({
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <Text variant="h3" className="text-gray-900 dark:text-gray-100 truncate">
+                    <Text variant="h3" className="text-text-default truncate">
                       {item.name}
                     </Text>
                     {isLowStock && (
@@ -69,31 +69,31 @@ export default function InventoryList({
                       </span>
                     )}
                     {item.status === 'archived' && (
-                      <span className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:text-gray-200">
+                      <span className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-text-default">
                         Archived
                       </span>
                     )}
                   </div>
-                  <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-text-secondary">
                     <div>
-                      <span className="font-semibold text-gray-900 dark:text-gray-100">Quantity:</span>{' '}
+                      <span className="font-semibold text-text-default">Quantity:</span>{' '}
                       {item.quantity} {item.unit || 'units'}
                     </div>
                     {item.locationName && (
                       <div>
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">Location:</span>{' '}
+                        <span className="font-semibold text-text-default">Location:</span>{' '}
                         {item.locationName}
                       </div>
                     )}
                     {item.preferredStoreName && (
                       <div>
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">Store:</span>{' '}
+                        <span className="font-semibold text-text-default">Store:</span>{' '}
                         {item.preferredStoreName}
                       </div>
                     )}
                   </div>
                   {item.notes && (
-                    <Text variant="body" className="mt-2 text-gray-600 dark:text-gray-400">
+                    <Text variant="body" className="mt-2 text-text-secondary">
                       {item.notes}
                     </Text>
                   )}
