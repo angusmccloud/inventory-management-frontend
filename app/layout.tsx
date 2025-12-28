@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#3b82f6',
+  themeColor: '#0A3315', // Updated to match primary color from theme
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen antialiased bg-background text-text-default">
         <ThemeProvider>
           {children}
         </ThemeProvider>

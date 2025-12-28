@@ -181,13 +181,13 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
-          <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          <h1 className="text-center text-3xl font-bold tracking-tight text-text-default">
             Inventory HQ
           </h1>
-          <h2 className="mt-6 text-center text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <h2 className="mt-6 text-center text-2xl font-semibold text-text-default">
             {getTitle()}
           </h2>
         </div>
@@ -197,9 +197,9 @@ function LoginForm() {
             {viewMode === 'verify' || viewMode === 'reset-password' ? (
               // Verification code input
               <>
-                <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                <div className="mb-4 text-sm text-text-secondary">
                   <p>We sent a verification code to:</p>
-                  <p className="font-semibold text-gray-900 dark:text-gray-100">{email}</p>
+                  <p className="font-semibold text-text-default">{email}</p>
                 </div>
                 <div>
                   <label htmlFor="code" className="sr-only">
@@ -210,7 +210,7 @@ function LoginForm() {
                     name="code"
                     type="text"
                     required
-                    className="relative block w-full rounded-md border-0 px-3 py-2 text-center text-2xl tracking-widest text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600"
+                    className="relative block w-full rounded-md border-0 px-3 py-2 text-center text-2xl tracking-widest text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary"
                     placeholder="000000"
                     value={verificationCode}
                     onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
@@ -229,7 +229,7 @@ function LoginForm() {
                         type="password"
                         autoComplete="new-password"
                         required
-                        className="relative block w-full rounded-t-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        className="relative block w-full rounded-t-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         placeholder="New Password (min 8 chars)"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -246,7 +246,7 @@ function LoginForm() {
                         type="password"
                         autoComplete="new-password"
                         required
-                        className="relative block w-full rounded-b-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        className="relative block w-full rounded-b-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         placeholder="Confirm New Password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -268,7 +268,7 @@ function LoginForm() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  className="relative block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -287,7 +287,7 @@ function LoginForm() {
                       name="name"
                       type="text"
                       required
-                      className="relative block w-full rounded-t-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      className="relative block w-full rounded-t-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                       placeholder="Full Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -304,7 +304,7 @@ function LoginForm() {
                     type="email"
                     autoComplete="email"
                     required
-                    className={`relative block w-full ${viewMode === 'register' ? '' : 'rounded-t-md'} border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6`}
+                    className={`relative block w-full ${viewMode === 'register' ? '' : 'rounded-t-md'} border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`}
                     placeholder="Email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -320,7 +320,7 @@ function LoginForm() {
                     type="password"
                     autoComplete={viewMode === 'register' ? 'new-password' : 'current-password'}
                     required
-                    className="relative block w-full rounded-b-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                    className="relative block w-full rounded-b-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     placeholder="Password (min 8 chars)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -407,8 +407,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-text-secondary">Loading...</div>
       </div>
     }>
       <LoginForm />

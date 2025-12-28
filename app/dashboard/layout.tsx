@@ -92,14 +92,14 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-800 shadow">
+      <nav className="bg-surface shadow">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Brand */}
             <div className="flex flex-shrink-0 items-center">
-              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+              <h1 className="text-xl font-bold text-primary">
                 Inventory HQ
               </h1>
             </div>
@@ -116,8 +116,8 @@ export default function DashboardLayout({
                     href={item.href}
                     className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium whitespace-nowrap ${
                       isActive
-                        ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                        ? 'border-primary text-text-default'
+                        : 'border-transparent text-text-secondary hover:border-border hover:text-text-default'
                     }`}
                   >
                     {item.icon === 'bell' && (
@@ -138,7 +138,7 @@ export default function DashboardLayout({
                         </svg>
                         {showBadge && (
                           <span
-                            className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+                            className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-xs font-bold text-error-contrast"
                             data-testid="notification-badge"
                           >
                             {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
@@ -159,16 +159,16 @@ export default function DashboardLayout({
               {/* Desktop User Info */}
               <div className="hidden md:flex md:items-center md:space-x-3">
                 <div className="hidden lg:flex lg:flex-col lg:items-end">
-                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[150px]">
+                  <span className="text-sm text-text-default truncate max-w-[150px]">
                     {userContext?.name || userContext?.email}
                   </span>
-                  <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                     {userContext?.role}
                   </span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="rounded-md bg-surface px-3 py-1.5 text-sm font-semibold text-text-default shadow-sm ring-1 ring-inset ring-border hover:bg-surface-elevated"
                 >
                   Logout
                 </button>
@@ -179,7 +179,7 @@ export default function DashboardLayout({
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-500 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                  className="inline-flex items-center justify-center rounded-md p-2 text-text-secondary hover:bg-surface-elevated hover:text-text-default focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
                   aria-expanded="false"
                 >
                   <span className="sr-only">Open main menu</span>
@@ -233,13 +233,13 @@ export default function DashboardLayout({
                       href={item.href}
                       className={`${showBadge ? 'flex items-center' : 'block'} border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                         isActive
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                          : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-transparent text-text-secondary hover:border-border hover:bg-surface-elevated hover:text-text-default'
                       }`}
                     >
                       <span>{item.label}</span>
                       {showBadge && (
-                        <span className="ml-2 inline-flex items-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                        <span className="ml-2 inline-flex items-center rounded-full bg-error px-2 py-0.5 text-xs font-bold text-error-contrast">
                           {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
                         </span>
                       )}
@@ -247,19 +247,19 @@ export default function DashboardLayout({
                   );
                 })}
               </div>
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-3">
+              <div className="border-t border-border pt-4 mt-3">
                 <div className="px-4 mb-3">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
+                  <div className="text-sm font-medium text-text-default mb-1">
                     {userContext?.name || userContext?.email}
                   </div>
-                  <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                     {userContext?.role}
                   </span>
                 </div>
                 <div className="px-2">
                   <button
                     onClick={handleLogout}
-                    className="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-base font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    className="block w-full rounded-md bg-surface px-3 py-2 text-base font-semibold text-text-default shadow-sm ring-1 ring-inset ring-border hover:bg-surface-elevated"
                   >
                     Logout
                   </button>
