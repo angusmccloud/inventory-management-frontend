@@ -12,7 +12,7 @@
 
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import AdjustmentClient from './AdjustmentClient';
+import SuccessDisplay from './SuccessDisplay';
 
 interface NfcPageProps {
   params: Promise<{
@@ -25,6 +25,7 @@ interface AdjustmentResponse {
   newQuantity: number;
   itemName: string;
   message: string;
+  delta?: number;
   error?: string;
   code?: string;
 }
@@ -47,6 +48,8 @@ async function performAdjustment(urlId: string): Promise<AdjustmentResponse> {
   const apiBaseUrl = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3001';
   const adjustmentUrl = `${apiBaseUrl}/api/adjust/${urlId}`;
 
+  console.log('[NFC] Performing adjustment:', { urlId, apiBaseUrl, adjustmentUrl });
+
   try {
     const response = await fetch(adjustmentUrl, {
       method: 'POST',
@@ -57,8 +60,11 @@ async function performAdjustment(urlId: string): Promise<AdjustmentResponse> {
       cache: 'no-store', // Never cache adjustment requests
     });
 
+    console.log('[NFC] Response status:', response.status, response.statusText);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.log('[NFC] Error response:', errorData);
       
       if (response.status === 404) {
         return {
@@ -82,11 +88,13 @@ async function performAdjustment(urlId: string): Promise<AdjustmentResponse> {
     }
 
     const data = await response.json();
+    console.log('[NFC] Success response:', data);
     return {
       success: true,
       newQuantity: data.newQuantity,
       itemName: data.itemName,
       message: data.message || `${data.itemName} quantity updated to ${data.newQuantity}`,
+      delta: data.delta || -1,
     };
   } catch (error) {
     console.error('NFC adjustment error:', error);
@@ -128,57 +136,13 @@ export default async function NfcPage({ params }: NfcPageProps) {
       <div className="w-full max-w-md">
         {/* Success State */}
         {result.success && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
-            {/* Success Icon */}
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
-              <svg
-                className="w-10 h-10 text-green-600 dark:text-green-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-
-            {/* Item Name */}
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {result.itemName}
-            </h1>
-
-            {/* Success Message */}
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-              Quantity updated successfully
-            </p>
-
-            {/* Current Quantity Display */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-6">
-              <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                Current Quantity
-              </p>
-              <p className="text-4xl font-bold text-gray-900 dark:text-white">
-                {result.newQuantity}
-              </p>
-            </div>
-
-            {/* Additional Info */}
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-              You can close this page or tap again to adjust further.
-            </p>
-
-            {/* Interactive Adjustment Client */}
-            <AdjustmentClient
-              urlId={urlId}
-              initialQuantity={result.newQuantity}
-              apiBaseUrl={process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3001'}
-            />
-          </div>
+          <SuccessDisplay
+            itemName={result.itemName}
+            initialQuantity={result.newQuantity}
+            previousQuantity={result.newQuantity - (result.delta || -1)}
+            urlId={urlId}
+            apiBaseUrl={process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3001'}
+          />
         )}
 
         {/* Error State */}
