@@ -93,12 +93,12 @@ function AcceptInvitationContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-surface rounded-2xl shadow-xl p-8">
           <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-4">
               <svg
-                className="h-10 w-10 text-green-600"
+                className="h-10 w-10 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -111,13 +111,13 @@ function AcceptInvitationContent() {
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <h1 className="text-2xl font-bold text-text-default mb-2">
               Welcome to the Family! 🎉
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-text-secondary mb-4">
               Your invitation has been accepted successfully.
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Redirecting to dashboard...</p>
+            <p className="text-sm text-text-secondary">Redirecting to dashboard...</p>
           </div>
         </div>
       </div>
@@ -125,13 +125,13 @@ function AcceptInvitationContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-surface rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          <h1 className="text-3xl font-bold text-text-default mb-2">
             Accept Family Invitation
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-text-secondary">
             You've been invited to join a family inventory
           </p>
         </div>
@@ -144,7 +144,7 @@ function AcceptInvitationContent() {
 
         {!token ? (
           <div className="text-center py-6">
-            <p className="text-gray-600">
+            <p className="text-text-secondary">
               Invalid invitation link. Please check your email for the correct link.
             </p>
           </div>
@@ -205,7 +205,7 @@ function AcceptInvitationContent() {
         )}
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-text-secondary">
             By accepting, you agree to collaborate with your family members
           </p>
         </div>
@@ -218,10 +218,10 @@ export default function AcceptInvitationPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-text-secondary">Loading...</p>
           </div>
         </div>
       }
