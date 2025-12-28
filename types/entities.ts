@@ -48,7 +48,7 @@ export type SuggestionStatus = 'pending' | 'approved' | 'rejected';
 /**
  * Suggestion type
  */
-export type SuggestionType = 'add_item' | 'add_to_shopping_list' | 'other';
+export type SuggestionType = 'add_to_shopping' | 'create_item';
 
 /**
  * Family Entity
@@ -219,17 +219,30 @@ export interface Suggestion {
   suggestionId: string;
   familyId: string;
   suggestedBy: string;
+  suggestedByName: string;
   type: SuggestionType;
   status: SuggestionStatus;
-  itemName: string;
-  quantity?: number;
-  unit?: string;
-  locationId?: string;
-  storeId?: string;
-  notes?: string;
-  reviewedBy?: string;
-  reviewedAt?: string;
-  reviewNotes?: string;
+  
+  // For add_to_shopping type
+  itemId: string | null;
+  itemNameSnapshot: string | null;
+  
+  // For create_item type
+  proposedItemName: string | null;
+  proposedQuantity: number | null;
+  proposedThreshold: number | null;
+  
+  // Optional notes
+  notes: string | null;
+  rejectionNotes: string | null;
+  
+  // Review information
+  reviewedBy: string | null;
+  reviewedAt: string | null;
+  
+  // Optimistic locking
+  version: number;
+  
   createdAt: string;
   updatedAt: string;
 }

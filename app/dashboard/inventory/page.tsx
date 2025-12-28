@@ -208,14 +208,14 @@ export default function InventoryPage() {
       <PageHeader
         title="Inventory"
         description="Manage your family's inventory items"
-        action={
+        action={isAdmin ? (
           <Button
             variant="primary"
             onClick={() => setModalState({ type: 'add' })}
           >
             Add Item
           </Button>
-        }
+        ) : undefined}
       />
 
       {error && (

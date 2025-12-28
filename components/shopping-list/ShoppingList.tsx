@@ -20,10 +20,14 @@ import {
 import ShoppingListItemComponent from './ShoppingListItem';
 import AddItemForm from './AddItemForm';
 import EditShoppingListItemForm from './EditShoppingListItemForm';
+import { SuggestionForm } from '../suggestions/SuggestionForm';
+import type { SuggestionFormData } from '../suggestions/SuggestionForm';
+import { createSuggestion } from '@/lib/api/suggestions';
 import StoreFilter from './StoreFilter';
 import Dialog from '../common/Dialog';
 import { Button, Text, EmptyState, Alert, PageHeader, LoadingSpinner } from '@/components/common';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { getUserContext } from '@/lib/auth';
 
 interface ShoppingListProps {
   familyId: string;
@@ -32,12 +36,14 @@ interface ShoppingListProps {
 type ModalState = 
   | { type: 'none' }
   | { type: 'add' }
-  | { type: 'edit'; item: ShoppingListItem };
+  | { type: 'edit'; item: ShoppingListItem }
+  | { type: 'suggest' };
 
 type DialogState = 
   | { type: 'none' }
   | { type: 'confirm'; item: ShoppingListItem; action: 'remove' }
-  | { type: 'error'; message: string };
+  | { type: 'error'; message: string }
+  | { type: 'success'; message: string };
 
 export default function ShoppingList({ familyId }: ShoppingListProps) {
   const [items, setItems] = useState<ShoppingListItem[]>([]);
@@ -47,6 +53,13 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Check user role
+  useEffect(() => {
+    const userContext = getUserContext();
+    setIsAdmin(userContext?.role === 'admin');
+  }, []);
 
   // Load shopping list
   const loadShoppingList = async () => {
@@ -160,6 +173,20 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     setDialogState({ type: 'confirm', item, action: 'remove' });
   };
 
+  // Handle create suggestion
+  const handleCreateSuggestion = async (data: SuggestionFormData) => {
+    try {
+      await createSuggestion(familyId, data);
+      setModalState({ type: 'none' });
+      setDialogState({
+        type: 'success',
+        message: 'Suggestion submitted successfully! An admin will review it soon.'
+      });
+    } catch (err) {
+      throw err; // Let form handle the error
+    }
+  };
+
   // Confirm remove item - remove from state without reload
   const confirmRemoveItem = async () => {
     if (dialogState.type !== 'confirm' || dialogState.action !== 'remove') return;
@@ -197,7 +224,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   Object.keys(groupedItems).forEach((storeKey) => {
     const items = groupedItems[storeKey];
     if (items) {
-      items.sort((a, b) => a.name.localeCompare(b.name));
+      items.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     }
   });
 
@@ -229,7 +256,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       <PageHeader
         title="Shopping List"
         description={`${items.length} ${items.length === 1 ? 'item' : 'items'} total`}
-        action={
+        action={isAdmin ? (
           <Button
             variant="primary"
             size="md"
@@ -237,7 +264,15 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           >
             Add Item
           </Button>
-        }
+        ) : (
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => setModalState({ type: 'suggest' })}
+          >
+            Suggest
+          </Button>
+        )}
         secondaryActions={[
           <StoreFilter
             key="store-filter"
@@ -253,12 +288,12 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         <EmptyState
           icon={<ShoppingCartIcon />}
           title="Your shopping list is empty."
-          description="Add items to get started."
-          action={{
+          description={isAdmin ? "Add items to get started." : "No items on the shopping list yet."}
+          action={isAdmin ? {
             label: "Add Item",
             onClick: () => setModalState({ type: 'add' }),
             variant: "primary"
-          }}
+          } : undefined}
         />
       ) : selectedStore === 'all' && Object.keys(groupedItems).length > 1 ? (
         // Grouped by store view with responsive grid
@@ -280,6 +315,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
                       onToggleStatus={handleToggleStatus}
                       onEdit={() => setModalState({ type: 'edit', item })}
                       onRemove={handleRemoveItem}
+                      isAdmin={isAdmin}
                     />
                   ))}
                 </div>
@@ -290,13 +326,14 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       ) : (
         // Single store view with responsive grid
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
+          {items.sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((item) => (
             <ShoppingListItemComponent
               key={item.shoppingItemId}
               item={item}
               onToggleStatus={handleToggleStatus}
               onEdit={() => setModalState({ type: 'edit', item })}
               onRemove={handleRemoveItem}
+              isAdmin={isAdmin}
             />
           ))}
         </div>
@@ -318,6 +355,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
                 <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}
                   {modalState.type === 'edit' && 'Edit Shopping List Item'}
+                  {modalState.type === 'suggest' && 'Create Suggestion'}
                 </Text>
 
                 {modalState.type === 'add' && (
@@ -327,7 +365,13 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
                     onCancel={() => setModalState({ type: 'none' })}
                   />
                 )}
-
+                {modalState.type === 'suggest' && (
+                  <SuggestionForm
+                    familyId={familyId}
+                    onSubmit={handleCreateSuggestion}
+                    onCancel={() => setModalState({ type: 'none' })}
+                  />
+                )}
                 {modalState.type === 'edit' && (
                   <EditShoppingListItemForm
                     familyId={familyId}
@@ -361,6 +405,19 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           isOpen={true}
           type="error"
           title="Error"
+          message={dialogState.message}
+          confirmLabel="OK"
+          cancelLabel=""
+          onConfirm={() => setDialogState({ type: 'none' })}
+          onCancel={() => setDialogState({ type: 'none' })}
+        />
+      )}
+
+      {dialogState.type === 'success' && (
+        <Dialog
+          isOpen={true}
+          type="alert"
+          title="Success"
           message={dialogState.message}
           confirmLabel="OK"
           cancelLabel=""

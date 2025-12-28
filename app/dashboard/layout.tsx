@@ -11,6 +11,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { isAuthenticated, getUserContext, handleLogout, setUserContext as saveUserContext } from '@/lib/auth';
 import { getActiveNotificationCount } from '@/lib/api/notifications';
 import { listUserFamilies } from '@/lib/api/families';
+import { getNavigationItems, isNavItemActive } from '@/lib/navigation';
 import { UserContext } from '@/types/entities';
 import { LoadingSpinner } from '@/components/common';
 
@@ -25,6 +26,10 @@ export default function DashboardLayout({
   const [loading, setLoading] = useState<boolean>(true);
   const [activeNotificationCount, setActiveNotificationCount] = useState<number>(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  
+  // Get navigation items filtered by user role
+  const isAdmin = userContext?.role === 'admin';
+  const navItems = getNavigationItems(isAdmin);
 
   // Fetch active notification count
   const fetchNotificationCount = useCallback(async (familyId: string) => {
@@ -101,94 +106,52 @@ export default function DashboardLayout({
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex md:space-x-2 lg:space-x-4">
-              <a
-                href="/dashboard"
-                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
-                  pathname === '/dashboard'
-                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                Dashboard
-              </a>
-              <a
-                href="/dashboard/inventory"
-                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
-                  pathname === '/dashboard/inventory'
-                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                Inventory
-              </a>
-              <a
-                href="/dashboard/shopping-list"
-                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium whitespace-nowrap ${
-                  pathname === '/dashboard/shopping-list'
-                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                Shopping
-              </a>
-              <a
-                href="/dashboard/notifications"
-                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
-                  pathname === '/dashboard/notifications'
-                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                <span className="relative">
-                  {/* Bell icon */}
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
+              {navItems.map((item) => {
+                const isActive = isNavItemActive(item, pathname);
+                const showBadge = item.badge === 'notifications' && activeNotificationCount > 0;
+                
+                return (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium whitespace-nowrap ${
+                      isActive
+                        ? 'border-blue-500 text-gray-900 dark:text-gray-100'
+                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                  {/* Notification badge */}
-                  {activeNotificationCount > 0 && (
-                    <span
-                      className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
-                      data-testid="notification-badge"
-                    >
-                      {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                    {item.icon === 'bell' && (
+                      <span className="relative">
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                          />
+                        </svg>
+                        {showBadge && (
+                          <span
+                            className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+                            data-testid="notification-badge"
+                          >
+                            {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                          </span>
+                        )}
+                      </span>
+                    )}
+                    <span className={item.icon === 'bell' ? 'ml-1 hidden lg:inline' : ''}>
+                      {item.label}
                     </span>
-                  )}
-                </span>
-                <span className="ml-1 hidden lg:inline">Notifications</span>
-              </a>
-              <a
-                href="/dashboard/members"
-                className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
-                  pathname === '/dashboard/members'
-                    ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                Members
-              </a>
-              {userContext?.role === 'admin' && (
-                <a
-                  href="/dashboard/settings/reference-data"
-                  className={`inline-flex items-center border-b-2 px-2 lg:px-3 pt-1 text-sm font-medium ${
-                    pathname?.startsWith('/dashboard/settings')
-                      ? 'border-blue-500 text-gray-900 dark:text-gray-100'
-                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-300'
-                  }`}
-                >
-                  Settings
-                </a>
-              )}
+                  </a>
+                );
+              })}
             </div>
             
             {/* Right side container */}
@@ -260,73 +223,29 @@ export default function DashboardLayout({
           {mobileMenuOpen && (
             <div className="md:hidden pb-3">
               <div className="space-y-1">
-                <a
-                  href="/dashboard"
-                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    pathname === '/dashboard'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
-                >
-                  Dashboard
-                </a>
-                <a
-                  href="/dashboard/inventory"
-                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    pathname === '/dashboard/inventory'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
-                >
-                  Inventory
-                </a>
-                <a
-                  href="/dashboard/shopping-list"
-                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    pathname === '/dashboard/shopping-list'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
-                >
-                  Shopping List
-                </a>
-                <a
-                  href="/dashboard/notifications"
-                  className={`flex items-center border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    pathname === '/dashboard/notifications'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
-                >
-                  <span>Notifications</span>
-                  {activeNotificationCount > 0 && (
-                    <span className="ml-2 inline-flex items-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
-                      {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
-                    </span>
-                  )}
-                </a>
-                <a
-                  href="/dashboard/members"
-                  className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    pathname === '/dashboard/members'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
-                >
-                  Members
-                </a>
-                {userContext?.role === 'admin' && (
-                  <a
-                    href="/dashboard/settings/reference-data"
-                    className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                      pathname?.startsWith('/dashboard/settings')
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                        : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
-                    }`}
-                  >
-                    Settings
-                  </a>
-                )}
+                {navItems.map((item) => {
+                  const isActive = isNavItemActive(item, pathname);
+                  const showBadge = item.badge === 'notifications' && activeNotificationCount > 0;
+                  
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      className={`${showBadge ? 'flex items-center' : 'block'} border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                        isActive
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                          : 'border-transparent text-gray-600 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {showBadge && (
+                        <span className="ml-2 inline-flex items-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                          {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                        </span>
+                      )}
+                    </a>
+                  );
+                })}
               </div>
               <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-3">
                 <div className="px-4 mb-3">

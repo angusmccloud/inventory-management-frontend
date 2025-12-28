@@ -6,9 +6,10 @@
 
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { InventoryItem } from '@/types/entities';
 import { Button, Text, EmptyState } from '@/components/common';
-import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon, QrCodeIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon, QrCodeIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -31,6 +32,13 @@ export default function InventoryList({
   onViewDetails,
   isAdmin = false,
 }: InventoryListProps) {
+  const router = useRouter();
+
+  const handleSuggest = (item: InventoryItem) => {
+    // Navigate to suggestion form with pre-filled itemId for add_to_shopping type
+    router.push(`/dashboard/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`);
+  };
+
   if (!items || items.length === 0) {
     return (
       <EmptyState
@@ -92,59 +100,81 @@ export default function InventoryList({
                 </div>
                 
                 <div className="ml-4 flex flex-shrink-0 gap-2">
-                  <Button
-                    onClick={() => onAddToShoppingList(item)}
-                    variant="secondary"
-                    size="sm"
-                    leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
-                    title="Add to Shopping List"
-                  >
-                    Add
-                  </Button>
-                  <Button
-                    onClick={() => onAdjustQuantity(item)}
-                    variant="secondary"
-                    size="sm"
-                  >
-                    Adjust
-                  </Button>
-                  {isAdmin && onViewDetails && (
+                  {/* Suggester-only: Suggest button */}
+                  {!isAdmin && (
                     <Button
-                      onClick={() => onViewDetails(item)}
-                      variant="secondary"
+                      onClick={() => handleSuggest(item)}
+                      variant="primary"
                       size="sm"
-                      leftIcon={<QrCodeIcon className="h-4 w-4" />}
-                      title="Manage NFC URLs"
+                      leftIcon={<LightBulbIcon className="h-4 w-4" />}
+                      title="Suggest adding to shopping list"
                     >
-                      NFC URLs
+                      Suggest
                     </Button>
                   )}
-                  <Button
-                    onClick={() => onEdit(item)}
-                    variant="secondary"
-                    size="sm"
-                    leftIcon={<PencilIcon className="h-4 w-4" />}
-                  >
-                    Edit
-                  </Button>
-                  {item.status === 'active' ? (
+
+                  {/* Common action: Add to shopping list (admins can add directly) */}
+                  {isAdmin && (
                     <Button
-                      onClick={() => onArchive(item)}
+                      onClick={() => onAddToShoppingList(item)}
                       variant="secondary"
                       size="sm"
-                      leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
+                      leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
+                      title="Add to Shopping List"
                     >
-                      Archive
+                      Add
                     </Button>
-                  ) : (
-                    <Button
-                      onClick={() => onDelete(item)}
-                      variant="danger"
-                      size="sm"
-                      leftIcon={<TrashIcon className="h-4 w-4" />}
-                    >
-                      Delete
-                    </Button>
+                  )}
+
+                  {/* Admin-only actions */}
+                  {isAdmin && (
+                    <>
+                      <Button
+                        onClick={() => onAdjustQuantity(item)}
+                        variant="secondary"
+                        size="sm"
+                      >
+                        Adjust
+                      </Button>
+                      {onViewDetails && (
+                        <Button
+                          onClick={() => onViewDetails(item)}
+                          variant="secondary"
+                          size="sm"
+                          leftIcon={<QrCodeIcon className="h-4 w-4" />}
+                          title="Manage NFC URLs"
+                        >
+                          NFC URLs
+                        </Button>
+                      )}
+                      <Button
+                        onClick={() => onEdit(item)}
+                        variant="secondary"
+                        size="sm"
+                        leftIcon={<PencilIcon className="h-4 w-4" />}
+                      >
+                        Edit
+                      </Button>
+                      {item.status === 'active' ? (
+                        <Button
+                          onClick={() => onArchive(item)}
+                          variant="secondary"
+                          size="sm"
+                          leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
+                        >
+                          Archive
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => onDelete(item)}
+                          variant="danger"
+                          size="sm"
+                          leftIcon={<TrashIcon className="h-4 w-4" />}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

@@ -16,6 +16,7 @@ interface ShoppingListItemProps {
   onToggleStatus: (item: ShoppingListItem) => Promise<void>;
   onEdit: (item: ShoppingListItem) => void;
   onRemove: (item: ShoppingListItem) => void;
+  isAdmin?: boolean;
 }
 
 export default function ShoppingListItemComponent({
@@ -23,6 +24,7 @@ export default function ShoppingListItemComponent({
   onToggleStatus,
   onEdit,
   onRemove,
+  isAdmin = true,
 }: ShoppingListItemProps) {
   const [isToggling, setIsToggling] = useState(false);
 
@@ -73,7 +75,7 @@ export default function ShoppingListItemComponent({
       </div>
 
       {/* Actions */}
-      {!isPurchased && (
+      {!isPurchased && isAdmin && (
         <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
           <Button
             variant="secondary"

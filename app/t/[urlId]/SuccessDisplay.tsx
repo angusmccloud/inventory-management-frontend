@@ -69,8 +69,6 @@ export default function SuccessDisplay({
     }
   };
 
-  const initialDelta = initialQuantity - previousQuantity;
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
       {/* Success Icon */}
