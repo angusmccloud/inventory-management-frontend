@@ -26,7 +26,7 @@ import { MemberList } from '@/components/members/MemberList';
 import { InvitationList } from '@/components/members/InvitationList';
 import { InviteMemberForm } from '@/components/members/InviteMemberForm';
 import { RemoveMemberDialog } from '@/components/members/RemoveMemberDialog';
-import { Text, Button, Alert, PageHeader, TabNavigation, LoadingSpinner } from '@/components/common';
+import { Text, Button, Alert, PageHeader, TabNavigation, PageLoading } from '@/components/common';
 
 export default function MembersPage() {
   const router = useRouter();
@@ -202,16 +202,7 @@ export default function MembersPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="flex flex-col items-center justify-center py-12">
-          <LoadingSpinner size="lg" />
-          <Text variant="body" className="mt-4 text-text-default">
-            Loading members...
-          </Text>
-        </div>
-      </div>
-    );
+    return <PageLoading message="Loading members..." fullHeight={false} />;
   }
 
   if (error && !familyId) {

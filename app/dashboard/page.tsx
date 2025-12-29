@@ -13,7 +13,7 @@ import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
-import { LoadingSpinner, Text } from '@/components/common';
+import { PageLoading, Text } from '@/components/common';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -85,14 +85,7 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <LoadingSpinner size="lg" />
-        <Text variant="body" className="mt-4 text-text-secondary">
-          Loading dashboard...
-        </Text>
-      </div>
-    );
+    return <PageLoading message="Loading dashboard..." fullHeight={false} />;
   }
 
   if (showCreateFamily) {

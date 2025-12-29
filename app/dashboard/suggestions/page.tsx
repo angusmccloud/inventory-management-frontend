@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SuggestionList } from '@/components/suggestions/SuggestionList';
-import { Button, Text, Card } from '@/components/common';
+import { Button, Text, Card, PageLoading } from '@/components/common';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
 
@@ -61,11 +61,7 @@ export default function SuggestionsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        <Text variant="body">Loading...</Text>
-      </div>
-    );
+    return <PageLoading message="Loading suggestions..." fullHeight={false} />;
   }
 
   if (!familyId || error) {

@@ -23,7 +23,7 @@ import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import AdjustQuantity from '@/components/inventory/AdjustQuantity';
 import Dialog from '@/components/common/Dialog';
-import { Text, Button, Alert, PageHeader } from '@/components/common';
+import { Text, Button, Alert, PageHeader, PageLoading } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
@@ -178,11 +178,7 @@ export default function InventoryPage() {
   };
 
   if (loading) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-text-default">Loading inventory...</p>
-      </div>
-    );
+    return <PageLoading message="Loading inventory..." fullHeight={false} />;
   }
 
   if (!familyId) {

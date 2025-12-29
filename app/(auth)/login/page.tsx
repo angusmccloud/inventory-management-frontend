@@ -10,7 +10,7 @@
 import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
-import { Button, Alert } from '@/components/common';
+import { Button, Alert, PageLoading } from '@/components/common';
 
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
@@ -406,11 +406,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-text-secondary">Loading...</div>
-      </div>
-    }>
+    <Suspense fallback={<PageLoading message="Loading..." />}>
       <LoginForm />
     </Suspense>
   );

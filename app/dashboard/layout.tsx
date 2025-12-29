@@ -13,7 +13,7 @@ import { getActiveNotificationCount } from '@/lib/api/notifications';
 import { listUserFamilies } from '@/lib/api/families';
 import { getNavigationItems, isNavItemActive } from '@/lib/navigation';
 import { UserContext } from '@/types/entities';
-import { LoadingSpinner } from '@/components/common';
+import { PageLoading } from '@/components/common';
 
 export default function DashboardLayout({
   children,
@@ -84,11 +84,7 @@ export default function DashboardLayout({
   }, [router, fetchNotificationCount]);
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <LoadingSpinner size="lg" label="Loading..." center />
-      </div>
-    );
+    return <PageLoading message="Loading..." />;
   }
 
   return (

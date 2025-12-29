@@ -19,7 +19,7 @@ import { getUserContext } from '@/lib/auth';
 import { getInventoryItem, deleteInventoryItem } from '@/lib/api/inventory';
 import { InventoryItem } from '@/types/entities';
 import NFCUrlManager from '@/components/inventory/NFCUrlManager';
-import { PageHeader, Button, Alert } from '@/components/common';
+import { PageHeader, Button, Alert, PageLoading } from '@/components/common';
 
 interface ItemDetailPageProps {
   params: Promise<{
@@ -77,14 +77,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   };
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          <span className="ml-4 text-text-default">Loading item...</span>
-        </div>
-      </div>
-    );
+    return <PageLoading message="Loading item..." fullHeight={false} />;
   }
 
   if (error || !item) {

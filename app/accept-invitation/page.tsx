@@ -11,7 +11,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { acceptInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
-import { Button, Input, Alert } from '@/components/common';
+import { Button, Input, Alert, PageLoading } from '@/components/common';
 
 function AcceptInvitationContent() {
   const router = useRouter();
@@ -216,16 +216,7 @@ function AcceptInvitationContent() {
 
 export default function AcceptInvitationPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-text-secondary">Loading...</p>
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<PageLoading message="Loading..." />}>
       <AcceptInvitationContent />
     </Suspense>
   );

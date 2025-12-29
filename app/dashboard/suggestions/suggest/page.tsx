@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SuggestionForm, SuggestionFormData } from '@/components/suggestions/SuggestionForm';
-import { Text, Card } from '@/components/common';
+import { Text, Card, PageLoading } from '@/components/common';
 import { createSuggestion } from '@/lib/api/suggestions';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
@@ -85,13 +85,7 @@ export default function SuggestPage() {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-2xl mx-auto p-6">
-        <Text variant="body" className="text-text-default">
-          Loading...
-        </Text>
-      </div>
-    );
+    return <PageLoading message="Loading..." fullHeight={false} />;
   }
 
   if (!familyId) {
