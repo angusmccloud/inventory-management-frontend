@@ -94,7 +94,7 @@ export default function StoreForm({
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          variant="warning"
+          variant="danger"
         >
           Cancel
         </Button>

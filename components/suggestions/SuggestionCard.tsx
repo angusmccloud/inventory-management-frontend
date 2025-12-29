@@ -163,7 +163,7 @@ export function SuggestionCard({
                 {isApproving ? 'Approving...' : 'Approve'}
               </Button>
               <Button
-                variant="warning"
+                variant="danger"
                 size="sm"
                 onClick={() => setShowRejectModal(true)}
                 disabled={isApproving || isRejecting}
@@ -198,7 +198,7 @@ export function SuggestionCard({
             </Text>
             <div className="flex gap-3 justify-end">
               <Button
-                variant="warning"
+                variant="danger"
                 onClick={() => {
                   setShowRejectModal(false);
                   setRejectionNotes('');

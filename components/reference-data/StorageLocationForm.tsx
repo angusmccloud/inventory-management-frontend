@@ -83,7 +83,7 @@ export default function StorageLocationForm({
       <div className="flex justify-end space-x-3">
         <Button
           type="button"
-          variant="warning"
+          variant="danger"
           onClick={onCancel}
           disabled={isSubmitting}
         >

@@ -5,7 +5,7 @@
 /* Light Theme (Default) */
 :root {
   /* Background and Text */
-  --color-background: 142 179 152; /* #8EB398 */
+  --color-background: 255 255 255; /* white */
   --color-text-default: 1 31 9; /* #011F09 */
 
   /* Primary - Main brand color */
@@ -54,7 +54,7 @@
 .dark,
 :root:has(.dark) {
   /* Background and Text */
-  --color-background: 1 31 9; /* #011F09 */
+  --color-background: 10 51 21; /* #0A3315 */
   --color-text-default: 142 179 152; /* #8EB398 */
 
   /* Primary - Lighter for dark backgrounds */

@@ -222,7 +222,7 @@ export default function EditItemForm({
         {onCancel && (
           <Button
             type="button"
-            variant="warning"
+            variant="danger"
             onClick={onCancel}
             disabled={loading}
           >

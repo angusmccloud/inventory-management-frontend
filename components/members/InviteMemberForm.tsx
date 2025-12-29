@@ -73,7 +73,7 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
         {onCancel && (
           <Button
             type="button"
-            variant="warning"
+            variant="danger"
             onClick={onCancel}
             disabled={isSubmitting}
           >
