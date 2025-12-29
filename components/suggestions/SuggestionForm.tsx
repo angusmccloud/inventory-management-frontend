@@ -130,7 +130,7 @@ export function SuggestionForm({
           <Text variant="h3" className="mb-4">
             Create Suggestion
           </Text>
-          <Text variant="body" className="text-gray-600 dark:text-gray-400">
+          <Text variant="body" className="text-text-default">
             Suggest adding an existing item to the shopping list or propose a new item for inventory.
           </Text>
         </div>
@@ -155,14 +155,14 @@ export function SuggestionForm({
         {type === 'add_to_shopping' && (
           <div>
             <label htmlFor="itemId" className="block text-sm font-medium mb-2">
-              Select Item <span className="text-red-500">*</span>
+              Select Item <span className="text-error">*</span>
             </label>
             {isLoadingItems ? (
-              <Text variant="body" className="text-gray-500">
+              <Text variant="body" className="text-text-secondary">
                 Loading items...
               </Text>
             ) : inventoryItems.length === 0 ? (
-              <Text variant="body" className="text-gray-500">
+              <Text variant="body" className="text-text-secondary">
                 No items available
               </Text>
             ) : (
@@ -189,7 +189,7 @@ export function SuggestionForm({
           <>
             <div>
               <label htmlFor="proposedItemName" className="block text-sm font-medium mb-2">
-                Item Name <span className="text-red-500">*</span>
+                Item Name <span className="text-error">*</span>
               </label>
               <Input
                 id="proposedItemName"
@@ -206,7 +206,7 @@ export function SuggestionForm({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="proposedQuantity" className="block text-sm font-medium mb-2">
-                  Quantity <span className="text-red-500">*</span>
+                  Quantity <span className="text-error">*</span>
                 </label>
                 <Input
                   id="proposedQuantity"
@@ -221,7 +221,7 @@ export function SuggestionForm({
 
               <div>
                 <label htmlFor="proposedThreshold" className="block text-sm font-medium mb-2">
-                  Low Stock Threshold <span className="text-red-500">*</span>
+                  Low Stock Threshold <span className="text-error">*</span>
                 </label>
                 <Input
                   id="proposedThreshold"
@@ -247,20 +247,20 @@ export function SuggestionForm({
             value={notes}
             onChange={handleNotesChange}
             placeholder="Add any additional details..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-surface-elevated dark:border-border dark:text-white"
             rows={3}
             disabled={isSubmitting}
             maxLength={500}
           />
-          <Text variant="caption" className="text-gray-500 mt-1">
+          <Text variant="caption" className="text-text-secondary mt-1">
             {notes.length}/500 characters
           </Text>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-            <Text variant="body" className="text-red-600 dark:text-red-400">
+          <div className="p-3 bg-error/10/20 border border-error rounded-md">
+            <Text variant="body" className="text-error">
               {error}
             </Text>
           </div>
@@ -269,7 +269,7 @@ export function SuggestionForm({
         {/* Actions */}
         <div className="flex gap-3 justify-end">
           {onCancel && (
-            <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
+            <Button variant="danger" onClick={onCancel} disabled={isSubmitting}>
               Cancel
             </Button>
           )}

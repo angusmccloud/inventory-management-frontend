@@ -47,7 +47,7 @@ export default function CreateFamilyForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="family-name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="family-name" className="block text-sm font-medium text-text-default">
           Family Name
         </label>
         <input
@@ -55,7 +55,7 @@ export default function CreateFamilyForm({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+          className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
           placeholder="Enter family name"
           required
           maxLength={100}
@@ -64,8 +64,8 @@ export default function CreateFamilyForm({
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-md bg-error/10 p-4">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 
@@ -73,7 +73,7 @@ export default function CreateFamilyForm({
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50"
+          className="flex-1 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
         >
           {loading ? 'Creating...' : 'Create Family'}
         </button>
@@ -82,7 +82,7 @@ export default function CreateFamilyForm({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="rounded-md bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+            className="rounded-md bg-surface px-4 py-2 text-sm font-semibold text-text-default ring-1 ring-inset ring-border hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
           >
             Cancel
           </button>

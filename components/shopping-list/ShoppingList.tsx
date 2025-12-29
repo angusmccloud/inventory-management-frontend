@@ -239,7 +239,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <LoadingSpinner size="lg" />
-        <Text variant="body" className="mt-4 text-gray-600 dark:text-gray-400">
+        <Text variant="body" className="mt-4 text-text-default">
           Loading shopping list...
         </Text>
       </div>
@@ -304,7 +304,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             
             return (
               <div key={storeName}>
-                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
+                <Text variant="h3" className="text-text-default mb-4">
                   {storeName}
                 </Text>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -345,14 +345,14 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity"
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
               onClick={() => setModalState({ type: 'none' })}
             />
 
             {/* Modal panel */}
-            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
+                <Text variant="h3" className="text-text-default mb-4">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}
                   {modalState.type === 'edit' && 'Edit Shopping List Item'}
                   {modalState.type === 'suggest' && 'Create Suggestion'}

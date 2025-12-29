@@ -40,13 +40,13 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                     <Link 
                       href={breadcrumb.href} 
                       variant="subtle"
-                      className="hover:text-gray-900 dark:hover:text-gray-100"
+                      className="hover:text-text-default"
                     >
                       {breadcrumb.label}
                     </Link>
                   ) : (
                     <span 
-                      className="text-gray-600 dark:text-gray-400"
+                      className="text-text-secondary"
                       aria-current={isLast ? 'page' : undefined}
                     >
                       {breadcrumb.label}
@@ -55,7 +55,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                   
                   {!isLast && (
                     <ChevronRightIcon 
-                      className="h-4 w-4 text-gray-400 dark:text-gray-500" 
+                      className="h-4 w-4 text-text-disabled" 
                       aria-hidden="true" 
                     />
                   )}
@@ -73,7 +73,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <Text 
             as="h1" 
             variant="h1" 
-            className="text-gray-900 dark:text-gray-100"
+            className="text-text-default"
           >
             {title}
           </Text>

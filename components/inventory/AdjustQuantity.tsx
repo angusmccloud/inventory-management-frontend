@@ -105,8 +105,8 @@ export default function AdjustQuantity({
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="rounded-md bg-error/10 p-4">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 
@@ -123,7 +123,7 @@ export default function AdjustQuantity({
         {onCancel && (
           <Button
             type="button"
-            variant="secondary"
+            variant="danger"
             onClick={onCancel}
             disabled={loading}
           >

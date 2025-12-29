@@ -21,6 +21,11 @@ export default {
           contrast: 'rgb(var(--color-secondary-contrast) / <alpha-value>)',
           hover: 'rgb(var(--color-secondary-hover) / <alpha-value>)',
         },
+        // Tertiary colors - supplementary color
+        tertiary: {
+          DEFAULT: 'rgb(var(--color-tertiary) / <alpha-value>)',
+          contrast: 'rgb(var(--color-tertiary-contrast) / <alpha-value>)',
+        },
         // Surface colors - backgrounds for cards, panels, etc.
         surface: {
           DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
@@ -31,6 +36,7 @@ export default {
         background: 'rgb(var(--color-background) / <alpha-value>)',
         // Text colors
         text: {
+          default: 'rgb(var(--color-text-default) / <alpha-value>)',
           primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
           secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)',
           disabled: 'rgb(var(--color-text-disabled) / <alpha-value>)',

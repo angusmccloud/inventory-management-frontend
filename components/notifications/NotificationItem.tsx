@@ -83,7 +83,7 @@ export default function NotificationItem({
           <div className="flex items-center gap-2">
             {/* Low stock icon */}
             <svg
-              className="h-5 w-5 text-red-500 flex-shrink-0"
+              className="h-5 w-5 text-error flex-shrink-0"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -107,26 +107,26 @@ export default function NotificationItem({
             </Badge>
           </div>
           
-          <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-text-default">
             {/* Quantity info */}
             <div data-testid="quantity-info">
-              <span className="font-semibold text-gray-900 dark:text-gray-100">Current:</span>{' '}
-              <span className="text-red-600 dark:text-red-400 font-medium">{notification.currentQuantity}</span>
+              <span className="font-semibold text-text-default">Current:</span>{' '}
+              <span className="text-error font-medium">{notification.currentQuantity}</span>
               {' / '}
-              <span className="font-semibold text-gray-900 dark:text-gray-100">Threshold:</span>{' '}
+              <span className="font-semibold text-text-default">Threshold:</span>{' '}
               {notification.threshold}
             </div>
             
             {/* Timestamp */}
             <div data-testid="timestamp">
-              <span className="font-semibold text-gray-900 dark:text-gray-100">Created:</span>{' '}
+              <span className="font-semibold text-text-default">Created:</span>{' '}
               {formatDate(notification.createdAt)}
             </div>
             
             {/* Resolved timestamp if applicable */}
             {notification.resolvedAt && (
               <div data-testid="resolved-timestamp">
-                <span className="font-semibold text-gray-900 dark:text-gray-100">Resolved:</span>{' '}
+                <span className="font-semibold text-text-default">Resolved:</span>{' '}
                 {formatDate(notification.resolvedAt)}
               </div>
             )}
@@ -168,7 +168,7 @@ export default function NotificationItem({
               variant="secondary"
               size="sm"
               data-testid="acknowledge-button"
-              className="bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 focus:ring-yellow-500"
+              className="bg-tertiary/10/30 text-tertiary-contrast hover:bg-tertiary/10 dark:hover:bg-tertiary/10/50 focus:ring-yellow-500"
             >
               Acknowledge
             </Button>
@@ -181,7 +181,7 @@ export default function NotificationItem({
               variant="secondary"
               size="sm"
               data-testid="resolve-button"
-              className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 focus:ring-green-500"
+              className="bg-secondary/10/30 text-secondary-contrast hover:bg-secondary/10 dark:hover:bg-secondary/10/50 focus:ring-green-500"
             >
               Resolve
             </Button>

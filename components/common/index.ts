@@ -24,6 +24,9 @@ export type { CardProps, CardElevation, CardPadding } from './Card/Card.types';
 export { LoadingSpinner } from './LoadingSpinner/LoadingSpinner';
 export type { LoadingSpinnerProps, SpinnerSize } from './LoadingSpinner/LoadingSpinner.types';
 
+export { PageLoading } from './PageLoading/PageLoading';
+export type { PageLoadingProps } from './PageLoading/PageLoading.types';
+
 // Form Inputs
 export { Input } from './Input/Input';
 export type { InputProps, InputType, InputValidationState, InputSize, BaseInputProps } from './Input/Input.types';

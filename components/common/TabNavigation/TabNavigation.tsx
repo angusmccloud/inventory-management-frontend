@@ -75,8 +75,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
       className={cn(
         'flex',
         orientation === 'horizontal' 
-          ? 'border-b border-gray-200 dark:border-gray-700' 
-          : 'flex-col border-r border-gray-200 dark:border-gray-700',
+          ? 'border-b border-border' 
+          : 'flex-col border-r border-border',
         className
       )}
     >
@@ -103,13 +103,13 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={cn(
               'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors',
-              'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
               orientation === 'horizontal' ? '-mb-px' : '',
               isActive
                 ? orientation === 'horizontal'
-                  ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
-                  : 'border-r-2 border-blue-600 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-b-2 border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600',
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'border-r-2 border-primary text-primary bg-primary/10'
+                : 'border-b-2 border-transparent text-text-secondary hover:text-text-default hover:border-border',
               tab.disabled && 'opacity-50 cursor-not-allowed'
             )}
           >

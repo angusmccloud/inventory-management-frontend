@@ -54,8 +54,8 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
       <RoleSelector value={role} onChange={setRole} disabled={isSubmitting} />
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="p-3 bg-error/10/20 border border-error rounded-lg">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 
@@ -73,7 +73,7 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
         {onCancel && (
           <Button
             type="button"
-            variant="secondary"
+            variant="danger"
             onClick={onCancel}
             disabled={isSubmitting}
           >

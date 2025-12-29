@@ -87,10 +87,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label 
             htmlFor={selectId}
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="block text-sm font-medium text-text-default mb-1"
           >
             {label}
-            {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
+            {required && <span className="text-error ml-1">*</span>}
           </label>
         )}
         
@@ -113,17 +113,17 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             // Base styles - match textarea/input exactly
             'block w-full rounded-md border-0',
             'px-3 py-2 pr-10',
-            'text-gray-900 dark:text-gray-100',
-            '!bg-white dark:!bg-gray-800',
-            'ring-1 ring-inset ring-gray-300 dark:ring-gray-600',
-            'placeholder:text-gray-400 dark:placeholder:text-gray-500',
-            'focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-500',
+            'text-text-default',
+            '!bg-surface',
+            'ring-1 ring-inset ring-border',
+            'placeholder:text-text-disabled',
+            'focus:ring-2 focus:ring-inset focus:ring-border-focus',
             'disabled:cursor-not-allowed disabled:opacity-60',
             'transition-colors duration-200',
             'appearance-none',
             // Error/success states
-            error && 'ring-red-500 dark:ring-red-400 focus:ring-red-500 dark:focus:ring-red-400',
-            success && 'ring-green-500 dark:ring-green-400 focus:ring-green-500 dark:focus:ring-green-400',
+            error && 'ring-error focus:ring-error',
+            success && 'ring-primary focus:ring-primary',
             // Custom classes
             className
           )}
@@ -161,9 +161,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={feedbackId}
             className={cn(
               'mt-1 text-xs',
-              error && 'text-red-600 dark:text-red-400',
-              success && 'text-green-600 dark:text-green-400',
-              !error && !success && 'text-gray-500 dark:text-gray-400'
+              error && 'text-error',
+              success && 'text-primary',
+              !error && !success && 'text-text-secondary'
             )}
           >
             {feedbackMessage}

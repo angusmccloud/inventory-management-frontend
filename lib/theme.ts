@@ -118,10 +118,13 @@ export const themeColors = {
   secondary: 'secondary',
   secondaryContrast: 'secondary-contrast',
   secondaryHover: 'secondary-hover',
+  tertiary: 'tertiary',
+  tertiaryContrast: 'tertiary-contrast',
   surface: 'surface',
   surfaceElevated: 'surface-elevated',
   surfaceHover: 'surface-hover',
   background: 'background',
+  textDefault: 'text-default',
   textPrimary: 'text-primary',
   textSecondary: 'text-secondary',
   textDisabled: 'text-disabled',
@@ -138,6 +141,20 @@ export const themeColors = {
 } as const;
 
 export type ThemeColor = typeof themeColors[keyof typeof themeColors];
+
+export type ColorToken = 
+  | 'background'
+  | 'text-default'
+  | 'primary' | 'primary-contrast' | 'primary-hover'
+  | 'secondary' | 'secondary-contrast' | 'secondary-hover'
+  | 'tertiary' | 'tertiary-contrast'
+  | 'error' | 'error-contrast'
+  | 'success' | 'success-contrast'
+  | 'warning' | 'warning-contrast'
+  | 'info' | 'info-contrast'
+  | 'surface' | 'surface-elevated' | 'surface-hover'
+  | 'border' | 'border-focus'
+  | 'text-primary' | 'text-secondary' | 'text-disabled';
 
 /**
  * Helper function to get theme-aware class names

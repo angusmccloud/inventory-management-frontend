@@ -23,7 +23,7 @@ import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import AdjustQuantity from '@/components/inventory/AdjustQuantity';
 import Dialog from '@/components/common/Dialog';
-import { Text, Button, Alert, PageHeader } from '@/components/common';
+import { Text, Button, Alert, PageHeader, PageLoading } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
@@ -178,17 +178,13 @@ export default function InventoryPage() {
   };
 
   if (loading) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-600 dark:text-gray-400">Loading inventory...</p>
-      </div>
-    );
+    return <PageLoading message="Loading inventory..." fullHeight={false} />;
   }
 
   if (!familyId) {
     return (
       <div className="text-center py-12">
-        <Text variant="body" className="text-gray-600 dark:text-gray-400">
+        <Text variant="body" className="text-text-default">
           Please create a family first from the dashboard.
         </Text>
         <Button
@@ -242,14 +238,14 @@ export default function InventoryPage() {
           <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity"
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
               onClick={() => setModalState({ type: 'none' })}
             />
 
             {/* Modal panel */}
-            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
-                <Text variant="h3" className="text-gray-900 dark:text-gray-100 mb-4">
+                <Text variant="h3" className="text-text-default mb-4">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
                   {modalState.type === 'adjust' && 'Adjust Quantity'}

@@ -70,8 +70,9 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   if (center) {
     return (
-      <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex flex-col items-center justify-center min-h-[200px] gap-3">
         {spinner}
+        {label && <p className="text-sm text-text-secondary">{label}</p>}
       </div>
     );
   }

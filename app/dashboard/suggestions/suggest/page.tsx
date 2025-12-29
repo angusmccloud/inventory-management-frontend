@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SuggestionForm, SuggestionFormData } from '@/components/suggestions/SuggestionForm';
-import { Text, Card } from '@/components/common';
+import { Text, Card, PageLoading } from '@/components/common';
 import { createSuggestion } from '@/lib/api/suggestions';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
@@ -85,20 +85,14 @@ export default function SuggestPage() {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-2xl mx-auto p-6">
-        <Text variant="body" className="text-gray-600 dark:text-gray-400">
-          Loading...
-        </Text>
-      </div>
-    );
+    return <PageLoading message="Loading..." fullHeight={false} />;
   }
 
   if (!familyId) {
     return (
       <div className="max-w-2xl mx-auto p-6">
-        <Card className="bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800">
-          <Text variant="body" className="text-red-600 dark:text-red-400">
+        <Card className="bg-error/10/20 border-error">
+          <Text variant="body" className="text-error">
             {error || 'Unable to load family information'}
           </Text>
         </Card>
@@ -112,14 +106,14 @@ export default function SuggestPage() {
         <Text variant="h1" className="mb-2">
           Create Suggestion
         </Text>
-        <Text variant="body" className="text-gray-600 dark:text-gray-400">
+        <Text variant="body" className="text-text-default">
           Suggest adding an item to the shopping list or creating a new inventory item.
         </Text>
       </div>
 
       {error && (
-        <Card className="mb-6 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800">
-          <Text variant="body" className="text-red-600 dark:text-red-400">
+        <Card className="mb-6 bg-error/10/20 border-error">
+          <Text variant="body" className="text-error">
             {error}
           </Text>
         </Card>
