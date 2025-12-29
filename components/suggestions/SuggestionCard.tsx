@@ -86,7 +86,7 @@ export function SuggestionCard({
                   {suggestion.type === 'add_to_shopping' ? 'Add to Shopping' : 'New Item'}
                 </Badge>
               </div>
-              <Text variant="caption" className="text-gray-500 dark:text-gray-400">
+              <Text variant="caption" className="text-text-default">
                 Suggested by {suggestion.suggestedByName} on {formatDate(suggestion.createdAt)}
               </Text>
             </div>
@@ -99,7 +99,7 @@ export function SuggestionCard({
                 <Text variant="body" className="font-medium">
                   {suggestion.itemNameSnapshot || 'Item'}
                 </Text>
-                <Text variant="caption" className="text-gray-600 dark:text-gray-400">
+                <Text variant="caption" className="text-text-default">
                   Add to shopping list
                 </Text>
               </>
@@ -110,13 +110,13 @@ export function SuggestionCard({
                 </Text>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <Text variant="caption" className="text-gray-500">
+                    <Text variant="caption" className="text-text-secondary">
                       Quantity:
                     </Text>
                     <Text variant="body">{suggestion.proposedQuantity}</Text>
                   </div>
                   <div>
-                    <Text variant="caption" className="text-gray-500">
+                    <Text variant="caption" className="text-text-secondary">
                       Threshold:
                     </Text>
                     <Text variant="body">{suggestion.proposedThreshold}</Text>
@@ -126,24 +126,24 @@ export function SuggestionCard({
             )}
 
             {suggestion.notes && (
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                <Text variant="caption" className="text-gray-500 mb-1">
+              <div className="pt-2 border-t border-border">
+                <Text variant="caption" className="text-text-secondary mb-1">
                   Notes:
                 </Text>
-                <Text variant="body" className="text-gray-700 dark:text-gray-300">
+                <Text variant="body" className="text-text-default">
                   {suggestion.notes}
                 </Text>
               </div>
             )}
 
             {suggestion.status !== 'pending' && suggestion.reviewedBy && (
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                <Text variant="caption" className="text-gray-500">
+              <div className="pt-2 border-t border-border">
+                <Text variant="caption" className="text-text-secondary">
                   {suggestion.status === 'approved' ? 'Approved' : 'Rejected'} on{' '}
                   {formatDate(suggestion.reviewedAt!)}
                 </Text>
                 {suggestion.rejectionNotes && (
-                  <Text variant="body" className="text-gray-700 dark:text-gray-300 mt-1">
+                  <Text variant="body" className="text-text-default mt-1">
                     Reason: {suggestion.rejectionNotes}
                   </Text>
                 )}
@@ -153,7 +153,7 @@ export function SuggestionCard({
 
           {/* Actions */}
           {showActions && (
-            <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex gap-2 pt-2 border-t border-border">
               <Button
                 variant="primary"
                 size="sm"
@@ -178,22 +178,22 @@ export function SuggestionCard({
       {/* Reject Modal */}
       {showRejectModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+          <div className="bg-surface rounded-lg max-w-md w-full p-6">
             <Text variant="h3" className="mb-4">
               Reject Suggestion
             </Text>
-            <Text variant="body" className="text-gray-600 dark:text-gray-400 mb-4">
+            <Text variant="body" className="text-text-default mb-4">
               Optionally provide a reason for rejecting this suggestion.
             </Text>
             <textarea
               value={rejectionNotes}
               onChange={(e) => setRejectionNotes(e.target.value)}
               placeholder="Rejection reason (optional)"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white mb-4"
+              className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-surface-elevated dark:border-border dark:text-white mb-4"
               rows={3}
               maxLength={500}
             />
-            <Text variant="caption" className="text-gray-500 mb-4">
+            <Text variant="caption" className="text-text-secondary mb-4">
               {rejectionNotes.length}/500 characters
             </Text>
             <div className="flex gap-3 justify-end">

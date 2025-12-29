@@ -119,7 +119,7 @@ describe('NotificationItem', () => {
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Active');
-      expect(badge).toHaveClass('bg-red-100', 'text-red-800');
+      expect(badge).toHaveClass('bg-error/10', 'text-error');
     });
 
     it('displays "Acknowledged" status with yellow styling for acknowledged notifications', () => {
@@ -131,7 +131,7 @@ describe('NotificationItem', () => {
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Acknowledged');
-      expect(badge).toHaveClass('bg-yellow-100', 'text-yellow-800');
+      expect(badge).toHaveClass('bg-tertiary/10', 'text-tertiary-contrast');
     });
 
     it('displays "Resolved" status with green styling for resolved notifications', () => {
@@ -143,7 +143,7 @@ describe('NotificationItem', () => {
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Resolved');
-      expect(badge).toHaveClass('bg-green-100', 'text-green-800');
+      expect(badge).toHaveClass('bg-secondary/10', 'text-secondary-contrast');
     });
   });
 

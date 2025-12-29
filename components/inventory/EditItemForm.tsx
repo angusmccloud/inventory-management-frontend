@@ -189,7 +189,7 @@ export default function EditItemForm({
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="notes" className="block text-sm font-medium text-text-default">
             Notes
           </label>
           <textarea
@@ -197,7 +197,7 @@ export default function EditItemForm({
             rows={3}
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default dark:bg-surface-elevated ring-1 ring-inset ring-border placeholder:text-text-secondary dark:placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
             disabled={loading}
           />
         </div>

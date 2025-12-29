@@ -206,7 +206,7 @@ export default function MembersPage() {
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex flex-col items-center justify-center py-12">
           <LoadingSpinner size="lg" />
-          <Text variant="body" className="mt-4 text-gray-600 dark:text-gray-400">
+          <Text variant="body" className="mt-4 text-text-default">
             Loading members...
           </Text>
         </div>
@@ -258,8 +258,8 @@ export default function MembersPage() {
 
       {/* Invite Form */}
       {isAdmin && showInviteForm && (
-        <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6">
-          <Text variant="h2" className="text-gray-900 dark:text-gray-100 mb-4">
+        <div className="mb-6 bg-surface rounded-lg shadow-md border border-border p-6">
+          <Text variant="h2" className="text-text-default mb-4">
             Invite New Member
           </Text>
           <InviteMemberForm

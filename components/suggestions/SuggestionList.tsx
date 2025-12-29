@@ -92,7 +92,7 @@ export function SuggestionList({
   if (isLoading && suggestions.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Text variant="body" className="text-gray-500">
+        <Text variant="body" className="text-text-secondary">
           Loading suggestions...
         </Text>
       </div>
@@ -102,7 +102,7 @@ export function SuggestionList({
   if (error && suggestions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <Text variant="body" className="text-red-600 dark:text-red-400 mb-4">
+        <Text variant="body" className="text-error mb-4">
           {error}
         </Text>
         <Button variant="secondary" onClick={() => loadSuggestions(true)}>
@@ -115,7 +115,7 @@ export function SuggestionList({
   if (suggestions.length === 0) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Text variant="body" className="text-gray-500">
+        <Text variant="body" className="text-text-secondary">
           {statusFilter
             ? `No ${statusFilter} suggestions found.`
             : 'No suggestions yet. Create your first suggestion!'}
@@ -127,8 +127,8 @@ export function SuggestionList({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
-          <Text variant="body" className="text-red-600 dark:text-red-400">
+        <div className="bg-error/10/20 border border-error rounded-md p-4">
+          <Text variant="body" className="text-error">
             {error}
           </Text>
         </div>

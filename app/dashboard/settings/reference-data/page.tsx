@@ -173,8 +173,8 @@ export default function ReferenceDataPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Reference Data</h1>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        <h1 className="text-3xl font-bold text-text-default">Reference Data</h1>
+        <p className="mt-2 text-sm text-text-default">
           Manage storage locations and stores for your family inventory.
           {!isAdmin && ' (View only - contact an admin to make changes)'}
         </p>
@@ -182,25 +182,25 @@ export default function ReferenceDataPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="mb-6 rounded-md bg-error/10/20 p-4">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 
       {/* Tab Navigation */}
-      <div className="mb-6 border-b border-gray-200 dark:border-gray-700">
+      <div className="mb-6 border-b border-border">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
           <button
             onClick={() => setActiveTab('locations')}
             className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium ${
               activeTab === 'locations'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-text-secondary hover:border-border hover:text-text-secondary'
             }`}
             aria-current={activeTab === 'locations' ? 'page' : undefined}
           >
             Storage Locations
-            <span className="ml-2 rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-gray-900 dark:text-gray-100">
+            <span className="ml-2 rounded-full bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-default">
               {locations.length}
             </span>
           </button>
@@ -208,13 +208,13 @@ export default function ReferenceDataPage() {
             onClick={() => setActiveTab('stores')}
             className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium ${
               activeTab === 'stores'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-text-secondary hover:border-border hover:text-text-secondary'
             }`}
             aria-current={activeTab === 'stores' ? 'page' : undefined}
           >
             Stores
-            <span className="ml-2 rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-gray-900 dark:text-gray-100">
+            <span className="ml-2 rounded-full bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-default">
               {stores.length}
             </span>
           </button>
@@ -239,7 +239,7 @@ export default function ReferenceDataPage() {
                   <div className="mb-4">
                     <button
                       onClick={() => setDialogState({ type: 'create-location' })}
-                      className="inline-flex items-center rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                      className="inline-flex items-center rounded-md bg-primary dark:bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary dark:hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Add Storage Location
                     </button>
@@ -267,7 +267,7 @@ export default function ReferenceDataPage() {
                   <div className="mb-4">
                     <button
                       onClick={() => setDialogState({ type: 'create-store' })}
-                      className="inline-flex items-center rounded-md bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                      className="inline-flex items-center rounded-md bg-primary dark:bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary dark:hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Add Store
                     </button>
@@ -295,9 +295,9 @@ export default function ReferenceDataPage() {
       {(dialogState.type === 'create-location' || dialogState.type === 'edit-location') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
-            <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
+            <div className="relative transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <h3 className="mb-4 text-lg font-semibold text-text-default">
                 {dialogState.type === 'create-location' ? 'Add Storage Location' : 'Edit Storage Location'}
               </h3>
               <StorageLocationForm
@@ -315,9 +315,9 @@ export default function ReferenceDataPage() {
       {(dialogState.type === 'create-store' || dialogState.type === 'edit-store') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
-            <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
+            <div className="relative transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <h3 className="mb-4 text-lg font-semibold text-text-default">
                 {dialogState.type === 'create-store' ? 'Add Store' : 'Edit Store'}
               </h3>
               <StoreForm

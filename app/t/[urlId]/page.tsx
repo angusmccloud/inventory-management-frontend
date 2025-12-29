@@ -147,11 +147,11 @@ export default async function NfcPage({ params }: NfcPageProps) {
 
         {/* Error State */}
         {!result.success && result.code !== 'NOT_FOUND' && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+          <div className="bg-surface rounded-lg shadow-lg p-8 text-center">
             {/* Error Icon */}
-            <div className="mx-auto w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-6">
+            <div className="mx-auto w-16 h-16 bg-error/10/30 rounded-full flex items-center justify-center mb-6">
               <svg
-                className="w-10 h-10 text-red-600 dark:text-red-400"
+                className="w-10 h-10 text-error"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -167,25 +167,25 @@ export default async function NfcPage({ params }: NfcPageProps) {
             </div>
 
             {/* Error Title */}
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-text-secondary dark:text-white mb-2">
               Adjustment Failed
             </h1>
 
             {/* Error Message */}
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-lg text-text-default mb-6">
               {result.message}
             </p>
 
             {/* Error Code (for debugging) */}
             {result.code && (
-              <p className="text-sm text-gray-400 dark:text-gray-500">
+              <p className="text-sm text-text-default">
                 Error code: {result.code}
               </p>
             )}
 
             {/* Retry Instructions */}
-            <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+            <div className="mt-8 p-4 bg-surface-elevated rounded-lg">
+              <p className="text-sm text-text-default">
                 Try tapping the NFC tag again or contact support if the problem persists.
               </p>
             </div>

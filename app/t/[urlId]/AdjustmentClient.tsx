@@ -134,15 +134,15 @@ export default function AdjustmentClient({
   return (
     <div className="space-y-6">
       {/* Current Quantity Display */}
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-        <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+      <div className="bg-surface-elevated rounded-lg p-6">
+        <p className="text-sm text-text-default uppercase tracking-wide mb-2">
           Current Quantity
         </p>
-        <p className="text-4xl font-bold text-gray-900 dark:text-white">
+        <p className="text-4xl font-bold text-text-secondary dark:text-white">
           {state.quantity}
         </p>
         {state.isLoading && (
-          <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
+          <p className="text-sm text-primary mt-2">
             Updating...
           </p>
         )}
@@ -151,13 +151,13 @@ export default function AdjustmentClient({
       {/* Error Message */}
       {state.error && (
         <div
-          className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
+          className="bg-error/10/20 border border-error rounded-lg p-4"
           role="alert"
           aria-live="assertive"
         >
           <div className="flex items-start">
             <svg
-              className="w-5 h-5 text-red-600 dark:text-red-400 mr-3 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-error mr-3 flex-shrink-0 mt-0.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -171,10 +171,10 @@ export default function AdjustmentClient({
               />
             </svg>
             <div>
-              <h3 className="text-sm font-medium text-red-800 dark:text-red-300">
+              <h3 className="text-sm font-medium text-error">
                 Adjustment Error
               </h3>
-              <p className="text-sm text-red-700 dark:text-red-400 mt-1">
+              <p className="text-sm text-error mt-1">
                 {state.error}
               </p>
             </div>
@@ -184,7 +184,7 @@ export default function AdjustmentClient({
 
       {/* Adjustment Buttons */}
       <div className="space-y-4">
-        <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
+        <p className="text-sm text-text-default text-center">
           Make additional adjustments:
         </p>
 
@@ -193,7 +193,7 @@ export default function AdjustmentClient({
           <button
             onClick={() => handleAdjustment(-1)}
             disabled={state.isLoading || state.quantity === 0}
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-error/10 hover:bg-error/10 disabled:bg-surface-elevated dark:disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Decrease quantity by 1"
             aria-disabled={state.isLoading || state.quantity === 0}
           >
@@ -218,7 +218,7 @@ export default function AdjustmentClient({
           <button
             onClick={() => handleAdjustment(1)}
             disabled={state.isLoading}
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-secondary/10 hover:bg-secondary/10 disabled:bg-surface-elevated dark:disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Increase quantity by 1"
             aria-disabled={state.isLoading}
           >
@@ -242,15 +242,15 @@ export default function AdjustmentClient({
 
         {/* Button Hint */}
         {state.quantity === 0 && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+          <p className="text-xs text-text-default text-center">
             Quantity is at minimum (0). Use the + button to add items.
           </p>
         )}
       </div>
 
       {/* Additional Info */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+      <div className="pt-4 border-t border-border">
+        <p className="text-xs text-text-default text-center">
           Changes are saved automatically. You can close this page anytime.
         </p>
       </div>

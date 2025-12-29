@@ -64,12 +64,12 @@ export default function InventoryList({
                       {item.name}
                     </Text>
                     {isLowStock && (
-                      <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+                      <span className="inline-flex items-center rounded-full bg-error/10 px-2.5 py-0.5 text-xs font-medium text-error">
                         Low Stock
                       </span>
                     )}
                     {item.status === 'archived' && (
-                      <span className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs font-medium text-text-default">
+                      <span className="inline-flex items-center rounded-full bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-default">
                         Archived
                       </span>
                     )}

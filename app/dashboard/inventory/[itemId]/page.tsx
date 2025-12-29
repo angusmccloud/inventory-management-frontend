@@ -80,8 +80,8 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <span className="ml-4 text-gray-600 dark:text-gray-300">Loading item...</span>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <span className="ml-4 text-text-default">Loading item...</span>
         </div>
       </div>
     );
@@ -112,7 +112,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
       <div className="mb-6">
         <button
           onClick={handleBack}
-          className="flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-4"
+          className="flex items-center text-primary hover:text-primary dark:hover:text-primary mb-4"
         >
           <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -129,44 +129,44 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Item Details Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-surface rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-text-secondary dark:text-white mb-4">
               Item Details
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Current Quantity</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{item.quantity}</p>
+                <p className="text-sm text-text-default">Current Quantity</p>
+                <p className="text-2xl font-bold text-text-secondary dark:text-white">{item.quantity}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Unit</p>
-                <p className="text-lg text-gray-900 dark:text-white">{item.unit || 'N/A'}</p>
+                <p className="text-sm text-text-default">Unit</p>
+                <p className="text-lg text-text-secondary dark:text-white">{item.unit || 'N/A'}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
-                <p className="text-lg text-gray-900 dark:text-white">{item.locationName || 'Not set'}</p>
+                <p className="text-sm text-text-default">Location</p>
+                <p className="text-lg text-text-secondary dark:text-white">{item.locationName || 'Not set'}</p>
               </div>
               {item.preferredStoreName && (
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Preferred Store</p>
-                  <p className="text-lg text-gray-900 dark:text-white">{item.preferredStoreName}</p>
+                  <p className="text-sm text-text-default">Preferred Store</p>
+                  <p className="text-lg text-text-secondary dark:text-white">{item.preferredStoreName}</p>
                 </div>
               )}
               {item.lowStockThreshold > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Low Stock Alert</p>
-                  <p className="text-lg text-gray-900 dark:text-white">
+                  <p className="text-sm text-text-default">Low Stock Alert</p>
+                  <p className="text-lg text-text-secondary dark:text-white">
                     Below {item.lowStockThreshold} {item.unit}
                   </p>
                 </div>
               )}
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
+                <p className="text-sm text-text-default">Status</p>
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     item.quantity <= item.lowStockThreshold
-                      ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                      : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                      ? 'bg-error/10 text-error dark:bg-error/10/30 dark:text-error'
+                      : 'bg-secondary/10 text-secondary-contrast dark:bg-secondary/10/30 dark:text-secondary-contrast'
                   }`}
                 >
                   {item.quantity <= item.lowStockThreshold ? 'Low Stock' : 'In Stock'}
@@ -178,7 +178,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             <div className="mt-6 flex gap-3">
               <button
                 onClick={() => router.push(`/dashboard/inventory?edit=${item.itemId}`)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Edit Item
               </button>
@@ -198,7 +198,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                       });
                     }
                   }}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="px-4 py-2 bg-error/10 hover:bg-error/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   Delete Item
                 </button>
@@ -213,14 +213,14 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
           {/* Suggester Notice */}
           {!isAdmin && (
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="bg-primary dark:bg-primary/20 border border-primary rounded-lg p-4">
               <div className="flex items-start">
-                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300">Admin Access Required</h4>
-                  <p className="text-sm text-blue-700 dark:text-blue-400 mt-1">
+                  <h4 className="text-sm font-medium text-primary">Admin Access Required</h4>
+                  <p className="text-sm text-primary mt-1">
                     NFC URL management is only available to family administrators. Contact your admin to generate NFC URLs for this item.
                   </p>
                 </div>
@@ -232,8 +232,8 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-6">
           {/* Quick Actions */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-surface rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-text-secondary dark:text-white mb-4">
               Quick Actions
             </h3>
             <div className="space-y-3">
@@ -242,7 +242,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                   // TODO: Implement quick adjust
                   alert('Quick adjust functionality coming soon');
                 }}
-                className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-4 py-2 bg-secondary/10 hover:bg-secondary/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 + Add Items
               </button>
@@ -251,7 +251,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                   // TODO: Implement quick adjust
                   alert('Quick adjust functionality coming soon');
                 }}
-                className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-2 bg-error/10 hover:bg-error/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 - Remove Items
               </button>
@@ -259,7 +259,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                 onClick={() => {
                   router.push(`/dashboard/shopping-list?add=${item.itemId}`);
                 }}
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Add to Shopping List
               </button>
@@ -267,24 +267,24 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
 
           {/* Item Metadata */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-surface rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-text-secondary dark:text-white mb-4">
               Information
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">Item ID:</span>
-                <span className="text-gray-900 dark:text-white font-mono text-xs">{item.itemId.split('#').pop()}</span>
+                <span className="text-text-default">Item ID:</span>
+                <span className="text-text-secondary dark:text-white font-mono text-xs">{item.itemId.split('#').pop()}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">Created:</span>
-                <span className="text-gray-900 dark:text-white">
+                <span className="text-text-default">Created:</span>
+                <span className="text-text-secondary dark:text-white">
                   {new Date(item.createdAt).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">Updated:</span>
-                <span className="text-gray-900 dark:text-white">
+                <span className="text-text-default">Updated:</span>
+                <span className="text-text-secondary dark:text-white">
                   {new Date(item.updatedAt).toLocaleDateString()}
                 </span>
               </div>

@@ -41,19 +41,19 @@ export function RemoveMemberDialog({
         {/* Dialog */}
         <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-text-secondary">
               {isSelfRemoval ? 'Leave Family?' : 'Remove Member?'}
             </h3>
           </div>
 
           {isLastAdmin ? (
             <div className="mb-6">
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
-                <p className="text-sm text-red-800 font-medium">
+              <div className="p-4 bg-error/10 border border-error rounded-lg mb-4">
+                <p className="text-sm text-error font-medium">
                   ⚠️ Cannot remove the last admin
                 </p>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-text-secondary">
                 At least one admin must exist in the family. Please promote another member
                 to admin before removing yourself.
               </p>
@@ -62,21 +62,21 @@ export function RemoveMemberDialog({
             <div className="mb-6">
               {isSelfRemoval ? (
                 <>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-text-secondary mb-3">
                     Are you sure you want to leave this family? You will immediately lose
                     access to all inventory and data.
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-text-secondary">
                     Another admin will need to invite you again if you want to rejoin.
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-text-secondary mb-3">
                     Are you sure you want to remove <strong>{member.name}</strong> (
                     {member.email}) from the family?
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-text-secondary">
                     They will immediately lose access, but items they created will be
                     preserved.
                   </p>
