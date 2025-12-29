@@ -13,7 +13,8 @@ import * as React from 'react';
 export type ButtonVariant = 
   | 'primary'    // Main call-to-action (filled, high contrast)
   | 'secondary'  // Alternative actions (outlined or subtle fill)
-  | 'danger';    // Destructive actions (red/warning color)
+  | 'danger'     // Destructive actions (red/warning color)
+  | 'warning';   // Warning/cancel actions (amber color)
 
 /**
  * Button size variants

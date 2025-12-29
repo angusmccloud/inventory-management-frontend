@@ -99,7 +99,7 @@ export function RemoveMemberDialog({
             )}
 
             <Button
-              variant="secondary"
+              variant="warning"
               onClick={onCancel}
               disabled={isRemoving}
               className={isLastAdmin ? 'flex-1' : ''}

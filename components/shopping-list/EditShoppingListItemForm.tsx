@@ -168,7 +168,7 @@ export default function EditShoppingListItemForm({
         </Button>
         <Button
           type="button"
-          variant="secondary"
+          variant="warning"
           onClick={onCancel}
           disabled={isSubmitting}
         >

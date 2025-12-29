@@ -51,12 +51,12 @@ export default function InventoryList({
 
   return (
     <div className="overflow-hidden bg-surface shadow sm:rounded-md">
-      <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
+      <ul role="list" className="divide-y divide-border">
         {items.map((item) => {
           const isLowStock = item.quantity <= item.lowStockThreshold;
           
           return (
-            <li key={item.itemId} className="px-4 py-4 sm:px-6">
+            <li key={item.itemId} className="px-4 py-4 sm:px-6 hover:bg-surface-elevated transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">

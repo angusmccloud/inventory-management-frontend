@@ -90,21 +90,21 @@ export default function StoreForm({
       )}
 
       <div className="flex justify-end space-x-3">
-        <button
+        <Button
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="px-4 py-2 border border-border rounded-md shadow-sm text-sm font-medium text-text-default bg-surface hover:bg-surface-elevated dark:hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="warning"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           disabled={!canSubmit}
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary dark:bg-primary hover:bg-primary-hover dark:hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="primary"
         >
           {isSubmitting ? 'Saving...' : initialData ? 'Update Store' : 'Add Store'}
-        </button>
+        </Button>
       </div>
     </form>
   );

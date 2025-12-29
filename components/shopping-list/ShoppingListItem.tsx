@@ -48,7 +48,7 @@ export default function ShoppingListItemComponent({
           checked={isPurchased}
           onChange={handleToggle}
           disabled={isToggling}
-          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary disabled:opacity-50 flex-shrink-0"
+          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary checked:bg-primary checked:border-primary disabled:opacity-50 flex-shrink-0"
         />
         <div className="flex-1 min-w-0">
           <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>

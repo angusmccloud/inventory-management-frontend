@@ -123,7 +123,7 @@ export default function AdjustQuantity({
         {onCancel && (
           <Button
             type="button"
-            variant="secondary"
+            variant="warning"
             onClick={onCancel}
             disabled={loading}
           >

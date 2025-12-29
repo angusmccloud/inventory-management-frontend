@@ -269,7 +269,7 @@ export function SuggestionForm({
         {/* Actions */}
         <div className="flex gap-3 justify-end">
           {onCancel && (
-            <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
+            <Button variant="warning" onClick={onCancel} disabled={isSubmitting}>
               Cancel
             </Button>
           )}
