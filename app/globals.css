@@ -54,7 +54,7 @@
 .dark,
 :root:has(.dark) {
   /* Background and Text */
-  --color-background: 10 51 21; /* #0A3315 */
+  --color-background: 1 31 9; /* #011F09 */
   --color-text-default: 142 179 152; /* #8EB398 */
 
   /* Primary - Lighter for dark backgrounds */
