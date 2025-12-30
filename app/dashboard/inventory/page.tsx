@@ -21,15 +21,13 @@ import { InventoryItem } from '@/types/entities';
 import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
-import AdjustQuantity from '@/components/inventory/AdjustQuantity';
 import Dialog from '@/components/common/Dialog';
 import { Text, Button, Alert, PageHeader, PageLoading } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
   | { type: 'add' }
-  | { type: 'edit'; item: InventoryItem }
-  | { type: 'adjust'; item: InventoryItem };
+  | { type: 'edit'; item: InventoryItem };
 
 type DialogState =
   | { type: 'none' }
@@ -223,12 +221,13 @@ export default function InventoryPage() {
       {/* Inventory List */}
       <InventoryList
         items={items}
+        familyId={familyId}
         onEdit={(item) => setModalState({ type: 'edit', item })}
-        onAdjustQuantity={(item) => setModalState({ type: 'adjust', item })}
         onArchive={handleArchive}
         onDelete={handleDelete}
         onAddToShoppingList={handleAddToShoppingList}
         onViewDetails={(item) => router.push(`/dashboard/inventory/${item.itemId}`)}
+        onItemUpdated={handleItemUpdated}
         isAdmin={isAdmin}
       />
 
@@ -248,7 +247,6 @@ export default function InventoryPage() {
                 <Text variant="h3" className="text-text-default mb-4">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
-                  {modalState.type === 'adjust' && 'Adjust Quantity'}
                 </Text>
 
                 {modalState.type === 'add' && (
@@ -261,15 +259,6 @@ export default function InventoryPage() {
 
                 {modalState.type === 'edit' && (
                   <EditItemForm
-                    familyId={familyId}
-                    item={modalState.item}
-                    onSuccess={handleItemUpdated}
-                    onCancel={() => setModalState({ type: 'none' })}
-                  />
-                )}
-
-                {modalState.type === 'adjust' && (
-                  <AdjustQuantity
                     familyId={familyId}
                     item={modalState.item}
                     onSuccess={handleItemUpdated}

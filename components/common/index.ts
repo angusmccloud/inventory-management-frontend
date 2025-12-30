@@ -53,3 +53,7 @@ export type { TabNavigationProps, Tab } from './TabNavigation/TabNavigation.type
 
 export { PageHeader } from './PageHeader/PageHeader';
 export type { PageHeaderProps } from './PageHeader/PageHeader.types';
+
+// Quantity Controls
+export { default as QuantityControls } from './QuantityControls';
+export type { QuantityControlsProps } from './QuantityControls';

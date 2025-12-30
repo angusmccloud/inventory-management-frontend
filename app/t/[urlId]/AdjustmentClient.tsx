@@ -2,22 +2,27 @@
  * Adjustment Client Component
  * 
  * @description Client-side component for interactive +/- inventory adjustments
- * Provides real-time quantity updates without page reload
+ * Provides real-time quantity updates with debounced API calls
  * 
  * Features:
+ * - Debounced API calls (500ms delay, batches rapid clicks)
  * - Optimistic UI updates for immediate feedback
  * - Error recovery with automatic rollback
  * - Touch-friendly buttons (44x44px minimum)
- * - Loading states to prevent double-submission
- * - Minimum quantity enforcement (cannot go below 0)
+ * - Auto-flush on navigation/page unload
+ * - Offline detection with disabled state
  * 
  * @see specs/006-api-integration/spec.md - User Story 2
- * @see specs/006-api-integration/contracts/nfc-adjustment-api.yaml
+ * @see specs/010-streamline-quantity-controls/spec.md - User Story 1
+ * @see specs/010-streamline-quantity-controls/contracts/nfc-adjustment-api.yaml
  */
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useCallback } from 'react';
+import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import QuantityControls from '@/components/common/QuantityControls';
 
 interface AdjustmentClientProps {
   urlId: string;
@@ -26,79 +31,31 @@ interface AdjustmentClientProps {
   apiBaseUrl: string;
 }
 
-interface AdjustmentState {
-  quantity: number;
-  isLoading: boolean;
-  error: string | null;
-  lastAction: 'increment' | 'decrement' | null;
-}
-
 /**
  * Client component for additional adjustments after initial NFC tap
  * 
  * WCAG 2.1 AA compliant with 44x44px touch targets
+ * Uses debounced API calls to reduce server load (500ms delay)
  */
 export default function AdjustmentClient({
   urlId,
   initialQuantity,
   apiBaseUrl,
 }: Omit<AdjustmentClientProps, 'initialItemName'>) {
-  const [state, setState] = useState<AdjustmentState>({
-    quantity: initialQuantity,
-    isLoading: false,
-    error: null,
-    lastAction: null,
-  });
+  const isOnline = useOnlineStatus();
 
   /**
-   * Perform adjustment with optimistic UI update
+   * Flush callback for debounced adjustments
+   * Makes API call with accumulated delta
    */
-  const handleAdjustment = async (delta: -1 | 1) => {
-    // Prevent adjustment if already loading
-    if (state.isLoading) {
-      return;
-    }
-
-    // Check minimum quantity constraint client-side
-    if (delta === -1 && state.quantity === 0) {
-      setState((prev) => ({
-        ...prev,
-        error: 'Cannot reduce quantity below 0',
-        lastAction: 'decrement',
-      }));
-      
-      // Clear error after 3 seconds
-      setTimeout(() => {
-        setState((prev) => ({
-          ...prev,
-          error: prev.error === 'Cannot reduce quantity below 0' ? null : prev.error,
-        }));
-      }, 3000);
-      
-      return;
-    }
-
-    // Store previous quantity for rollback
-    const previousQuantity = state.quantity;
-    const optimisticQuantity = state.quantity + delta;
-
-    // Optimistic update
-    setState((prev) => ({
-      ...prev,
-      quantity: optimisticQuantity,
-      isLoading: true,
-      error: null,
-      lastAction: delta === 1 ? 'increment' : 'decrement',
-    }));
-
-    try {
-      // Call adjustment API
-      const response = await fetch(`${apiBaseUrl}/api/adjust/${urlId}`, {
+  const handleFlush = useCallback(
+    async (itemId: string, accumulatedDelta: number) => {
+      const response = await fetch(`${apiBaseUrl}/api/adjust/${itemId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ delta }),
+        body: JSON.stringify({ delta: accumulatedDelta }),
       });
 
       if (!response.ok) {
@@ -107,27 +64,70 @@ export default function AdjustmentClient({
       }
 
       const data = await response.json();
+      return data.newQuantity;
+    },
+    [apiBaseUrl]
+  );
 
-      // Update with server response (may differ from optimistic update)
-      setState((prev) => ({
-        ...prev,
-        quantity: data.newQuantity,
-        isLoading: false,
-        error: null,
-      }));
-    } catch (error) {
-      // Rollback optimistic update on error
-      setState((prev) => ({
-        ...prev,
-        quantity: previousQuantity,
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Adjustment failed',
-      }));
+  // Initialize debounce hook
+  const {
+    localQuantity,
+    hasPendingChanges,
+    isFlushing,
+    error,
+    adjust,
+    flush,
+    retry,
+    clearError,
+  } = useQuantityDebounce({
+    itemId: urlId,
+    initialQuantity,
+    onFlush: handleFlush,
+    delay: 500, // 500ms debounce delay
+  });
 
-      // Clear error after 5 seconds
-      setTimeout(() => {
-        setState((prev) => ({ ...prev, error: null }));
-      }, 5000);
+  /**
+   * Flush pending changes on navigation/unmount
+   */
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasPendingChanges) {
+        flush();
+        // Show browser warning for pending changes
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Flush on unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      if (hasPendingChanges) {
+        flush();
+      }
+    };
+  }, [hasPendingChanges, flush]);
+
+  /**
+   * Flush on route change (Next.js navigation)
+   * Note: Next.js 13+ App Router doesn't expose router events directly
+   * Relying on beforeunload and unmount for now
+   */
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+    };
+  }, []);
+
+  const handleIncrement = () => {
+    adjust(1);
+  };
+
+  const handleDecrement = () => {
+    if (localQuantity > 0) {
+      adjust(-1);
     }
   };
 
@@ -138,20 +138,32 @@ export default function AdjustmentClient({
         <p className="text-sm text-text-default uppercase tracking-wide mb-2">
           Current Quantity
         </p>
-        <p className="text-4xl font-bold text-text-secondary dark:text-white">
-          {state.quantity}
-        </p>
-        {state.isLoading && (
+        <div className="flex items-center gap-3">
+          <p className="text-4xl font-bold text-text-secondary dark:text-white">
+            {localQuantity}
+          </p>
+          {hasPendingChanges && (
+            <span className="text-warning text-2xl" title="Changes pending">
+              *
+            </span>
+          )}
+        </div>
+        {isFlushing && (
           <p className="text-sm text-primary mt-2">
-            Updating...
+            Saving...
+          </p>
+        )}
+        {!isOnline && (
+          <p className="text-sm text-warning mt-2">
+            You are offline. Changes will be disabled.
           </p>
         )}
       </div>
 
       {/* Error Message */}
-      {state.error && (
+      {error && (
         <div
-          className="bg-error/10/20 border border-error rounded-lg p-4"
+          className="bg-error/10 border border-error rounded-lg p-4"
           role="alert"
           aria-live="assertive"
         >
@@ -170,14 +182,27 @@ export default function AdjustmentClient({
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-medium text-error">
                 Adjustment Error
               </h3>
               <p className="text-sm text-error mt-1">
-                {state.error}
+                {error.message}
               </p>
+              <button
+                onClick={retry}
+                className="mt-2 text-sm underline text-error hover:no-underline"
+              >
+                Retry
+              </button>
             </div>
+            <button
+              onClick={clearError}
+              className="ml-2 text-error hover:text-error/80"
+              aria-label="Dismiss error"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}
@@ -188,60 +213,29 @@ export default function AdjustmentClient({
           Make additional adjustments:
         </p>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Decrement Button (-1) */}
-          <button
-            onClick={() => handleAdjustment(-1)}
-            disabled={state.isLoading || state.quantity === 0}
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-error/10 hover:bg-error/10 disabled:bg-surface-elevated dark:disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Decrease quantity by 1"
-            aria-disabled={state.isLoading || state.quantity === 0}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M20 12H4"
-              />
-            </svg>
-            <span className="text-lg">Remove 1</span>
-          </button>
-
-          {/* Increment Button (+1) */}
-          <button
-            onClick={() => handleAdjustment(1)}
-            disabled={state.isLoading}
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-2 px-6 py-3 bg-secondary/10 hover:bg-secondary/10 disabled:bg-surface-elevated dark:disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Increase quantity by 1"
-            aria-disabled={state.isLoading}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            <span className="text-lg">Add 1</span>
-          </button>
+        <div className="flex justify-center">
+          <QuantityControls
+            quantity={localQuantity}
+            onIncrement={handleIncrement}
+            onDecrement={handleDecrement}
+            disabled={!isOnline}
+            isLoading={isFlushing}
+            hasPendingChanges={hasPendingChanges}
+            size="lg"
+            minQuantity={0}
+            unit=""
+            incrementLabel="Increase quantity by 1"
+            decrementLabel="Decrease quantity by 1"
+          />
         </div>
 
         {/* Button Hint */}
-        {state.quantity === 0 && (
+        {!isOnline && (
+          <p className="text-xs text-warning text-center">
+            You are offline. Adjustments are disabled until connection is restored.
+          </p>
+        )}
+        {localQuantity === 0 && isOnline && (
           <p className="text-xs text-text-default text-center">
             Quantity is at minimum (0). Use the + button to add items.
           </p>
@@ -251,7 +245,7 @@ export default function AdjustmentClient({
       {/* Additional Info */}
       <div className="pt-4 border-t border-border">
         <p className="text-xs text-text-default text-center">
-          Changes are saved automatically. You can close this page anytime.
+          Changes are saved automatically after a brief delay. You can close this page anytime.
         </p>
       </div>
     </div>
