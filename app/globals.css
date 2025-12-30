@@ -103,7 +103,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* Background and Text */
-    --color-background: 10 51 21; /* #0A3315 */
+    --color-background: 1 31 9; /* #011F09 */
     --color-text-default: 140 197 154; /* #8CC59A */
 
     /* Primary - Lighter for dark backgrounds */
@@ -147,6 +147,10 @@
     --color-info: 96 165 250; /* blue */
     --color-info-contrast: 17 24 39;
   }
+}
+
+html {
+  background: rgb(var(--color-background));
 }
 
 body {

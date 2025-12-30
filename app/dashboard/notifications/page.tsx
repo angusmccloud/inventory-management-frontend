@@ -241,19 +241,19 @@ export default function NotificationsPage() {
 
       {/* Status summary cards */}
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="overflow-hidden rounded-lg bg-error/10/30 px-4 py-5 shadow sm:p-6">
+        <div className="overflow-hidden rounded-lg bg-error/10 px-4 py-5 shadow sm:p-6">
           <dt className="truncate text-sm font-medium text-error">Active Alerts</dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-error">
             {activeCount}
           </dd>
         </div>
-        <div className="overflow-hidden rounded-lg bg-tertiary/10/30 px-4 py-5 shadow sm:p-6">
+        <div className="overflow-hidden rounded-lg bg-tertiary/10 px-4 py-5 shadow sm:p-6">
           <dt className="truncate text-sm font-medium text-tertiary-contrast">Acknowledged</dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-tertiary-contrast">
             {acknowledgedCount}
           </dd>
         </div>
-        <div className="overflow-hidden rounded-lg bg-secondary/10/30 px-4 py-5 shadow sm:p-6">
+        <div className="overflow-hidden rounded-lg bg-secondary/10 px-4 py-5 shadow sm:p-6">
           <dt className="truncate text-sm font-medium text-secondary-contrast">Resolved</dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-secondary-contrast">
             {resolvedCount}
@@ -288,7 +288,7 @@ export default function NotificationsPage() {
                 <button
                   type="button"
                   onClick={fetchNotifications}
-                  className="rounded-md bg-error/10/30 px-2 py-1.5 text-sm font-medium text-error hover:bg-error/10 dark:hover:bg-error/10/50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50 dark:focus:ring-offset-red-900"
+                  className="rounded-md bg-error/10 px-2 py-1.5 text-sm font-medium text-error hover:bg-error/20 focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2"
                 >
                   Retry
                 </button>
@@ -303,7 +303,7 @@ export default function NotificationsPage() {
         <div className="mt-6 flex justify-center py-12" data-testid="loading-state">
           <div className="text-center">
             <svg
-              className="mx-auto h-12 w-12 animate-spin text-primary"
+              className="mx-auto h-12 w-12 animate-spin text-border-focus"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -342,10 +342,10 @@ export default function NotificationsPage() {
 
       {/* Acknowledging indicator */}
       {acknowledging && (
-        <div className="fixed bottom-4 right-4 rounded-md bg-primary dark:bg-primary/30 p-4 shadow-lg">
+        <div className="fixed bottom-4 right-4 rounded-md bg-surface border border-border p-4 shadow-lg">
           <div className="flex items-center">
             <svg
-              className="h-5 w-5 animate-spin text-primary"
+              className="h-5 w-5 animate-spin text-border-focus"
               fill="none"
               viewBox="0 0 24 24"
             >
