@@ -18,7 +18,7 @@ import StorageLocationForm from '@/components/reference-data/StorageLocationForm
 import StoreList from '@/components/reference-data/StoreList';
 import StoreForm from '@/components/reference-data/StoreForm';
 import ReferenceDataEmptyState from '@/components/reference-data/ReferenceDataEmptyState';
-import { PageLoading, Text } from '@/components/common';
+import { PageLoading, Text, LoadingSpinner } from '@/components/common';
 import type { UserContext, StorageLocation, Store } from '@/types/entities';
 import {
   listStorageLocations,

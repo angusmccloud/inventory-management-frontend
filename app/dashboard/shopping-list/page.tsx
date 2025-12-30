@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import ShoppingList from '@/components/shopping-list/ShoppingList';
-import { PageLoading, Text } from '@/components/common';
+import { PageLoading } from '@/components/common';
 
 export default function ShoppingListPage() {
   const router = useRouter();

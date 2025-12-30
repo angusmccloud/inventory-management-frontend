@@ -13,7 +13,7 @@ import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
-import { PageLoading, Text } from '@/components/common';
+import { PageLoading } from '@/components/common';
 
 export default function DashboardPage() {
   const router = useRouter();

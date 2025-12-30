@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import type { Store } from '../../types/entities';
-import { Input } from '@/components/common';
+import { Input, Button } from '@/components/common';
 
 interface StoreFormProps {
   familyId: string;
