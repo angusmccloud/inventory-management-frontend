@@ -89,6 +89,22 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     try {
       const updatedItem = await toggleShoppingListItemStatus(familyId, item);
       
+      // Debug: Log the updated item to see what fields we get back
+      console.log('Toggle status - original item:', { 
+        shoppingItemId: item.shoppingItemId,
+        name: item.name,
+        storeId: item.storeId, 
+        storeName: item.storeName,
+        status: item.status 
+      });
+      console.log('Toggle status - updated item:', { 
+        shoppingItemId: updatedItem.shoppingItemId,
+        name: updatedItem.name,
+        storeId: updatedItem.storeId, 
+        storeName: updatedItem.storeName,
+        status: updatedItem.status 
+      });
+      
       // Update item in state without full reload
       setItems(prevItems => 
         prevItems.map(i => 
