@@ -93,10 +93,12 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
       html.classList.remove('dark');
       setApplied('light');
       console.log('[ThemeProvider] Applied light theme, dark class removed:', !html.classList.contains('dark'));
+      return; // Explicit return for consistency
     } else if (mode === 'dark') {
       html.classList.add('dark');
       setApplied('dark');
       console.log('[ThemeProvider] Applied dark theme, dark class added:', html.classList.contains('dark'));
+      return; // Explicit return for consistency
     } else {
       // Auto mode: follow system preference
       const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
