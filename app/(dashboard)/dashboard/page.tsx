@@ -13,7 +13,7 @@ import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
-import { PageLoading, PageContainer } from '@/components/common';
+import { PageLoading, PageContainer, PageHeader } from '@/components/common';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -112,15 +112,10 @@ export default function DashboardPage() {
 
   return (
     <PageContainer>
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-default">
-          Welcome to {family?.name || 'your family'}
-        </h1>
-        <p className="mt-2 text-sm text-text-default">
-          Manage your family's inventory and shopping lists
-        </p>
-      </div>
+      <PageHeader
+        title={`Welcome to ${family?.name || 'your family'}`}
+        description="Manage your family's inventory and shopping lists"
+      />
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
