@@ -13,7 +13,7 @@ import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
-import { PageLoading } from '@/components/common';
+import { PageLoading, PageContainer } from '@/components/common';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -90,26 +90,28 @@ export default function DashboardPage() {
 
   if (showCreateFamily) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-surface shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-lg font-medium text-text-default">
-              Welcome! Let's create your family
-            </h2>
-            <p className="mt-2 text-sm text-text-default">
-              To get started, create a family account. You'll be the administrator and can invite other family members later.
-            </p>
-            <div className="mt-5">
-              <CreateFamilyForm onSuccess={handleFamilyCreated} />
+      <PageContainer>
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-surface shadow sm:rounded-lg">
+            <div className="px-4 py-5 sm:p-6">
+              <h2 className="text-lg font-medium text-text-default">
+                Welcome! Let's create your family
+              </h2>
+              <p className="mt-2 text-sm text-text-default">
+                To get started, create a family account. You'll be the administrator and can invite other family members later.
+              </p>
+              <div className="mt-5">
+                <CreateFamilyForm onSuccess={handleFamilyCreated} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <PageContainer>
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-default">
@@ -188,6 +190,6 @@ export default function DashboardPage() {
 
       {/* NFC URL Statistics (Admin Only) */}
       {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
-    </div>
+    </PageContainer>
   );
 }
