@@ -173,7 +173,7 @@ export default function SettingsPage() {
         {/* Header */}
         <PageHeader
           title="Settings"
-          subtitle={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
+          description={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
         />
 
       {/* Error Message */}

@@ -219,7 +219,7 @@ export default function NotificationsPage() {
         <div className="sm:flex sm:items-center sm:justify-between">
           <PageHeader
             title="Notifications"
-            subtitle="Low-stock alerts for your inventory items."
+            description="Low-stock alerts for your inventory items."
           />
           
           {/* Status filter */}
