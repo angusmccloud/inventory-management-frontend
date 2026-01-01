@@ -27,23 +27,23 @@ export const navigationItems: NavItem[] = [
   {
     id: 'inventory',
     label: 'Inventory',
-    href: '/dashboard/inventory',
+    href: '/inventory',
   },
   {
     id: 'shopping',
     label: 'Shopping',
-    href: '/dashboard/shopping-list',
+    href: '/shopping-list',
   },
   {
     id: 'suggestions',
     label: 'Suggestions',
-    href: '/dashboard/suggestions',
-    matchPaths: ['/dashboard/suggestions/suggest'],
+    href: '/suggestions',
+    matchPaths: ['/suggestions/suggest'],
   },
   {
     id: 'notifications',
     label: 'Notifications',
-    href: '/dashboard/notifications',
+    href: '/notifications',
     requiresAdmin: true,
     badge: 'notifications',
     icon: 'bell',
@@ -51,14 +51,14 @@ export const navigationItems: NavItem[] = [
   {
     id: 'members',
     label: 'Members',
-    href: '/dashboard/members',
+    href: '/members',
     requiresAdmin: true,
   },
   {
     id: 'settings',
     label: 'Settings',
-    href: '/dashboard/settings',
-    matchPaths: ['/dashboard/settings', '/dashboard/settings/reference-data'],
+    href: '/settings',
+    matchPaths: ['/settings', '/settings/reference-data'],
   },
 ];
 
