@@ -26,7 +26,7 @@ import { MemberList } from '@/components/members/MemberList';
 import { InvitationList } from '@/components/members/InvitationList';
 import { InviteMemberForm } from '@/components/members/InviteMemberForm';
 import { RemoveMemberDialog } from '@/components/members/RemoveMemberDialog';
-import { Text, Button, Alert, PageHeader, TabNavigation, PageLoading } from '@/components/common';
+import { Text, Button, Alert, PageHeader, TabNavigation, PageLoading, PageContainer } from '@/components/common';
 
 export default function MembersPage() {
   const router = useRouter();
@@ -207,19 +207,16 @@ export default function MembersPage() {
 
   if (error && !familyId) {
     return (
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl p-6">
+      <PageContainer className="p-6">
           <Alert severity="error">
             {error}
           </Alert>
-        </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl p-6">
+    <PageContainer className="p-6">
         {/* Header - T031: Apply mobileVertical for responsive stacking */}
       <PageHeader
         title="Family Members"
@@ -300,8 +297,7 @@ export default function MembersPage() {
         isSelfRemoval={memberToRemove?.memberId === currentUserId}
         isLastAdmin={isLastAdmin && memberToRemove?.memberId === currentUserId}
       />
-      </div>
-    </div>
+    </PageContainer>
   );
 }
 

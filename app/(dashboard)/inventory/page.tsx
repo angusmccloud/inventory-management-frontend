@@ -22,7 +22,7 @@ import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
-import { Text, Button, Alert, PageHeader, PageLoading } from '@/components/common';
+import { Text, Button, Alert, PageHeader, PageLoading, PageContainer } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
@@ -197,8 +197,7 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer className="space-y-6">
         {/* Header */}
         <PageHeader
           title="Inventory"
@@ -289,7 +288,6 @@ export default function InventoryPage() {
           onCancel={() => setDialogState({ type: 'none' })}
         />
       )}
-      </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -14,7 +14,7 @@ import { listUserFamilies } from '@/lib/api/families';
 import { getErrorMessage, isApiClientError } from '@/lib/api-client';
 import { LowStockNotification, LowStockNotificationStatus, UserContext } from '@/types/entities';
 import NotificationList from '@/components/notifications/NotificationList';
-import { PageHeader, PageLoading } from '@/components/common';
+import { PageHeader, PageLoading, PageContainer } from '@/components/common';
 
 type StatusFilterOption = LowStockNotificationStatus | 'all';
 
@@ -213,8 +213,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <PageContainer>
         {/* Page header with filter */}
         <div className="sm:flex sm:items-center sm:justify-between">
           <PageHeader
@@ -371,7 +370,6 @@ export default function NotificationsPage() {
           </div>
         </div>
       )}
-      </div>
-    </div>
+    </PageContainer>
   );
 }

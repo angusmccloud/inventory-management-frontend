@@ -13,7 +13,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
-import { TabNavigation, Card, PageLoading, Text, LoadingSpinner, Button, PageHeader } from '@/components/common';
+import { TabNavigation, Card, PageLoading, Text, LoadingSpinner, Button, PageHeader, PageContainer } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 import type { UserContext, StorageLocation, Store } from '@/types/entities';
 import StorageLocationList from '@/components/reference-data/StorageLocationList';
@@ -168,8 +168,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer className="space-y-6">
         {/* Header */}
         <PageHeader
           title="Settings"
@@ -332,7 +331,6 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-      </div>
-    </div>
+    </PageContainer>
   );
 }

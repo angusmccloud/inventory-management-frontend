@@ -19,7 +19,7 @@ import { getUserContext } from '@/lib/auth';
 import { getInventoryItem, deleteInventoryItem } from '@/lib/api/inventory';
 import { InventoryItem } from '@/types/entities';
 import NFCUrlManager from '@/components/inventory/NFCUrlManager';
-import { PageHeader, Button, Alert, PageLoading } from '@/components/common';
+import { PageHeader, Button, Alert, PageLoading, PageContainer } from '@/components/common';
 
 interface ItemDetailPageProps {
   params: Promise<{
@@ -82,7 +82,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
   if (error || !item) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <PageContainer className="py-8">
         <PageHeader
           title="Item Not Found"
           description="The item you're looking for doesn't exist or you don't have access"
@@ -95,12 +95,12 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             Back to Inventory
           </Button>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <PageContainer className="py-8">
       {/* Header */}
       <div className="mb-6">
         <button
@@ -285,6 +285,6 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

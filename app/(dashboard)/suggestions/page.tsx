@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SuggestionList } from '@/components/suggestions/SuggestionList';
-import { Button, Text, Card, PageLoading, TabNavigation } from '@/components/common';
+import { Button, Text, Card, PageLoading, TabNavigation, PageContainer } from '@/components/common';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
@@ -76,22 +76,19 @@ export default function SuggestionsPage() {
 
   if (!familyId || error) {
     return (
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl p-6">
+      <PageContainer className="p-6">
           <Card>
             <Text variant="h2" className="mb-4">Error</Text>
             <Text variant="body" className="text-red-600">
               {error || 'Unable to load family information. Please try again.'}
             </Text>
           </Card>
-        </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl p-6">
+    <PageContainer className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Text variant="h1" className="mb-2">
@@ -130,7 +127,6 @@ export default function SuggestionsPage() {
         statusFilter={statusFilter === 'all' ? undefined : statusFilter as 'pending' | 'approved' | 'rejected'}
         onSuggestionUpdate={handleSuggestionUpdate}
       />
-      </div>
-    </div>
+    </PageContainer>
   );
 }
