@@ -14,12 +14,11 @@ export interface PageContainerProps {
   children: React.ReactNode;
 }
 
+// One spot for styling content wrapper, but not needed right now.
 export function PageContainer({ children }: PageContainerProps) {
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6">
-      <div className="mx-auto max-w-7xl space-y-6">
-        {children}
-      </div>
+    <div>
+      {children}
     </div>
   );
 }
