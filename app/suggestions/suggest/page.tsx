@@ -66,7 +66,7 @@ export default function SuggestPage() {
       console.log('Suggestion created successfully!');
 
       // Redirect to suggestions list
-      router.push('/dashboard/suggestions');
+      router.push('/suggestions');
     } catch (err) {
       if (err instanceof Error) {
         // Handle specific error cases

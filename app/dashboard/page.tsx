@@ -129,7 +129,7 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <button
-          onClick={() => router.push('/dashboard/inventory')}
+          onClick={() => router.push('/inventory')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
@@ -141,7 +141,7 @@ export default function DashboardPage() {
         </button>
 
         <button
-          onClick={() => router.push('/dashboard/inventory?action=add')}
+          onClick={() => router.push('/inventory?action=add')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
@@ -153,7 +153,7 @@ export default function DashboardPage() {
         </button>
 
         <button
-          onClick={() => router.push('/dashboard/shopping-list')}
+          onClick={() => router.push('/shopping-list')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">

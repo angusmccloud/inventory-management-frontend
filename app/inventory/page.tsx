@@ -226,7 +226,7 @@ export default function InventoryPage() {
         onArchive={handleArchive}
         onDelete={handleDelete}
         onAddToShoppingList={handleAddToShoppingList}
-        onViewDetails={(item) => router.push(`/dashboard/inventory/${item.itemId}`)}
+        onViewDetails={(item) => router.push(`/inventory/${item.itemId}`)}
         onItemUpdated={handleItemUpdated}
         isAdmin={isAdmin}
       />

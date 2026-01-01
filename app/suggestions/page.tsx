@@ -101,7 +101,7 @@ export default function SuggestionsPage() {
           </Text>
         </div>
         {!isAdmin && (
-          <Button variant="primary" onClick={() => router.push('/dashboard/suggestions/suggest')}>
+          <Button variant="primary" onClick={() => router.push('/suggestions/suggest')}>
             Create Suggestion
           </Button>
         )}

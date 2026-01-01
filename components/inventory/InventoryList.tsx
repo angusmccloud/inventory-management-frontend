@@ -264,7 +264,7 @@ export default function InventoryList({
 
   const handleSuggest = (item: InventoryItem) => {
     // Navigate to suggestion form with pre-filled itemId for add_to_shopping type
-    router.push(`/dashboard/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`);
+    router.push(`/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`);
   };
 
   if (!items || items.length === 0) {

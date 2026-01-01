@@ -2,7 +2,7 @@
  * Reference Data Management Page - DEPRECATED
  * 
  * This page has been consolidated into the main Settings page with tabs.
- * Redirect to /dashboard/settings
+ * Redirect to /settings
  */
 
 'use client';
@@ -16,7 +16,7 @@ export default function ReferenceDataRedirect() {
 
   useEffect(() => {
     // Redirect to Settings page with stores tab active
-    router.replace('/dashboard/settings');
+    router.replace('/settings');
   }, [router]);
 
   return <PageLoading message="Redirecting to Settings..." />;

@@ -73,7 +73,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   };
 
   const handleBack = () => {
-    router.push('/dashboard/inventory');
+    router.push('/inventory');
   };
 
   if (isLoading) {
@@ -170,7 +170,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             {/* Action Buttons */}
             <div className="mt-6 flex gap-3">
               <button
-                onClick={() => router.push(`/dashboard/inventory?edit=${item.itemId}`)}
+                onClick={() => router.push(`/inventory?edit=${item.itemId}`)}
                 className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Edit Item
@@ -185,7 +185,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                         return;
                       }
                       deleteInventoryItem(userContext.familyId, item.itemId).then(() => {
-                        router.push('/dashboard/inventory');
+                        router.push('/inventory');
                       }).catch((err) => {
                         setError(err instanceof Error ? err.message : 'Failed to delete item');
                       });
@@ -250,7 +250,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
               </button>
               <button
                 onClick={() => {
-                  router.push(`/dashboard/shopping-list?add=${item.itemId}`);
+                  router.push(`/shopping-list?add=${item.itemId}`);
                 }}
                 className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
