@@ -197,17 +197,18 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <PageHeader
-        title="Inventory"
-        description="Manage your family's inventory items"
-        action={isAdmin ? (
-          <Button
-            variant="primary"
-            onClick={() => setModalState({ type: 'add' })}
-          >
-            Add Item
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-6">
+        {/* Header */}
+        <PageHeader
+          title="Inventory"
+          description="Manage your family's inventory items"
+          action={isAdmin ? (
+            <Button
+              variant="primary"
+              onClick={() => setModalState({ type: 'add' })}
+            >
+              Add Item
           </Button>
         ) : undefined}
       />
@@ -288,6 +289,7 @@ export default function InventoryPage() {
           onCancel={() => setDialogState({ type: 'none' })}
         />
       )}
+      </div>
     </div>
   );
 }

@@ -13,7 +13,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
-import { TabNavigation, Card, PageLoading, Text, LoadingSpinner, Button } from '@/components/common';
+import { TabNavigation, Card, PageLoading, Text, LoadingSpinner, Button, PageHeader } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 import type { UserContext, StorageLocation, Store } from '@/types/entities';
 import StorageLocationList from '@/components/reference-data/StorageLocationList';
@@ -168,15 +168,13 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-default">Settings</h1>
-        <p className="mt-2 text-sm text-text-secondary">
-          Manage your personal preferences and family reference data
-          {!isAdmin && ' (Reference data is view-only for suggesters)'}
-        </p>
-      </div>
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-6">
+        {/* Header */}
+        <PageHeader
+          title="Settings"
+          subtitle={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
+        />
 
       {/* Error Message */}
       {error && (
@@ -334,6 +332,7 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

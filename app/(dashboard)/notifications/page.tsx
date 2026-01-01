@@ -14,6 +14,7 @@ import { listUserFamilies } from '@/lib/api/families';
 import { getErrorMessage, isApiClientError } from '@/lib/api-client';
 import { LowStockNotification, LowStockNotificationStatus, UserContext } from '@/types/entities';
 import NotificationList from '@/components/notifications/NotificationList';
+import { PageHeader, PageLoading } from '@/components/common';
 
 type StatusFilterOption = LowStockNotificationStatus | 'all';
 
@@ -207,37 +208,38 @@ export default function NotificationsPage() {
   const acknowledgedCount = notifications.filter((n) => n.status === 'acknowledged').length;
   const resolvedCount = notifications.filter((n) => n.status === 'resolved').length;
 
+  if (loading) {
+    return <PageLoading message="Loading notifications..." fullHeight={false} />;
+  }
+
   return (
-    <div>
-      {/* Page header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text-default">Notifications</h1>
-          <p className="mt-2 text-sm text-text-default">
-            Low-stock alerts for your inventory items.
-          </p>
-        </div>
-        
-        {/* Status filter */}
-        <div className="mt-4 sm:mt-0">
-          <label htmlFor="status-filter" className="block text-sm font-medium text-text-default mb-1">
-            Filter by Status
-          </label>
-          <select
-            id="status-filter"
-            name="status-filter"
-            value={statusFilter}
-            onChange={handleStatusFilterChange}
-            className="block w-full rounded-md border-0 px-3 py-2 text-text-default dark:bg-surface-elevated ring-1 ring-inset ring-border focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
-            data-testid="status-filter"
-          >
-            <option value="all">All Notifications ({notifications.length})</option>
-            <option value="active">Active ({activeCount})</option>
-            <option value="acknowledged">Acknowledged ({acknowledgedCount})</option>
-            <option value="resolved">Resolved ({resolvedCount})</option>
-          </select>
-        </div>
-      </div>
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Page header */}
+        <PageHeader
+          title="Notifications"
+          subtitle="Low-stock alerts for your inventory items."
+        >
+          {/* Status filter */}
+          <div className="mt-4 sm:mt-0">
+            <label htmlFor="status-filter" className="block text-sm font-medium text-text-default mb-1">
+              Filter by Status
+            </label>
+            <select
+              id="status-filter"
+              name="status-filter"
+              value={statusFilter}
+              onChange={handleStatusFilterChange}
+              className="block w-full rounded-md border-0 px-3 py-2 text-text-default dark:bg-surface-elevated ring-1 ring-inset ring-border focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+              data-testid="status-filter"
+            >
+              <option value="all">All Notifications ({notifications.length})</option>
+              <option value="active">Active ({activeCount})</option>
+              <option value="acknowledged">Acknowledged ({acknowledgedCount})</option>
+              <option value="resolved">Resolved ({resolvedCount})</option>
+            </select>
+          </div>
+        </PageHeader>
 
       {/* Status summary cards */}
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -367,6 +369,7 @@ export default function NotificationsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

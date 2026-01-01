@@ -207,17 +207,20 @@ export default function MembersPage() {
 
   if (error && !familyId) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <Alert severity="error">
-          {error}
-        </Alert>
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl p-6">
+          <Alert severity="error">
+            {error}
+          </Alert>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header - T031: Apply mobileVertical for responsive stacking */}
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl p-6">
+        {/* Header - T031: Apply mobileVertical for responsive stacking */}
       <PageHeader
         title="Family Members"
         description={summary ? `${summary.total} member${summary.total !== 1 ? 's' : ''} (${summary.admins} admin${summary.admins !== 1 ? 's' : ''}, ${summary.suggesters} suggester${summary.suggesters !== 1 ? 's' : ''})` : undefined}
@@ -297,6 +300,7 @@ export default function MembersPage() {
         isSelfRemoval={memberToRemove?.memberId === currentUserId}
         isLastAdmin={isLastAdmin && memberToRemove?.memberId === currentUserId}
       />
+      </div>
     </div>
   );
 }
