@@ -126,7 +126,7 @@ export default function EditShoppingListItemForm({
         {!loadingStores && stores.length === 0 && (
           <p className="mt-1 text-xs text-text-secondary">
             No stores available. Add them in{' '}
-            <a href="/dashboard/settings" className="text-primary hover:text-primary-hover">
+            <a href="/settings" className="text-primary hover:text-primary-hover">
               Settings
             </a>
           </p>

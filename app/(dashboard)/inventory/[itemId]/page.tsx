@@ -19,7 +19,7 @@ import { getUserContext } from '@/lib/auth';
 import { getInventoryItem, deleteInventoryItem } from '@/lib/api/inventory';
 import { InventoryItem } from '@/types/entities';
 import NFCUrlManager from '@/components/inventory/NFCUrlManager';
-import { PageHeader, Button, Alert, PageLoading } from '@/components/common';
+import { PageHeader, Button, Alert, PageLoading, PageContainer } from '@/components/common';
 
 interface ItemDetailPageProps {
   params: Promise<{
@@ -73,7 +73,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   };
 
   const handleBack = () => {
-    router.push('/dashboard/inventory');
+    router.push('/inventory');
   };
 
   if (isLoading) {
@@ -82,7 +82,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
   if (error || !item) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <PageContainer>
         <PageHeader
           title="Item Not Found"
           description="The item you're looking for doesn't exist or you don't have access"
@@ -95,12 +95,12 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             Back to Inventory
           </Button>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <PageContainer>
       {/* Header */}
       <div className="mb-6">
         <button
@@ -170,7 +170,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             {/* Action Buttons */}
             <div className="mt-6 flex gap-3">
               <button
-                onClick={() => router.push(`/dashboard/inventory?edit=${item.itemId}`)}
+                onClick={() => router.push(`/inventory?edit=${item.itemId}`)}
                 className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Edit Item
@@ -185,7 +185,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                         return;
                       }
                       deleteInventoryItem(userContext.familyId, item.itemId).then(() => {
-                        router.push('/dashboard/inventory');
+                        router.push('/inventory');
                       }).catch((err) => {
                         setError(err instanceof Error ? err.message : 'Failed to delete item');
                       });
@@ -250,7 +250,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
               </button>
               <button
                 onClick={() => {
-                  router.push(`/dashboard/shopping-list?add=${item.itemId}`);
+                  router.push(`/shopping-list?add=${item.itemId}`);
                 }}
                 className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
@@ -285,6 +285,6 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

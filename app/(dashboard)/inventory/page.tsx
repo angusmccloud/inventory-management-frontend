@@ -22,7 +22,7 @@ import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
-import { Text, Button, Alert, PageHeader, PageLoading } from '@/components/common';
+import { Text, Button, Alert, PageHeader, PageLoading, PageContainer } from '@/components/common';
 
 type ModalState =
   | { type: 'none' }
@@ -197,17 +197,17 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <PageHeader
-        title="Inventory"
-        description="Manage your family's inventory items"
-        action={isAdmin ? (
-          <Button
-            variant="primary"
-            onClick={() => setModalState({ type: 'add' })}
-          >
-            Add Item
+    <PageContainer>
+        {/* Header */}
+        <PageHeader
+          title="Inventory"
+          description="Manage your family's inventory items"
+          action={isAdmin ? (
+            <Button
+              variant="primary"
+              onClick={() => setModalState({ type: 'add' })}
+            >
+              Add Item
           </Button>
         ) : undefined}
       />
@@ -226,7 +226,7 @@ export default function InventoryPage() {
         onArchive={handleArchive}
         onDelete={handleDelete}
         onAddToShoppingList={handleAddToShoppingList}
-        onViewDetails={(item) => router.push(`/dashboard/inventory/${item.itemId}`)}
+        onViewDetails={(item) => router.push(`/inventory/${item.itemId}`)}
         onItemUpdated={handleItemUpdated}
         isAdmin={isAdmin}
       />
@@ -288,6 +288,6 @@ export default function InventoryPage() {
           onCancel={() => setDialogState({ type: 'none' })}
         />
       )}
-    </div>
+    </PageContainer>
   );
 }

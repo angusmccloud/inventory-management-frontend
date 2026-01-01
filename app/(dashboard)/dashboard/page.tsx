@@ -13,7 +13,7 @@ import { getFamily, listUserFamilies } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
-import { PageLoading } from '@/components/common';
+import { PageLoading, PageContainer, PageHeader } from '@/components/common';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -90,46 +90,44 @@ export default function DashboardPage() {
 
   if (showCreateFamily) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-surface shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-lg font-medium text-text-default">
-              Welcome! Let's create your family
-            </h2>
-            <p className="mt-2 text-sm text-text-default">
-              To get started, create a family account. You'll be the administrator and can invite other family members later.
-            </p>
-            <div className="mt-5">
-              <CreateFamilyForm onSuccess={handleFamilyCreated} />
+      <PageContainer>
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-surface shadow sm:rounded-lg">
+            <div className="px-4 py-5 sm:p-6">
+              <h2 className="text-lg font-medium text-text-default">
+                Welcome! Let's create your family
+              </h2>
+              <p className="mt-2 text-sm text-text-default">
+                To get started, create a family account. You'll be the administrator and can invite other family members later.
+              </p>
+              <div className="mt-5">
+                <CreateFamilyForm onSuccess={handleFamilyCreated} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-default">
-          Welcome to {family?.name || 'your family'}
-        </h1>
-        <p className="mt-2 text-sm text-text-default">
-          Manage your family's inventory and shopping lists
-        </p>
-      </div>
+    <PageContainer>
+      <div className="space-y-6">
+        <PageHeader
+          title={`Welcome to ${family?.name || 'your family'}`}
+          description="Manage your family's inventory and shopping lists"
+        />
 
-      {error && (
-        <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
-        </div>
-      )}
+        {error && (
+          <div className="rounded-md bg-error/10 p-4">
+            <p className="text-sm text-error">{error}</p>
+          </div>
+        )}
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <button
-          onClick={() => router.push('/dashboard/inventory')}
+          onClick={() => router.push('/inventory')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
@@ -141,7 +139,7 @@ export default function DashboardPage() {
         </button>
 
         <button
-          onClick={() => router.push('/dashboard/inventory?action=add')}
+          onClick={() => router.push('/inventory?action=add')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
@@ -153,7 +151,7 @@ export default function DashboardPage() {
         </button>
 
         <button
-          onClick={() => router.push('/dashboard/shopping-list')}
+          onClick={() => router.push('/shopping-list')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
@@ -186,8 +184,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* NFC URL Statistics (Admin Only) */}
-      {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
-    </div>
+        {/* NFC URL Statistics (Admin Only) */}
+        {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
+      </div>
+    </PageContainer>
   );
 }

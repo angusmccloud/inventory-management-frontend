@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import ShoppingList from '@/components/shopping-list/ShoppingList';
-import { PageLoading } from '@/components/common';
+import { PageLoading, PageContainer } from '@/components/common';
 
 export default function ShoppingListPage() {
   const router = useRouter();
@@ -41,11 +41,9 @@ export default function ShoppingListPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <PageContainer>
         <ShoppingList familyId={familyId} />
-      </div>
-    </div>
+    </PageContainer>
   );
 }
 
