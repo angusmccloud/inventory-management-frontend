@@ -112,19 +112,20 @@ export default function DashboardPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title={`Welcome to ${family?.name || 'your family'}`}
-        description="Manage your family's inventory and shopping lists"
-      />
+      <div className="space-y-6">
+        <PageHeader
+          title={`Welcome to ${family?.name || 'your family'}`}
+          description="Manage your family's inventory and shopping lists"
+        />
 
-      {error && (
-        <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
-        </div>
-      )}
+        {error && (
+          <div className="rounded-md bg-error/10 p-4">
+            <p className="text-sm text-error">{error}</p>
+          </div>
+        )}
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <button
           onClick={() => router.push('/inventory')}
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -183,8 +184,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* NFC URL Statistics (Admin Only) */}
-      {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
+        {/* NFC URL Statistics (Admin Only) */}
+        {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
+      </div>
     </PageContainer>
   );
 }
