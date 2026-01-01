@@ -3,17 +3,27 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SuggestionList } from '@/components/suggestions/SuggestionList';
-import { Button, Text, Card, PageLoading } from '@/components/common';
+import { Button, Text, Card, PageLoading, TabNavigation } from '@/components/common';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
+import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 
 export default function SuggestionsPage() {
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState<'pending' | 'approved' | 'rejected' | undefined>('pending');
+  // T024/T025: Use string type compatible with TabNavigation
+  const [statusFilter, setStatusFilter] = useState<string>('pending');
   const [familyId, setFamilyId] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  
+  // Define tabs for TabNavigation
+  const filterTabs: Tab[] = [
+    { id: 'pending', label: 'Pending' },
+    { id: 'approved', label: 'Approved' },
+    { id: 'rejected', label: 'Rejected' },
+    { id: 'all', label: 'All' },
+  ];
 
   useEffect(() => {
     loadFamilyId();
@@ -97,45 +107,24 @@ export default function SuggestionsPage() {
         )}
       </div>
 
-      {/* Filter Tabs */}
+      {/* Filter Tabs - T024/T025: Replace toggle buttons with TabNavigation + responsiveMode='auto' */}
       <Card className="mb-6">
-        <div className="flex gap-2">
-          <Button
-            variant={statusFilter === 'pending' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('pending')}
-          >
-            Pending
-          </Button>
-          <Button
-            variant={statusFilter === 'approved' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('approved')}
-          >
-            Approved
-          </Button>
-          <Button
-            variant={statusFilter === 'rejected' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('rejected')}
-          >
-            Rejected
-          </Button>
-          <Button
-            variant={statusFilter === undefined ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter(undefined)}
-          >
-            All
-          </Button>
-        </div>
+        <TabNavigation
+          tabs={filterTabs}
+          activeTab={statusFilter}
+          onChange={(tabId) => {
+            // Convert 'all' tab to undefined for SuggestionList
+            setStatusFilter(tabId);
+          }}
+          responsiveMode="auto"
+        />
       </Card>
 
       {/* Suggestions List */}
       <SuggestionList
         familyId={familyId}
         isAdmin={isAdmin}
-        statusFilter={statusFilter}
+        statusFilter={statusFilter === 'all' ? undefined : statusFilter as 'pending' | 'approved' | 'rejected'}
         onSuggestionUpdate={handleSuggestionUpdate}
       />
     </div>

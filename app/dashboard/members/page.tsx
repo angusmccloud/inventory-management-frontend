@@ -217,10 +217,11 @@ export default function MembersPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
+      {/* Header - T031: Apply mobileVertical for responsive stacking */}
       <PageHeader
         title="Family Members"
         description={summary ? `${summary.total} member${summary.total !== 1 ? 's' : ''} (${summary.admins} admin${summary.admins !== 1 ? 's' : ''}, ${summary.suggesters} suggester${summary.suggesters !== 1 ? 's' : ''})` : undefined}
+        mobileVertical={true}
         action={
           isAdmin && !showInviteForm ? (
             <Button

@@ -86,6 +86,16 @@ export interface TabNavigationProps {
   orientation?: 'horizontal' | 'vertical';
   
   /**
+   * Responsive display mode
+   * Feature: 011-mobile-responsive-ui
+   * - 'tabs': Always show as tabs (default)
+   * - 'dropdown': Always show as dropdown/select
+   * - 'auto': Show tabs on desktop (>=md), dropdown on mobile (<md)
+   * @default 'tabs'
+   */
+  responsiveMode?: 'tabs' | 'dropdown' | 'auto';
+  
+  /**
    * Additional CSS classes
    */
   className?: string;

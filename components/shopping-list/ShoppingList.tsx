@@ -268,10 +268,11 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header - T018/T019: Apply mobileVertical for responsive stacking */}
       <PageHeader
         title="Shopping List"
         description={`${items.length} ${items.length === 1 ? 'item' : 'items'} total`}
+        mobileVertical={true}
         action={isAdmin ? (
           <Button
             variant="primary"
@@ -358,7 +359,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {/* Modals */}
       {modalState.type !== 'none' && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          <div className="flex min-h-screen items-center justify-center px-4 text-center sm:p-0">
             {/* Background overlay */}
             <div
               className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
@@ -366,7 +367,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             />
 
             {/* Modal panel */}
-            <div className="inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="relative w-[90%] max-w-full inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <Text variant="h3" className="text-text-default mb-4">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}

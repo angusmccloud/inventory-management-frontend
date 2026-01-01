@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/auth';
-import { Link } from '@/components/common';
+import { Button } from '@/components/common';
 
 export default function Home() {
   const router = useRouter();
@@ -55,12 +55,14 @@ export default function Home() {
         
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-          <Link
-            href="/login"
-            className="px-8 py-3 bg-primary text-primary-contrast font-semibold rounded-lg hover:bg-primary-hover transition-colors text-center"
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => router.push('/login')}
+            className="sm:w-auto"
           >
             Sign In / Create Account
-          </Link>
+          </Button>
         </div>
         
         {/* Key Benefits */}

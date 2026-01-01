@@ -23,6 +23,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   breadcrumbs,
   action,
   secondaryActions,
+  mobileVertical = false,
   className 
 }) => {
   return (
@@ -67,7 +68,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       )}
       
       {/* Title and Actions Row */}
-      <div className="flex items-start justify-between gap-4">
+      <div className={cn(
+        'flex gap-4',
+        mobileVertical 
+          ? 'flex-col items-start md:flex-row md:items-start md:justify-between'
+          : 'items-start justify-between'
+      )}>
         {/* Title and Description */}
         <div className="flex-1 min-w-0">
           <Text 
@@ -90,7 +96,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         
         {/* Actions */}
         {(action || (secondaryActions && secondaryActions.length > 0)) && (
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className={cn(
+            'flex gap-3',
+            mobileVertical 
+              ? 'flex-col w-full md:flex-row md:w-auto md:items-center md:flex-shrink-0'
+              : 'items-center flex-shrink-0'
+          )}>
             {/* Secondary Actions */}
             {secondaryActions && secondaryActions.length > 0 && (
               <>

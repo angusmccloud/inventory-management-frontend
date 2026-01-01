@@ -93,8 +93,9 @@ function InventoryListItem({
 
   return (
     <li className="px-4 py-4 sm:px-6 hover:bg-surface-elevated transition-colors">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex-1 min-w-0">
+      {/* T012: Mobile-first stacking layout (flex-col) with horizontal on desktop (md:flex-row) */}
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+        <div className="flex-1 min-w-0 w-full md:w-auto">
           <div className="flex items-center gap-2">
             <Text variant="h3" className="text-text-default truncate">
               {item.name}
@@ -169,7 +170,9 @@ function InventoryListItem({
           )}
         </div>
         
-        <div className="ml-4 flex flex-shrink-0 gap-2">
+        {/* T013: Action buttons with flex-wrap and full width on mobile (w-full md:w-auto) */}
+        {/* T014: Buttons inherit responsive touch targets from Button component (min-h-[44px]) */}
+        <div className="flex flex-wrap gap-2 w-full md:w-auto md:flex-shrink-0">
           {/* Suggester-only: Suggest button */}
           {!isAdmin && (
             <Button

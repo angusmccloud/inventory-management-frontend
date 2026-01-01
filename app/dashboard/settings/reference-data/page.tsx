@@ -285,9 +285,9 @@ export default function ReferenceDataPage() {
       {/* Storage Location Form Dialog */}
       {(dialogState.type === 'create-location' || dialogState.type === 'edit-location') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
-            <div className="relative transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+            <div className="relative w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
               <h3 className="mb-4 text-lg font-semibold text-text-default">
                 {dialogState.type === 'create-location' ? 'Add Storage Location' : 'Edit Storage Location'}
               </h3>
@@ -305,9 +305,9 @@ export default function ReferenceDataPage() {
       {/* Store Form Dialog */}
       {(dialogState.type === 'create-store' || dialogState.type === 'edit-store') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
-            <div className="relative transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+            <div className="relative w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
               <h3 className="mb-4 text-lg font-semibold text-text-default">
                 {dialogState.type === 'create-store' ? 'Add Store' : 'Edit Store'}
               </h3>

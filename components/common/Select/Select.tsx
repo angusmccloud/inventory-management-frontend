@@ -121,6 +121,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             'disabled:cursor-not-allowed disabled:opacity-60',
             'transition-colors duration-200',
             'appearance-none',
+            // Feature 011-mobile-responsive-ui: Touch target sizing
+            'min-h-[44px] md:min-h-[36px]',
             // Error/success states
             error && 'ring-error focus:ring-error',
             success && 'ring-primary focus:ring-primary',

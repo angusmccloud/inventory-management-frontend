@@ -81,4 +81,23 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * Icon to display after children (right side)
    */
   rightIcon?: React.ReactNode;
+  
+  /**
+   * Optional text for responsive rendering (hides on mobile, shows on desktop)
+   * When provided, children will be hidden on mobile (<md breakpoint)
+   * Feature: 011-mobile-responsive-ui
+   * @default undefined
+   */
+  responsiveText?: {
+    /**
+     * Breakpoint at which to show full text
+     * @default 'md'
+     */
+    showAt?: 'sm' | 'md' | 'lg';
+    /**
+     * Optional mobile replacement (e.g., icon-only)
+     * If not provided, children will be hidden on mobile
+     */
+    mobileContent?: React.ReactNode;
+  };
 }

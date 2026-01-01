@@ -20,6 +20,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   activeTab, 
   onChange, 
   orientation = 'horizontal',
+  responsiveMode = 'tabs',
   className 
 }) => {
   const tabRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
@@ -68,18 +69,58 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
     }
   };
   
+  // Determine if we should show dropdown (based on responsiveMode)
+  const showDropdown = responsiveMode === 'dropdown';
+  const showAutoResponsive = responsiveMode === 'auto';
+  
   return (
-    <div 
-      role="tablist"
-      aria-orientation={orientation}
-      className={cn(
-        'flex',
-        orientation === 'horizontal' 
-          ? 'border-b border-border' 
-          : 'flex-col border-r border-border',
-        className
+    <>
+      {/* Dropdown view (mobile for 'auto' mode, always for 'dropdown' mode) */}
+      {(showDropdown || showAutoResponsive) && (
+        <div className={cn(
+          showAutoResponsive && 'md:hidden',
+          'w-full',
+          className
+        )}>
+          <label htmlFor="tab-select" className="sr-only">
+            Select tab
+          </label>
+          <select
+            id="tab-select"
+            value={activeTab}
+            onChange={(e) => onChange(e.target.value)}
+            className={cn(
+              'w-full px-4 py-2 text-sm font-medium',
+              'border border-border rounded-md',
+              'bg-surface text-text-default',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+              'disabled:opacity-50 disabled:cursor-not-allowed'
+            )}
+          >
+            {tabs.map((tab) => (
+              <option key={tab.id} value={tab.id} disabled={tab.disabled}>
+                {tab.label}
+                {tab.badge !== undefined && tab.badge > 0 ? ` (${tab.badge})` : ''}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
-    >
+      
+      {/* Tabs view (desktop for 'auto' mode, always for 'tabs' mode) */}
+      <div 
+        role="tablist"
+        aria-orientation={orientation}
+        className={cn(
+          'flex',
+          showAutoResponsive && 'hidden md:flex',
+          showDropdown && 'hidden',
+          orientation === 'horizontal' 
+            ? 'border-b border-border' 
+            : 'flex-col border-r border-border',
+          className
+        )}
+      >
       {tabs.map((tab, index) => {
         const isActive = tab.id === activeTab;
         
@@ -139,7 +180,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           </button>
         );
       })}
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -22,11 +22,12 @@ const variantStyles: Record<ButtonVariant, string> = {
 
 /**
  * Size-specific styles mapping (square buttons with proper touch targets)
+ * Feature: 011-mobile-responsive-ui - Verified WCAG 2.1 AA touch target sizes
  */
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'p-1.5',      // 32px touch target with 16px icon
-  md: 'p-2',        // 40px touch target with 20px icon
-  lg: 'p-3',        // 48px touch target with 24px icon
+  sm: 'p-1.5 min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px]',      // 44px mobile, 32px desktop
+  md: 'p-2 min-h-[44px] min-w-[44px] md:min-h-[40px] md:min-w-[40px]',        // 44px mobile, 40px desktop
+  lg: 'p-3 min-h-[48px] min-w-[48px]',                                         // 48px all breakpoints
 };
 
 /**

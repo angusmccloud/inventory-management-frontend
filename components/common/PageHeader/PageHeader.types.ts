@@ -82,4 +82,12 @@ export interface PageHeaderProps {
    * Additional CSS classes
    */
   className?: string;
+  
+  /**
+   * Enable vertical layout stacking on mobile devices
+   * When true, title/description and actions stack vertically on mobile (<md breakpoint)
+   * Feature: 011-mobile-responsive-ui
+   * @default false
+   */
+  mobileVertical?: boolean;
 }

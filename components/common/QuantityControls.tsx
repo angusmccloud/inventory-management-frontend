@@ -126,9 +126,9 @@ export default function QuantityControls({
   const isAtMax = maxQuantity !== undefined && quantity >= maxQuantity;
 
   const buttonSize = {
-    sm: 'h-8 w-8 text-sm',
-    md: 'h-11 w-11 text-base',
-    lg: 'h-14 w-14 text-lg',
+    sm: 'min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px] text-sm',
+    md: 'min-h-[44px] min-w-[44px] text-base',
+    lg: 'min-h-[48px] min-w-[48px] text-lg',
   }[size];
 
   const quantityTextSize = {

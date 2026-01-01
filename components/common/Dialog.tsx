@@ -34,15 +34,15 @@ export default function Dialog({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex min-h-screen items-center justify-center px-4 text-center sm:p-0">
         {/* Background overlay */}
         <div
           className="fixed inset-0 bg-surface/75 backdrop-blur-sm transition-opacity"
           onClick={onCancel}
         />
 
-        {/* Dialog panel */}
-        <div className="inline-block align-bottom bg-surface-elevated rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        {/* Dialog panel - Feature 011-mobile-responsive-ui: 90% width on mobile */}
+        <div className="relative w-[90%] max-w-full inline-block align-bottom bg-surface-elevated rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
           <div>
             {/* Icon */}
             <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${

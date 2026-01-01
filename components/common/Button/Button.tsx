@@ -21,11 +21,12 @@ const variantStyles: Record<ButtonVariant, string> = {
 
 /**
  * Size-specific styles mapping
+ * Feature: 011-mobile-responsive-ui - Added responsive touch target sizing
  */
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  sm: 'px-3 py-1.5 text-sm min-h-[44px] md:min-h-[32px]',
+  md: 'px-4 py-2 text-base min-h-[44px] md:min-h-[36px]',
+  lg: 'px-6 py-3 text-lg min-h-[44px] md:min-h-[40px]',
 };
 
 /**
@@ -95,12 +96,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       leftIcon,
       rightIcon,
+      responsiveText,
       children,
       ...props
     },
     ref
   ) => {
     const isDisabled = disabled || loading;
+    
+    // Determine responsive content visibility
+    const showAtBreakpoint = responsiveText?.showAt || 'md';
+    const hideOnMobileClass = responsiveText ? `hidden ${showAtBreakpoint}:inline` : undefined;
+    const mobileContent = responsiveText?.mobileContent;
 
     return (
       <button
@@ -117,7 +124,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:cursor-not-allowed disabled:opacity-60',
           // Variant styles
           variantStyles[variant],
-          // Size styles
+          // Size styles (includes responsive touch targets)
           sizeStyles[size],
           // Full width
           fullWidth && 'w-full',
@@ -128,7 +135,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {loading && <LoadingSpinner size={size} />}
         {!loading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
-        <span>{children}</span>
+        
+        {/* Mobile content (if responsiveText with mobileContent) */}
+        {!loading && mobileContent && (
+          <span className={`${showAtBreakpoint}:hidden`}>
+            {mobileContent}
+          </span>
+        )}
+        
+        {/* Desktop content (responsive or always visible) */}
+        <span className={hideOnMobileClass}>{children}</span>
+        
         {!loading && rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
       </button>
     );
