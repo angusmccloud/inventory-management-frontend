@@ -82,7 +82,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
   if (error || !item) {
     return (
-      <PageContainer className="py-8">
+      <PageContainer>
         <PageHeader
           title="Item Not Found"
           description="The item you're looking for doesn't exist or you don't have access"
@@ -100,7 +100,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   }
 
   return (
-    <PageContainer className="py-8">
+    <PageContainer>
       {/* Header */}
       <div className="mb-6">
         <button

@@ -76,7 +76,7 @@ export default function SuggestionsPage() {
 
   if (!familyId || error) {
     return (
-      <PageContainer className="p-6">
+      <PageContainer>
           <Card>
             <Text variant="h2" className="mb-4">Error</Text>
             <Text variant="body" className="text-red-600">
@@ -88,7 +88,7 @@ export default function SuggestionsPage() {
   }
 
   return (
-    <PageContainer className="p-6">
+    <PageContainer>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Text variant="h1" className="mb-2">

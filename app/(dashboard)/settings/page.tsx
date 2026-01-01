@@ -168,7 +168,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <PageContainer className="space-y-6">
+    <PageContainer>
         {/* Header */}
         <PageHeader
           title="Settings"

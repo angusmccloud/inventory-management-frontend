@@ -207,7 +207,7 @@ export default function MembersPage() {
 
   if (error && !familyId) {
     return (
-      <PageContainer className="p-6">
+      <PageContainer>
           <Alert severity="error">
             {error}
           </Alert>
@@ -216,7 +216,7 @@ export default function MembersPage() {
   }
 
   return (
-    <PageContainer className="p-6">
+    <PageContainer>
         {/* Header - T031: Apply mobileVertical for responsive stacking */}
       <PageHeader
         title="Family Members"
