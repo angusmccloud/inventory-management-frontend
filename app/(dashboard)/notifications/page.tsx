@@ -215,11 +215,13 @@ export default function NotificationsPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Page header */}
-        <PageHeader
-          title="Notifications"
-          subtitle="Low-stock alerts for your inventory items."
-        >
+        {/* Page header with filter */}
+        <div className="sm:flex sm:items-center sm:justify-between">
+          <PageHeader
+            title="Notifications"
+            subtitle="Low-stock alerts for your inventory items."
+          />
+          
           {/* Status filter */}
           <div className="mt-4 sm:mt-0">
             <label htmlFor="status-filter" className="block text-sm font-medium text-text-default mb-1">
@@ -239,7 +241,7 @@ export default function NotificationsPage() {
               <option value="resolved">Resolved ({resolvedCount})</option>
             </select>
           </div>
-        </PageHeader>
+        </div>
 
       {/* Status summary cards */}
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
