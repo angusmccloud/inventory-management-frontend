@@ -205,6 +205,12 @@ inventory-management-frontend/
 - Shopping list management
 - Multi-user collaboration
 - Role-based access control
+- **Theme Toggle**: Light/Dark mode with auto-detection
+  - Three-state toggle: Light, Dark, and Auto (follows system preference)
+  - Persists user preference in localStorage for anonymous users
+  - Syncs preference to backend for logged-in users (works across devices)
+  - Zero flash on page load with SSR-compatible inline script
+  - Full keyboard navigation and ARIA accessibility support
 
 ## Testing
 

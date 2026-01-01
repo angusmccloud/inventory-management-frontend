@@ -99,54 +99,52 @@
   --color-info-contrast: 17 24 39;
 }
 
-/* Also support system preference directly for immediate feedback */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Background and Text */
-    --color-background: 1 31 9; /* #011F09 */
-    --color-text-default: 140 197 154; /* #8CC59A */
+/* Dark mode - controlled by .dark class on <html> element */
+.dark {
+  /* Background and Text */
+  --color-background: 1 31 9; /* #011F09 */
+  --color-text-default: 140 197 154; /* #8CC59A */
 
-    /* Primary - Lighter for dark backgrounds */
-    --color-primary: 140 197 154; /* #8CC59A */
-    --color-primary-contrast: 10 51 21; /* #0A3315 */
-    --color-primary-hover: 160 217 174; /* Lighter #8CC59A for hover */
+  /* Primary - Lighter for dark backgrounds */
+  --color-primary: 140 197 154; /* #8CC59A */
+  --color-primary-contrast: 10 51 21; /* #0A3315 */
+  --color-primary-hover: 160 217 174; /* Lighter #8CC59A for hover */
 
-    /* Secondary - Lighter for dark backgrounds */
-    --color-secondary: 121 180 190; /* #79B4BE */
-    --color-secondary-contrast: 9 36 42; /* #09242A */
-    --color-secondary-hover: 141 200 210; /* Lighter #79B4BE for hover */
+  /* Secondary - Lighter for dark backgrounds */
+  --color-secondary: 121 180 190; /* #79B4BE */
+  --color-secondary-contrast: 9 36 42; /* #09242A */
+  --color-secondary-hover: 141 200 210; /* Lighter #79B4BE for hover */
 
-    /* Tertiary - Lighter for dark backgrounds */
-    --color-tertiary: 210 183 157; /* #D2B79D */
-    --color-tertiary-contrast: 68 41 13; /* #44290D */
+  /* Tertiary - Lighter for dark backgrounds */
+  --color-tertiary: 210 183 157; /* #D2B79D */
+  --color-tertiary-contrast: 68 41 13; /* #44290D */
 
-    /* Surface - Dark card and panel backgrounds */
-    --color-surface: 31 41 55; /* dark gray */
-    --color-surface-elevated: 55 65 81; /* slightly lighter gray */
-    --color-surface-hover: 75 85 99; /* hover gray */
+  /* Surface - Dark card and panel backgrounds */
+  --color-surface: 31 41 55; /* dark gray */
+  --color-surface-elevated: 55 65 81; /* slightly lighter gray */
+  --color-surface-hover: 75 85 99; /* hover gray */
 
-    /* Text colors */
-    --color-text-primary: 140 197 154; /* #8CC59A - same as text-default */
-    --color-text-secondary: 156 163 175; /* muted text */
+  /* Text colors */
+  --color-text-primary: 140 197 154; /* #8CC59A - same as text-default */
+  --color-text-secondary: 156 163 175; /* muted text */
     --color-text-disabled: 75 85 99; /* disabled text */
 
-    /* Border colors */
-    --color-border: 55 65 81; /* dark border */
-    --color-border-focus: 140 197 154; /* primary color for focus */
+  /* Border colors */
+  --color-border: 55 65 81; /* dark border */
+  --color-border-focus: 140 197 154; /* primary color for focus */
 
-    /* Semantic colors */
-    --color-success: 74 222 128; /* green */
-    --color-success-contrast: 17 24 39;
-    
-    --color-warning: 251 191 36; /* amber */
-    --color-warning-contrast: 17 24 39;
-    
-    --color-error: 212 166 161; /* #D4A6A1 */
-    --color-error-contrast: 68 20 13; /* #44140D */
-    
-    --color-info: 96 165 250; /* blue */
-    --color-info-contrast: 17 24 39;
-  }
+  /* Semantic colors */
+  --color-success: 74 222 128; /* green */
+  --color-success-contrast: 17 24 39;
+  
+  --color-warning: 251 191 36; /* amber */
+  --color-warning-contrast: 17 24 39;
+  
+  --color-error: 212 166 161; /* #D4A6A1 */
+  --color-error-contrast: 68 20 13; /* #44140D */
+  
+  --color-info: 96 165 250; /* blue */
+  --color-info-contrast: 17 24 39;
 }
 
 html {

@@ -5,7 +5,7 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'media', // Use media query for automatic system preference detection
+  darkMode: 'class', // Use class strategy for manual theme control
   theme: {
     extend: {
       colors: {

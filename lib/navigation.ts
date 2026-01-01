@@ -57,9 +57,8 @@ export const navigationItems: NavItem[] = [
   {
     id: 'settings',
     label: 'Settings',
-    href: '/dashboard/settings/reference-data',
-    requiresAdmin: true,
-    matchPaths: ['/dashboard/settings/categories', '/dashboard/settings/units', '/dashboard/settings/stores'],
+    href: '/dashboard/settings',
+    matchPaths: ['/dashboard/settings', '/dashboard/settings/reference-data'],
   },
 ];
 
