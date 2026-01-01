@@ -15,7 +15,7 @@ import { Input, Select, Button } from '@/components/common';
 
 interface AddItemFormProps {
   familyId: string;
-  onSubmit: (data: AddToShoppingListRequest) => Promise<void>;
+  onSubmit: (data: AddToShoppingListRequest, keepModalOpen?: boolean) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -46,7 +46,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
     loadStores();
   }, [familyId]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, keepModalOpen: boolean = false) => {
     e.preventDefault();
     setError(null);
 
@@ -62,13 +62,25 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
         quantity: quantity === '' ? null : Number(quantity),
         storeId: storeId || null,
         notes: notes.trim() || null,
-      });
+      }, keepModalOpen);
       
       // Reset form on success
-      setName('');
-      setQuantity('');
-      setStoreId('');
-      setNotes('');
+      if (keepModalOpen) {
+        // Quick add: keep store, clear name/quantity/notes
+        setName('');
+        setQuantity('');
+        setNotes('');
+        // Focus back on name input for quick entry
+        setTimeout(() => {
+          document.getElementById('name')?.focus();
+        }, 0);
+      } else {
+        // Normal submit: reset everything
+        setName('');
+        setQuantity('');
+        setStoreId('');
+        setNotes('');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add item');
     } finally {
@@ -76,20 +88,34 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
     }
   };
 
+  // Handle Enter key in name field for quick add
+  const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isSubmitting) {
+      e.preventDefault();
+      handleSubmit(e as any, true);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-4">
       <div className="space-y-4">
         {/* Item Name */}
-        <Input
-          id="name"
-          label="Item Name *"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="e.g., Paper Towels, Birthday Cake"
-          maxLength={100}
-          required
-          disabled={isSubmitting}
-        />
+        <div>
+          <Input
+            id="name"
+            label="Item Name *"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={handleNameKeyDown}
+            placeholder="e.g., Paper Towels, Birthday Cake"
+            maxLength={100}
+            required
+            disabled={isSubmitting}
+          />
+          <p className="mt-1 text-xs text-text-secondary">
+            Tip: Press Enter to quickly add multiple items
+          </p>
+        </div>
 
         {/* Quantity */}
         <Input

@@ -120,10 +120,14 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   };
 
   // Handle add item - add to state without reload
-  const handleAddItem = async (data: any) => {
+  const handleAddItem = async (data: any, keepModalOpen: boolean = false) => {
     try {
       const newItem = await addToShoppingList(familyId, data);
-      setModalState({ type: 'none' });
+      
+      // Only close modal if not quick-adding
+      if (!keepModalOpen) {
+        setModalState({ type: 'none' });
+      }
       
       // Add new item to state
       setItems(prevItems => [...prevItems, newItem]);
