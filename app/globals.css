@@ -21,6 +21,7 @@
   /* Tertiary - Supplementary color */
   --color-tertiary: 68 41 13; /* #44290D */
   --color-tertiary-contrast: 210 183 157; /* #D2B79D */
+  --color-tertiary-hover: 210 183 157; /* #D2B79D */
 
   /* Surface - Card and panel backgrounds */
   --color-surface: 255 255 255; /* white */
@@ -39,37 +40,59 @@
   /* Semantic colors */
   --color-success: 34 197 94; /* green */
   --color-success-contrast: 255 255 255;
+  --color-success-hover: 22 163 74; /* darker green for hover */
   
   --color-warning: 245 158 11; /* amber */
   --color-warning-contrast: 255 255 255;
+  --color-warning-hover: 217 119 6; /* darker amber for hover */
   
   --color-error: 68 20 13; /* #44140D */
   --color-error-contrast: 212 166 161; /* #D4A6A1 */
+  --color-error-hover: 48 14 9; /* darker error for hover */
   
   --color-info: 59 130 246; /* blue */
   --color-info-contrast: 255 255 255;
+  --color-info-hover: 37 99 235; /* darker blue for hover */
 }
+
+/* 
+Primary:
+Base: 34 71 130; (#224782)
+Lighter: 90 121 168; (#5A79A8)
+Darker: 6 35 79; (#06234F)
+
+Secondary:
+Base: 23 125 108; (#177D6C)
+Lighter: 79 161 148; (#4FA194)
+Darker: 0 76 63; (#004C3F)
+
+Tertiary:
+Base: 55 39 136; (#372788)
+Lighter: 79 64 181; (#4F40B5)
+Darker: 111 98 176; (#6F62B0)
+*/
 
 /* Dark Theme (Class-based and Media Query for compatibility) */
 .dark,
 :root:has(.dark) {
   /* Background and Text */
-  --color-background: 1 31 9; /* #011F09 */
-  --color-text-default: 142 179 152; /* #8EB398 */
+  --color-background: 32 32 32; /* #202020 */
+  --color-text-default: 255 255 255; /* white */
 
   /* Primary - Lighter for dark backgrounds */
-  --color-primary: 140 197 154; /* #8CC59A */
-  --color-primary-contrast: 10 51 21; /* #0A3315 */
-  --color-primary-hover: 160 217 174; /* Lighter #8CC59A for hover */
+  --color-primary: 34 71 130; /* #224782 */
+  --color-primary-contrast: 255 255 255; /* #FFFFFF */
+  --color-primary-hover: 6 35 79; /* (#06234F) */
 
   /* Secondary - Lighter for dark backgrounds */
-  --color-secondary: 121 180 190; /* #79B4BE */
-  --color-secondary-contrast: 9 36 42; /* #09242A */
-  --color-secondary-hover: 141 200 210; /* Lighter #79B4BE for hover */
+  --color-secondary: 23 125 108; /* #177D6C */
+  --color-secondary-contrast: 255 255 255; /* #FFFFFF */
+  --color-secondary-hover: 0 76 63; /* #004C3F */
 
   /* Tertiary - Lighter for dark backgrounds */
-  --color-tertiary: 210 183 157; /* #D2B79D */
-  --color-tertiary-contrast: 68 41 13; /* #44290D */
+  --color-tertiary: 55 39 136; /* #372788 */
+  --color-tertiary-contrast: 255 255 255; /* #FFFFFF */
+  --color-tertiary-hover: 22 9 83; /* #160953 */
 
   /* Surface - Dark card and panel backgrounds */
   --color-surface: 31 41 55; /* dark gray */
@@ -77,47 +100,52 @@
   --color-surface-hover: 75 85 99; /* hover gray */
 
   /* Text colors */
-  --color-text-primary: 140 197 154; /* #8CC59A - same as text-default */
-  --color-text-secondary: 156 163 175; /* muted text */
+  --color-text-primary: 255 255 255; /* white */
+  --color-text-secondary: 166 166 166; /* #A6A6A6 */
   --color-text-disabled: 75 85 99; /* disabled text */
 
   /* Border colors */
-  --color-border: 55 65 81; /* dark border */
-  --color-border-focus: 140 197 154; /* primary color for focus */
+  --color-border: 90 121 168; /* #5A79A8 */
+  --color-border-focus: 6 35 79; /* #06234F */
 
   /* Semantic colors */
   --color-success: 74 222 128; /* green */
   --color-success-contrast: 17 24 39;
+  --color-success-hover: 34 197 94; /* darker green for hover */
   
   --color-warning: 251 191 36; /* amber */
   --color-warning-contrast: 17 24 39;
+  --color-warning-hover: 245 158 11; /* darker amber for hover */
   
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */
+  --color-error-hover: 248 180 176; /* lighter error for hover */
   
   --color-info: 96 165 250; /* blue */
   --color-info-contrast: 17 24 39;
+  --color-info-hover: 59 130 246; /* darker blue for hover */
 }
 
 /* Dark mode - controlled by .dark class on <html> element */
 .dark {
   /* Background and Text */
-  --color-background: 1 31 9; /* #011F09 */
-  --color-text-default: 140 197 154; /* #8CC59A */
+  --color-background: 32 32 32; /* #202020 */
+  --color-text-default: 255 255 255; /* white */
 
   /* Primary - Lighter for dark backgrounds */
-  --color-primary: 140 197 154; /* #8CC59A */
-  --color-primary-contrast: 10 51 21; /* #0A3315 */
-  --color-primary-hover: 160 217 174; /* Lighter #8CC59A for hover */
+  --color-primary: 34 71 130; /* #224782 */
+  --color-primary-contrast: 6 35 79; /* #06234F */
+  --color-primary-hover: 90 121 168; /* #5A79A8 */
 
   /* Secondary - Lighter for dark backgrounds */
-  --color-secondary: 121 180 190; /* #79B4BE */
-  --color-secondary-contrast: 9 36 42; /* #09242A */
-  --color-secondary-hover: 141 200 210; /* Lighter #79B4BE for hover */
+  --color-secondary: 23 125 108; /* #177D6C */
+  --color-secondary-contrast: 0 76 63; /* #004C3F */
+  --color-secondary-hover: 79 161 148; /* #4FA194 */
 
   /* Tertiary - Lighter for dark backgrounds */
-  --color-tertiary: 210 183 157; /* #D2B79D */
-  --color-tertiary-contrast: 68 41 13; /* #44290D */
+  --color-tertiary: 55 39 136; /* #372788 */
+  --color-tertiary-contrast: 22 9 83; /* #160953 */
+  --color-tertiary-hover: 79 64 181; /* #4F40B5 */
 
   /* Surface - Dark card and panel backgrounds */
   --color-surface: 31 41 55; /* dark gray */
@@ -125,26 +153,30 @@
   --color-surface-hover: 75 85 99; /* hover gray */
 
   /* Text colors */
-  --color-text-primary: 140 197 154; /* #8CC59A - same as text-default */
-  --color-text-secondary: 156 163 175; /* muted text */
-    --color-text-disabled: 75 85 99; /* disabled text */
+  --color-text-primary: 255 255 255; /* white */
+  --color-text-secondary: 166 166 166; /* #A6A6A6 */
+  --color-text-disabled: 75 85 99; /* disabled text */
 
   /* Border colors */
-  --color-border: 55 65 81; /* dark border */
-  --color-border-focus: 140 197 154; /* primary color for focus */
+  --color-border: 90 121 168; /* #5A79A8 */
+  --color-border-focus: 6 35 79; /* #06234F */
 
   /* Semantic colors */
   --color-success: 74 222 128; /* green */
   --color-success-contrast: 17 24 39;
+  --color-success-hover: 34 197 94; /* darker green for hover */
   
   --color-warning: 251 191 36; /* amber */
   --color-warning-contrast: 17 24 39;
+  --color-warning-hover: 245 158 11; /* darker amber for hover */
   
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */
+  --color-error-hover: 248 180 176; /* lighter error for hover */
   
   --color-info: 96 165 250; /* blue */
   --color-info-contrast: 17 24 39;
+  --color-info-hover: 59 130 246; /* darker blue for hover */
 }
 
 html {

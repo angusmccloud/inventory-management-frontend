@@ -6,6 +6,8 @@
 
 'use client';
 
+import { Button } from '@/components/common/Button/Button';
+
 export interface DialogProps {
   isOpen: boolean;
   title: string;
@@ -94,37 +96,36 @@ export default function Dialog({
           <div className={`mt-5 sm:mt-6 ${isConfirm ? 'sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3' : ''}`}>
             {isConfirm ? (
               <>
-                <button
-                  type="button"
-                  onClick={onConfirm}
-                  className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 sm:col-start-2 ${
-                    isError
-                      ? 'bg-error text-error-contrast hover:opacity-90 focus:ring-error'
-                      : 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary'
-                  }`}
-                >
-                  {confirmLabel}
-                </button>
-                <button
-                  type="button"
-                  onClick={onCancel}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-surface px-3 py-2 text-sm font-semibold text-text-primary shadow-sm ring-1 ring-inset ring-border hover:bg-surface-hover sm:col-start-1 sm:mt-0"
-                >
-                  {cancelLabel}
-                </button>
+                <div className="sm:col-start-2">
+                  <Button
+                    variant={isError ? 'danger' : 'primary'}
+                    size="sm"
+                    fullWidth
+                    onClick={onConfirm}
+                  >
+                    {confirmLabel}
+                  </Button>
+                </div>
+                <div className="mt-3 sm:col-start-1 sm:mt-0">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    fullWidth
+                    onClick={onCancel}
+                  >
+                    {cancelLabel}
+                  </Button>
+                </div>
               </>
             ) : (
-              <button
-                type="button"
+              <Button
+                variant={isError ? 'danger' : 'primary'}
+                size="sm"
+                fullWidth
                 onClick={onConfirm}
-                className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  isError
-                    ? 'bg-error text-error-contrast hover:opacity-90 focus:ring-error'
-                    : 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary'
-                }`}
               >
                 {confirmLabel}
-              </button>
+              </Button>
             )}
           </div>
         </div>

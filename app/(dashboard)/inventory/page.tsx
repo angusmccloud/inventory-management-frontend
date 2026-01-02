@@ -22,7 +22,9 @@ import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
-import { Text, Button, Alert, PageHeader, PageLoading, PageContainer } from '@/components/common';
+import DashboardManager from '@/components/dashboard/DashboardManager';
+import { Text, Button, Alert, PageHeader, PageLoading, PageContainer, TabNavigation } from '@/components/common';
+import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 
 type ModalState =
   | { type: 'none' }
@@ -43,6 +45,12 @@ export default function InventoryPage() {
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
   const [familyId, setFamilyId] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('inventory');
+
+  const tabs: Tab[] = [
+    { id: 'inventory', label: 'Inventory' },
+    { id: 'tracking-lists', label: 'Tracking Lists' },
+  ];
 
   useEffect(() => {
     loadFamilyId();
@@ -201,8 +209,8 @@ export default function InventoryPage() {
         {/* Header */}
         <PageHeader
           title="Inventory"
-          description="Manage your family's inventory items"
-          action={isAdmin ? (
+          description="Manage your family's inventory items and tracking lists"
+          action={isAdmin && activeTab === 'inventory' ? (
             <Button
               variant="primary"
               onClick={() => setModalState({ type: 'add' })}
@@ -218,18 +226,32 @@ export default function InventoryPage() {
         </Alert>
       )}
 
-      {/* Inventory List */}
-      <InventoryList
-        items={items}
-        familyId={familyId}
-        onEdit={(item) => setModalState({ type: 'edit', item })}
-        onArchive={handleArchive}
-        onDelete={handleDelete}
-        onAddToShoppingList={handleAddToShoppingList}
-        onViewDetails={(item) => router.push(`/inventory/${item.itemId}`)}
-        onItemUpdated={handleItemUpdated}
-        isAdmin={isAdmin}
+      {/* Tab Navigation */}
+      <TabNavigation
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
       />
+
+      {/* Inventory Tab */}
+      {activeTab === 'inventory' && (
+        <InventoryList
+          items={items}
+          familyId={familyId}
+          onEdit={(item) => setModalState({ type: 'edit', item })}
+          onArchive={handleArchive}
+          onDelete={handleDelete}
+          onAddToShoppingList={handleAddToShoppingList}
+          onViewDetails={(item) => router.push(`/inventory/${item.itemId}`)}
+          onItemUpdated={handleItemUpdated}
+          isAdmin={isAdmin}
+        />
+      )}
+
+      {/* Tracking Lists Tab */}
+      {activeTab === 'tracking-lists' && (
+        <DashboardManager familyId={familyId} />
+      )}
 
       {/* Modals */}
       {modalState.type !== 'none' && (

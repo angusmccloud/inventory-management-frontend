@@ -10,8 +10,7 @@
 import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
-import { Button, Alert, PageLoading } from '@/components/common';
-
+import { Button, Alert, PageLoading, Input } from '@/components/common';
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
 function LoginForm() {
@@ -193,7 +192,7 @@ function LoginForm() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="-space-y-px rounded-md shadow-sm">
+          <div className="space-y-4">
             {viewMode === 'verify' || viewMode === 'reset-password' ? (
               // Verification code input
               <>
@@ -201,132 +200,101 @@ function LoginForm() {
                   <p>We sent a verification code to:</p>
                   <p className="font-semibold text-text-default">{email}</p>
                 </div>
-                <div>
-                  <label htmlFor="code" className="sr-only">
-                    Verification Code
-                  </label>
-                  <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    required
-                    className="relative block w-full rounded-md border-0 px-3 py-2 text-center text-2xl tracking-widest text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary"
-                    placeholder="000000"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
-                    maxLength={6}
-                  />
-                </div>
+                <Input
+                  id="code"
+                  name="code"
+                  type="text"
+                  required
+                  label="Verification Code"
+                  placeholder="000000"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
+                  maxLength={6}
+                  className="text-center text-2xl tracking-widest"
+                />
                 {viewMode === 'reset-password' && (
                   <>
-                    <div className="mt-4">
-                      <label htmlFor="new-password" className="sr-only">
-                        New Password
-                      </label>
-                      <input
-                        id="new-password"
-                        name="new-password"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        className="relative block w-full rounded-t-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                        placeholder="New Password (min 8 chars)"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        minLength={8}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="confirm-password" className="sr-only">
-                        Confirm Password
-                      </label>
-                      <input
-                        id="confirm-password"
-                        name="confirm-password"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        className="relative block w-full rounded-b-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                        placeholder="Confirm New Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        minLength={8}
-                      />
-                    </div>
+                    <Input
+                      id="new-password"
+                      name="new-password"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      label="New Password"
+                      placeholder="New Password (min 8 chars)"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      minLength={8}
+                      helpText="Must be at least 8 characters"
+                    />
+                    <Input
+                      id="confirm-password"
+                      name="confirm-password"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      label="Confirm Password"
+                      placeholder="Confirm New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      minLength={8}
+                    />
                   </>
                 )}
               </>
             ) : viewMode === 'forgot-password' ? (
               // Forgot password - email only
-              <div>
-                <label htmlFor="email" className="sr-only">
-                  Email address
-                </label>
-                <input
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                label="Email address"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                helpText="Enter your email to receive a password reset code"
+              />
+            ) : (
+              // Login or Register form
+              <>
+                {viewMode === 'register' && (
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    label="Full Name"
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                )}
+                <Input
                   id="email"
                   name="email"
                   type="email"
                   autoComplete="email"
                   required
-                  className="relative block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                  label="Email address"
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-              </div>
-            ) : (
-              // Login or Register form
-              <>
-                {viewMode === 'register' && (
-                  <div>
-                    <label htmlFor="name" className="sr-only">
-                      Full Name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      className="relative block w-full rounded-t-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                )}
-                <div>
-                  <label htmlFor="email" className="sr-only">
-                    Email address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className={`relative block w-full ${viewMode === 'register' ? '' : 'rounded-t-md'} border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`}
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="password" className="sr-only">
-                    Password
-                  </label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete={viewMode === 'register' ? 'new-password' : 'current-password'}
-                    required
-                    className="relative block w-full rounded-b-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                    placeholder="Password (min 8 chars)"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    minLength={8}
-                  />
-                </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete={viewMode === 'register' ? 'new-password' : 'current-password'}
+                  required
+                  label="Password"
+                  placeholder="Password (min 8 chars)"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={8}
+                  helpText={viewMode === 'register' ? 'Must be at least 8 characters' : undefined}
+                />
               </>
             )}
           </div>
@@ -343,7 +311,7 @@ function LoginForm() {
             </Alert>
           )}
 
-          <div>
+          <div className="flex flex-col items-center space-y-4">
             <Button
               type="submit"
               disabled={loading}
@@ -364,38 +332,36 @@ function LoginForm() {
           </div>
 
           {viewMode === 'login' && (
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <button
-                  type="button"
-                  onClick={switchToForgotPassword}
-                  className="font-medium text-primary hover:text-primary-hover"
-                >
-                  Forgot your password?
-                </button>
-              </div>
+            <div className="flex flex-col items-center">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={switchToForgotPassword}
+              >
+                Forgot your password?
+              </Button>
             </div>
           )}
 
-          <div className="text-center text-sm">
+          <div className="flex flex-col items-center">
             {viewMode === 'verify' || viewMode === 'forgot-password' || viewMode === 'reset-password' ? (
-              <button
-                type="button"
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={switchToLogin}
-                className="font-medium text-primary hover:text-primary-hover"
               >
                 Back to sign in
-              </button>
+              </Button>
             ) : (
-              <button
-                type="button"
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={viewMode === 'login' ? switchToRegister : switchToLogin}
-                className="font-medium text-primary hover:text-primary-hover"
               >
                 {viewMode === 'login'
                   ? "Don't have an account? Create one"
                   : 'Already have an account? Sign in'}
-              </button>
+              </Button>
             )}
           </div>
         </form>

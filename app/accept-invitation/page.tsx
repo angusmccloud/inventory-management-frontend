@@ -11,7 +11,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { acceptInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
-import { Button, Input, Alert, PageLoading } from '@/components/common';
+import { Button, Alert, PageLoading, Input } from '@/components/common';
 
 function AcceptInvitationContent() {
   const router = useRouter();
@@ -150,62 +150,58 @@ function AcceptInvitationContent() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Input
-                type="text"
-                id="name"
-                label="Your Name *"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                placeholder="Enter your full name"
-                disabled={isSubmitting}
-                helpText="This name will be visible to other family members"
-              />
-            </div>
+            <Input
+              type="text"
+              id="name"
+              label="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="Enter your full name"
+              disabled={isSubmitting}
+              helpText="This name will be visible to other family members"
+            />
 
-            <div>
-              <Input
-                type="password"
-                id="password"
-                label="Password (Optional)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Create a password"
-                disabled={isSubmitting}
-                helpText="Leave blank to use email-based authentication"
-              />
-            </div>
+            <Input
+              type="password"
+              id="password"
+              label="Password (Optional)"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Create a password"
+              disabled={isSubmitting}
+              helpText="Leave blank to use email-based authentication"
+            />
 
             {password && (
-              <div>
-                <Input
-                  type="password"
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
-                  disabled={isSubmitting}
-                />
-              </div>
+              <Input
+                type="password"
+                id="confirmPassword"
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                disabled={isSubmitting}
+              />
             )}
 
-            <Button
-              type="submit"
-              disabled={isSubmitting || !token}
-              loading={isSubmitting}
-              variant="primary"
-              size="lg"
-              fullWidth
-            >
-              Accept Invitation
-            </Button>
+            <div className="flex flex-col items-center space-y-4">
+              <Button
+                type="submit"
+                disabled={isSubmitting || !token}
+                loading={isSubmitting}
+                variant="primary"
+                size="lg"
+                fullWidth
+              >
+                Accept Invitation
+              </Button>
+            </div>
           </form>
         )}
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-text-secondary">
+        <div className="mt-6 flex flex-col items-center">
+          <p className="text-sm text-text-secondary text-center">
             By accepting, you agree to collaborate with your family members
           </p>
         </div>

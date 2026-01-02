@@ -9,7 +9,7 @@
 
 import { ShoppingListItem } from '@/lib/api/shoppingList';
 import { useState } from 'react';
-import { Badge, Button } from '@/components/common';
+import { Badge, Button, Checkbox } from '@/components/common';
 
 interface ShoppingListItemProps {
   item: ShoppingListItem;
@@ -43,12 +43,12 @@ export default function ShoppingListItemComponent({
     <div className={`bg-surface rounded-lg shadow-sm border ${isPurchased ? 'border-border bg-surface-elevated bg-surface' : 'border-border'} p-4 flex flex-col h-full`}>
       {/* Header with checkbox and status */}
       <div className="flex items-start gap-3 mb-3">
-        <input
-          type="checkbox"
+        <Checkbox
+          label=""
           checked={isPurchased}
           onChange={handleToggle}
           disabled={isToggling}
-          className="mt-1 h-5 w-5 rounded border-border text-primary focus:ring-primary checked:bg-primary checked:border-primary disabled:opacity-50 flex-shrink-0"
+          className="flex-shrink-0 -mt-1"
         />
         <div className="flex-1 min-w-0">
           <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>

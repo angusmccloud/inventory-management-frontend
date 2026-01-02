@@ -23,6 +23,7 @@ import { useEffect, useCallback } from 'react';
 import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import QuantityControls from '@/components/common/QuantityControls';
+import { Button } from '@/components/common/Button/Button';
 
 interface AdjustmentClientProps {
   urlId: string;
@@ -189,20 +190,23 @@ export default function AdjustmentClient({
               <p className="text-sm text-error mt-1">
                 {error.message}
               </p>
-              <button
-                onClick={retry}
-                className="mt-2 text-sm underline text-error hover:no-underline"
-              >
-                Retry
-              </button>
+              <div className="flex gap-2 mt-2">
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={retry}
+                >
+                  Retry
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={clearError}
+                >
+                  Dismiss
+                </Button>
+              </div>
             </div>
-            <button
-              onClick={clearError}
-              className="ml-2 text-error hover:text-error/80"
-              aria-label="Dismiss error"
-            >
-              ✕
-            </button>
           </div>
         </div>
       )}

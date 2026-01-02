@@ -10,6 +10,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { Button } from '@/components/common/Button/Button';
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -71,13 +72,14 @@ export default function Error({ error, reset }: ErrorPageProps) {
           {/* Action Buttons */}
           <div className="space-y-3">
             {/* Try Again Button */}
-            <button
+            <Button
+              variant="primary"
+              size="md"
+              fullWidth
               onClick={reset}
-              className="w-full px-6 py-3 bg-primary hover:bg-primary-hover focus:ring-4 focus:ring-primary dark:focus:ring-primary text-white font-medium rounded-lg transition-colors focus:outline-none"
-              aria-label="Try again"
             >
               Try Again
-            </button>
+            </Button>
 
             {/* Help Text */}
             <p className="text-sm text-text-default">

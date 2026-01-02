@@ -158,14 +158,15 @@ function InventoryListItem({
           )}
           {/* Error Display */}
           {error && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-error">
-              <span>Failed to save: {error.message}</span>
-              <button
+            <div className="mt-2 flex items-center gap-2 text-sm">
+              <span className="text-error">Failed to save: {error.message}</span>
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={clearError}
-                className="underline hover:no-underline"
               >
                 Dismiss
-              </button>
+              </Button>
             </div>
           )}
         </div>

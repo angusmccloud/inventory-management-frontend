@@ -34,6 +34,12 @@ export type { InputProps, InputType, InputValidationState, InputSize, BaseInputP
 export { Select } from './Select/Select';
 export type { SelectProps, SelectOption } from './Select/Select.types';
 
+export { Radio } from './Radio/Radio';
+export type { RadioProps, RadioOption } from './Radio/Radio.types';
+
+export { Checkbox } from './Checkbox/Checkbox';
+export type { CheckboxProps } from './Checkbox/Checkbox.types';
+
 // Feedback
 export { Alert } from './Alert/Alert';
 export type { AlertProps, AlertSeverity } from './Alert/Alert.types';

@@ -32,6 +32,7 @@
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/cn';
 import { LoadingSpinner } from './LoadingSpinner/LoadingSpinner';
+import { IconButton } from './IconButton/IconButton';
 
 export interface QuantityControlsProps {
   /**
@@ -125,12 +126,6 @@ export default function QuantityControls({
   const isAtMin = quantity <= minQuantity;
   const isAtMax = maxQuantity !== undefined && quantity >= maxQuantity;
 
-  const buttonSize = {
-    sm: 'min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px] text-sm',
-    md: 'min-h-[44px] min-w-[44px] text-base',
-    lg: 'min-h-[48px] min-w-[48px] text-lg',
-  }[size];
-
   const quantityTextSize = {
     sm: 'text-sm',
     md: 'text-base',
@@ -144,23 +139,14 @@ export default function QuantityControls({
       className={cn('inline-flex items-center gap-2', className)}
     >
       {/* Decrement Button */}
-      <button
+      <IconButton
+        icon={<MinusIcon className="h-5 w-5" />}
+        variant="danger"
+        size={size}
         onClick={onDecrement}
         disabled={disabled || isAtMin}
         aria-label={`${decrementLabel}. Current: ${quantity}${unit ? ' ' + unit : ''}`}
-        aria-disabled={disabled || isAtMin}
-        className={cn(
-          'inline-flex items-center justify-center rounded-md font-medium',
-          'transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          buttonSize,
-          !disabled && !isAtMin
-            ? 'bg-error hover:bg-error/90 text-white'
-            : 'bg-surface-elevated text-text-secondary'
-        )}
-      >
-        <MinusIcon className="h-5 w-5" />
-      </button>
+      />
 
       {/* Quantity Display */}
       <span
@@ -184,23 +170,14 @@ export default function QuantityControls({
       </span>
 
       {/* Increment Button */}
-      <button
+      <IconButton
+        icon={<PlusIcon className="h-5 w-5" />}
+        variant="secondary"
+        size={size}
         onClick={onIncrement}
         disabled={disabled || isAtMax}
         aria-label={`${incrementLabel}. Current: ${quantity}${unit ? ' ' + unit : ''}`}
-        aria-disabled={disabled || isAtMax}
-        className={cn(
-          'inline-flex items-center justify-center rounded-md font-medium',
-          'transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          buttonSize,
-          !disabled && !isAtMax
-            ? 'bg-secondary hover:bg-secondary/90 text-white'
-            : 'bg-surface-elevated text-text-secondary'
-        )}
-      >
-        <PlusIcon className="h-5 w-5" />
-      </button>
+      />
     </div>
   );
 }

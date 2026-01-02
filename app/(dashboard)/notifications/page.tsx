@@ -15,6 +15,7 @@ import { getErrorMessage, isApiClientError } from '@/lib/api-client';
 import { LowStockNotification, LowStockNotificationStatus, UserContext } from '@/types/entities';
 import NotificationList from '@/components/notifications/NotificationList';
 import { PageHeader, PageLoading, PageContainer } from '@/components/common';
+import { Button } from '@/components/common/Button/Button';
 
 type StatusFilterOption = LowStockNotificationStatus | 'all';
 
@@ -288,13 +289,13 @@ export default function NotificationsPage() {
                 <p>{error}</p>
               </div>
               <div className="mt-4">
-                <button
-                  type="button"
+                <Button
+                  variant="danger"
+                  size="sm"
                   onClick={fetchNotifications}
-                  className="rounded-md bg-error/10 px-2 py-1.5 text-sm font-medium text-error hover:bg-error/20 focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2"
                 >
                   Retry
-                </button>
+                </Button>
               </div>
             </div>
           </div>

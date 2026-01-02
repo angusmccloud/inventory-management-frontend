@@ -18,6 +18,7 @@
 import { useState, useEffect } from 'react';
 import { nfcUrlsApi } from '@/lib/api/nfcUrls';
 import type { NFCUrl } from '@/types/entities';
+import { Button } from '@/components/common/Button/Button';
 
 interface NFCUrlManagerProps {
   itemId: string;
@@ -189,24 +190,15 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
               Manage scannable URLs for {itemName}
             </p>
           </div>
-          <button
+          <Button
+            variant="primary"
+            size="md"
             onClick={handleGenerate}
             disabled={state.isGenerating}
-            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-surface-elevated text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-primary/30 disabled:cursor-not-allowed"
-            aria-label="Generate new NFC URL"
+            loading={state.isGenerating}
           >
-            {state.isGenerating ? (
-              <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Generating...
-              </span>
-            ) : (
-              '+ Generate NFC URL'
-            )}
-          </button>
+            {state.isGenerating ? 'Generating...' : '+ Generate NFC URL'}
+          </Button>
         </div>
       </div>
 
@@ -287,10 +279,10 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                   {/* Actions */}
                   <div className="ml-4 flex flex-col gap-2">
                     {/* Copy Button */}
-                    <button
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => handleCopy(url.urlId)}
-                      className="px-3 py-1 text-sm bg-surface-elevated hover:bg-surface text-text-default rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-                      aria-label="Copy URL to clipboard"
                     >
                       {state.copiedUrlId === url.urlId ? (
                         <span className="flex items-center text-secondary-contrast">
@@ -307,22 +299,19 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                           Copy
                         </span>
                       )}
-                    </button>
+                    </Button>
 
                     {/* Rotate Button */}
                     {url.isActive && (
-                      <button
+                      <Button
+                        variant="warning"
+                        size="sm"
                         onClick={() => setRotateConfirmUrlId(url.urlId)}
                         disabled={state.isRotating === url.urlId}
-                        className="px-3 py-1 text-sm bg-tertiary/20 hover:bg-tertiary/30 text-tertiary-contrast rounded transition-colors focus:outline-none focus:ring-2 focus:ring-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Rotate URL (deactivate and create new)"
+                        loading={state.isRotating === url.urlId}
                       >
                         {state.isRotating === url.urlId ? (
                           <span className="flex items-center">
-                            <svg className="animate-spin h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
                             Rotating...
                           </span>
                         ) : (
@@ -333,7 +322,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
                             Rotate
                           </span>
                         )}
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -354,18 +343,20 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
               This will deactivate the current URL and generate a new one. The old URL will stop working immediately. You'll need to update any physical NFC tags with the new URL.
             </p>
             <div className="flex gap-3 justify-end">
-              <button
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() => setRotateConfirmUrlId(null)}
-                className="px-4 py-2 text-sm bg-surface-elevated hover:bg-surface text-text-default rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="warning"
+                size="sm"
                 onClick={() => handleRotate(rotateConfirmUrlId)}
-                className="px-4 py-2 text-sm bg-tertiary hover:bg-tertiary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-tertiary"
               >
                 Rotate URL
-              </button>
+              </Button>
             </div>
           </div>
         </div>

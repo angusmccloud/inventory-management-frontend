@@ -25,6 +25,7 @@ export default {
         tertiary: {
           DEFAULT: 'rgb(var(--color-tertiary) / <alpha-value>)',
           contrast: 'rgb(var(--color-tertiary-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-tertiary-hover) / <alpha-value>)',
         },
         // Surface colors - backgrounds for cards, panels, etc.
         surface: {
@@ -50,18 +51,22 @@ export default {
         success: {
           DEFAULT: 'rgb(var(--color-success) / <alpha-value>)',
           contrast: 'rgb(var(--color-success-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-success-hover) / <alpha-value>)',
         },
         warning: {
           DEFAULT: 'rgb(var(--color-warning) / <alpha-value>)',
           contrast: 'rgb(var(--color-warning-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-warning-hover) / <alpha-value>)',
         },
         error: {
           DEFAULT: 'rgb(var(--color-error) / <alpha-value>)',
           contrast: 'rgb(var(--color-error-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-error-hover) / <alpha-value>)',
         },
         info: {
           DEFAULT: 'rgb(var(--color-info) / <alpha-value>)',
           contrast: 'rgb(var(--color-info-contrast) / <alpha-value>)',
+          hover: 'rgb(var(--color-info-hover) / <alpha-value>)',
         },
       },
     },

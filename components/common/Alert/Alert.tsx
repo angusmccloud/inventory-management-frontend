@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { AlertProps, AlertSeverity } from './Alert.types';
 import { cn } from '@/lib/cn';
+import { IconButton } from '@/components/common/IconButton/IconButton';
 
 /**
  * Get severity-specific styles and icon
@@ -106,19 +107,13 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
           
           {/* Dismiss button */}
           {dismissible && onDismiss && (
-            <button
-              type="button"
+            <IconButton
+              icon={<XMarkIcon className="h-4 w-4" />}
+              variant="secondary"
+              size="sm"
               onClick={onDismiss}
-              className={cn(
-                'flex-shrink-0 rounded-md p-1 inline-flex',
-                'hover:bg-black/5 dark:hover:bg-white/10',
-                'focus:outline-none focus:ring-2 focus:ring-offset-2',
-                config.icon
-              )}
               aria-label="Dismiss alert"
-            >
-              <XMarkIcon className="h-4 w-4" />
-            </button>
+            />
           )}
         </div>
       </div>

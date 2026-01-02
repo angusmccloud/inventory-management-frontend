@@ -91,7 +91,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           <Alert severity="error">
             {error || 'Item not found'}
           </Alert>
-          <Button onClick={handleBack} className="mt-4">
+          <Button variant='primary' onClick={handleBack} className="mt-4">
             Back to Inventory
           </Button>
         </div>
@@ -103,15 +103,19 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
     <PageContainer>
       {/* Header */}
       <div className="mb-6">
-        <button
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={handleBack}
-          className="flex items-center text-primary hover:text-primary dark:hover:text-primary mb-4"
+          leftIcon={
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          }
+          className="mb-4"
         >
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
           Back to Inventory
-        </button>
+        </Button>
         <PageHeader
           title={item.name}
           description={`Quantity: ${item.quantity} ${item.unit || ''}${item.locationName ? ` • ${item.locationName}` : ''}`}
@@ -169,14 +173,17 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
             {/* Action Buttons */}
             <div className="mt-6 flex gap-3">
-              <button
+              <Button
+                variant="primary"
+                size="md"
                 onClick={() => router.push(`/inventory?edit=${item.itemId}`)}
-                className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Edit Item
-              </button>
+              </Button>
               {isAdmin && (
-                <button
+                <Button
+                  variant="danger"
+                  size="md"
                   onClick={() => {
                     if (confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
                       const userContext = getUserContext();
@@ -191,10 +198,9 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                       });
                     }
                   }}
-                  className="px-4 py-2 bg-error/10 hover:bg-error/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   Delete Item
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -230,32 +236,38 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
               Quick Actions
             </h3>
             <div className="space-y-3">
-              <button
+              <Button
+                variant="secondary"
+                size="md"
+                fullWidth
                 onClick={() => {
                   // TODO: Implement quick adjust
                   alert('Quick adjust functionality coming soon');
                 }}
-                className="w-full px-4 py-2 bg-secondary/10 hover:bg-secondary/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 + Add Items
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="danger"
+                size="md"
+                fullWidth
                 onClick={() => {
                   // TODO: Implement quick adjust
                   alert('Quick adjust functionality coming soon');
                 }}
-                className="w-full px-4 py-2 bg-error/10 hover:bg-error/10 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 - Remove Items
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                fullWidth
                 onClick={() => {
                   router.push(`/shopping-list?add=${item.itemId}`);
                 }}
-                className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Add to Shopping List
-              </button>
+              </Button>
             </div>
           </div>
 

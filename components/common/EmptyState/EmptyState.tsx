@@ -79,13 +79,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           
           {/* Secondary Action */}
           {secondaryAction && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={secondaryAction.onClick}
-              className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 focus:outline-none focus:underline"
             >
               {secondaryAction.label}
-            </button>
+            </Button>
           )}
         </div>
       )}

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { QuantityControls } from '@/components/common';
+import { Button } from '@/components/common/Button/Button';
 
 interface SuccessDisplayProps {
   itemName: string;
@@ -114,18 +115,20 @@ export default function SuccessDisplay({
         <div className="mb-6 p-4 bg-error/10/20 rounded-lg">
           <p className="text-sm text-error">{error.message}</p>
           <div className="flex gap-2 mt-2">
-            <button
+            <Button
+              variant="danger"
+              size="sm"
               onClick={retry}
-              className="text-sm text-error underline"
             >
               Retry
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={clearError}
-              className="text-sm text-error underline"
             >
               Dismiss
-            </button>
+            </Button>
           </div>
         </div>
       )}

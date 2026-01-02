@@ -15,8 +15,9 @@ import type { ButtonProps, ButtonVariant, ButtonSize } from './Button.types';
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary disabled:bg-primary/50',
   secondary: 'bg-secondary text-secondary-contrast hover:bg-secondary-hover focus:ring-secondary disabled:bg-secondary/50',
-  danger: 'bg-error text-error-contrast hover:bg-error/90 focus:ring-error disabled:bg-error/50',
-  warning: 'bg-warning text-warning-contrast hover:bg-warning/90 focus:ring-warning disabled:bg-warning/50',
+  tertiary: 'bg-tertiary text-tertiary-contrast hover:bg-tertiary-hover focus:ring-tertiary disabled:bg-tertiary/50',
+  danger: 'bg-error text-error-contrast hover:bg-error-hover focus:ring-error disabled:bg-error/50',
+  warning: 'bg-warning text-warning-contrast hover:bg-warning-hover focus:ring-warning disabled:bg-warning/50',
 };
 
 /**
