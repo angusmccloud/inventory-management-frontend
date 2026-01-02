@@ -134,18 +134,18 @@ Darker: 111 98 176; (#6F62B0)
 
   /* Primary - Lighter for dark backgrounds */
   --color-primary: 34 71 130; /* #224782 */
-  --color-primary-contrast: 6 35 79; /* #06234F */
-  --color-primary-hover: 90 121 168; /* #5A79A8 */
+  --color-primary-contrast: 255 255 255; /* #FFFFFF */
+  --color-primary-hover: 6 35 79; /* (#06234F) */
 
   /* Secondary - Lighter for dark backgrounds */
   --color-secondary: 23 125 108; /* #177D6C */
-  --color-secondary-contrast: 0 76 63; /* #004C3F */
-  --color-secondary-hover: 79 161 148; /* #4FA194 */
+  --color-secondary-contrast: 255 255 255; /* #FFFFFF */
+  --color-secondary-hover: 0 76 63; /* #004C3F */
 
   /* Tertiary - Lighter for dark backgrounds */
   --color-tertiary: 55 39 136; /* #372788 */
-  --color-tertiary-contrast: 22 9 83; /* #160953 */
-  --color-tertiary-hover: 79 64 181; /* #4F40B5 */
+  --color-tertiary-contrast: 255 255 255; /* #FFFFFF */
+  --color-tertiary-hover: 22 9 83; /* #160953 */
 
   /* Surface - Dark card and panel backgrounds */
   --color-surface: 31 41 55; /* dark gray */

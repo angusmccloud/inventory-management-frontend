@@ -28,6 +28,7 @@ import Dialog from '../common/Dialog';
 import { Button, Text, EmptyState, Alert, PageHeader, LoadingSpinner } from '@/components/common';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { getUserContext } from '@/lib/auth';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 interface ShoppingListProps {
   familyId: string;
@@ -46,6 +47,7 @@ type DialogState =
   | { type: 'success'; message: string };
 
 export default function ShoppingList({ familyId }: ShoppingListProps) {
+  const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState<ShoppingListItem[]>([]);
   const [stores, setStores] = useState<StoreGroupSummary[]>([]);
   const [selectedStore, setSelectedStore] = useState<string | null | 'all'>('all');
@@ -123,6 +125,12 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   const handleAddItem = async (data: any, keepModalOpen: boolean = false) => {
     try {
       const newItem = await addToShoppingList(familyId, data);
+      
+      // Show success snackbar first
+      showSnackbar({
+        variant: 'success',
+        text: `${newItem.name} added to shopping list`,
+      });
       
       // Only close modal if not quick-adding
       if (!keepModalOpen) {
@@ -411,7 +419,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {dialogState.type === 'confirm' && dialogState.action === 'remove' && (
         <Dialog
           isOpen={true}
-          type="confirm"
+          type="error"
           title="Remove Item"
           message={`Remove "${dialogState.item.name}" from shopping list?`}
           confirmLabel="Remove"

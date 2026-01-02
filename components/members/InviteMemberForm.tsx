@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { MemberRole } from '@/types/entities';
 import { RoleSelector } from './RoleSelector';
-import { Input, Button } from '@/components/common';
+import { Input, Button, Text } from '@/components/common';
 
 interface InviteMemberFormProps {
   onSubmit: (email: string, role: MemberRole) => Promise<void>;
@@ -55,7 +55,7 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
 
       {error && (
         <div className="p-3 bg-error/10/20 border border-error rounded-lg">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 

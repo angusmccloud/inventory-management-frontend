@@ -12,6 +12,7 @@ import { AddToShoppingListRequest } from '@/lib/api/shoppingList';
 import { listStores } from '@/lib/api/reference-data';
 import type { Store } from '@/types/entities';
 import { Input, Select, Button } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 interface AddItemFormProps {
   familyId: string;
@@ -112,9 +113,9 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             required
             disabled={isSubmitting}
           />
-          <p className="mt-1 text-xs text-text-secondary">
+          <Text variant="caption" color="secondary" className="mt-1">
             Tip: Press Enter to quickly add multiple items
-          </p>
+          </Text>
         </div>
 
         {/* Quantity */}
@@ -145,12 +146,12 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
           ))}
         </Select>
         {!loadingStores && stores.length === 0 && (
-          <p className="mt-1 text-xs text-text-secondary">
+          <Text variant="caption" color="secondary" className="mt-1">
             No stores available. Add them in{' '}
             <a href="/settings" className="text-primary hover:text-primary-hover">
               Settings
             </a>
-          </p>
+          </Text>
         )}
 
         {/* Notes */}
@@ -173,7 +174,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 

@@ -56,7 +56,7 @@ export const adjustDashboardItemQuantity = async (
  */
 export const recordDashboardAccess = async (dashboardId: string): Promise<void> => {
   try {
-    await apiClient.post(`/api/public/dashboards/${dashboardId}/access`, {}, false);
+    await apiClient.post(`/d/${dashboardId}/access`, {}, false);
   } catch (error) {
     // Silent fail - don't block dashboard viewing if analytics fail
     console.error('Failed to record dashboard access:', error);
@@ -80,12 +80,12 @@ export const listDashboards = async (
   const queryString = params.toString();
   const url = `/api/dashboards${queryString ? `?${queryString}` : ''}`;
   
-  const response = await apiClient.get<{ data: { dashboards: DashboardListItem[] } }>(
+  const response = await apiClient.get<{ dashboards: DashboardListItem[] }>(
     url,
     true // Authenticated
   );
   
-  return response.data.dashboards;
+  return response.dashboards;
 };
 
 /**

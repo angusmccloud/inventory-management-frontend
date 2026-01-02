@@ -14,7 +14,7 @@ import { listUserFamilies } from '@/lib/api/families';
 import { getErrorMessage, isApiClientError } from '@/lib/api-client';
 import { LowStockNotification, LowStockNotificationStatus, UserContext } from '@/types/entities';
 import NotificationList from '@/components/notifications/NotificationList';
-import { PageHeader, PageLoading, PageContainer } from '@/components/common';
+import { PageHeader, PageLoading, PageContainer, Text } from '@/components/common';
 import { Button } from '@/components/common/Button/Button';
 
 type StatusFilterOption = LowStockNotificationStatus | 'all';
@@ -286,7 +286,7 @@ export default function NotificationsPage() {
             <div className="ml-3">
               <h3 className="text-sm font-medium text-error">Error</h3>
               <div className="mt-2 text-sm text-error">
-                <p>{error}</p>
+                <Text variant="bodySmall" color="error">{error}</Text>
               </div>
               <div className="mt-4">
                 <Button
@@ -325,7 +325,7 @@ export default function NotificationsPage() {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            <p className="mt-2 text-sm text-text-default">Loading notifications...</p>
+            <Text variant="bodySmall" className="mt-2">Loading notifications...</Text>
           </div>
         </div>
       )}

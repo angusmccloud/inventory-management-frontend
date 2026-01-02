@@ -13,6 +13,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import SuccessDisplay from './SuccessDisplay';
+import { Text } from '@/components/common/Text/Text';
 
 interface NfcPageProps {
   params: Promise<{
@@ -172,22 +173,22 @@ export default async function NfcPage({ params }: NfcPageProps) {
             </h1>
 
             {/* Error Message */}
-            <p className="text-lg text-text-default mb-6">
+            <Text variant="h5" color="primary" className="mb-6">
               {result.message}
-            </p>
+            </Text>
 
             {/* Error Code (for debugging) */}
             {result.code && (
-              <p className="text-sm text-text-default">
+              <Text variant="bodySmall" color="primary">
                 Error code: {result.code}
-              </p>
+              </Text>
             )}
 
             {/* Retry Instructions */}
             <div className="mt-8 p-4 bg-surface-elevated rounded-lg">
-              <p className="text-sm text-text-default">
+              <Text variant="bodySmall" color="primary">
                 Try tapping the NFC tag again or contact support if the problem persists.
-              </p>
+              </Text>
             </div>
           </div>
         )}

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { getDashboardPublic, recordDashboardAccess } from '@/lib/api/dashboards';
 import { DashboardWithItems, DashboardItem as DashboardItemType } from '@/types/dashboard';
 import DashboardItemCard from './DashboardItemCard';
+import { Text } from '@/components/common/Text/Text';
 
 interface DashboardViewProps {
   dashboardId: string;
@@ -60,22 +61,6 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
     };
   }, [dashboard, loadDashboard]);
 
-  // 30-second polling interval (T039)
-  useEffect(() => {
-    // Only start polling if dashboard is loaded
-    if (dashboard) {
-      refreshIntervalRef.current = setInterval(() => {
-        loadDashboard(true);
-      }, 30000); // 30 seconds
-    }
-
-    return () => {
-      if (refreshIntervalRef.current) {
-        clearInterval(refreshIntervalRef.current);
-      }
-    };
-  }, [dashboard, loadDashboard]);
-
   // Handle local quantity updates from cards
   const handleQuantityChange = useCallback((itemId: string, newQuantity: number): void => {
     setDashboard((prev) => {
@@ -97,7 +82,7 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+          <Text variant="body" color="secondary" className="mt-4">Loading dashboard...</Text>
         </div>
       </div>
     );
@@ -124,7 +109,7 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
             <h2 className="text-xl font-semibold text-red-900 dark:text-red-100 mb-2">
               Dashboard Not Found
             </h2>
-            <p className="text-red-700 dark:text-red-300">{error}</p>
+            <Text variant="body" color="error">{error}</Text>
           </div>
         </div>
       </div>
@@ -135,7 +120,7 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400">No dashboard data available</p>
+          <Text variant="body" color="secondary">No dashboard data available</Text>
         </div>
       </div>
     );
@@ -145,7 +130,7 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Dashboard Header */}
-        <div className="mb-8">
+        <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             {dashboard.dashboard.title}
           </h1>
@@ -154,7 +139,7 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
         {/* Dashboard Items Grid */}
         {dashboard.items.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400">No items in this dashboard</p>
+            <Text variant="body" color="secondary">No items in this dashboard</Text>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,11 +153,6 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
             ))}
           </div>
         )}
-
-        {/* Dashboard Footer */}
-        <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-600">
-          <p>Dashboard: {dashboard.dashboard.title}</p>
-        </div>
       </div>
     </div>
   );

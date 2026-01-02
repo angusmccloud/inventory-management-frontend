@@ -6,7 +6,7 @@ import { Input, Button, Alert } from '@/components/common';
 
 interface StorageLocationFormProps {
   familyId: string;
-  onSubmit: (data: { name: string; description?: string }) => Promise<void>;
+  onSubmit: (data: { name: string; description?: string }, keepModalOpen?: boolean) => Promise<void>;
   onCancel: () => void;
   initialData?: StorageLocation;
 }
@@ -28,7 +28,7 @@ export default function StorageLocationForm({
 
   const canSubmit = isNameValid && !isSubmitting;
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent, keepModalOpen: boolean = false) {
     e.preventDefault();
     if (!canSubmit) return;
 
@@ -39,25 +39,46 @@ export default function StorageLocationForm({
       await onSubmit({
         name: name.trim(),
         description: description.trim() || undefined,
-      });
+      }, keepModalOpen);
+      
+      // Reset form if keeping modal open
+      if (keepModalOpen) {
+        setName('');
+        setDescription('');
+        // Focus back on name input for quick entry
+        setTimeout(() => {
+          document.getElementById('name')?.focus();
+        }, 0);
+      }
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save storage location');
+    } finally {
       setIsSubmitting(false);
     }
   }
 
+  // Handle Enter key in name field for quick add (only when adding, not editing)
+  const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isSubmitting && !initialData) {
+      e.preventDefault();
+      handleSubmit(e as any, true);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
       <Input
         id="name"
         label="Location Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        onKeyDown={handleNameKeyDown}
         maxLength={50}
         placeholder="e.g., Pantry, Fridge, Garage"
         required
-        helpText={`${name.length}/50 characters`}
+        helpText={!initialData ? `${name.length}/50 characters - Press Enter to quickly add multiple locations` : `${name.length}/50 characters`}
         autoFocus
+        disabled={isSubmitting}
       />
 
       <div>

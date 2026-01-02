@@ -1,7 +1,7 @@
 'use client';
 
 import type { Store } from '../../types/entities';
-import { Button } from '@/components/common';
+import { Button, Text } from '@/components/common';
 
 interface StoreItemProps {
   store: Store;
@@ -31,9 +31,9 @@ export default function StoreItem({
                 {store.name}
               </h3>
               {store.address && (
-                <p className="text-sm text-text-default mt-1">
+                <Text variant="bodySmall" className="mt-1">
                   {store.address}
-                </p>
+                </Text>
               )}
             </div>
           </div>

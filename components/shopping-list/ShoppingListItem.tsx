@@ -10,6 +10,7 @@
 import { ShoppingListItem } from '@/lib/api/shoppingList';
 import { useState } from 'react';
 import { Badge, Button, Checkbox } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 interface ShoppingListItemProps {
   item: ShoppingListItem;
@@ -70,7 +71,7 @@ export default function ShoppingListItemComponent({
           </div>
         )}
         {item.notes && (
-          <p className="text-text-secondary text-sm">{item.notes}</p>
+          <Text variant="bodySmall" color="secondary">{item.notes}</Text>
         )}
       </div>
 

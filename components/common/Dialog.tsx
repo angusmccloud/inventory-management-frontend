@@ -7,12 +7,13 @@
 'use client';
 
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 export interface DialogProps {
   isOpen: boolean;
   title: string;
   message: string;
-  type?: 'confirm' | 'alert' | 'error';
+  type?: 'confirm' | 'alert' | 'error' | 'warning';
   confirmLabel?: string;
   cancelLabel?: string;
   onConfirm: () => void;
@@ -33,6 +34,7 @@ export default function Dialog({
 
   const isConfirm = type === 'confirm';
   const isError = type === 'error';
+  const isWarning = type === 'warning';
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -48,11 +50,25 @@ export default function Dialog({
           <div>
             {/* Icon */}
             <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${
-              isError ? 'bg-error/10' : 'bg-primary/10'
+              isError ? 'bg-error/10' : isWarning ? 'bg-warning/10' : 'bg-primary/10'
             }`}>
               {isError ? (
                 <svg
                   className="h-6 w-6 text-error"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                  />
+                </svg>
+              ) : isWarning ? (
+                <svg
+                  className="h-6 w-6 text-warning"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -87,18 +103,18 @@ export default function Dialog({
                 {title}
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-text-secondary">{message}</p>
+                <Text variant="bodySmall" color="secondary">{message}</Text>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className={`mt-5 sm:mt-6 ${isConfirm ? 'sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3' : ''}`}>
-            {isConfirm ? (
+          <div className={`mt-5 sm:mt-6 ${isConfirm || isWarning ? 'sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3' : ''}`}>
+            {isConfirm || isWarning ? (
               <>
                 <div className="sm:col-start-2">
                   <Button
-                    variant={isError ? 'danger' : 'primary'}
+                    variant={isError ? 'danger' : isWarning ? 'warning' : 'primary'}
                     size="sm"
                     fullWidth
                     onClick={onConfirm}

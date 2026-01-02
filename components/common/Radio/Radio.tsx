@@ -9,6 +9,7 @@
 
 import * as React from 'react';
 import { RadioProps } from './Radio.types';
+import { Text } from '@/components/common/Text/Text';
 
 export const Radio: React.FC<RadioProps> = ({
   name,
@@ -76,12 +77,12 @@ export const Radio: React.FC<RadioProps> = ({
                   ${hasError ? 'border-error' : 'border-border'}
                   ${
                     isChecked
-                      ? 'bg-primary border-primary'
-                      : 'bg-surface'
+                      ? 'bg-primary border-primary text-primary-contrast'
+                      : 'bg-surface border-border'
                   }
                   focus:ring-2 focus:ring-primary focus:ring-offset-2
                   disabled:cursor-not-allowed disabled:opacity-50
-                  transition-colors
+                  transition-colors hover:border-primary-hover
                 `}
               />
               <div className="ml-3 flex-1">
@@ -89,9 +90,9 @@ export const Radio: React.FC<RadioProps> = ({
                   {option.label}
                 </span>
                 {option.description && (
-                  <p className="text-xs text-text-secondary mt-0.5">
+                  <Text variant="caption" color="secondary" className="mt-0.5">
                     {option.description}
-                  </p>
+                  </Text>
                 )}
               </div>
             </label>
@@ -101,23 +102,29 @@ export const Radio: React.FC<RadioProps> = ({
 
       {/* Help Text */}
       {helpText && !error && (
-        <p
+        <Text
+          as="p"
+          variant="caption"
+          color="secondary"
           id={`${groupId}-help`}
-          className="mt-1.5 text-xs text-text-secondary"
+          className="mt-1.5"
         >
           {helpText}
-        </p>
+        </Text>
       )}
 
       {/* Error Message */}
       {error && (
-        <p
+        <Text
+          as="p"
+          variant="caption"
+          color="error"
           id={`${groupId}-error`}
-          className="mt-1.5 text-xs text-error"
           role="alert"
+          className="mt-1.5"
         >
           {error}
-        </p>
+        </Text>
       )}
     </div>
   );

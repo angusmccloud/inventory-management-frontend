@@ -13,16 +13,20 @@ import {
   Badge,
   Button,
   Card,
+  Checkbox,
   IconButton,
   Input,
   Link,
   LoadingSpinner,
   PageContainer,
   PageHeader,
+  Radio,
   Select,
   TabNavigation,
   Text,
+  ToggleButton,
 } from '@/components/common';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 import { 
   PencilIcon, 
   TrashIcon, 
@@ -32,9 +36,21 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function ThemeTestPage() {
+  const { showSnackbar } = useSnackbar();
   const [inputValue, setInputValue] = useState('');
   const [selectValue, setSelectValue] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const [togglePrimary, setTogglePrimary] = useState(false);
+  const [toggleSecondary, setToggleSecondary] = useState(true);
+  const [toggleTertiary, setToggleTertiary] = useState(false);
+  const [toggleSuccess, setToggleSuccess] = useState(true);
+  const [toggleWarning, setToggleWarning] = useState(false);
+  const [toggleError, setToggleError] = useState(false);
+  const [toggleWithError, setToggleWithError] = useState(false);
+  const [checkboxValue, setCheckboxValue] = useState(false);
+  const [rememberPrefs, setRememberPrefs] = useState(true);
+  const [newsletter, setNewsletter] = useState(false);
+  const [radioValue, setRadioValue] = useState('option1');
 
   return (
     <PageContainer>
@@ -141,6 +157,54 @@ export default function ThemeTestPage() {
           </div>
         </div>
 
+        {/* Snackbar */}
+        <Card elevation="low" padding="lg">
+          <Text as="h2" variant="h2" className="mb-4">
+            Snackbar Notifications
+          </Text>
+          <Text variant="body" color="secondary" className="mb-4">
+            Click the buttons below to trigger snackbar notifications. They will appear at the bottom center of the screen and auto-hide after 5 seconds.
+          </Text>
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              variant="secondary"
+              onClick={() => showSnackbar({ 
+                variant: 'info', 
+                text: 'This is an informational snackbar message' 
+              })}
+            >
+              Show Info Snackbar
+            </Button>
+            <Button 
+              variant="primary"
+              onClick={() => showSnackbar({ 
+                variant: 'success', 
+                text: 'Operation completed successfully!' 
+              })}
+            >
+              Show Success Snackbar
+            </Button>
+            <Button 
+              variant="warning"
+              onClick={() => showSnackbar({ 
+                variant: 'warning', 
+                text: 'Please review this warning message' 
+              })}
+            >
+              Show Warning Snackbar
+            </Button>
+            <Button 
+              variant="danger"
+              onClick={() => showSnackbar({ 
+                variant: 'error', 
+                text: 'An error occurred. Please try again.' 
+              })}
+            >
+              Show Error Snackbar
+            </Button>
+          </div>
+        </Card>
+
         {/* Form Elements */}
         <Card elevation="low" padding="lg">
           <Text as="h2" variant="h2" className="mb-4">
@@ -173,6 +237,175 @@ export default function ThemeTestPage() {
               ]}
               placeholder="Choose an option"
             />
+          </div>
+        </Card>
+
+        {/* Toggle, Radio, and Checkbox Components */}
+        <Card elevation="low" padding="lg">
+          <Text as="h2" variant="h2" className="mb-4">
+            Toggle, Radio & Checkbox Components
+          </Text>
+          <div className="space-y-6 max-w-md">
+            {/* Toggle Buttons */}
+            <div>
+              <Text as="h3" variant="h4" className="mb-3">Toggle Buttons</Text>
+              <div className="space-y-3">
+                <div>
+                  <Text variant="label" className="mb-2">Variants</Text>
+                  <div className="space-y-2">
+                    <ToggleButton
+                      checked={togglePrimary}
+                      onChange={setTogglePrimary}
+                      label="Primary variant"
+                      variant="primary"
+                    />
+                    <ToggleButton
+                      checked={toggleSecondary}
+                      onChange={setToggleSecondary}
+                      label="Secondary variant"
+                      variant="secondary"
+                    />
+                    <ToggleButton
+                      checked={toggleTertiary}
+                      onChange={setToggleTertiary}
+                      label="Tertiary variant"
+                      variant="tertiary"
+                    />
+                    <ToggleButton
+                      checked={toggleSuccess}
+                      onChange={setToggleSuccess}
+                      label="Success variant"
+                      variant="success"
+                    />
+                    <ToggleButton
+                      checked={toggleWarning}
+                      onChange={setToggleWarning}
+                      label="Warning variant"
+                      variant="warning"
+                    />
+                    <ToggleButton
+                      checked={toggleError}
+                      onChange={setToggleError}
+                      label="Error variant"
+                      variant="error"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Text variant="label" className="mb-2">Sizes</Text>
+                  <div className="space-y-2">
+                    <ToggleButton
+                      checked={togglePrimary}
+                      onChange={setTogglePrimary}
+                      label="Small size"
+                      size="sm"
+                    />
+                    <ToggleButton
+                      checked={toggleSecondary}
+                      onChange={setToggleSecondary}
+                      label="Medium size (default)"
+                      size="md"
+                    />
+                    <ToggleButton
+                      checked={toggleSuccess}
+                      onChange={setToggleSuccess}
+                      label="Large size"
+                      size="lg"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Text variant="label" className="mb-2">States</Text>
+                  <div className="space-y-2">
+                    <ToggleButton
+                      checked={toggleWithError}
+                      onChange={setToggleWithError}
+                      label="Toggle with error"
+                      error={!toggleWithError ? "This field is required" : undefined}
+                    />
+                    <ToggleButton
+                      checked={false}
+                      onChange={() => {}}
+                      label="Disabled toggle"
+                      disabled
+                    />
+                    <ToggleButton
+                      checked={togglePrimary}
+                      onChange={setTogglePrimary}
+                      label="With description"
+                      description="Additional context about this option"
+                    />
+                    <ToggleButton
+                      checked={toggleSecondary}
+                      onChange={setToggleSecondary}
+                      label="With help text"
+                      helpText="Helpful information about this setting"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Radio Buttons */}
+            <div>
+              <Text as="h3" variant="h4" className="mb-3">Radio Buttons</Text>
+              <Radio
+                name="example-radio"
+                label="Choose an option"
+                value={radioValue}
+                onChange={setRadioValue}
+                options={[
+                  { label: 'Option 1', value: 'option1', description: 'First choice' },
+                  { label: 'Option 2', value: 'option2', description: 'Second choice' },
+                  { label: 'Option 3', value: 'option3', description: 'Third choice' },
+                  { label: 'Disabled Option', value: 'option4', disabled: true },
+                ]}
+                helpText="Select one option from the list"
+              />
+            </div>
+
+            {/* Checkboxes */}
+            <div>
+              <Text as="h3" variant="h4" className="mb-3">Checkboxes</Text>
+              <div className="space-y-3">
+                <Checkbox
+                  checked={checkboxValue}
+                  onChange={setCheckboxValue}
+                  label="I agree to the terms and conditions"
+                  required
+                />
+                
+                <Checkbox
+                  checked={rememberPrefs}
+                  onChange={setRememberPrefs}
+                  label="Remember my preferences"
+                  description="Save your settings for future visits"
+                />
+                
+                <Checkbox
+                  checked={newsletter}
+                  onChange={setNewsletter}
+                  label="Subscribe to newsletter"
+                  helpText="Receive weekly updates about new features"
+                />
+                
+                <Checkbox
+                  checked={false}
+                  onChange={() => {}}
+                  label="Disabled checkbox"
+                  disabled
+                />
+                
+                <Checkbox
+                  checked={false}
+                  onChange={() => {}}
+                  label="Checkbox with error"
+                  error="This field is required"
+                />
+              </div>
+            </div>
           </div>
         </Card>
 

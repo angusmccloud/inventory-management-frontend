@@ -11,6 +11,7 @@
 
 import { useEffect } from 'react';
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -56,16 +57,16 @@ export default function Error({ error, reset }: ErrorPageProps) {
           </h1>
 
           {/* Error Message */}
-          <p className="text-lg text-text-default mb-6">
+          <Text variant="h5" color="primary" className="mb-6">
             Unable to process this NFC tag
-          </p>
+          </Text>
 
           {/* Error Details (in development) */}
           {process.env.NODE_ENV === 'development' && (
             <div className="mb-6 p-4 bg-surface-elevated rounded-lg text-left">
-              <p className="text-xs font-mono text-text-default break-all">
+              <Text variant="caption" color="primary" className="font-mono break-all">
                 {error.message}
-              </p>
+              </Text>
             </div>
           )}
 
@@ -82,16 +83,16 @@ export default function Error({ error, reset }: ErrorPageProps) {
             </Button>
 
             {/* Help Text */}
-            <p className="text-sm text-text-default">
+            <Text variant="bodySmall" color="primary">
               If this problem persists, the NFC tag may be inactive or invalid.
-            </p>
+            </Text>
           </div>
 
           {/* Support Information */}
           <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-xs text-text-default">
+            <Text variant="caption" color="primary">
               Need help? Contact your family administrator to verify the NFC tag configuration.
-            </p>
+            </Text>
           </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ import { listInventoryItems } from '@/lib/api/inventory';
 import { nfcUrlsApi } from '@/lib/api/nfcUrls';
 import { LoadingSpinner } from '@/components/common';
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 interface NFCStats {
   totalUrls: number;
@@ -38,8 +39,8 @@ export default function NFCStatsWidget() {
   const loadStats = async () => {
     try {
       const userContext = getUserContext();
-      if (!userContext) {
-        setError('User context not found');
+      if (!userContext || !userContext.familyId) {
+        setError('Family context not available');
         setIsLoading(false);
         return;
       }
@@ -111,7 +112,7 @@ export default function NFCStatsWidget() {
         <h3 className="text-lg font-medium text-text-default mb-4">
           NFC URL Statistics
         </h3>
-        <p className="text-sm text-error">{error}</p>
+        <Text variant="bodySmall" color="error">{error}</Text>
       </div>
     );
   }

@@ -14,6 +14,7 @@ import { Family } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
 import { PageLoading, PageContainer, PageHeader } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -97,9 +98,9 @@ export default function DashboardPage() {
               <h2 className="text-lg font-medium text-text-default">
                 Welcome! Let's create your family
               </h2>
-              <p className="mt-2 text-sm text-text-default">
+              <Text variant="bodySmall" color="primary" className="mt-2">
                 To get started, create a family account. You'll be the administrator and can invite other family members later.
-              </p>
+              </Text>
               <div className="mt-5">
                 <CreateFamilyForm onSuccess={handleFamilyCreated} />
               </div>
@@ -120,7 +121,7 @@ export default function DashboardPage() {
 
         {error && (
           <div className="rounded-md bg-error/10 p-4">
-            <p className="text-sm text-error">{error}</p>
+            <Text variant="bodySmall" color="error">{error}</Text>
           </div>
         )}
 
@@ -132,9 +133,9 @@ export default function DashboardPage() {
         >
           <div className="text-center">
             <h3 className="text-lg font-medium text-text-default">View Inventory</h3>
-            <p className="mt-2 text-sm text-text-default">
+            <Text variant="bodySmall" color="primary" className="mt-2">
               See all your family's items
-            </p>
+            </Text>
           </div>
         </button>
 
@@ -144,9 +145,9 @@ export default function DashboardPage() {
         >
           <div className="text-center">
             <h3 className="text-lg font-medium text-text-default">Add Item</h3>
-            <p className="mt-2 text-sm text-text-default">
+            <Text variant="bodySmall" color="primary" className="mt-2">
               Add a new inventory item
-            </p>
+            </Text>
           </div>
         </button>
 
@@ -156,9 +157,9 @@ export default function DashboardPage() {
         >
           <div className="text-center">
             <h3 className="text-lg font-medium text-text-default">Shopping List</h3>
-            <p className="mt-2 text-sm text-text-default">
+            <Text variant="bodySmall" color="primary" className="mt-2">
               Manage your shopping list
-            </p>
+            </Text>
           </div>
         </button>
       </div>
@@ -185,7 +186,7 @@ export default function DashboardPage() {
       </div>
 
         {/* NFC URL Statistics (Admin Only) */}
-        {getUserContext()?.role === 'admin' && <NFCStatsWidget />}
+        {family && getUserContext()?.role === 'admin' && <NFCStatsWidget />}
       </div>
     </PageContainer>
   );

@@ -5,6 +5,7 @@ import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { QuantityControls } from '@/components/common';
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 interface SuccessDisplayProps {
   itemName: string;
@@ -86,34 +87,34 @@ export default function SuccessDisplay({
       <div className="bg-surface-elevated rounded-lg p-6 mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="text-center">
-            <p className="text-sm text-text-default uppercase tracking-wide mb-1">
+            <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-1">
               Previous
-            </p>
-            <p className="text-3xl font-bold text-text-default">
+            </Text>
+            <Text variant="h1" weight="bold">
               {previousQuantity}
-            </p>
+            </Text>
           </div>
           <div className="text-2xl text-text-default">
             →
           </div>
           <div className="text-center">
-            <p className="text-sm text-text-default uppercase tracking-wide mb-1">
+            <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-1">
               Current
-            </p>
-            <p className="text-3xl font-bold text-secondary-contrast">
+            </Text>
+            <Text variant="h1" weight="bold" className="text-secondary-contrast">
               {localQuantity}
-            </p>
+            </Text>
           </div>
         </div>
-        <p className="text-sm text-center text-text-default">
+        <Text variant="bodySmall" color="primary" className="text-center">
           {changeMessage}
-        </p>
+        </Text>
       </div>
 
       {/* Error Message */}
       {error && (
         <div className="mb-6 p-4 bg-error/10/20 rounded-lg">
-          <p className="text-sm text-error">{error.message}</p>
+          <Text variant="bodySmall" color="error">{error.message}</Text>
           <div className="flex gap-2 mt-2">
             <Button
               variant="danger"
@@ -134,14 +135,14 @@ export default function SuccessDisplay({
       )}
 
       {/* Additional Info */}
-      <p className="text-sm text-text-default mb-6">
+      <Text variant="bodySmall" color="primary" className="mb-6">
         Make additional adjustments:
         {pendingDelta !== 0 && (
           <span className="ml-2 text-xs text-primary">
             (Pending: {pendingDelta > 0 ? `+${pendingDelta}` : pendingDelta})
           </span>
         )}
-      </p>
+      </Text>
 
       {/* Adjustment Controls with Debouncing */}
       <div className="flex justify-center mb-6">
@@ -160,16 +161,16 @@ export default function SuccessDisplay({
       {/* Offline Warning */}
       {!isOnline && (
         <div className="mb-6 p-4 bg-warning/10 rounded-lg">
-          <p className="text-sm text-warning">
+          <Text variant="bodySmall" color="warning">
             You are currently offline. Changes will be saved when connection is restored.
-          </p>
+          </Text>
         </div>
       )}
 
       {/* Footer Message */}
-      <p className="text-xs text-text-default">
+      <Text variant="caption" color="primary">
         Changes are saved automatically. You can close this page anytime.
-      </p>
+      </Text>
     </div>
   );
 }

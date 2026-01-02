@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import { nfcUrlsApi } from '@/lib/api/nfcUrls';
 import type { NFCUrl } from '@/types/entities';
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 interface NFCUrlManagerProps {
   itemId: string;
@@ -186,9 +187,9 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
             <h3 className="text-lg font-semibold text-text-default">
               NFC URLs
             </h3>
-            <p className="text-sm text-text-secondary mt-1">
+            <Text variant="bodySmall" color="secondary" className="mt-1">
               Manage scannable URLs for {itemName}
-            </p>
+            </Text>
           </div>
           <Button
             variant="primary"
@@ -211,7 +212,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
             </svg>
             <div>
               <h4 className="text-sm font-medium text-error">Error</h4>
-              <p className="text-sm text-error mt-1">{state.error}</p>
+              <Text variant="bodySmall" color="error" className="mt-1">{state.error}</Text>
             </div>
           </div>
         </div>
@@ -225,9 +226,9 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <h3 className="mt-2 text-sm font-medium text-text-default">No NFC URLs</h3>
-            <p className="mt-1 text-sm text-text-secondary">
+            <Text variant="bodySmall" color="secondary" className="mt-1">
               Generate your first NFC URL to enable tap-to-adjust functionality
-            </p>
+            </Text>
           </div>
         ) : (
           <div className="space-y-4">
@@ -269,9 +270,9 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
                     {/* Metadata */}
                     <div className="text-xs text-text-secondary space-y-1">
-                      <p>Created: {formatDate(url.createdAt)}</p>
+                      <Text variant="caption" color="secondary">Created: {formatDate(url.createdAt)}</Text>
                       {url.lastAccessedAt && (
-                        <p>Last accessed: {formatDate(url.lastAccessedAt)}</p>
+                        <Text variant="caption" color="secondary">Last accessed: {formatDate(url.lastAccessedAt)}</Text>
                       )}
                     </div>
                   </div>
@@ -339,9 +340,9 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
             <h3 id="rotate-dialog-title" className="text-lg font-semibold text-text-default mb-2">
               Rotate NFC URL?
             </h3>
-            <p className="text-sm text-text-secondary mb-4">
+            <Text variant="bodySmall" color="secondary" className="mb-4">
               This will deactivate the current URL and generate a new one. The old URL will stop working immediately. You'll need to update any physical NFC tags with the new URL.
-            </p>
+            </Text>
             <div className="flex gap-3 justify-end">
               <Button
                 variant="secondary"

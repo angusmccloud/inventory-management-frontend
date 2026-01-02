@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Text } from '@/components/common';
 
 export default function NotFound() {
   return (
@@ -21,13 +22,13 @@ export default function NotFound() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Dashboard Not Found
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <Text variant="body" color="secondary" className="mb-6">
             The dashboard you're looking for doesn't exist or has been deactivated.
-          </p>
+          </Text>
           <div className="space-y-3">
-            <p className="text-sm text-gray-500 dark:text-gray-500">
+            <Text variant="bodySmall" color="secondary">
               Possible reasons:
-            </p>
+            </Text>
             <ul className="text-sm text-gray-600 dark:text-gray-400 text-left space-y-1">
               <li>• The dashboard link is incorrect or expired</li>
               <li>• The dashboard has been deactivated by the owner</li>

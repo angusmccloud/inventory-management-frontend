@@ -2,11 +2,11 @@
 
 import { useState, FormEvent } from 'react';
 import type { Store } from '../../types/entities';
-import { Input, Button } from '@/components/common';
+import { Input, Button, Text } from '@/components/common';
 
 interface StoreFormProps {
   familyId: string;
-  onSubmit: (data: { name: string; address?: string }) => Promise<void>;
+  onSubmit: (data: { name: string; address?: string }, keepModalOpen?: boolean) => Promise<void>;
   onCancel: () => void;
   initialData?: Store;
 }
@@ -28,7 +28,7 @@ export default function StoreForm({
 
   const canSubmit = isNameValid && !isSubmitting;
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent, keepModalOpen: boolean = false) {
     e.preventDefault();
     if (!canSubmit) return;
 
@@ -39,25 +39,46 @@ export default function StoreForm({
       await onSubmit({
         name: name.trim(),
         address: address.trim() || undefined,
-      });
+      }, keepModalOpen);
+      
+      // Reset form if keeping modal open
+      if (keepModalOpen) {
+        setName('');
+        setAddress('');
+        // Focus back on name input for quick entry
+        setTimeout(() => {
+          document.getElementById('name')?.focus();
+        }, 0);
+      }
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save store');
+    } finally {
       setIsSubmitting(false);
     }
   }
 
+  // Handle Enter key in name field for quick add (only when adding, not editing)
+  const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isSubmitting && !initialData) {
+      e.preventDefault();
+      handleSubmit(e as any, true);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
       <Input
         id="name"
         label="Store Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        onKeyDown={handleNameKeyDown}
         maxLength={100}
         placeholder="e.g., Walmart, Target, Costco"
         required
-        helpText={`${name.length}/100 characters`}
+        helpText={!initialData ? `${name.length}/100 characters - Press Enter to quickly add multiple stores` : `${name.length}/100 characters`}
         autoFocus
+        disabled={isSubmitting}
       />
 
       <div>
@@ -83,7 +104,7 @@ export default function StoreForm({
               </svg>
             </div>
             <div className="ml-3">
-              <p className="text-sm text-error">{submitError}</p>
+              <Text variant="bodySmall" color="error">{submitError}</Text>
             </div>
           </div>
         </div>

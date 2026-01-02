@@ -8,6 +8,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/cn';
 import type { InputProps, InputSize, InputValidationState } from './Input.types';
+import { Text } from '@/components/common/Text/Text';
 
 /**
  * Size-specific styles mapping
@@ -145,17 +146,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         
         {/* Feedback message (help text, error, or success) */}
         {feedbackMessage && (
-          <p
+          <Text
+            as="p"
+            variant="bodySmall"
+            color={error ? 'error' : success ? 'success' : 'secondary'}
             id={feedbackId}
-            className={cn(
-              'mt-1.5 text-sm',
-              error && 'text-error',
-              success && 'text-success',
-              !error && !success && 'text-text-secondary'
-            )}
+            className="mt-1.5"
           >
             {feedbackMessage}
-          </p>
+          </Text>
         )}
       </div>
     );

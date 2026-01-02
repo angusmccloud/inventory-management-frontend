@@ -1,7 +1,7 @@
 'use client';
 
 import type { StorageLocation } from '../../types/entities';
-import { Button } from '@/components/common';
+import { Button, Text } from '@/components/common';
 
 interface StorageLocationItemProps {
   location: StorageLocation;
@@ -32,9 +32,9 @@ export default function StorageLocationItem({
                 {location.name}
               </h3>
               {location.description && (
-                <p className="text-sm text-text-default mt-1">
+                <Text variant="bodySmall" className="mt-1">
                   {location.description}
-                </p>
+                </Text>
               )}
             </div>
           </div>

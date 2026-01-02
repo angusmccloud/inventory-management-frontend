@@ -19,7 +19,8 @@ import { getUserContext } from '@/lib/auth';
 import { getInventoryItem, deleteInventoryItem } from '@/lib/api/inventory';
 import { InventoryItem } from '@/types/entities';
 import NFCUrlManager from '@/components/inventory/NFCUrlManager';
-import { PageHeader, Button, Alert, PageLoading, PageContainer } from '@/components/common';
+import { PageHeader, Button, Alert, PageLoading, PageContainer, Text } from '@/components/common';
+import Dialog from '@/components/common/Dialog';
 
 interface ItemDetailPageProps {
   params: Promise<{
@@ -34,6 +35,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Resolve params
   useEffect(() => {
@@ -74,6 +76,22 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
 
   const handleBack = () => {
     router.push('/inventory');
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const userContext = getUserContext();
+      if (!userContext) {
+        setError('User context not found');
+        return;
+      }
+      await deleteInventoryItem(userContext.familyId, item!.itemId);
+      router.push('/inventory');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete item');
+    } finally {
+      setShowDeleteDialog(false);
+    }
   };
 
   if (isLoading) {
@@ -132,33 +150,33 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-text-default">Current Quantity</p>
-                <p className="text-2xl font-bold text-text-secondary dark:text-white">{item.quantity}</p>
+                <Text variant="bodySmall">Current Quantity</Text>
+                <Text variant="h2" weight="bold">{item.quantity}</Text>
               </div>
               <div>
-                <p className="text-sm text-text-default">Unit</p>
-                <p className="text-lg text-text-secondary dark:text-white">{item.unit || 'N/A'}</p>
+                <Text variant="bodySmall">Unit</Text>
+                <Text variant="h4">{item.unit || 'N/A'}</Text>
               </div>
               <div>
-                <p className="text-sm text-text-default">Location</p>
-                <p className="text-lg text-text-secondary dark:text-white">{item.locationName || 'Not set'}</p>
+                <Text variant="bodySmall">Location</Text>
+                <Text variant="h4">{item.locationName || 'Not set'}</Text>
               </div>
               {item.preferredStoreName && (
                 <div>
-                  <p className="text-sm text-text-default">Preferred Store</p>
-                  <p className="text-lg text-text-secondary dark:text-white">{item.preferredStoreName}</p>
+                  <Text variant="bodySmall">Preferred Store</Text>
+                  <Text variant="h4">{item.preferredStoreName}</Text>
                 </div>
               )}
               {item.lowStockThreshold > 0 && (
                 <div>
-                  <p className="text-sm text-text-default">Low Stock Alert</p>
-                  <p className="text-lg text-text-secondary dark:text-white">
+                  <Text variant="bodySmall">Low Stock Alert</Text>
+                  <Text variant="h4">
                     Below {item.lowStockThreshold} {item.unit}
-                  </p>
+                  </Text>
                 </div>
               )}
               <div>
-                <p className="text-sm text-text-default">Status</p>
+                <Text variant="bodySmall">Status</Text>
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     item.quantity <= item.lowStockThreshold
@@ -184,20 +202,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                 <Button
                   variant="danger"
                   size="md"
-                  onClick={() => {
-                    if (confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
-                      const userContext = getUserContext();
-                      if (!userContext) {
-                        setError('User context not found');
-                        return;
-                      }
-                      deleteInventoryItem(userContext.familyId, item.itemId).then(() => {
-                        router.push('/inventory');
-                      }).catch((err) => {
-                        setError(err instanceof Error ? err.message : 'Failed to delete item');
-                      });
-                    }
-                  }}
+                  onClick={() => setShowDeleteDialog(true)}
                 >
                   Delete Item
                 </Button>
@@ -219,9 +224,9 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                 </svg>
                 <div>
                   <h4 className="text-sm font-medium text-primary">Admin Access Required</h4>
-                  <p className="text-sm text-primary mt-1">
+                  <Text variant="bodySmall" color="primary" className="mt-1">
                     NFC URL management is only available to family administrators. Contact your admin to generate NFC URLs for this item.
-                  </p>
+                  </Text>
                 </div>
               </div>
             </div>
@@ -297,6 +302,20 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteDialog && (
+        <Dialog
+          isOpen={true}
+          type="error"
+          title="Delete Item"
+          message={`Permanently delete ${item.name}? This cannot be undone.`}
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setShowDeleteDialog(false)}
+        />
+      )}
     </PageContainer>
   );
 }

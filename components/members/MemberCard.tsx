@@ -6,7 +6,7 @@
 'use client';
 
 import { Member } from '@/types/entities';
-import { Badge, Button } from '@/components/common';
+import { Badge, Button, Text } from '@/components/common';
 import type { BadgeVariant } from '@/components/common';
 
 interface MemberCardProps {
@@ -47,7 +47,7 @@ export function MemberCard({
             </h3>
           </div>
 
-          <p className="text-sm text-text-secondary mb-3">{member.email}</p>
+          <Text variant="bodySmall" color="secondary" className="mb-3">{member.email}</Text>
 
           <div className="flex items-center gap-2">
             <Badge variant={roleVariants[member.role]} size="sm">
@@ -59,9 +59,9 @@ export function MemberCard({
             </Badge>
           </div>
 
-          <p className="text-xs text-text-secondary mt-2">
+          <Text variant="caption" color="secondary" className="mt-2">
             Joined {new Date(member.createdAt).toLocaleDateString()}
-          </p>
+          </Text>
         </div>
 
         {canManage && member.status === 'active' && (

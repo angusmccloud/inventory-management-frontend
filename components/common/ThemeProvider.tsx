@@ -42,10 +42,9 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
       if (isAuthenticated()) {
         try {
           const userContext = getUserContext();
-          const token = getAuthToken();
-          if (userContext?.memberId && token) {
+          if (userContext?.memberId) {
             // Fetch from backend
-            const serverTheme = await getThemePreference(userContext.memberId, token);
+            const serverTheme = await getThemePreference(userContext.memberId);
             console.log('[ThemeProvider] Loaded theme from server:', serverTheme);
             
             // Only update if different from current (localStorage cache)
@@ -130,9 +129,8 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
     if (synced && isAuthenticated()) {
       try {
         const userContext = getUserContext();
-        const token = getAuthToken();
-        if (userContext?.memberId && token) {
-          await updateThemePreference(userContext.memberId, token, newMode);
+        if (userContext?.memberId) {
+          await updateThemePreference(userContext.memberId, newMode);
         }
       } catch (error) {
         console.error('Failed to sync theme preference to server:', error);

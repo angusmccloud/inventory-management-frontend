@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated } from '@/lib/auth';
 import { Button } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 export default function Home() {
   const router = useRouter();
@@ -29,9 +30,9 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-text-default">
             Inventory HQ
           </h1>
-          <p className="text-xl text-text-default max-w-2xl mx-auto">
+          <Text variant="h4" color="primary" className="max-w-2xl mx-auto">
             Keep track of household items, manage shopping lists, and coordinate with your family - all in one place.
-          </p>
+          </Text>
         </div>
         
         {/* Features Grid */}
@@ -110,7 +111,7 @@ function FeatureCard({
     <div className="bg-surface rounded-lg shadow-md p-6 text-center space-y-3">
       <div className="text-4xl">{icon}</div>
       <h3 className="text-xl font-semibold text-text-default">{title}</h3>
-      <p className="text-text-default">{description}</p>
+      <Text variant="body" color="primary">{description}</Text>
     </div>
   );
 }
@@ -144,7 +145,7 @@ function BenefitItem({
       </div>
       <div>
         <h4 className="font-semibold text-text-default">{title}</h4>
-        <p className="text-text-default text-sm">{description}</p>
+        <Text variant="bodySmall" color="primary">{description}</Text>
       </div>
     </div>
   );

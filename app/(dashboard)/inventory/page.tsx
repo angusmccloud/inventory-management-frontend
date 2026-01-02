@@ -25,6 +25,7 @@ import Dialog from '@/components/common/Dialog';
 import DashboardManager from '@/components/dashboard/DashboardManager';
 import { Text, Button, Alert, PageHeader, PageLoading, PageContainer, TabNavigation } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 type ModalState =
   | { type: 'none' }
@@ -38,6 +39,7 @@ type DialogState =
 export default function InventoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -170,15 +172,29 @@ export default function InventoryPage() {
         quantity: 1,
         notes: null,
       });
-      // Show success message
+      
+      // Show success snackbar
+      showSnackbar({
+        variant: 'success',
+        text: `${item.name} added to shopping list`,
+      });
       setError('');
-      // Could show a success toast here instead
     } catch (err) {
-      // If it's a duplicate (409 conflict), treat it as success
+      // If it's a duplicate (409 conflict), show warning
       if (isApiClientError(err) && err.statusCode === 409) {
-        setError(''); // Clear any existing errors - item is already in list
+        showSnackbar({
+          variant: 'warning',
+          text: `${item.name} is already in shopping list`,
+        });
+        setError('');
         return;
       }
+      
+      // Show error snackbar for other errors
+      showSnackbar({
+        variant: 'error',
+        text: err instanceof Error ? err.message : 'Failed to add item to shopping list',
+      });
       setError(err instanceof Error ? err.message : 'Failed to add item to shopping list');
     }
   };
@@ -213,7 +229,10 @@ export default function InventoryPage() {
           action={isAdmin && activeTab === 'inventory' ? (
             <Button
               variant="primary"
-              onClick={() => setModalState({ type: 'add' })}
+              onClick={() => {
+                console.log('Add Item button clicked');
+                setModalState({ type: 'add' });
+              }}
             >
               Add Item
           </Button>
@@ -260,7 +279,10 @@ export default function InventoryPage() {
             {/* Background overlay */}
             <div
               className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
-              onClick={() => setModalState({ type: 'none' })}
+              onClick={() => {
+                console.log('Modal overlay clicked');
+                setModalState({ type: 'none' });
+              }}
             />
 
             {/* Modal panel */}
@@ -297,7 +319,7 @@ export default function InventoryPage() {
       {dialogState.type === 'confirm' && (
         <Dialog
           isOpen={true}
-          type="confirm"
+          type="error"
           title={dialogState.action === 'archive' ? 'Archive Item' : 'Delete Item'}
           message={
             dialogState.action === 'archive'

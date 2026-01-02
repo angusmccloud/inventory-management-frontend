@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { dashboardId } = params;
+  const { dashboardId } = await params;
 
   // Basic validation of dashboard ID format
   if (!dashboardId || dashboardId.length < 20) {

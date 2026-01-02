@@ -40,6 +40,9 @@ export type { RadioProps, RadioOption } from './Radio/Radio.types';
 export { Checkbox } from './Checkbox/Checkbox';
 export type { CheckboxProps } from './Checkbox/Checkbox.types';
 
+export { ToggleButton } from './ToggleButton/ToggleButton';
+export type { ToggleButtonProps, ToggleButtonVariant, ToggleButtonSize } from './ToggleButton/ToggleButton.types';
+
 // Feedback
 export { Alert } from './Alert/Alert';
 export type { AlertProps, AlertSeverity } from './Alert/Alert.types';

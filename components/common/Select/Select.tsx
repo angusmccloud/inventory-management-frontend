@@ -9,6 +9,7 @@ import * as React from 'react';
 import { cn } from '@/lib/cn';
 import type { SelectProps } from './Select.types';
 import type { InputValidationState } from '../Input/Input.types';
+import { Text } from '@/components/common/Text/Text';
 
 /**
  * Select component for dropdown selections
@@ -159,17 +160,15 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         
         {/* Feedback message (help text, error, or success) */}
         {feedbackMessage && (
-          <p
+          <Text
+            as="p"
+            variant="caption"
+            color={error ? 'error' : success ? 'primary' : 'secondary'}
             id={feedbackId}
-            className={cn(
-              'mt-1 text-xs',
-              error && 'text-error',
-              success && 'text-primary',
-              !error && !success && 'text-text-secondary'
-            )}
+            className="mt-1"
           >
             {feedbackMessage}
-          </p>
+          </Text>
         )}
       </div>
     );

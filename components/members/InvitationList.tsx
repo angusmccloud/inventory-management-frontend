@@ -6,7 +6,7 @@
 'use client';
 
 import { Invitation } from '@/types/entities';
-import { Badge, Button } from '@/components/common';
+import { Badge, Button, Text } from '@/components/common';
 import type { BadgeVariant } from '@/components/common';
 
 interface InvitationListProps {
@@ -32,9 +32,9 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
           />
         </svg>
         <h3 className="mt-2 text-sm font-medium text-text-default">No pending invitations</h3>
-        <p className="mt-1 text-sm text-text-secondary">
+        <Text variant="bodySmall" color="secondary" className="mt-1">
           Invite new members to start collaborating
-        </p>
+        </Text>
       </div>
     );
   }
@@ -92,10 +92,10 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                   )}
                 </div>
 
-                <p className="text-xs text-text-secondary">
+                <Text variant="caption" color="secondary">
                   Invited by {invitation.invitedByName || 'Unknown'} on{' '}
                   {new Date(invitation.createdAt).toLocaleDateString()}
-                </p>
+                </Text>
               </div>
 
               {invitation.status === 'pending' && !isExpired && onRevoke && (

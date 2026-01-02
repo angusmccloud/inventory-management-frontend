@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import ThemeProvider from '@/components/common/ThemeProvider';
+import { SnackbarProvider } from '@/contexts/SnackbarContext';
 
 export const metadata: Metadata = {
   title: 'Inventory HQ',
@@ -39,7 +40,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen antialiased bg-background text-text-default">
         <ThemeProvider>
-          {children}
+          <SnackbarProvider>
+            {children}
+          </SnackbarProvider>
         </ThemeProvider>
       </body>
     </html>

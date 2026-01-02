@@ -92,12 +92,16 @@ export default function SettingsPage() {
   }, [userContext?.familyId, loadData]);
 
   // Storage Location handlers
-  const handleCreateLocation = async (data: { name: string; description?: string }) => {
+  const handleCreateLocation = async (data: { name: string; description?: string }, keepModalOpen: boolean = false) => {
     if (!userContext?.familyId) return;
     
     const newLocation = await createStorageLocation(userContext.familyId, data);
     setLocations((prev) => [...prev, newLocation]);
-    setDialogState({ type: 'none' });
+    
+    // Only close modal if not quick-adding
+    if (!keepModalOpen) {
+      setDialogState({ type: 'none' });
+    }
   };
 
   const handleUpdateLocation = async (data: { name: string; description?: string }) => {
@@ -122,12 +126,16 @@ export default function SettingsPage() {
   };
 
   // Store handlers
-  const handleCreateStore = async (data: { name: string; address?: string }) => {
+  const handleCreateStore = async (data: { name: string; address?: string }, keepModalOpen: boolean = false) => {
     if (!userContext?.familyId) return;
     
     const newStore = await createStore(userContext.familyId, data);
     setStores((prev) => [...prev, newStore]);
-    setDialogState({ type: 'none' });
+    
+    // Only close modal if not quick-adding
+    if (!keepModalOpen) {
+      setDialogState({ type: 'none' });
+    }
   };
 
   const handleUpdateStore = async (data: { name: string; address?: string }) => {
@@ -178,7 +186,7 @@ export default function SettingsPage() {
       {/* Error Message */}
       {error && (
         <div className="mb-6 rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 
@@ -204,9 +212,9 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium text-text-default mb-2">
                   Theme
                 </label>
-                <p className="text-sm text-text-secondary mb-3">
+                <Text variant="bodySmall" color="secondary" className="mb-3">
                   Choose how the interface looks. Auto mode follows your system preference.
-                </p>
+                </Text>
                 <ThemeToggle />
               </div>
             </div>

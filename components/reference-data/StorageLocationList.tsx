@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { StorageLocation } from '../../types/entities';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-import { Button } from '@/components/common';
+import { Button, Text } from '@/components/common';
 
 interface StorageLocationListProps {
   locations: StorageLocation[];
@@ -48,7 +48,7 @@ export default function StorageLocationList({
     <>
       <div className="bg-surface shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {locations.map((location) => (
+          {[...locations].sort((a, b) => a.name.localeCompare(b.name)).map((location) => (
             <li key={location.locationId}>
               <div className="px-4 py-4 flex items-center sm:px-6 hover:bg-surface-elevated dark:hover:bg-surface-elevated">
                 <div className="min-w-0 flex-1">
@@ -65,9 +65,9 @@ export default function StorageLocationList({
                           {location.name}
                         </h3>
                         {location.description && (
-                          <p className="text-sm text-text-default mt-1">
+                          <Text variant="bodySmall" className="mt-1">
                             {location.description}
-                          </p>
+                          </Text>
                         )}
                       </div>
                     </div>

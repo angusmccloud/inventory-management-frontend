@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingListItem, UpdateShoppingListItemRequest } from '@/lib/api/shoppingList';
 import { listStores } from '@/lib/api/reference-data';
 import type { Store } from '@/types/entities';
-import { Input, Select, Button } from '@/components/common';
+import { Input, Select, Button, Text } from '@/components/common';
 
 interface EditShoppingListItemFormProps {
   familyId: string;
@@ -124,12 +124,12 @@ export default function EditShoppingListItemForm({
           ))}
         </Select>
         {!loadingStores && stores.length === 0 && (
-          <p className="mt-1 text-xs text-text-secondary">
+          <Text variant="caption" color="secondary" className="mt-1">
             No stores available. Add them in{' '}
             <a href="/settings" className="text-primary hover:text-primary-hover">
               Settings
             </a>
-          </p>
+          </Text>
         )}
 
         {/* Notes */}
@@ -152,7 +152,7 @@ export default function EditShoppingListItemForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 

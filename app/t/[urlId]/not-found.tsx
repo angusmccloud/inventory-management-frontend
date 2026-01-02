@@ -8,6 +8,7 @@
  */
 
 import type { Metadata } from 'next';
+import { Text } from '@/components/common/Text/Text';
 
 export const metadata: Metadata = {
   title: 'NFC Tag Not Found',
@@ -48,15 +49,15 @@ export default function NotFound() {
           </h1>
 
           {/* Message */}
-          <p className="text-lg text-text-default mb-6">
+          <Text variant="h5" color="primary" className="mb-6">
             This NFC tag is invalid or has been deactivated
-          </p>
+          </Text>
 
           {/* Explanation */}
           <div className="bg-surface-elevated rounded-lg p-6 mb-6 text-left">
-            <p className="text-sm text-text-default mb-3">
+            <Text variant="bodySmall" color="primary" className="mb-3">
               <strong className="text-text-secondary dark:text-white">Possible reasons:</strong>
-            </p>
+            </Text>
             <ul className="space-y-2 text-sm text-text-default">
               <li className="flex items-start">
                 <svg
@@ -96,16 +97,16 @@ export default function NotFound() {
 
           {/* Action Instructions */}
           <div className="space-y-3">
-            <p className="text-sm text-text-default">
+            <Text variant="bodySmall" color="primary">
               Contact your family administrator to generate a new NFC tag for this item.
-            </p>
+            </Text>
           </div>
 
           {/* Support Information */}
           <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-xs text-text-default">
+            <Text variant="caption" color="primary">
               NFC tags can be managed from the inventory item details page.
-            </p>
+            </Text>
           </div>
         </div>
       </div>

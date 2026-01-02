@@ -148,8 +148,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               orientation === 'horizontal' ? '-mb-px' : '',
               isActive
                 ? orientation === 'horizontal'
-                  ? 'border-b-2 border-primary text-primary'
-                  : 'border-r-2 border-primary text-primary bg-primary/10'
+                  ? 'border-b-2 border-primary text-text-default'
+                  : 'border-r-2 border-primary text-text-default bg-primary/10'
                 : 'border-b-2 border-transparent text-text-secondary hover:text-text-default hover:border-border',
               tab.disabled && 'opacity-50 cursor-not-allowed'
             )}

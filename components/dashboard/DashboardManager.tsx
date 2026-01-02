@@ -7,6 +7,7 @@ import { Input } from '@/components/common/Input/Input';
 import { Alert } from '@/components/common/Alert/Alert';
 import { Radio } from '@/components/common/Radio/Radio';
 import { Checkbox } from '@/components/common/Checkbox/Checkbox';
+import { Text } from '@/components/common/Text/Text';
 import { 
   listDashboards, 
   createDashboard, 
@@ -148,7 +149,7 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
       const result = await createDashboard(input);
 
       // Generate shareable URL
-      const shareableUrl = `${window.location.origin}/d/${result.dashboard.dashboardId}`;
+      const shareableUrl = `${window.location.origin}/d/${result.dashboardId}`;
       setNewDashboardUrl(shareableUrl);
       setSuccessMessage('Dashboard created successfully!');
 
@@ -209,7 +210,7 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
       setLoading(true);
       setError(null);
       const result = await rotateDashboard(dashboardId);
-      const newUrl = `${window.location.origin}/d/${result.newDashboard.dashboardId}`;
+      const newUrl = `${window.location.origin}/d/${result.newDashboardId}`;
       setSuccessMessage(`URL rotated successfully! New URL: ${newUrl}`);
       await loadDashboards();
     } catch (err) {
@@ -239,9 +240,9 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
           <h3 className="text-lg font-semibold text-text-primary mb-2">
             Dashboard Created Successfully!
           </h3>
-          <p className="text-text-secondary mb-4">
+          <Text variant="body" color="secondary" className="mb-4">
             Share this URL to give others access to the dashboard:
-          </p>
+          </Text>
           <div className="flex gap-2">
             <Input
               value={newDashboardUrl}
@@ -304,7 +305,7 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
                 </label>
                 <div className="space-y-2 max-h-60 overflow-y-auto border border-border rounded-md p-3 bg-surface">
                   {locations.length === 0 ? (
-                    <p className="text-sm text-text-tertiary">No locations available</p>
+                    <Text variant="bodySmall" color="tertiary">No locations available</Text>
                   ) : (
                     locations.map((location) => (
                       <Checkbox
@@ -331,9 +332,9 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
                     ))
                   )}
                 </div>
-                <p className="text-xs text-text-tertiary mt-1">
+                <Text variant="caption" color="tertiary" className="mt-1">
                   {formData.locationIds.length} of 10 locations selected
-                </p>
+                </Text>
               </div>
             )}
 
@@ -353,7 +354,7 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
 
                 <div className="space-y-2 max-h-96 overflow-y-auto border border-border rounded-md p-3 bg-surface">
                   {inventoryItems.length === 0 ? (
-                    <p className="text-sm text-text-tertiary">No items available</p>
+                    <Text variant="bodySmall" color="tertiary">No items available</Text>
                   ) : (
                     inventoryItems
                       .filter((item) =>
@@ -387,9 +388,9 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
                       ))
                   )}
                 </div>
-                <p className="text-xs text-text-tertiary mt-1">
+                <Text variant="caption" color="tertiary" className="mt-1">
                   {formData.itemIds.length} of 100 items selected
-                </p>
+                </Text>
               </div>
             )}
 
@@ -433,14 +434,14 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
       {loading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-text-secondary">Loading dashboards...</p>
+          <Text variant="body" color="secondary" className="mt-2">Loading dashboards...</Text>
         </div>
       ) : dashboards.length === 0 ? (
         <Card elevation="low" padding="lg">
           <div className="text-center py-8">
-            <p className="text-text-secondary mb-4">
+            <Text variant="body" color="secondary" className="mb-4">
               You haven't created any dashboards yet.
-            </p>
+            </Text>
             <Button variant="primary" onClick={() => setView('create')}>
               Create Your First Dashboard
             </Button>
@@ -454,9 +455,9 @@ export default function DashboardManager({ familyId }: DashboardManagerProps) {
                 {dashboard.title}
               </h3>
               <div className="text-xs text-text-tertiary mb-3">
-                <p>Type: {dashboard.type === 'location' ? 'Location-based' : 'Item-based'}</p>
-                <p>Created: {new Date(dashboard.createdAt).toLocaleDateString()}</p>
-                <p>Accessed: {dashboard.accessCount} times</p>
+                <Text variant="caption" color="tertiary">Type: {dashboard.type === 'location' ? 'Location-based' : 'Item-based'}</Text>
+                <Text variant="caption" color="tertiary">Created: {new Date(dashboard.createdAt).toLocaleDateString()}</Text>
+                <Text variant="caption" color="tertiary">Accessed: {dashboard.accessCount} times</Text>
               </div>
               <div className="flex flex-col gap-2">
                 <Button

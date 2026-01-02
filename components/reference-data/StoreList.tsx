@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { Store } from '../../types/entities';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-import { Button } from '@/components/common';
+import { Button, Text } from '@/components/common';
 
 interface StoreListProps {
   stores: Store[];
@@ -48,7 +48,7 @@ export default function StoreList({
     <>
       <div className="bg-surface shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {stores.map((store) => (
+          {[...stores].sort((a, b) => a.name.localeCompare(b.name)).map((store) => (
             <li key={store.storeId}>
               <div className="px-4 py-4 flex items-center sm:px-6 hover:bg-surface-elevated dark:hover:bg-surface-elevated">
                 <div className="min-w-0 flex-1">
@@ -64,9 +64,9 @@ export default function StoreList({
                           {store.name}
                         </h3>
                         {store.address && (
-                          <p className="text-sm text-text-default mt-1">
+                          <Text variant="bodySmall" className="mt-1">
                             {store.address}
-                          </p>
+                          </Text>
                         )}
                       </div>
                     </div>

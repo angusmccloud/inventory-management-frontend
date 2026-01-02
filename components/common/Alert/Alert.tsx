@@ -18,6 +18,7 @@ import {
 import { AlertProps, AlertSeverity } from './Alert.types';
 import { cn } from '@/lib/cn';
 import { IconButton } from '@/components/common/IconButton/IconButton';
+import { Text } from '@/components/common/Text/Text';
 
 /**
  * Get severity-specific styles and icon
@@ -30,6 +31,7 @@ const getSeverityConfig = (severity: AlertSeverity) => {
       title: 'text-text-default',
       text: 'text-text-secondary',
       iconComponent: InformationCircleIcon,
+      buttonVariant: 'secondary' as const,
       role: 'status' as const,
     },
     success: {
@@ -38,6 +40,7 @@ const getSeverityConfig = (severity: AlertSeverity) => {
       title: 'text-text-default',
       text: 'text-text-secondary',
       iconComponent: CheckCircleIcon,
+      buttonVariant: 'primary' as const,
       role: 'status' as const,
     },
     warning: {
@@ -46,6 +49,7 @@ const getSeverityConfig = (severity: AlertSeverity) => {
       title: 'text-text-default',
       text: 'text-text-secondary',
       iconComponent: ExclamationTriangleIcon,
+      buttonVariant: 'warning' as const,
       role: 'alert' as const,
     },
     error: {
@@ -54,6 +58,7 @@ const getSeverityConfig = (severity: AlertSeverity) => {
       title: 'text-text-default',
       text: 'text-text-secondary',
       iconComponent: XCircleIcon,
+      buttonVariant: 'danger' as const,
       role: 'alert' as const,
     },
   };
@@ -89,16 +94,16 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         )}
         {...props}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-3">
           {/* Icon */}
-          <IconComponent className={cn('h-5 w-5 flex-shrink-0 mt-0.5', config.icon)} />
+          <IconComponent className={cn('h-5 w-5 flex-shrink-0', config.icon)} />
           
           {/* Content */}
           <div className="flex-1 space-y-1">
             {title && (
-              <p className={cn('text-sm font-semibold', config.title)}>
+              <Text variant="bodySmall" weight="semibold">
                 {title}
-              </p>
+              </Text>
             )}
             <div className={cn('text-sm', config.text)}>
               {children}
@@ -109,7 +114,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
           {dismissible && onDismiss && (
             <IconButton
               icon={<XMarkIcon className="h-4 w-4" />}
-              variant="secondary"
+              variant={config.buttonVariant}
               size="sm"
               onClick={onDismiss}
               aria-label="Dismiss alert"

@@ -11,6 +11,7 @@ import { useState, useEffect, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
 import { Button, Alert, PageLoading, Input } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
 function LoginForm() {
@@ -197,8 +198,8 @@ function LoginForm() {
               // Verification code input
               <>
                 <div className="mb-4 text-sm text-text-secondary">
-                  <p>We sent a verification code to:</p>
-                  <p className="font-semibold text-text-default">{email}</p>
+                  <Text variant="bodySmall" color="secondary">We sent a verification code to:</Text>
+                  <Text variant="bodySmall" weight="semibold">{email}</Text>
                 </div>
                 <Input
                   id="code"

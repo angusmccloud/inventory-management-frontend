@@ -24,6 +24,7 @@ import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import QuantityControls from '@/components/common/QuantityControls';
 import { Button } from '@/components/common/Button/Button';
+import { Text } from '@/components/common/Text/Text';
 
 interface AdjustmentClientProps {
   urlId: string;
@@ -136,13 +137,13 @@ export default function AdjustmentClient({
     <div className="space-y-6">
       {/* Current Quantity Display */}
       <div className="bg-surface-elevated rounded-lg p-6">
-        <p className="text-sm text-text-default uppercase tracking-wide mb-2">
+        <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-2">
           Current Quantity
-        </p>
+        </Text>
         <div className="flex items-center gap-3">
-          <p className="text-4xl font-bold text-text-secondary dark:text-white">
+          <Text variant="h1" weight="bold" className="text-text-secondary dark:text-white">
             {localQuantity}
-          </p>
+          </Text>
           {hasPendingChanges && (
             <span className="text-warning text-2xl" title="Changes pending">
               *
@@ -150,14 +151,14 @@ export default function AdjustmentClient({
           )}
         </div>
         {isFlushing && (
-          <p className="text-sm text-primary mt-2">
+          <Text variant="bodySmall" color="primary" className="mt-2">
             Saving...
-          </p>
+          </Text>
         )}
         {!isOnline && (
-          <p className="text-sm text-warning mt-2">
+          <Text variant="bodySmall" color="warning" className="mt-2">
             You are offline. Changes will be disabled.
-          </p>
+          </Text>
         )}
       </div>
 
@@ -187,9 +188,9 @@ export default function AdjustmentClient({
               <h3 className="text-sm font-medium text-error">
                 Adjustment Error
               </h3>
-              <p className="text-sm text-error mt-1">
+              <Text variant="bodySmall" color="error" className="mt-1">
                 {error.message}
-              </p>
+              </Text>
               <div className="flex gap-2 mt-2">
                 <Button
                   variant="danger"
@@ -213,9 +214,9 @@ export default function AdjustmentClient({
 
       {/* Adjustment Buttons */}
       <div className="space-y-4">
-        <p className="text-sm text-text-default text-center">
+        <Text variant="bodySmall" color="primary" className="text-center">
           Make additional adjustments:
-        </p>
+        </Text>
 
         <div className="flex justify-center">
           <QuantityControls
@@ -235,22 +236,22 @@ export default function AdjustmentClient({
 
         {/* Button Hint */}
         {!isOnline && (
-          <p className="text-xs text-warning text-center">
+          <Text variant="caption" color="warning" className="text-center">
             You are offline. Adjustments are disabled until connection is restored.
-          </p>
+          </Text>
         )}
         {localQuantity === 0 && isOnline && (
-          <p className="text-xs text-text-default text-center">
+          <Text variant="caption" color="primary" className="text-center">
             Quantity is at minimum (0). Use the + button to add items.
-          </p>
+          </Text>
         )}
       </div>
 
       {/* Additional Info */}
       <div className="pt-4 border-t border-border">
-        <p className="text-xs text-text-default text-center">
+        <Text variant="caption" color="primary" className="text-center">
           Changes are saved automatically after a brief delay. You can close this page anytime.
-        </p>
+        </Text>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 /**
  * InventoryList Component
- * 
+ *
  * Displays a list of inventory items with inline quantity controls and actions.
  * Features debounced quantity adjustments with optimistic updates.
  */
@@ -15,7 +15,14 @@ import QuantityControls from '@/components/common/QuantityControls';
 import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { adjustInventoryQuantity } from '@/lib/api/inventory';
-import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon, TrashIcon, QrCodeIcon, LightBulbIcon } from '@heroicons/react/24/outline';
+import {
+  ShoppingCartIcon,
+  PencilIcon,
+  ArchiveBoxIcon,
+  TrashIcon,
+  QrCodeIcon,
+  LightBulbIcon,
+} from '@heroicons/react/24/outline';
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -65,39 +72,33 @@ function InventoryListItem({
       const updatedItem = await adjustInventoryQuantity(familyId, itemId, {
         adjustment: accumulatedDelta,
       });
-      
+
       // Notify parent of update
       if (onItemUpdated) {
         onItemUpdated(updatedItem);
       }
-      
+
       return updatedItem.quantity;
     },
     [familyId, onItemUpdated]
   );
 
   // Initialize debounce hook for this item
-  const {
-    localQuantity,
-    hasPendingChanges,
-    isFlushing,
-    error,
-    adjust,
-    clearError,
-  } = useQuantityDebounce({
-    itemId: item.itemId,
-    initialQuantity: item.quantity,
-    onFlush: handleFlush,
-    delay: 500,
-  });
+  const { localQuantity, hasPendingChanges, isFlushing, error, adjust, clearError } =
+    useQuantityDebounce({
+      itemId: item.itemId,
+      initialQuantity: item.quantity,
+      onFlush: handleFlush,
+      delay: 500,
+    });
 
   return (
-    <li className="px-4 py-4 sm:px-6 hover:bg-surface-elevated transition-colors">
+    <li className="px-4 py-4 transition-colors hover:bg-surface-elevated sm:px-6">
       {/* T012: Mobile-first stacking layout (flex-col) with horizontal on desktop (md:flex-row) */}
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-        <div className="flex-1 min-w-0 w-full md:w-auto">
+      <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+        <div className="w-full min-w-0 flex-1 md:w-auto">
           <div className="flex items-center gap-2">
-            <Text variant="h3" className="text-text-default truncate">
+            <Text variant="h3" className="truncate text-text-default">
               {item.name}
             </Text>
             {isLowStock && (
@@ -111,7 +112,7 @@ function InventoryListItem({
               </span>
             )}
           </div>
-          <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-text-secondary">
+          <div className="mt-2 flex flex-col text-sm text-text-secondary sm:flex-row sm:gap-4">
             {/* Inline Quantity Controls (Admin Only) */}
             {isAdmin && (
               <div className="flex items-center gap-2">
@@ -134,8 +135,8 @@ function InventoryListItem({
             {/* Non-admin: Just show quantity */}
             {!isAdmin && (
               <div>
-                <span className="font-semibold text-text-default">Quantity:</span>{' '}
-                {item.quantity} {item.unit || 'units'}
+                <span className="font-semibold text-text-default">Quantity:</span> {item.quantity}{' '}
+                {item.unit || 'units'}
               </div>
             )}
             {item.locationName && (
@@ -160,20 +161,16 @@ function InventoryListItem({
           {error && (
             <div className="mt-2 flex items-center gap-2 text-sm">
               <span className="text-error">Failed to save: {error.message}</span>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={clearError}
-              >
+              <Button variant="secondary" size="sm" onClick={clearError}>
                 Dismiss
               </Button>
             </div>
           )}
         </div>
-        
+
         {/* T013: Action buttons with flex-wrap and full width on mobile (w-full md:w-auto) */}
         {/* T014: Buttons inherit responsive touch targets from Button component (min-h-[44px]) */}
-        <div className="flex flex-wrap gap-2 w-full md:w-auto md:flex-shrink-0">
+        <div className="flex w-full flex-wrap gap-2 md:w-auto md:flex-shrink-0">
           {/* Suggester-only: Suggest button */}
           {!isAdmin && (
             <Button
@@ -187,22 +184,18 @@ function InventoryListItem({
             </Button>
           )}
 
-          {/* Common action: Add to shopping list (admins can add directly) */}
-          {isAdmin && (
-            <Button
-              onClick={() => onAddToShoppingList(item)}
-              variant="secondary"
-              size="sm"
-              leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
-              title="Add to Shopping List"
-            >
-              Add
-            </Button>
-          )}
-
           {/* Admin-only actions */}
           {isAdmin && (
             <>
+              <Button
+                onClick={() => onAddToShoppingList(item)}
+                variant="primary"
+                size="sm"
+                leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
+                title="Add to Shopping List"
+              >
+                Add
+              </Button>
               {onViewDetails && (
                 <Button
                   onClick={() => onViewDetails(item)}
@@ -216,7 +209,7 @@ function InventoryListItem({
               )}
               <Button
                 onClick={() => onEdit(item)}
-                variant="secondary"
+                variant="warning"
                 size="sm"
                 leftIcon={<PencilIcon className="h-4 w-4" />}
               >
@@ -225,7 +218,7 @@ function InventoryListItem({
               {item.status === 'active' ? (
                 <Button
                   onClick={() => onArchive(item)}
-                  variant="secondary"
+                  variant="danger"
                   size="sm"
                   leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
                 >
@@ -265,7 +258,9 @@ export default function InventoryList({
 
   const handleSuggest = (item: InventoryItem) => {
     // Navigate to suggestion form with pre-filled itemId for add_to_shopping type
-    router.push(`/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`);
+    router.push(
+      `/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`
+    );
   };
 
   if (!items || items.length === 0) {

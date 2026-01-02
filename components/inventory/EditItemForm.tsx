@@ -10,7 +10,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import { updateInventoryItem } from '@/lib/api/inventory';
 import { listStorageLocations, listStores } from '@/lib/api/reference-data';
 import { InventoryItem, UpdateInventoryItemRequest, StorageLocation, Store } from '@/types/entities';
-import { Input, Select, Button } from '@/components/common';
+import { Input, Select, Button, Text } from '@/components/common';
 import type { SelectOption } from '@/components/common';
 
 interface EditItemFormProps {
@@ -205,7 +205,7 @@ export default function EditItemForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 

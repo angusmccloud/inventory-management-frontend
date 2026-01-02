@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { acceptInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
 import { Button, Alert, PageLoading, Input } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 function AcceptInvitationContent() {
   const router = useRouter();
@@ -114,10 +115,10 @@ function AcceptInvitationContent() {
             <h1 className="text-2xl font-bold text-text-default mb-2">
               Welcome to the Family! 🎉
             </h1>
-            <p className="text-text-secondary mb-4">
+            <Text variant="body" color="secondary" className="mb-4">
               Your invitation has been accepted successfully.
-            </p>
-            <p className="text-sm text-text-secondary">Redirecting to dashboard...</p>
+            </Text>
+            <Text variant="bodySmall" color="secondary">Redirecting to dashboard...</Text>
           </div>
         </div>
       </div>
@@ -131,9 +132,9 @@ function AcceptInvitationContent() {
           <h1 className="text-3xl font-bold text-text-default mb-2">
             Accept Family Invitation
           </h1>
-          <p className="text-text-secondary">
+          <Text variant="body" color="secondary">
             You've been invited to join a family inventory
-          </p>
+          </Text>
         </div>
 
         {error && (
@@ -144,9 +145,9 @@ function AcceptInvitationContent() {
 
         {!token ? (
           <div className="text-center py-6">
-            <p className="text-text-secondary">
+            <Text variant="body" color="secondary">
               Invalid invitation link. Please check your email for the correct link.
-            </p>
+            </Text>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -201,9 +202,9 @@ function AcceptInvitationContent() {
         )}
 
         <div className="mt-6 flex flex-col items-center">
-          <p className="text-sm text-text-secondary text-center">
+          <Text variant="bodySmall" color="secondary" className="text-center">
             By accepting, you agree to collaborate with your family members
-          </p>
+          </Text>
         </div>
       </div>
     </div>

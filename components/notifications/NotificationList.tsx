@@ -8,6 +8,7 @@
 
 import { LowStockNotification, LowStockNotificationStatus } from '@/types/entities';
 import NotificationItem from './NotificationItem';
+import { Text } from '@/components/common';
 
 interface NotificationListProps {
   notifications: LowStockNotification[];
@@ -71,11 +72,11 @@ export default function NotificationList({
           />
         </svg>
         <h3 className="mt-2 text-sm font-medium text-text-secondary">No notifications</h3>
-        <p className="mt-1 text-sm text-text-secondary">
+        <Text variant="bodySmall" color="secondary" className="mt-1">
           {statusFilter && statusFilter !== 'all'
             ? `No ${statusFilter} notifications found.`
             : 'All inventory items are above their thresholds.'}
-        </p>
+        </Text>
       </div>
     );
   }

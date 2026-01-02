@@ -8,6 +8,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/cn';
 import type { LoadingSpinnerProps, SpinnerSize } from './LoadingSpinner.types';
+import { Text } from '@/components/common/Text/Text';
 
 /**
  * Size-specific dimensions mapping
@@ -72,7 +73,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     return (
       <div className="flex flex-col items-center justify-center min-h-[200px] gap-3">
         {spinner}
-        {label && <p className="text-sm text-text-secondary">{label}</p>}
+        {label && <Text variant="bodySmall" color="secondary">{label}</Text>}
       </div>
     );
   }

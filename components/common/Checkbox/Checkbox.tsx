@@ -9,6 +9,7 @@
 
 import * as React from 'react';
 import { CheckboxProps } from './Checkbox.types';
+import { Text } from '@/components/common/Text/Text';
 
 export const Checkbox: React.FC<CheckboxProps> = ({
   label,
@@ -51,12 +52,12 @@ export const Checkbox: React.FC<CheckboxProps> = ({
             ${hasError ? 'border-error' : 'border-border'}
             ${
               checked
-                ? 'bg-primary border-primary'
-                : 'bg-surface'
+                ? 'bg-primary border-primary text-primary-contrast'
+                : 'bg-surface border-border'
             }
             focus:ring-2 focus:ring-primary focus:ring-offset-2
             disabled:cursor-not-allowed disabled:opacity-50
-            transition-colors
+            transition-colors hover:border-primary-hover
           `}
         />
         <div className="ml-3 flex-1">
@@ -65,35 +66,44 @@ export const Checkbox: React.FC<CheckboxProps> = ({
             {required && <span className="text-error ml-1">*</span>}
           </span>
           {description && (
-            <p
+            <Text
+              as="p"
+              variant="caption"
+              color="secondary"
               id={`${id}-desc`}
-              className="text-xs text-text-secondary mt-0.5"
+              className="mt-0.5"
             >
               {description}
-            </p>
+            </Text>
           )}
         </div>
       </label>
 
       {/* Help Text */}
       {helpText && !error && (
-        <p
+        <Text
+          as="p"
+          variant="caption"
+          color="secondary"
           id={`${id}-help`}
-          className="mt-1.5 ml-7 text-xs text-text-secondary"
+          className="mt-1.5 ml-7"
         >
           {helpText}
-        </p>
+        </Text>
       )}
 
       {/* Error Message */}
       {error && (
-        <p
+        <Text
+          as="p"
+          variant="caption"
+          color="error"
           id={`${id}-error`}
-          className="mt-1.5 ml-7 text-xs text-error"
           role="alert"
+          className="mt-1.5 ml-7"
         >
           {error}
-        </p>
+        </Text>
       )}
     </div>
   );

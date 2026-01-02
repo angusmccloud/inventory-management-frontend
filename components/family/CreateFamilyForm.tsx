@@ -11,6 +11,7 @@ import { createFamily } from '@/lib/api/families';
 import { Family } from '@/types/entities';
 import { Button } from '@/components/common/Button/Button';
 import { Input } from '@/components/common';
+import { Text } from '@/components/common/Text/Text';
 
 interface CreateFamilyFormProps {
   onSuccess: (family: Family) => void;
@@ -62,7 +63,7 @@ export default function CreateFamilyForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <p className="text-sm text-error">{error}</p>
+          <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}
 

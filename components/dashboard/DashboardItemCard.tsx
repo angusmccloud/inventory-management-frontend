@@ -5,6 +5,7 @@ import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { adjustDashboardItemQuantity } from '@/lib/api/dashboards';
 import { IconButton } from '@/components/common/IconButton/IconButton';
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Text } from '@/components/common/Text/Text';
 
 interface DashboardItemCardProps {
   item: DashboardItem;
@@ -65,9 +66,9 @@ export default function DashboardItemCard({
           {item.name}
         </h3>
         {item.locationName && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <Text variant="bodySmall" color="secondary">
             📍 {item.locationName}
-          </p>
+          </Text>
         )}
       </div>
 
@@ -124,14 +125,6 @@ export default function DashboardItemCard({
           {error.message}
         </div>
       )}
-
-      {/* Low Stock Threshold */}
-      {item.lowStockThreshold && (
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Low stock threshold: {item.lowStockThreshold} {item.unit || ''}
-        </div>
-      )}
-
     </div>
   );
 }
