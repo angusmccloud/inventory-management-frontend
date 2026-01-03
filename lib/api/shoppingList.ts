@@ -20,6 +20,7 @@ export interface ShoppingListItem {
   status: 'pending' | 'purchased';
   quantity: number | null;
   notes: string | null;
+  inventoryNotes?: string | null; // Notes from linked inventory item
   version: number;
   addedBy: string;
   addedByName?: string | null; // Denormalized for display

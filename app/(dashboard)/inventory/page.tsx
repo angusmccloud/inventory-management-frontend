@@ -16,13 +16,15 @@ import {
   deleteInventoryItem,
 } from '@/lib/api/inventory';
 import { addToShoppingList } from '@/lib/api/shoppingList';
+import { listStorageLocations, listStores } from '@/lib/api/reference-data';
 import { isApiClientError } from '@/lib/api-client';
-import { InventoryItem } from '@/types/entities';
+import { InventoryItem, StorageLocation, Store } from '@/types/entities';
 import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
 import DashboardManager from '@/components/dashboard/DashboardManager';
+import DashboardForm from '@/components/dashboard/DashboardForm';
 import { Text, Button, Alert, PageHeader, PageLoading, PageContainer, TabNavigation } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 import { useSnackbar } from '@/contexts/SnackbarContext';
@@ -30,7 +32,9 @@ import { useSnackbar } from '@/contexts/SnackbarContext';
 type ModalState =
   | { type: 'none' }
   | { type: 'add' }
-  | { type: 'edit'; item: InventoryItem };
+  | { type: 'edit'; item: InventoryItem }
+  | { type: 'addDashboard' }
+  | { type: 'editDashboard'; dashboardId: string };
 
 type DialogState =
   | { type: 'none' }
@@ -48,11 +52,21 @@ export default function InventoryPage() {
   const [familyId, setFamilyId] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('inventory');
+  const [locationMap, setLocationMap] = useState<Map<string, StorageLocation>>(new Map());
+  const [storeMap, setStoreMap] = useState<Map<string, Store>>(new Map());
+  const [newDashboardUrl, setNewDashboardUrl] = useState<string | null>(null);
 
   const tabs: Tab[] = [
     { id: 'inventory', label: 'Inventory' },
     { id: 'tracking-lists', label: 'Tracking Lists' },
   ];
+
+  // Helper function to enrich an item with location and store names
+  const enrichItem = (item: InventoryItem): InventoryItem => ({
+    ...item,
+    locationName: item.locationId ? locationMap.get(item.locationId)?.name : undefined,
+    preferredStoreName: item.preferredStoreId ? storeMap.get(item.preferredStoreId)?.name : undefined,
+  });
 
   useEffect(() => {
     loadFamilyId();
@@ -115,8 +129,36 @@ export default function InventoryPage() {
     setError('');
 
     try {
-      const response = await listInventoryItems(familyId, { archived: false });
-      setItems(response.items || []);
+      // Fetch inventory items and reference data in parallel
+      const [response, locations, stores] = await Promise.all([
+        listInventoryItems(familyId, { archived: false }),
+        listStorageLocations(familyId),
+        listStores(familyId),
+      ]);
+
+      // Create lookup maps for efficient enrichment
+      const newLocationMap = new Map<string, StorageLocation>();
+      locations.forEach((loc: StorageLocation) => {
+        newLocationMap.set(loc.locationId, loc);
+      });
+
+      const newStoreMap = new Map<string, Store>();
+      stores.forEach((store: Store) => {
+        newStoreMap.set(store.storeId, store);
+      });
+
+      // Store the maps in state for later use
+      setLocationMap(newLocationMap);
+      setStoreMap(newStoreMap);
+
+      // Enrich items with location and store names
+      const enrichedItems = (response.items || []).map((item: InventoryItem) => ({
+        ...item,
+        locationName: item.locationId ? newLocationMap.get(item.locationId)?.name : undefined,
+        preferredStoreName: item.preferredStoreId ? newStoreMap.get(item.preferredStoreId)?.name : undefined,
+      }));
+
+      setItems(enrichedItems);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load inventory');
       setItems([]); // Reset to empty array on error
@@ -126,13 +168,13 @@ export default function InventoryPage() {
   };
 
   const handleItemAdded = (item: InventoryItem): void => {
-    setItems([...items, item]);
+    setItems([...items, enrichItem(item)]);
     setModalState({ type: 'none' });
   };
 
   const handleItemUpdated = (updatedItem: InventoryItem): void => {
     setItems(items.map((item) => 
-      item.itemId === updatedItem.itemId ? updatedItem : item
+      item.itemId === updatedItem.itemId ? enrichItem(updatedItem) : item
     ));
     setModalState({ type: 'none' });
   };
@@ -226,17 +268,26 @@ export default function InventoryPage() {
         <PageHeader
           title="Inventory"
           description="Manage your family's inventory items and tracking lists"
-          action={isAdmin && activeTab === 'inventory' ? (
-            <Button
-              variant="primary"
-              onClick={() => {
-                console.log('Add Item button clicked');
-                setModalState({ type: 'add' });
-              }}
-            >
-              Add Item
-          </Button>
-        ) : undefined}
+          action={isAdmin ? (
+            activeTab === 'inventory' ? (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  console.log('Add Item button clicked');
+                  setModalState({ type: 'add' });
+                }}
+              >
+                Add Item
+              </Button>
+            ) : activeTab === 'tracking-lists' ? (
+              <Button
+                variant="primary"
+                onClick={() => setModalState({ type: 'addDashboard' })}
+              >
+                Create New List
+              </Button>
+            ) : undefined
+          ) : undefined}
       />
 
       {error && (
@@ -261,7 +312,6 @@ export default function InventoryPage() {
           onArchive={handleArchive}
           onDelete={handleDelete}
           onAddToShoppingList={handleAddToShoppingList}
-          onViewDetails={(item) => router.push(`/inventory/${item.itemId}`)}
           onItemUpdated={handleItemUpdated}
           isAdmin={isAdmin}
         />
@@ -269,7 +319,10 @@ export default function InventoryPage() {
 
       {/* Tracking Lists Tab */}
       {activeTab === 'tracking-lists' && (
-        <DashboardManager familyId={familyId} />
+        <DashboardManager 
+          familyId={familyId}
+          onEdit={(dashboardId) => setModalState({ type: 'editDashboard', dashboardId })}
+        />
       )}
 
       {/* Modals */}
@@ -291,6 +344,8 @@ export default function InventoryPage() {
                 <Text variant="h3" className="text-text-default mb-4">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
+                  {modalState.type === 'addDashboard' && 'Create New List'}
+                  {modalState.type === 'editDashboard' && 'Edit List'}
                 </Text>
 
                 {modalState.type === 'add' && (
@@ -306,6 +361,36 @@ export default function InventoryPage() {
                     familyId={familyId}
                     item={modalState.item}
                     onSuccess={handleItemUpdated}
+                    onCancel={() => setModalState({ type: 'none' })}
+                  />
+                )}
+
+                {modalState.type === 'addDashboard' && (
+                  <DashboardForm
+                    familyId={familyId}
+                    onSuccess={(dashboardId, shareableUrl) => {
+                      setModalState({ type: 'none' });
+                      if (shareableUrl) {
+                        setNewDashboardUrl(shareableUrl);
+                      }
+                      showSnackbar('List created successfully!');
+                      // Reload page to refresh dashboard list
+                      window.location.reload();
+                    }}
+                    onCancel={() => setModalState({ type: 'none' })}
+                  />
+                )}
+
+                {modalState.type === 'editDashboard' && (
+                  <DashboardForm
+                    familyId={familyId}
+                    dashboardId={modalState.dashboardId}
+                    onSuccess={() => {
+                      setModalState({ type: 'none' });
+                      showSnackbar('List updated successfully!');
+                      // Reload page to refresh dashboard list
+                      window.location.reload();
+                    }}
                     onCancel={() => setModalState({ type: 'none' })}
                   />
                 )}

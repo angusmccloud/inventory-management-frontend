@@ -43,17 +43,17 @@ export default function ShoppingListItemComponent({
   return (
     <div className={`bg-surface rounded-lg shadow-sm border ${isPurchased ? 'border-border bg-surface-elevated bg-surface' : 'border-border'} p-4 flex flex-col h-full`}>
       {/* Header with checkbox and status */}
-      <div className="flex items-start gap-3 mb-3">
+      <div className="flex items-center gap-3 mb-2">
         <Checkbox
           label=""
           checked={isPurchased}
           onChange={handleToggle}
           disabled={isToggling}
-          className="flex-shrink-0 -mt-1"
+          className="flex-shrink-0"
         />
         <div className="flex-1 min-w-0">
           <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>
-            {item.name}
+            {item.name}{item.quantity ? ` (${item.quantity})` : ''}
           </h3>
           {isPurchased && (
             <Badge variant="success" size="sm" className="mt-1">
@@ -65,9 +65,9 @@ export default function ShoppingListItemComponent({
 
       {/* Item Details */}
       <div className="flex-1 space-y-2 text-sm">
-        {item.quantity && (
-          <div className="text-text-default">
-            <span className="font-medium">Qty:</span> {item.quantity}
+        {item.inventoryNotes && (
+          <div className="text-text-subtle text-xs italic border-l-2 border-border pl-2">
+            {item.inventoryNotes}
           </div>
         )}
         {item.notes && (
@@ -77,7 +77,7 @@ export default function ShoppingListItemComponent({
 
       {/* Actions */}
       {!isPurchased && isAdmin && (
-        <div className="flex gap-2 mt-4 pt-3 border-t border-border">
+        <div className="flex gap-2 mt-3">
           <Button
             variant="secondary"
             size="sm"

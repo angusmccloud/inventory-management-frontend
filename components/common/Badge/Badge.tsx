@@ -11,14 +11,15 @@ import type { BadgeProps, BadgeVariant, BadgeSize } from './Badge.types';
 
 /**
  * Variant-specific styles (background and text colors)
+ * Matches Button component pattern for consistent contrast
  */
 const variantStyles: Record<BadgeVariant, string> = {
   default: 'bg-surface-elevated text-text-secondary border border-border',
-  primary: 'bg-primary/10 text-primary border border-primary/20',
-  success: 'bg-success/10 text-success border border-success/20',
-  warning: 'bg-warning/10 text-warning border border-warning/20',
-  error: 'bg-error/10 text-error border border-error/20',
-  info: 'bg-info/10 text-info border border-info/20',
+  primary: 'bg-primary text-primary-contrast border border-primary',
+  success: 'bg-success text-success-contrast border border-success',
+  warning: 'bg-warning text-warning-contrast border border-warning',
+  error: 'bg-error text-error-contrast border border-error',
+  info: 'bg-info text-info-contrast border border-info',
   neutral: 'bg-surface-elevated text-text-secondary border border-border',
 };
 

@@ -1,4 +1,8 @@
 /**
+ * @deprecated This page has been retired. NFC URL management now happens
+ * in a modal on the main inventory page (InventoryList component).
+ * This file is kept for reference only and should be removed in a future cleanup.
+ * 
  * Inventory Item Detail Page
  * 
  * @description Detailed view of a single inventory item with NFC URL management

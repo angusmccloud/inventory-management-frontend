@@ -59,69 +59,62 @@ export default function DashboardItemCard({
   const stockStatus = getStockStatus();
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
-      {/* Item Name */}
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-3 hover:shadow-lg transition-shadow">
+      {/* Item Name and Stock Badge */}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 flex-1 min-w-0 truncate">
           {item.name}
         </h3>
-        {item.locationName && (
-          <Text variant="bodySmall" color="secondary">
-            📍 {item.locationName}
-          </Text>
-        )}
-      </div>
-
-      {/* Stock Status Badge */}
-      <div className="mb-4">
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${stockStatus.color}`}>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${stockStatus.color}`}>
           {stockStatus.label}
         </span>
-        {hasPendingChanges && (
-          <span className="ml-2 inline-flex items-center text-xs text-gray-500 dark:text-gray-400">
+      </div>
+
+      {/* Location */}
+      {item.locationName && (
+        <Text variant="bodySmall" color="secondary" className="mb-2">
+          📍 {item.locationName}
+        </Text>
+      )}
+
+      {/* Quantity Controls */}
+      <div className="flex items-center justify-start gap-2 mb-2">
+        <IconButton
+          icon={<MinusIcon className="h-4 w-4" />}
+          variant="secondary"
+          size="sm"
+          onClick={() => adjust(-1)}
+          disabled={localQuantity <= 0}
+          aria-label="Decrease quantity"
+        />
+        <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+          {localQuantity}{item.unit ? ` ${item.unit}` : ''}
+        </span>
+        <IconButton
+          icon={<PlusIcon className="h-4 w-4" />}
+          variant="primary"
+          size="sm"
+          onClick={() => adjust(1)}
+          aria-label="Increase quantity"
+        />
+      </div>
+
+      {/* Saving Indicator */}
+      {hasPendingChanges && (
+        <div className="text-center mb-2">
+          <span className="inline-flex items-center text-xs text-gray-500 dark:text-gray-400">
             <svg className="animate-spin h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             Saving...
           </span>
-        )}
-      </div>
-
-      {/* Quantity Controls */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-bold text-gray-900 dark:text-gray-100">
-            {localQuantity}
-          </span>
-          {item.unit && (
-            <span className="text-lg text-gray-600 dark:text-gray-400">{item.unit}</span>
-          )}
         </div>
-
-        {/* Adjustment Buttons */}
-        <div className="flex gap-2">
-          <IconButton
-            icon={<MinusIcon className="h-6 w-6" />}
-            variant="secondary"
-            size="md"
-            onClick={() => adjust(-1)}
-            disabled={localQuantity <= 0}
-            aria-label="Decrease quantity"
-          />
-          <IconButton
-            icon={<PlusIcon className="h-6 w-6" />}
-            variant="primary"
-            size="md"
-            onClick={() => adjust(1)}
-            aria-label="Increase quantity"
-          />
-        </div>
-      </div>
+      )}
 
       {/* Error Message */}
       {error && (
-        <div className="mt-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-800 dark:text-red-200">
+        <div className="mt-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-xs text-red-800 dark:text-red-200">
           {error.message}
         </div>
       )}

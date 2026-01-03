@@ -34,6 +34,11 @@ export type { InputProps, InputType, InputValidationState, InputSize, BaseInputP
 export { Select } from './Select/Select';
 export type { SelectProps, SelectOption } from './Select/Select.types';
 
+export { default as MultiSelect } from './MultiSelect';
+
+export { default as Autocomplete } from './Autocomplete/Autocomplete';
+export type { AutocompleteProps, AutocompleteOption } from './Autocomplete/Autocomplete.types';
+
 export { Radio } from './Radio/Radio';
 export type { RadioProps, RadioOption } from './Radio/Radio.types';
 
@@ -52,6 +57,9 @@ export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge/Badge.types';
 
 export { EmptyState } from './EmptyState/EmptyState';
 export type { EmptyStateProps } from './EmptyState/EmptyState.types';
+
+export { default as Modal } from './Modal/Modal';
+export type { ModalProps, ModalSize } from './Modal/Modal.types';
 
 // Navigation
 export { Link } from './Link/Link';

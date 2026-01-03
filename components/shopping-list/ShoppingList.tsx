@@ -17,6 +17,8 @@ import {
   toggleShoppingListItemStatus,
   removeFromShoppingList,
 } from '@/lib/api/shoppingList';
+import { listInventoryItems } from '@/lib/api/inventory';
+import { InventoryItem } from '@/types/entities';
 import ShoppingListItemComponent from './ShoppingListItem';
 import AddItemForm from './AddItemForm';
 import EditShoppingListItemForm from './EditShoppingListItemForm';
@@ -26,6 +28,7 @@ import { createSuggestion } from '@/lib/api/suggestions';
 import StoreFilter from './StoreFilter';
 import Dialog from '../common/Dialog';
 import { Button, Text, EmptyState, Alert, PageHeader, LoadingSpinner } from '@/components/common';
+import { ToggleButton } from '@/components/common/ToggleButton/ToggleButton';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { getUserContext } from '@/lib/auth';
 import { useSnackbar } from '@/contexts/SnackbarContext';
@@ -48,9 +51,12 @@ type DialogState =
 
 export default function ShoppingList({ familyId }: ShoppingListProps) {
   const { showSnackbar } = useSnackbar();
-  const [items, setItems] = useState<ShoppingListItem[]>([]);
+  const [allItems, setAllItems] = useState<ShoppingListItem[]>([]); // Store all items
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]); // Store all inventory items
   const [stores, setStores] = useState<StoreGroupSummary[]>([]);
-  const [selectedStore, setSelectedStore] = useState<string | null | 'all'>('all');
+  const [selectedStoreIds, setSelectedStoreIds] = useState<string[]>([]); // Empty array = all stores
+  const [hidePurchased, setHidePurchased] = useState(true); // Hide purchased items by default
+  const [initialPurchasedIds, setInitialPurchasedIds] = useState<Set<string>>(new Set()); // Track initially purchased items
   const [modalState, setModalState] = useState<ModalState>({ type: 'none' });
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
   const [isLoading, setIsLoading] = useState(true);
@@ -63,18 +69,29 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     setIsAdmin(userContext?.role === 'admin');
   }, []);
 
-  // Load shopping list
+  // Load shopping list - load all items once
   const loadShoppingList = async () => {
     try {
       setIsLoading(true);
       setError(null);
       
-      const result = await listShoppingListItems(familyId, {
-        storeId: selectedStore === 'all' ? undefined : selectedStore,
-      });
+      // Load all shopping list items and inventory items in parallel
+      const [shoppingResult, inventoryResult] = await Promise.all([
+        listShoppingListItems(familyId, {}),
+        listInventoryItems(familyId, { archived: false })
+      ]);
       
-      setItems(result.items);
-      setStores(result.groupedByStore || []);
+      // Track initially purchased items
+      const purchasedIds = new Set(
+        shoppingResult.items
+          .filter(item => item.status === 'purchased')
+          .map(item => item.shoppingItemId)
+      );
+      setInitialPurchasedIds(purchasedIds);
+      
+      setAllItems(shoppingResult.items);
+      setInventoryItems(inventoryResult.items);
+      setStores(shoppingResult.groupedByStore || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load shopping list');
     } finally {
@@ -82,9 +99,54 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     }
   };
 
+  // Load data only once on mount
   useEffect(() => {
     loadShoppingList();
-  }, [familyId, selectedStore]);
+  }, [familyId]);
+
+  // Create inventory lookup maps
+  const inventoryById = new Map(
+    inventoryItems.map(item => [item.itemId, item])
+  );
+  const inventoryByName = new Map(
+    inventoryItems.map(item => [item.name.toLowerCase().trim(), item])
+  );
+
+  // Enrich shopping list items with inventory notes
+  const enrichedItems = allItems.map(item => {
+    let inventoryNotes = item.inventoryNotes; // Use backend-provided notes if available
+    
+    // If no notes yet, try to match by itemId or name
+    if (!inventoryNotes) {
+      if (item.itemId) {
+        const inventoryItem = inventoryById.get(item.itemId);
+        inventoryNotes = inventoryItem?.notes || null;
+      } else if (item.name) {
+        const inventoryItem = inventoryByName.get(item.name.toLowerCase().trim());
+        inventoryNotes = inventoryItem?.notes || null;
+      }
+    }
+    
+    return {
+      ...item,
+      inventoryNotes,
+    };
+  });
+
+  // Filter items based on selected stores (frontend filtering)
+  // Empty array = show all stores
+  let items = selectedStoreIds.length === 0
+    ? enrichedItems
+    : enrichedItems.filter(item => {
+        const itemStoreId = item.storeId || 'unassigned';
+        return selectedStoreIds.includes(itemStoreId);
+      });
+  
+  // Hide initially purchased items if toggle is enabled
+  // Don't reapply filter to newly purchased items (only hide items that were purchased on load)
+  if (hidePurchased) {
+    items = items.filter(item => !initialPurchasedIds.has(item.shoppingItemId));
+  }
 
   // Handle toggle status - optimistic update
   const handleToggleStatus = async (item: ShoppingListItem) => {
@@ -108,7 +170,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       });
       
       // Update item in state without full reload
-      setItems(prevItems => 
+      setAllItems(prevItems => 
         prevItems.map(i => 
           i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i
         )
@@ -138,7 +200,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       }
       
       // Add new item to state
-      setItems(prevItems => [...prevItems, newItem]);
+      setAllItems(prevItems => [...prevItems, newItem]);
       
       // Update store summary if needed
       if (newItem.storeName) {
@@ -186,7 +248,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       setModalState({ type: 'none' });
       
       // Update item in state
-      setItems(prevItems => 
+      setAllItems(prevItems => 
         prevItems.map(i => 
           i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i
         )
@@ -226,7 +288,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       await removeFromShoppingList(familyId, item.shoppingItemId);
       
       // Remove item from state
-      setItems(prevItems => 
+      setAllItems(prevItems => 
         prevItems.filter(i => i.shoppingItemId !== item.shoppingItemId)
       );
     } catch (err) {
@@ -303,12 +365,26 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           </Button>
         )}
         secondaryActions={[
-          <StoreFilter
-            key="store-filter"
-            stores={stores}
-            selectedStoreId={selectedStore}
-            onStoreChange={setSelectedStore}
-          />
+          <div key="filters" className="flex items-end gap-4">
+            <StoreFilter
+              stores={stores}
+              selectedStoreIds={selectedStoreIds}
+              onStoreChange={setSelectedStoreIds}
+            />
+            <div className="flex flex-col gap-1">
+              <Text variant="bodySmall" className="text-text-default font-medium">
+                Hide Purchased
+              </Text>
+              <ToggleButton
+                checked={hidePurchased}
+                onChange={setHidePurchased}
+                label="Hide purchased items"
+                visibleLabel=""
+                size="md"
+                variant="primary"
+              />
+            </div>
+          </div>
         ]}
       />
 
@@ -324,8 +400,8 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             variant: "primary"
           } : undefined}
         />
-      ) : selectedStore === 'all' && Object.keys(groupedItems).length > 1 ? (
-        // Grouped by store view with responsive grid
+      ) : (
+        // Grouped by store view with responsive grid (always show headers)
         <div className="space-y-8">
           {sortedStoreNames.map((storeName) => {
             const storeItems = groupedItems[storeName];
@@ -351,20 +427,6 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
               </div>
             );
           })}
-        </div>
-      ) : (
-        // Single store view with responsive grid
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((item) => (
-            <ShoppingListItemComponent
-              key={item.shoppingItemId}
-              item={item}
-              onToggleStatus={handleToggleStatus}
-              onEdit={() => setModalState({ type: 'edit', item })}
-              onRemove={handleRemoveItem}
-              isAdmin={isAdmin}
-            />
-          ))}
         </div>
       )}
 

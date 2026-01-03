@@ -10,8 +10,9 @@
 import { useState, useEffect } from 'react';
 import { AddToShoppingListRequest } from '@/lib/api/shoppingList';
 import { listStores } from '@/lib/api/reference-data';
-import type { Store } from '@/types/entities';
-import { Input, Select, Button } from '@/components/common';
+import { listInventoryItems } from '@/lib/api/inventory';
+import type { Store, InventoryItem } from '@/types/entities';
+import { Input, Select, Button, Autocomplete } from '@/components/common';
 import { Text } from '@/components/common/Text/Text';
 
 interface AddItemFormProps {
@@ -30,12 +31,47 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
   const [stores, setStores] = useState<Store[]>([]);
   const [loadingStores, setLoadingStores] = useState<boolean>(true);
 
+  // Search inventory items for autocomplete
+  const searchInventoryItems = async (query: string) => {
+    if (!query.trim()) return [];
+    
+    try {
+      const result = await listInventoryItems(familyId, { archived: false });
+      const lowerQuery = query.toLowerCase();
+      
+      // Create store lookup map for enrichment
+      const storeMap = new Map<string, Store>();
+      stores.forEach((store) => {
+        storeMap.set(store.storeId, store);
+      });
+      
+      return result.items
+        .filter((item: InventoryItem) => 
+          item.name.toLowerCase().includes(lowerQuery)
+        )
+        .slice(0, 10) // Limit to 10 results
+        .map((item: InventoryItem) => ({
+          value: item.itemId,
+          label: item.name,
+          metadata: {
+            location: item.preferredStoreId ? (storeMap.get(item.preferredStoreId)?.name || 'Unknown store') : 'No store set',
+            quantity: item.quantity,
+          },
+        }));
+    } catch (error) {
+      console.error('Failed to search inventory:', error);
+      return [];
+    }
+  };
+
   // Load stores
   useEffect(() => {
     const loadStores = async () => {
       try {
         const storesData = await listStores(familyId);
-        setStores(storesData);
+        // Sort stores alphabetically by name
+        const sortedStores = storesData.sort((a, b) => a.name.localeCompare(b.name));
+        setStores(sortedStores);
       } catch (err) {
         console.error('Failed to load stores:', err);
         // Continue with empty list - form will still work
@@ -102,19 +138,22 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       <div className="space-y-4">
         {/* Item Name */}
         <div>
-          <Input
+          <Autocomplete
             id="name"
-            label="Item Name *"
+            label="Item Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(value) => setName(value)}
+            onSearch={searchInventoryItems}
             onKeyDown={handleNameKeyDown}
             placeholder="e.g., Paper Towels, Birthday Cake"
             maxLength={100}
             required
             disabled={isSubmitting}
+            minSearchLength={2}
+            emptyMessage="No matching items in inventory"
           />
           <Text variant="caption" color="secondary" className="mt-1">
-            Tip: Press Enter to quickly add multiple items
+            Tip: Press Enter to quickly add multiple items. Start typing to see items from your inventory.
           </Text>
         </div>
 

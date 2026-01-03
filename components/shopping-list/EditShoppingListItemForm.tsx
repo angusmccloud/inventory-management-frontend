@@ -40,7 +40,9 @@ export default function EditShoppingListItemForm({
     const loadStores = async () => {
       try {
         const storesData = await listStores(familyId);
-        setStores(storesData);
+        // Sort stores alphabetically by name
+        const sortedStores = storesData.sort((a, b) => a.name.localeCompare(b.name));
+        setStores(sortedStores);
       } catch (err) {
         console.error('Failed to load stores:', err);
         // Continue with empty list - form will still work
@@ -87,7 +89,7 @@ export default function EditShoppingListItemForm({
         {/* Item Name */}
         <Input
           id="edit-name"
-          label="Item Name *"
+          label="Item Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g., Paper Towels, Birthday Cake"

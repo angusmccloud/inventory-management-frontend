@@ -15,6 +15,7 @@ import { getNavigationItems, isNavItemActive } from '@/lib/navigation';
 import { UserContext } from '@/types/entities';
 import { PageLoading } from '@/components/common';
 import { Button } from '@/components/common/Button/Button';
+import { Badge } from '@/components/common/Badge/Badge';
 
 export default function DashboardLayout({
   children,
@@ -156,12 +157,12 @@ export default function DashboardLayout({
               {/* Desktop User Info */}
               <div className="hidden md:flex md:items-center md:space-x-3">
                 <div className="hidden lg:flex lg:flex-col lg:items-end">
-                  <span className="text-sm text-text-default truncate max-w-[150px]">
+                  <span className="text-sm text-text-secondary truncate max-w-[150px]">
                     {userContext?.name || userContext?.email}
                   </span>
-                  <span className="inline-flex items-center rounded-full bg-secondary/10 px-2 py-0.5 text-xs font-medium text-secondary">
+                  <Badge variant="info" size="sm">
                     {userContext?.role}
-                  </span>
+                  </Badge>
                 </div>
                 <Button
                   variant="secondary"
@@ -231,7 +232,7 @@ export default function DashboardLayout({
                       href={item.href}
                       className={`${showBadge ? 'flex items-center' : 'block'} border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                         isActive
-                          ? 'border-primary bg-primary/10 text-primary'
+                          ? 'border-primary bg-primary/10 text-text-default'
                           : 'border-transparent text-text-secondary hover:border-border hover:bg-surface-elevated hover:text-text-default'
                       }`}
                     >
@@ -247,12 +248,12 @@ export default function DashboardLayout({
               </div>
               <div className="border-t border-border pt-4 mt-3">
                 <div className="px-4 mb-3">
-                  <div className="text-sm font-medium text-text-default mb-1">
+                  <div className="text-sm font-medium text-text-secondary mb-1">
                     {userContext?.name || userContext?.email}
                   </div>
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  <Badge variant="info" size="sm">
                     {userContext?.role}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="px-2">
                   <Button

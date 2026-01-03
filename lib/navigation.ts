@@ -46,19 +46,13 @@ export const navigationItems: NavItem[] = [
     href: '/notifications',
     requiresAdmin: true,
     badge: 'notifications',
-    icon: 'bell',
-  },
-  {
-    id: 'members',
-    label: 'Members',
-    href: '/members',
-    requiresAdmin: true,
+    // icon: 'bell',
   },
   {
     id: 'settings',
     label: 'Settings',
     href: '/settings',
-    matchPaths: ['/settings', '/settings/reference-data'],
+    matchPaths: ['/settings', '/settings/reference-data', '/members'],
   },
 ];
 

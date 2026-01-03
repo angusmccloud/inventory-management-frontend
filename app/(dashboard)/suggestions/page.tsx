@@ -108,17 +108,15 @@ export default function SuggestionsPage() {
       </div>
 
       {/* Filter Tabs - T024/T025: Replace toggle buttons with TabNavigation + responsiveMode='auto' */}
-      <Card className="mb-6">
-        <TabNavigation
-          tabs={filterTabs}
-          activeTab={statusFilter}
-          onChange={(tabId) => {
-            // Convert 'all' tab to undefined for SuggestionList
-            setStatusFilter(tabId);
-          }}
-          responsiveMode="auto"
-        />
-      </Card>
+      <TabNavigation
+        tabs={filterTabs}
+        activeTab={statusFilter}
+        onChange={(tabId) => {
+          // Convert 'all' tab to undefined for SuggestionList
+          setStatusFilter(tabId);
+        }}
+        responsiveMode="auto"
+      />
 
       {/* Suggestions List */}
       <SuggestionList

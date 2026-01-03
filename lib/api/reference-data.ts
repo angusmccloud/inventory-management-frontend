@@ -44,6 +44,9 @@ export async function updateStorageLocation(
   return apiClient.put<StorageLocation>(`/families/${familyId}/locations/${locationId}`, data);
 }
 
+/**
+ * Archive a storage location (soft delete)
+ */
 export async function deleteStorageLocation(
   familyId: string,
   locationId: string
@@ -82,6 +85,9 @@ export async function updateStore(
   return apiClient.put<Store>(`/families/${familyId}/stores/${storeId}`, data);
 }
 
+/**
+ * Archive a store (soft delete)
+ */
 export async function deleteStore(
   familyId: string,
   storeId: string

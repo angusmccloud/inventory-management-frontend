@@ -14,9 +14,9 @@ export interface RadioOption {
   value: string;
   
   /**
-   * Display label for the option
+   * Display label for the option (can be string or React element)
    */
-  label: string;
+  label: string | React.ReactNode;
   
   /**
    * Optional description text

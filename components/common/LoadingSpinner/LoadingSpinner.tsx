@@ -61,7 +61,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       <div
         className={cn(
           'rounded-full border-solid animate-spin',
-          'border-border-focus border-t-transparent',
+          'border-secondary border-t-transparent',
           sizeStyles[size]
         )}
       />

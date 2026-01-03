@@ -131,6 +131,7 @@ export interface StorageLocation {
   familyId: string;
   name: string;
   description?: string;
+  archived?: boolean;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -145,6 +146,7 @@ export interface Store {
   name: string;
   address?: string;
   notes?: string;
+  archived?: boolean;
   version: number;
   createdAt: string;
   updatedAt: string;

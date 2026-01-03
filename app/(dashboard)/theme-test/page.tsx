@@ -549,7 +549,7 @@ export default function ThemeTestPage() {
                   </Link>
                 </div>
                 <div>
-                  <Link href="/members" variant="subtle">
+                  <Link href="/settings" variant="subtle">
                     Subtle link style
                   </Link>
                 </div>

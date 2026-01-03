@@ -232,7 +232,16 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
           </div>
         ) : (
           <div className="space-y-4">
-            {state.urls.map((url) => (
+            {state.urls
+              .slice()
+              .sort((a, b) => {
+                // Active URLs first
+                if (a.isActive && !b.isActive) return -1;
+                if (!a.isActive && b.isActive) return 1;
+                // Then by creation date (newest first)
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+              })
+              .map((url) => (
               <div
                 key={url.urlId}
                 className={`border rounded-lg p-4 ${

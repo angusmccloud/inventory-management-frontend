@@ -2,24 +2,24 @@
  * StoreFilter Component
  * Feature: 002-shopping-lists
  * 
- * Filter dropdown for viewing shopping list by store.
+ * Multi-select filter dropdown for viewing shopping list by multiple stores.
  */
 
 'use client';
 
 import { StoreGroupSummary } from '@/lib/api/shoppingList';
-import { Select } from '@/components/common';
+import { MultiSelect } from '@/components/common';
 import type { SelectOption } from '@/components/common/Select/Select.types';
 
 interface StoreFilterProps {
   stores: StoreGroupSummary[];
-  selectedStoreId: string | null | 'all';
-  onStoreChange: (storeId: string | null | 'all') => void;
+  selectedStoreIds: string[];
+  onStoreChange: (storeIds: string[]) => void;
 }
 
 export default function StoreFilter({
   stores,
-  selectedStoreId,
+  selectedStoreIds,
   onStoreChange,
 }: StoreFilterProps) {
   if (!stores || stores.length === 0) {
@@ -33,39 +33,23 @@ export default function StoreFilter({
     return a.storeName.localeCompare(b.storeName);
   });
 
-  // Build options array for Select component
-  const options: SelectOption<string>[] = [
-    {
-      label: `All Stores (${stores.reduce((sum, s) => sum + s.itemCount, 0)} items)`,
-      value: 'all',
-    },
-    ...sortedStores.map((store) => ({
-      label: `${store.storeName} (${store.itemCount} items, ${store.pendingCount} pending)`,
-      value: store.storeId || 'unassigned',
-    })),
-  ];
-
-  // Convert between internal state (null for unassigned) and select value (string)
-  const selectValue = selectedStoreId === null ? 'unassigned' : selectedStoreId;
-
-  const handleChange = (value: string) => {
-    if (value === 'all') {
-      onStoreChange('all');
-    } else if (value === 'unassigned') {
-      onStoreChange(null);
-    } else {
-      onStoreChange(value);
-    }
-  };
+  // Build options array for MultiSelect component
+  const options: SelectOption<string>[] = sortedStores.map((store) => ({
+    label: `${store.storeName} (${store.itemCount} ${store.itemCount === 1 ? 'item' : 'items'})`,
+    value: store.storeId || 'unassigned',
+  }));
 
   return (
-    <Select
-      id="store-filter"
-      label="Filter by Store"
-      options={options}
-      value={selectValue}
-      onChange={handleChange}
-    />
+    <div className="min-w-[250px]">
+      <MultiSelect
+        id="store-filter"
+        label="Filter by Store"
+        options={options}
+        value={selectedStoreIds}
+        onChange={onStoreChange}
+        placeholder="All Stores"
+      />
+    </div>
   );
 }
 

@@ -8,13 +8,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { InventoryItem } from '@/types/entities';
-import { Button, Text, EmptyState } from '@/components/common';
+import { Button, Text, EmptyState, Modal } from '@/components/common';
 import QuantityControls from '@/components/common/QuantityControls';
 import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { adjustInventoryQuantity } from '@/lib/api/inventory';
+import NFCUrlManager from '@/components/inventory/NFCUrlManager';
 import {
   ShoppingCartIcon,
   PencilIcon,
@@ -31,7 +32,6 @@ interface InventoryListProps {
   onArchive: (item: InventoryItem) => void;
   onDelete: (item: InventoryItem) => void;
   onAddToShoppingList: (item: InventoryItem) => void;
-  onViewDetails?: (item: InventoryItem) => void;
   onItemUpdated?: (updatedItem: InventoryItem) => void;
   isAdmin?: boolean;
 }
@@ -48,9 +48,9 @@ function InventoryListItem({
   onArchive,
   onDelete,
   onAddToShoppingList,
-  onViewDetails,
   onItemUpdated,
   onSuggest,
+  onShowNFCModal,
 }: {
   item: InventoryItem;
   familyId: string;
@@ -60,9 +60,9 @@ function InventoryListItem({
   onArchive: (item: InventoryItem) => void;
   onDelete: (item: InventoryItem) => void;
   onAddToShoppingList: (item: InventoryItem) => void;
-  onViewDetails?: (item: InventoryItem) => void;
   onItemUpdated?: (updatedItem: InventoryItem) => void;
   onSuggest: (item: InventoryItem) => void;
+  onShowNFCModal: (item: InventoryItem) => void;
 }) {
   const isLowStock = item.quantity <= item.lowStockThreshold;
 
@@ -196,17 +196,15 @@ function InventoryListItem({
               >
                 Add
               </Button>
-              {onViewDetails && (
-                <Button
-                  onClick={() => onViewDetails(item)}
-                  variant="secondary"
-                  size="sm"
-                  leftIcon={<QrCodeIcon className="h-4 w-4" />}
-                  title="Manage NFC URLs"
-                >
-                  NFC URLs
-                </Button>
-              )}
+              <Button
+                onClick={() => onShowNFCModal(item)}
+                variant="secondary"
+                size="sm"
+                leftIcon={<QrCodeIcon className="h-4 w-4" />}
+                title="Manage NFC URLs"
+              >
+                NFC URLs
+              </Button>
               <Button
                 onClick={() => onEdit(item)}
                 variant="warning"
@@ -249,18 +247,26 @@ export default function InventoryList({
   onArchive,
   onDelete,
   onAddToShoppingList,
-  onViewDetails,
   onItemUpdated,
   isAdmin = false,
 }: InventoryListProps) {
   const router = useRouter();
   const isOnline = useOnlineStatus();
+  const [nfcModalItem, setNfcModalItem] = useState<InventoryItem | null>(null);
 
   const handleSuggest = (item: InventoryItem) => {
     // Navigate to suggestion form with pre-filled itemId for add_to_shopping type
     router.push(
       `/suggestions/suggest?itemId=${item.itemId}&itemName=${encodeURIComponent(item.name)}`
     );
+  };
+
+  const handleShowNFCModal = (item: InventoryItem) => {
+    setNfcModalItem(item);
+  };
+
+  const handleCloseNFCModal = () => {
+    setNfcModalItem(null);
   };
 
   if (!items || items.length === 0) {
@@ -273,26 +279,80 @@ export default function InventoryList({
     );
   }
 
+  // Group items by storage location for display
+  const groupedItems: Record<string, InventoryItem[]> = {};
+  items.forEach((item) => {
+    const locationKey = item.locationName || 'Unassigned';
+    if (!groupedItems[locationKey]) {
+      groupedItems[locationKey] = [];
+    }
+    groupedItems[locationKey].push(item);
+  });
+
+  // Sort items within each location alphabetically by name
+  Object.keys(groupedItems).forEach((locationKey) => {
+    const locationItems = groupedItems[locationKey];
+    if (locationItems) {
+      locationItems.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    }
+  });
+
+  // Get sorted location names: alphabetically, with 'Unassigned' at the end
+  const sortedLocationNames = Object.keys(groupedItems).sort((a, b) => {
+    if (a === 'Unassigned') return 1;
+    if (b === 'Unassigned') return -1;
+    return a.localeCompare(b);
+  });
+
   return (
-    <div className="overflow-hidden bg-surface shadow sm:rounded-md">
-      <ul role="list" className="divide-y divide-border">
-        {items.map((item) => (
-          <InventoryListItem
-            key={item.itemId}
-            item={item}
-            familyId={familyId}
-            isAdmin={isAdmin}
-            isOnline={isOnline}
-            onEdit={onEdit}
-            onArchive={onArchive}
-            onDelete={onDelete}
-            onAddToShoppingList={onAddToShoppingList}
-            onViewDetails={onViewDetails}
-            onItemUpdated={onItemUpdated}
-            onSuggest={handleSuggest}
+    <div className="mt-6 space-y-8">
+      {sortedLocationNames.map((locationName) => {
+        const locationItems = groupedItems[locationName];
+        if (!locationItems) return null;
+
+        return (
+          <div key={locationName}>
+            <Text variant="h3" className="mb-4 text-text-default">
+              {locationName}
+            </Text>
+            <div className="overflow-hidden bg-surface shadow sm:rounded-md">
+              <ul role="list" className="divide-y divide-border">
+                {locationItems.map((item) => (
+                  <InventoryListItem
+                    key={item.itemId}
+                    item={item}
+                    familyId={familyId}
+                    isAdmin={isAdmin}
+                    isOnline={isOnline}
+                    onEdit={onEdit}
+                    onArchive={onArchive}
+                    onDelete={onDelete}
+                    onAddToShoppingList={onAddToShoppingList}
+                    onItemUpdated={onItemUpdated}
+                    onSuggest={handleSuggest}
+                    onShowNFCModal={handleShowNFCModal}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* NFC URL Management Modal */}
+      {nfcModalItem && (
+        <Modal
+          isOpen={true}
+          onClose={handleCloseNFCModal}
+          title={`NFC URLs - ${nfcModalItem.name}`}
+          size="lg"
+        >
+          <NFCUrlManager
+            itemId={nfcModalItem.itemId}
+            itemName={nfcModalItem.name}
           />
-        ))}
-      </ul>
+        </Modal>
+      )}
     </div>
   );
 }

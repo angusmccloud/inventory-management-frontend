@@ -25,9 +25,9 @@ export default function DeleteConfirmDialog({
     <Dialog
       isOpen={isOpen}
       type="error"
-      title={`Delete ${entityType}`}
-      message={`Are you sure you want to delete "${name}"? This action cannot be undone.`}
-      confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+      title={`Archive ${entityType}`}
+      message={`Archive ${name}? You can restore it later.`}
+      confirmLabel={isDeleting ? 'Archiving...' : 'Archive'}
       cancelLabel="Cancel"
       onConfirm={onConfirm}
       onCancel={onClose}

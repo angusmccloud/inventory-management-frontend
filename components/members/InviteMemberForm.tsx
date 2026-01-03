@@ -54,7 +54,7 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
       <RoleSelector value={role} onChange={setRole} disabled={isSubmitting} />
 
       {error && (
-        <div className="p-3 bg-error/10/20 border border-error rounded-lg">
+        <div className="p-3 bg-error/10 border border-error rounded-lg">
           <Text variant="bodySmall" color="error">{error}</Text>
         </div>
       )}

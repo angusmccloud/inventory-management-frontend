@@ -67,7 +67,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 }) => {
   const id = React.useId();
   const hasError = Boolean(error);
-  const displayLabel = visibleLabel || label;
+  const displayLabel = visibleLabel !== undefined ? visibleLabel : label;
 
   const handleChange = (): void => {
     if (!disabled) {
@@ -87,15 +87,17 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
     <div className={className}>
       <div className="flex items-center justify-between">
         {/* Label */}
-        <label
-          htmlFor={id}
-          className={cn(
-            'text-sm font-medium text-text-primary',
-            disabled && 'opacity-50 cursor-not-allowed'
-          )}
-        >
-          {displayLabel}
-        </label>
+        {displayLabel && (
+          <label
+            htmlFor={id}
+            className={cn(
+              'text-sm font-medium text-text-primary',
+              disabled && 'opacity-50 cursor-not-allowed'
+            )}
+          >
+            {displayLabel}
+          </label>
+        )}
 
         {/* Toggle Button */}
         <button

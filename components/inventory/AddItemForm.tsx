@@ -94,10 +94,12 @@ export default function AddItemForm({
     value: loc.locationId,
   }));
 
-  const storeOptions: SelectOption[] = stores.map((store) => ({
-    label: store.name,
-    value: store.storeId,
-  }));
+  const storeOptions: SelectOption[] = stores
+    .map((store) => ({
+      label: store.name,
+      value: store.storeId,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
