@@ -13,7 +13,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import type { ThemeMode, AppliedTheme, ThemeContextValue } from '@/types/theme';
 import { ThemeStorage } from '@/lib/theme-storage';
 import { getThemePreference, updateThemePreference } from '@/lib/api/theme';
-import { isAuthenticated, getUserContext, getAuthToken } from '@/lib/auth';
+import { isAuthenticated, getUserContext } from '@/lib/auth';
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 

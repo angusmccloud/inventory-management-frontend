@@ -4,7 +4,6 @@
  * Tests type selection, field rendering, validation, and submission.
  */
 
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SuggestionForm } from '../../../components/suggestions/SuggestionForm';
 import * as inventoryApi from '../../../lib/api/inventory';

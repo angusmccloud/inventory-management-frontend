@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getDashboardPublic, recordDashboardAccess } from '@/lib/api/dashboards';
 import { DashboardWithItems, DashboardItem as DashboardItemType } from '@/types/dashboard';
 import DashboardItemCard from './DashboardItemCard';
@@ -14,7 +14,6 @@ export default function DashboardView({ dashboardId }: DashboardViewProps) {
   const [dashboard, setDashboard] = useState<DashboardWithItems | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadDashboard = useCallback(async (isRefresh: boolean = false): Promise<void> => {
     try {

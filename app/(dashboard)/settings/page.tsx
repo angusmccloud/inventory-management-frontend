@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
-import { TabNavigation, Card, PageLoading, Text, LoadingSpinner, Button, PageHeader, PageContainer } from '@/components/common';
+import { TabNavigation, PageLoading, Text, LoadingSpinner, Button, PageHeader, PageContainer } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 import type { UserContext, StorageLocation, Store, Member, Invitation, MemberRole, ListMembersResponse } from '@/types/entities';
 import StorageLocationList from '@/components/reference-data/StorageLocationList';

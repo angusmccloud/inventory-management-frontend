@@ -44,6 +44,8 @@ export default function MultiSelect<T extends string = string>({
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
+    
+    return undefined;
   }, [isOpen]);
 
   const toggleOption = (optionValue: T) => {

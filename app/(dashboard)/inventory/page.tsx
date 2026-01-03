@@ -7,7 +7,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
 import {
@@ -41,7 +41,6 @@ type DialogState =
   | { type: 'confirm'; item: InventoryItem; action: 'archive' | 'delete' };
 
 export default function InventoryPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState<InventoryItem[]>([]);
@@ -54,7 +53,6 @@ export default function InventoryPage() {
   const [activeTab, setActiveTab] = useState<string>('inventory');
   const [locationMap, setLocationMap] = useState<Map<string, StorageLocation>>(new Map());
   const [storeMap, setStoreMap] = useState<Map<string, Store>>(new Map());
-  const [newDashboardUrl, setNewDashboardUrl] = useState<string | null>(null);
 
   const tabs: Tab[] = [
     { id: 'inventory', label: 'Inventory' },
@@ -368,12 +366,9 @@ export default function InventoryPage() {
                 {modalState.type === 'addDashboard' && (
                   <DashboardForm
                     familyId={familyId}
-                    onSuccess={(dashboardId, shareableUrl) => {
+                    onSuccess={(_dashboardId, _shareableUrl) => {
                       setModalState({ type: 'none' });
-                      if (shareableUrl) {
-                        setNewDashboardUrl(shareableUrl);
-                      }
-                      showSnackbar('List created successfully!');
+                      showSnackbar({ variant: 'success', text: 'List created successfully!' });
                       // Reload page to refresh dashboard list
                       window.location.reload();
                     }}
@@ -387,7 +382,7 @@ export default function InventoryPage() {
                     dashboardId={modalState.dashboardId}
                     onSuccess={() => {
                       setModalState({ type: 'none' });
-                      showSnackbar('List updated successfully!');
+                      showSnackbar({ variant: 'success', text: 'List updated successfully!' });
                       // Reload page to refresh dashboard list
                       window.location.reload();
                     }}

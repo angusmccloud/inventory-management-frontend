@@ -4,7 +4,6 @@
  * Tests filtering by status, pagination, and list rendering.
  */
 
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SuggestionList } from '../../../components/suggestions/SuggestionList';
 import * as suggestionsApi from '../../../lib/api/suggestions';

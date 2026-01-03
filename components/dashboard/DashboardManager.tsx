@@ -20,7 +20,7 @@ interface DashboardManagerProps {
   onEdit?: (dashboardId: string) => void;
 }
 
-export default function DashboardManager({ familyId, onCreateNew, onEdit }: DashboardManagerProps) {
+export default function DashboardManager({ familyId: _familyId, onCreateNew, onEdit }: DashboardManagerProps) {
   // @ts-ignore - dashboards is used in renderListView  
   const [dashboards, setDashboards] = useState<DashboardListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -95,7 +95,7 @@ export default function DashboardManager({ familyId, onCreateNew, onEdit }: Dash
       setLoading(true);
       setError(null);
       const result = await rotateDashboard(dashboardId);
-      const newUrl = `${window.location.origin}/d/${result.newDashboardId}`;
+      const newUrl = `${window.location.origin}/d/${result.newDashboard.dashboardId}`;
       setSuccessMessage(`URL rotated successfully! New URL: ${newUrl}`);
       await loadDashboards();
     } catch (err) {
@@ -123,9 +123,11 @@ export default function DashboardManager({ familyId, onCreateNew, onEdit }: Dash
             <Text variant="body" color="secondary" className="mb-4">
               You haven't created any dashboards yet.
             </Text>
-            <Button variant="primary" onClick={() => setView('create')}>
-              Create Your First List
-            </Button>
+            {onCreateNew && (
+              <Button variant="primary" onClick={onCreateNew}>
+                Create Your First List
+              </Button>
+            )}
           </div>
         </Card>
       ) : (

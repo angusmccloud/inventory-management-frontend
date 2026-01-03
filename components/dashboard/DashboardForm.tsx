@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/common/Card/Card';
 import { Button } from '@/components/common/Button/Button';
 import { Input } from '@/components/common/Input/Input';
 import { Alert } from '@/components/common/Alert/Alert';
@@ -63,13 +62,21 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
     
     try {
       setLoading(true);
-      const dashboard = await getDashboard(dashboardId);
+      const dashboardData = await getDashboard(dashboardId);
+      
+      // Extract configuration based on dashboard type
+      const locationIds = dashboardData.dashboard.type === 'location'
+        ? Array.from(new Set(dashboardData.items.filter(item => item.locationId).map(item => item.locationId!)))
+        : [];
+      const itemIds = dashboardData.dashboard.type === 'items'
+        ? dashboardData.items.map(item => item.itemId)
+        : [];
       
       setFormData({
-        name: dashboard.title,
-        type: dashboard.type,
-        locationIds: dashboard.locationIds || [],
-        itemIds: dashboard.items?.map(item => item.itemId) || [],
+        name: dashboardData.dashboard.title,
+        type: dashboardData.dashboard.type,
+        locationIds,
+        itemIds,
       });
     } catch (err) {
       console.error('Failed to load dashboard:', err);
@@ -138,9 +145,9 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         };
 
         const result = await createDashboard(input);
-        const shareableUrl = `${window.location.origin}/d/${result.dashboardId}`;
+        const shareableUrl = `${window.location.origin}/d/${result.dashboard.dashboardId}`;
         
-        onSuccess(result.dashboardId, shareableUrl);
+        onSuccess(result.dashboard.dashboardId, shareableUrl);
       }
     } catch (err) {
       console.error(`Failed to ${dashboardId ? 'update' : 'create'} dashboard:`, err);
