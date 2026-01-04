@@ -125,6 +125,12 @@ export default function InventoryPage() {
     if (action === 'add') {
       setModalState({ type: 'add' });
     }
+
+    // Persist tab selection via `tab` query param (e.g. ?tab=tracking-lists)
+    const tab = searchParams.get('tab');
+    if (tab && ['inventory', 'tracking-lists'].includes(tab)) {
+      setActiveTab(tab);
+    }
   }, [searchParams]);
 
   const loadInventory = async (): Promise<void> => {
@@ -248,6 +254,17 @@ export default function InventoryPage() {
     }
   };
 
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tabId);
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {
+      // noop
+    }
+  };
+
   if (loading) {
     return <PageLoading message="Loading inventory..." fullHeight={false} />;
   }
@@ -303,7 +320,7 @@ export default function InventoryPage() {
       )}
 
       {/* Tab Navigation */}
-      <TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <TabNavigation tabs={tabs} activeTab={activeTab} onChange={handleTabChange} />
 
       {/* Inventory Tab */}
       {activeTab === 'inventory' && (

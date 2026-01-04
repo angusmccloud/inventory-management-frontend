@@ -89,15 +89,14 @@ export default function HelpPage() {
 
         <div className="mt-6">
           {activeTab === 'contact' && (
-            <div className="rounded-lg border border-border bg-surface p-6">
-              <Text variant="h3">Contact Us</Text>
-
+            <div>
+              <Text variant="h3" className="mb-1 text-text-default">Contact Us</Text>
               <ContactForm />
             </div>
           )}
 
           {activeTab === 'privacy' && (
-            <div className="rounded-lg border border-border bg-surface p-6">
+            <div>
               {privacyContent ? (
                 <div className="prose prose-sm prose-invert mt-2 text-sm text-text-secondary">
                   <ReactMarkdown>{privacyContent}</ReactMarkdown>
@@ -111,7 +110,7 @@ export default function HelpPage() {
           )}
 
           {activeTab === 'terms' && (
-            <div className="rounded-lg border border-border bg-surface p-6">
+            <div>
               {termsContent ? (
                 <div className="prose prose-sm prose-invert mt-2 text-sm text-text-secondary">
                   <ReactMarkdown>{termsContent}</ReactMarkdown>

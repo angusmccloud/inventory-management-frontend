@@ -97,6 +97,17 @@ export default function SettingsPage() {
     }
   }, []);
 
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tabId);
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {
+      // noop
+    }
+  };
+
   useEffect(() => {
     const context = getUserContext();
     if (!context) {
@@ -351,7 +362,7 @@ export default function SettingsPage() {
       <TabNavigation
         tabs={tabs}
         activeTab={activeTab}
-        onChange={setActiveTab}
+        onChange={handleTabChange}
         responsiveMode="auto"
       />
 

@@ -29,6 +29,15 @@ export default function SuggestionsPage() {
     loadFamilyId();
   }, []);
 
+  // Persist tab selection via `tab` query param (e.g. ?tab=approved)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['pending', 'approved', 'rejected', 'all'].includes(tabParam)) {
+      setStatusFilter(tabParam);
+    }
+  }, []);
+
   const loadFamilyId = async (): Promise<void> => {
     try {
       const userContext = getUserContext();
@@ -116,6 +125,13 @@ export default function SuggestionsPage() {
         onChange={(tabId) => {
           // Convert 'all' tab to undefined for SuggestionList
           setStatusFilter(tabId);
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('tab', tabId);
+            window.history.replaceState({}, '', url.toString());
+          } catch (e) {
+            // noop
+          }
         }}
         responsiveMode="auto"
       />
