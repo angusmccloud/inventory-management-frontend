@@ -6,7 +6,7 @@
 
 'use client';
 
-import { LowStockNotification, LowStockNotificationStatus } from '@/types/entities';
+import { LowStockNotification } from '@/types/entities';
 import NotificationItem from './NotificationItem';
 import { Text } from '@/components/common';
 

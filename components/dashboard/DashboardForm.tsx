@@ -63,14 +63,31 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
     try {
       setLoading(true);
       const dashboardData = await getDashboard(dashboardId);
-      
-      // API client automatically unwraps the response, so dashboardData is the dashboard object
-      const locationIds = dashboardData.locationIds || [];
-      const itemIds = dashboardData.itemIds || [];
-      
+
+      // The API may return different shapes depending on endpoint/version.
+      // Normalize to extract title, type, locationIds and itemIds.
+      let title = '';
+      let type: DashboardType = 'location';
+      let locationIds: string[] = [];
+      let itemIds: string[] = [];
+
+      if ((dashboardData as any).dashboard) {
+        // Public shape: { dashboard: { title, type, ... }, items: [...] }
+        title = (dashboardData as any).dashboard.title || '';
+        type = (dashboardData as any).dashboard.type || 'location';
+        locationIds = (dashboardData as any).locationIds ?? (dashboardData as any).dashboard.locationIds ?? [];
+        itemIds = (dashboardData as any).itemIds ?? (dashboardData as any).dashboard.itemIds ?? [];
+      } else {
+        // Admin/admin API shape: dashboard object inline
+        title = (dashboardData as any).title || '';
+        type = (dashboardData as any).type || 'location';
+        locationIds = (dashboardData as any).locationIds ?? [];
+        itemIds = (dashboardData as any).itemIds ?? [];
+      }
+
       setFormData({
-        name: dashboardData.title,
-        type: dashboardData.type,
+        name: title,
+        type,
         locationIds,
         itemIds,
       });
@@ -141,9 +158,10 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         };
 
         const result = await createDashboard(input);
-        const shareableUrl = `${window.location.origin}/d/${result.dashboardId}`;
-        
-        onSuccess(result.dashboardId, shareableUrl);
+        const newDashboardId = (result as any).dashboardId ?? (result as any).dashboard?.dashboardId;
+        const shareableUrl = `${window.location.origin}/d/${newDashboardId}`;
+
+        onSuccess(newDashboardId, shareableUrl);
       }
     } catch (err) {
       console.error(`Failed to ${dashboardId ? 'update' : 'create'} dashboard:`, err);

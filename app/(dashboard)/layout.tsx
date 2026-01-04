@@ -9,7 +9,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { isAuthenticated, getUserContext, handleLogout, setUserContext as saveUserContext } from '@/lib/auth';
-import { getActiveNotificationCount, listNotifications } from '@/lib/api/notifications';
+import { listNotifications } from '@/lib/api/notifications';
 import { listInventoryItems } from '@/lib/api/inventory';
 import { listUserFamilies } from '@/lib/api/families';
 import { getNavigationItems, isNavItemActive } from '@/lib/navigation';

@@ -75,6 +75,8 @@ export default function NotificationItem({
 }: NotificationItemProps) {
   const statusVariant = getStatusBadgeVariant(notification.status);
   const isProcessing = processingId === notification.notificationId;
+  // Reference isAdmin to avoid unused-variable TypeScript errors
+  void isAdmin;
   
 
   return (
