@@ -1,11 +1,13 @@
 /**
  * Dialog Component
- * 
+ *
  * Reusable confirmation and alert dialog.
  */
 
 'use client';
 
+import { useEffect, useId, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/common/Button/Button';
 import { Text } from '@/components/common/Text/Text';
 
@@ -14,7 +16,7 @@ export type DialogType = 'primary' | 'secondary' | 'tertiary' | 'error' | 'warni
 export interface DialogProps {
   isOpen: boolean;
   title: string;
-  message: string;
+  message: ReactNode;
   type?: DialogType;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -35,14 +37,22 @@ export default function Dialog({
   onCancel,
   showCancel = true,
 }: DialogProps) {
-  if (!isOpen) return null;
+  const titleId = useId();
+  const descriptionId = useId();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   // Default showCancel to true for primary (confirm-style), false for others (alert-style)
-  const shouldShowCancel = showCancel ?? (type === 'primary');
-  
+  const shouldShowCancel = showCancel ?? type === 'primary';
+
   // Map dialog type to button variant
   const buttonVariant = type === 'error' ? 'danger' : type;
-  
+
   // Map dialog type to icon color classes
   const iconColorMap: Record<DialogType, { bg: string; text: string }> = {
     primary: { bg: 'bg-primary/10', text: 'text-primary' },
@@ -51,11 +61,11 @@ export default function Dialog({
     error: { bg: 'bg-error/10', text: 'text-error' },
     warning: { bg: 'bg-warning/10', text: 'text-warning' },
   };
-  
+
   const iconColors = iconColorMap[type];
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[120] overflow-y-auto">
       <div className="flex min-h-screen items-center justify-center px-4 text-center sm:p-0">
         {/* Background overlay */}
         <div
@@ -64,10 +74,18 @@ export default function Dialog({
         />
 
         {/* Dialog panel - Feature 011-mobile-responsive-ui: 90% width on mobile */}
-        <div className="relative w-[90%] max-w-full inline-block align-bottom bg-surface-elevated rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        <div
+          className="relative inline-block w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface-elevated px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
+        >
           <div>
             {/* Icon */}
-            <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${iconColors.bg}`}>
+            <div
+              className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${iconColors.bg}`}
+            >
               {type === 'error' || type === 'warning' ? (
                 <svg
                   className={`h-6 w-6 ${iconColors.text}`}
@@ -101,54 +119,47 @@ export default function Dialog({
 
             {/* Content */}
             <div className="mt-3 text-center sm:mt-5">
-              <h3 className="text-lg font-semibold leading-6 text-text-primary">
+              <h3 id={titleId} className="text-lg font-semibold leading-6 text-text-primary">
                 {title}
               </h3>
-              <div className="mt-2">
-                <Text variant="bodySmall" color="secondary">{message}</Text>
+              <div className="mt-2" id={descriptionId}>
+                {typeof message === 'string' ? (
+                  <Text variant="bodySmall" color="secondary">
+                    {message}
+                  </Text>
+                ) : (
+                  message
+                )}
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className={`mt-5 sm:mt-6 ${shouldShowCancel ? 'sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3' : ''}`}>
+          <div
+            className={`mt-5 sm:mt-6 ${shouldShowCancel ? 'sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3' : ''}`}
+          >
             {shouldShowCancel ? (
               <>
                 <div className="sm:col-start-2">
-                  <Button
-                    variant={buttonVariant}
-                    size="sm"
-                    fullWidth
-                    onClick={onConfirm}
-                  >
+                  <Button variant={buttonVariant} size="sm" fullWidth onClick={onConfirm}>
                     {confirmLabel}
                   </Button>
                 </div>
                 <div className="mt-3 sm:col-start-1 sm:mt-0">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    fullWidth
-                    onClick={onCancel}
-                  >
+                  <Button variant="secondary" size="sm" fullWidth onClick={onCancel}>
                     {cancelLabel}
                   </Button>
                 </div>
               </>
             ) : (
-              <Button
-                variant={buttonVariant}
-                size="sm"
-                fullWidth
-                onClick={onConfirm}
-              >
+              <Button variant={buttonVariant} size="sm" fullWidth onClick={onConfirm}>
                 {confirmLabel}
               </Button>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
-

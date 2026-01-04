@@ -1,7 +1,7 @@
 /**
  * ShoppingListItem Component
  * Feature: 002-shopping-lists
- * 
+ *
  * Displays a single shopping list item with checkbox to toggle purchased status.
  */
 
@@ -42,7 +42,9 @@ export default function ShoppingListItemComponent({
   const isPurchased = item.status === 'purchased';
 
   return (
-    <div className={`bg-surface rounded-lg shadow-sm border ${isPurchased ? 'border-border bg-surface-elevated bg-surface' : 'border-border'} p-4 h-auto self-start`}>
+    <div
+      className={`rounded-lg border bg-surface shadow-sm ${isPurchased ? 'border-border bg-surface bg-surface-elevated' : 'border-border'} h-auto self-start p-4`}
+    >
       <div className="flex items-center">
         {/* Content Section */}
         <div className="min-w-0 flex-1">
@@ -55,12 +57,16 @@ export default function ShoppingListItemComponent({
               disabled={isToggling}
               className="flex-shrink-0"
             />
-            <div className="flex-1 min-w-0">
-              <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>
+            <div className="min-w-0 flex-1">
+              <h3
+                className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}
+              >
                 {item.name}
                 {item.quantity && (
                   <span className="text-text-subtle">
-                    {' '}({item.quantity}{item.unit ? ` ${item.unit}` : ''})
+                    {' '}
+                    ({item.quantity}
+                    {item.unit ? ` ${item.unit}` : ''})
                   </span>
                 )}
               </h3>
@@ -74,14 +80,16 @@ export default function ShoppingListItemComponent({
 
           {/* Item Details */}
           {(item.inventoryNotes || item.notes) && (
-            <div className="space-y-2 text-sm mt-2">
+            <div className="mt-2 space-y-2 text-sm">
               {item.inventoryNotes && (
-                <div className="text-text-subtle text-xs italic border-l-2 border-border pl-2">
+                <div className="text-text-subtle border-l-2 border-border pl-2 text-xs italic">
                   {item.inventoryNotes}
                 </div>
               )}
               {item.notes && (
-                <Text variant="bodySmall" color="secondary">{item.notes}</Text>
+                <Text variant="bodySmall" color="secondary">
+                  {item.notes}
+                </Text>
               )}
             </div>
           )}
@@ -89,14 +97,19 @@ export default function ShoppingListItemComponent({
 
         {/* Actions */}
         {!isPurchased && isAdmin && (
-          <div className="ml-4 flex-shrink-0 flex space-x-2">
+          <div className="ml-4 flex flex-shrink-0 space-x-2">
             <Button
               variant="secondary"
               size="sm"
               onClick={() => onEdit(item)}
               leftIcon={
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
                 </svg>
               }
               responsiveText={{ showAt: 'md' }}
@@ -122,4 +135,3 @@ export default function ShoppingListItemComponent({
     </div>
   );
 }
-

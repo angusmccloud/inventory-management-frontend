@@ -1,7 +1,7 @@
 /**
  * IconButton Component
  * Feature: 008-common-components
- * 
+ *
  * Button optimized for icon-only display with proper touch targets and accessibility.
  */
 
@@ -14,11 +14,15 @@ import type { ButtonVariant, ButtonSize } from '../Button/Button.types';
  * Variant-specific styles mapping (same as Button)
  */
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary disabled:bg-primary/50',
-  secondary: 'bg-secondary text-secondary-contrast hover:bg-secondary-hover focus:ring-secondary disabled:bg-secondary/50',
-  tertiary: 'bg-transparent text-text-primary hover:bg-surface-elevated focus:ring-primary disabled:opacity-50',
+  primary:
+    'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary disabled:bg-primary/50',
+  secondary:
+    'bg-secondary text-secondary-contrast hover:bg-secondary-hover focus:ring-secondary disabled:bg-secondary/50',
+  tertiary:
+    'bg-transparent text-text-primary hover:bg-surface-elevated focus:ring-primary disabled:opacity-50',
   danger: 'bg-error text-error-contrast hover:bg-error/90 focus:ring-error disabled:bg-error/50',
-  warning: 'bg-warning text-warning-contrast hover:bg-warning/90 focus:ring-warning disabled:bg-warning/50',
+  warning:
+    'bg-warning text-warning-contrast hover:bg-warning/90 focus:ring-warning disabled:bg-warning/50',
 };
 
 /**
@@ -26,9 +30,9 @@ const variantStyles: Record<ButtonVariant, string> = {
  * Feature: 011-mobile-responsive-ui - Verified WCAG 2.1 AA touch target sizes
  */
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'p-1.5 min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px]',      // 44px mobile, 32px desktop
-  md: 'p-2 min-h-[44px] min-w-[44px] md:min-h-[40px] md:min-w-[40px]',        // 44px mobile, 40px desktop
-  lg: 'p-3 min-h-[48px] min-w-[48px]',                                         // 48px all breakpoints
+  sm: 'p-1.5 min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px]', // 44px mobile, 32px desktop
+  md: 'p-2 min-h-[44px] min-w-[44px] md:min-h-[40px] md:min-w-[40px]', // 44px mobile, 40px desktop
+  lg: 'p-3 min-h-[48px] min-w-[48px]', // 48px all breakpoints
 };
 
 /**
@@ -49,14 +53,7 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
         fill="currentColor"
@@ -68,19 +65,19 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
 
 /**
  * IconButton component for icon-only actions
- * 
+ *
  * @example
  * ```tsx
  * // Edit button
- * <IconButton 
+ * <IconButton
  *   icon={<PencilIcon className="h-5 w-5" />}
  *   aria-label="Edit item"
  *   variant="secondary"
  *   onClick={handleEdit}
  * />
- * 
+ *
  * // Delete button with loading
- * <IconButton 
+ * <IconButton
  *   icon={<TrashIcon className="h-5 w-5" />}
  *   aria-label="Delete item"
  *   variant="warning"

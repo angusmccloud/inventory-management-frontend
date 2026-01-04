@@ -13,10 +13,10 @@ export type AppliedTheme = 'light' | 'dark';
 export interface ThemeContextValue {
   /** User's selected theme mode */
   mode: ThemeMode;
-  
+
   /** Currently applied theme */
   applied: AppliedTheme;
-  
+
   /** Update theme mode */
   setMode: (mode: ThemeMode) => void | Promise<void>;
 }

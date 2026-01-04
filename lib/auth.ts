@@ -1,6 +1,6 @@
 /**
  * Authentication Helpers - Inventory HQ Frontend
- * 
+ *
  * Provides authentication utilities for Cognito integration,
  * token management, and user context access.
  */
@@ -20,19 +20,22 @@ import { UserContext } from '@/types/entities';
 
 // Configure Amplify
 if (typeof window !== 'undefined') {
-  Amplify.configure({
-    Auth: {
-      Cognito: {
-        userPoolId: process.env['NEXT_PUBLIC_USER_POOL_ID'] || '',
-        userPoolClientId: process.env['NEXT_PUBLIC_USER_POOL_CLIENT_ID'] || '',
-        loginWith: {
-          email: true,
+  Amplify.configure(
+    {
+      Auth: {
+        Cognito: {
+          userPoolId: process.env['NEXT_PUBLIC_USER_POOL_ID'] || '',
+          userPoolClientId: process.env['NEXT_PUBLIC_USER_POOL_CLIENT_ID'] || '',
+          loginWith: {
+            email: true,
+          },
         },
       },
     },
-  }, {
-    ssr: true,
-  });
+    {
+      ssr: true,
+    }
+  );
 }
 
 /**
@@ -54,14 +57,11 @@ export const cognitoConfig = {
 /**
  * Store authentication tokens in local storage
  */
-export const setAuthTokens = (
-  idToken: string,
-  refreshToken: string
-): void => {
+export const setAuthTokens = (idToken: string, refreshToken: string): void => {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   localStorage.setItem(AUTH_TOKEN_KEY, idToken);
   localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
 };
@@ -73,7 +73,7 @@ export const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   return localStorage.getItem(AUTH_TOKEN_KEY);
 };
 
@@ -84,7 +84,7 @@ export const getRefreshToken = (): string | null => {
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   return localStorage.getItem(REFRESH_TOKEN_KEY);
 };
 
@@ -95,7 +95,7 @@ export const clearAuth = (): void => {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   localStorage.removeItem(AUTH_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
   localStorage.removeItem(USER_CONTEXT_KEY);
@@ -108,7 +108,7 @@ export const setUserContext = (context: UserContext): void => {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   localStorage.setItem(USER_CONTEXT_KEY, JSON.stringify(context));
 };
 
@@ -119,12 +119,12 @@ export const getUserContext = (): UserContext | null => {
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   const contextJson = localStorage.getItem(USER_CONTEXT_KEY);
   if (!contextJson) {
     return null;
   }
-  
+
   try {
     return JSON.parse(contextJson) as UserContext;
   } catch {
@@ -157,7 +157,7 @@ export const isSuggester = (): boolean => {
 
 /**
  * Decode JWT token payload (without verification)
- * 
+ *
  * Note: This is for reading claims only. Verification happens on the backend.
  */
 export const decodeToken = (token: string): Record<string, unknown> | null => {
@@ -166,7 +166,7 @@ export const decodeToken = (token: string): Record<string, unknown> | null => {
     if (parts.length !== 3 || !parts[1]) {
       return null;
     }
-    
+
     const payload = parts[1];
     const decoded = atob(payload);
     return JSON.parse(decoded) as Record<string, unknown>;
@@ -183,16 +183,16 @@ export const isTokenExpired = (token: string): boolean => {
   if (!payload || !payload['exp']) {
     return true;
   }
-  
+
   const expiration = payload['exp'] as number;
   const now = Math.floor(Date.now() / 1000);
-  
+
   return expiration < now;
 };
 
 /**
  * Refresh the access token using AWS Amplify
- * 
+ *
  * Attempts to refresh the current session and update stored tokens.
  * Returns true if successful, false if refresh fails.
  */
@@ -200,23 +200,23 @@ export const refreshAccessToken = async (): Promise<boolean> => {
   try {
     // Force refresh of the session
     const session = await fetchAuthSession({ forceRefresh: true });
-    
+
     const idToken = session.tokens?.idToken?.toString();
     const accessToken = session.tokens?.accessToken?.toString();
-    
+
     if (idToken && accessToken) {
       // Update stored tokens
       setAuthTokens(idToken, accessToken);
-      
+
       // Update user context from new token
       const userContext = extractUserContext(idToken);
       if (userContext) {
         setUserContext(userContext);
       }
-      
+
       return true;
     }
-    
+
     return false;
   } catch (error) {
     console.error('Token refresh failed:', error);
@@ -232,7 +232,7 @@ export const extractUserContext = (idToken: string): UserContext | null => {
   if (!payload) {
     return null;
   }
-  
+
   return {
     memberId: payload['sub'] as string,
     familyId: (payload['custom:familyId'] as string) || '',
@@ -244,19 +244,19 @@ export const extractUserContext = (idToken: string): UserContext | null => {
 
 /**
  * Handle successful login
- * 
+ *
  * Stores tokens and user context, then redirects to dashboard
  */
 export const handleLogin = (idToken: string, refreshToken: string): void => {
   // Store tokens
   setAuthTokens(idToken, refreshToken);
-  
+
   // Extract and store user context
   const userContext = extractUserContext(idToken);
   if (userContext) {
     setUserContext(userContext);
   }
-  
+
   // Redirect to dashboard
   if (typeof window !== 'undefined') {
     window.location.href = '/dashboard';
@@ -265,7 +265,7 @@ export const handleLogin = (idToken: string, refreshToken: string): void => {
 
 /**
  * Login with email and password
- * 
+ *
  * Authenticates user via Cognito and stores tokens
  */
 export const login = async (
@@ -277,7 +277,7 @@ export const login = async (
       username: email,
       password,
     });
-    
+
     if (!isSignedIn && nextStep.signInStep === 'CONFIRM_SIGN_UP') {
       return {
         success: false,
@@ -285,26 +285,26 @@ export const login = async (
         message: 'Please verify your email address first',
       };
     }
-    
+
     if (isSignedIn) {
       // Get session tokens
       const session = await fetchAuthSession();
       const idToken = session.tokens?.idToken?.toString();
       const accessToken = session.tokens?.accessToken?.toString();
-      
+
       if (idToken && accessToken) {
         setAuthTokens(idToken, accessToken);
-        
+
         // Extract user context from ID token
         const userContext = extractUserContext(idToken);
         if (userContext) {
           setUserContext(userContext);
         }
       }
-      
+
       return { success: true };
     }
-    
+
     return {
       success: false,
       message: 'Sign in incomplete. Please try again.',
@@ -320,7 +320,7 @@ export const login = async (
 
 /**
  * Register new user
- * 
+ *
  * Creates new user account in Cognito
  */
 export const register = async (
@@ -340,9 +340,9 @@ export const register = async (
         autoSignIn: false,
       },
     });
-    
+
     console.log('Sign up result:', { isSignUpComplete, userId, nextStep });
-    
+
     if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
       return {
         success: true,
@@ -350,7 +350,7 @@ export const register = async (
         message: 'Account created! Please check your email for a verification code.',
       };
     }
-    
+
     return {
       success: true,
       message: 'Account created successfully!',
@@ -367,7 +367,7 @@ export const register = async (
 
 /**
  * Confirm email verification code
- * 
+ *
  * Verifies user email with code sent by Cognito
  */
 export const confirmEmail = async (
@@ -379,7 +379,7 @@ export const confirmEmail = async (
       username: email,
       confirmationCode: code,
     });
-    
+
     return {
       success: true,
       message: 'Email verified successfully! You can now log in.',
@@ -395,14 +395,14 @@ export const confirmEmail = async (
 
 /**
  * Handle logout
- * 
+ *
  * Signs out from Cognito and clears all auth data
  */
 export const handleLogout = async (): Promise<void> => {
   try {
     await signOut();
     clearAuth();
-    
+
     if (typeof window !== 'undefined') {
       window.location.href = '/login';
     }
@@ -418,7 +418,7 @@ export const handleLogout = async (): Promise<void> => {
 
 /**
  * Get current authenticated user
- * 
+ *
  * Returns current user from Cognito session
  */
 export const getCurrentAuthUser = async (): Promise<{
@@ -438,7 +438,7 @@ export const getCurrentAuthUser = async (): Promise<{
 
 /**
  * Require authentication (for use in components)
- * 
+ *
  * Returns true if authenticated, otherwise redirects to login
  */
 export const requireAuth = (): boolean => {
@@ -448,33 +448,33 @@ export const requireAuth = (): boolean => {
     }
     return false;
   }
-  
+
   return true;
 };
 
 /**
  * Require admin role (for use in components)
- * 
+ *
  * Returns true if user is admin, otherwise redirects to dashboard
  */
 export const requireAdmin = (): boolean => {
   if (!requireAuth()) {
     return false;
   }
-  
+
   if (!isAdmin()) {
     if (typeof window !== 'undefined') {
       window.location.href = '/dashboard';
     }
     return false;
   }
-  
+
   return true;
 };
 
 /**
  * Initiate forgot password flow
- * 
+ *
  * Sends password reset code to user's email via Cognito
  */
 export const forgotPassword = async (
@@ -482,9 +482,9 @@ export const forgotPassword = async (
 ): Promise<{ success: boolean; message?: string }> => {
   try {
     const output = await resetPassword({ username: email });
-    
+
     const { nextStep } = output;
-    
+
     if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
       const codeDeliveryDetails = nextStep.codeDeliveryDetails;
       return {
@@ -492,7 +492,7 @@ export const forgotPassword = async (
         message: `Password reset code sent to ${codeDeliveryDetails.deliveryMedium === 'EMAIL' ? codeDeliveryDetails.destination : 'your email'}`,
       };
     }
-    
+
     return {
       success: false,
       message: 'Unable to initiate password reset. Please try again.',
@@ -508,7 +508,7 @@ export const forgotPassword = async (
 
 /**
  * Confirm forgot password with code and new password
- * 
+ *
  * Completes password reset using verification code from email
  */
 export const confirmForgotPassword = async (
@@ -522,7 +522,7 @@ export const confirmForgotPassword = async (
       confirmationCode: code,
       newPassword,
     });
-    
+
     return {
       success: true,
       message: 'Password reset successful! You can now log in with your new password.',

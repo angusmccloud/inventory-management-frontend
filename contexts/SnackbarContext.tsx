@@ -1,6 +1,6 @@
 /**
  * Snackbar Context
- * 
+ *
  * Provides global snackbar notification system that can be triggered from any component.
  */
 
@@ -15,18 +15,18 @@ export interface SnackbarConfig {
    * Message variant (maps to Alert severity)
    */
   variant: SnackbarVariant;
-  
+
   /**
    * Message text to display
    */
   text: string;
-  
+
   /**
    * Whether to auto-hide the snackbar
    * @default true
    */
   autoHide?: boolean;
-  
+
   /**
    * Duration in milliseconds before auto-hiding
    * @default 5000
@@ -39,7 +39,7 @@ interface SnackbarContextValue {
    * Show a snackbar notification
    */
   showSnackbar: (config: SnackbarConfig) => void;
-  
+
   /**
    * Hide the current snackbar
    */
@@ -60,19 +60,19 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     autoHide: true,
     autoHideDuration: 5000,
   });
-  
+
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-  
+
   const showSnackbar = React.useCallback((config: SnackbarConfig) => {
     // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-    
+
     const autoHide = config.autoHide ?? true;
     const autoHideDuration = config.autoHideDuration ?? 5000;
-    
+
     setSnackbar({
       isOpen: true,
       variant: config.variant,
@@ -80,7 +80,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       autoHide,
       autoHideDuration,
     });
-    
+
     // Set auto-hide timeout if enabled
     if (autoHide) {
       timeoutRef.current = setTimeout(() => {
@@ -89,7 +89,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }, autoHideDuration);
     }
   }, []);
-  
+
   const hideSnackbar = React.useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -97,7 +97,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
     setSnackbar((prev) => ({ ...prev, isOpen: false }));
   }, []);
-  
+
   // Cleanup timeout on unmount
   React.useEffect(() => {
     return () => {
@@ -106,12 +106,9 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     };
   }, []);
-  
-  const value = React.useMemo(
-    () => ({ showSnackbar, hideSnackbar }),
-    [showSnackbar, hideSnackbar]
-  );
-  
+
+  const value = React.useMemo(() => ({ showSnackbar, hideSnackbar }), [showSnackbar, hideSnackbar]);
+
   return (
     <SnackbarContext.Provider value={value}>
       {children}
@@ -142,14 +139,14 @@ const SnackbarComponent: React.FC<{
 }> = ({ snackbar, onClose }) => {
   // Lazy import Alert to avoid circular dependencies
   const Alert = React.lazy(() => import('@/components/common/Alert/Alert'));
-  
+
   if (!snackbar.isOpen) {
     return null;
   }
-  
+
   return (
     <div
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4 animate-in slide-in-from-bottom-2 duration-300"
+      className="animate-in slide-in-from-bottom-2 fixed bottom-4 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 duration-300"
       role="region"
       aria-label="Notification"
     >
@@ -158,7 +155,7 @@ const SnackbarComponent: React.FC<{
           severity={snackbar.variant}
           dismissible
           onDismiss={onClose}
-          className="shadow-lg bg-surface"
+          className="bg-surface shadow-lg"
         >
           {snackbar.text}
         </Alert>

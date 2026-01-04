@@ -1,18 +1,18 @@
 /**
  * QuantityControls Component
- * 
+ *
  * @description Reusable +/- button controls for quantity adjustments
  * Features inline controls with visual feedback states and accessibility support
- * 
+ *
  * Features:
  * - Size variants: sm (32px), md (44px), lg (56px)
  * - Visual states: pending, loading, disabled
  * - Accessibility: WCAG 2.1 AA compliant (44x44px touch targets in md/lg)
  * - Keyboard navigation: Tab + Enter/Space
  * - Screen reader support with aria-labels
- * 
+ *
  * @see specs/010-streamline-quantity-controls/contracts/quantity-controls-component.md
- * 
+ *
  * @example
  * ```tsx
  * <QuantityControls
@@ -153,14 +153,14 @@ export default function QuantityControls({
         role="status"
         aria-live="polite"
         className={cn(
-          'min-w-[4rem] text-center font-semibold text-text-default flex items-center justify-center gap-1',
+          'flex min-w-[4rem] items-center justify-center gap-1 text-center font-semibold text-text-default',
           quantityTextSize
         )}
       >
         {quantity} {unit}
         {hasPendingChanges && (
           <>
-            <span aria-label="Changes pending" className="text-warning ml-0.5">
+            <span aria-label="Changes pending" className="ml-0.5 text-warning">
               *
             </span>
             <span className="sr-only">Changes pending save</span>

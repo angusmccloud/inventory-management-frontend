@@ -1,9 +1,9 @@
 /**
  * Tests: NFC Adjustment Page
- * 
+ *
  * @description Unit tests for NFC adjustment server component
  * Tests successful adjustments, error handling, and accessibility
- * 
+ *
  * @see specs/006-api-integration/tasks.md - T023 (partial)
  */
 
@@ -120,9 +120,7 @@ describe('NFC Adjustment Page', () => {
 
   describe('Error State', () => {
     it('should display error message for network errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       const NfcPage = (await import('../../../app/t/[urlId]/page')).default;
       const { container } = render(
@@ -135,9 +133,7 @@ describe('NFC Adjustment Page', () => {
 
       // Verify error message
       expect(screen.getByText('Adjustment Failed')).toBeInTheDocument();
-      expect(
-        screen.getByText('Network error - please try again')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Network error - please try again')).toBeInTheDocument();
     });
 
     it('should display error for non-404 API errors', async () => {
@@ -159,16 +155,12 @@ describe('NFC Adjustment Page', () => {
     });
 
     it('should provide retry instructions in error state', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       const NfcPage = (await import('../../../app/t/[urlId]/page')).default;
       render(await NfcPage({ params: Promise.resolve({ urlId: mockUrlId }) }));
 
-      expect(
-        screen.getByText(/Try tapping the NFC tag again/)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Try tapping the NFC tag again/)).toBeInTheDocument();
     });
   });
 
@@ -253,9 +245,7 @@ describe('NFC Adjustment Page', () => {
         params: Promise.resolve({ urlId: mockUrlId }),
       });
 
-      expect(metadata.viewport).toBe(
-        'width=device-width, initial-scale=1, maximum-scale=1'
-      );
+      expect(metadata.viewport).toBe('width=device-width, initial-scale=1, maximum-scale=1');
     });
   });
 

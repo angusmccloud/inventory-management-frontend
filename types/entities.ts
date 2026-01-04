@@ -1,6 +1,6 @@
 /**
  * Entity Type Definitions - Inventory HQ Frontend
- * 
+ *
  * Shared TypeScript types for frontend components.
  * These mirror the backend entity types but are simplified for client use.
  */
@@ -224,27 +224,27 @@ export interface Suggestion {
   suggestedByName: string;
   type: SuggestionType;
   status: SuggestionStatus;
-  
+
   // For add_to_shopping type
   itemId: string | null;
   itemNameSnapshot: string | null;
-  
+
   // For create_item type
   proposedItemName: string | null;
   proposedQuantity: number | null;
   proposedThreshold: number | null;
-  
+
   // Optional notes
   notes: string | null;
   rejectionNotes: string | null;
-  
+
   // Review information
   reviewedBy: string | null;
   reviewedAt: string | null;
-  
+
   // Optimistic locking
   version: number;
-  
+
   createdAt: string;
   updatedAt: string;
 }
@@ -419,24 +419,24 @@ export interface UserContext {
 
 /**
  * NFC URL Entity (for NFC Inventory Tap feature)
- * 
+ *
  * @description Maps cryptographically random URL IDs to inventory items,
  * enabling unauthenticated adjustments via NFC tag taps.
- * 
+ *
  * @see specs/006-api-integration/data-model.md for schema design
  */
 export interface NFCUrl {
-  urlId: string;                 // Base62-encoded UUID (22 chars)
-  itemId: string;                // UUID of inventory item
-  familyId: string;              // UUID of family
-  itemName: string;              // Denormalized for fast display
-  isActive: boolean;             // false if rotated/revoked
-  createdAt: string;             // ISO 8601 timestamp
-  createdBy: string;             // memberId who created URL
-  lastAccessedAt?: string;       // ISO 8601 timestamp (updated on each tap)
-  accessCount: number;           // Incremented on each access
-  rotatedAt?: string;            // ISO 8601 timestamp when deactivated
-  rotatedBy?: string;            // memberId who rotated URL
+  urlId: string; // Base62-encoded UUID (22 chars)
+  itemId: string; // UUID of inventory item
+  familyId: string; // UUID of family
+  itemName: string; // Denormalized for fast display
+  isActive: boolean; // false if rotated/revoked
+  createdAt: string; // ISO 8601 timestamp
+  createdBy: string; // memberId who created URL
+  lastAccessedAt?: string; // ISO 8601 timestamp (updated on each tap)
+  accessCount: number; // Incremented on each access
+  rotatedAt?: string; // ISO 8601 timestamp when deactivated
+  rotatedBy?: string; // memberId who rotated URL
 }
 
 /**

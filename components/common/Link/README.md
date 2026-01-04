@@ -18,9 +18,7 @@ Styled anchor element with Next.js integration, external link detection, and con
 ```tsx
 import { Link } from '@/components/common';
 
-<Link href="/dashboard/inventory">
-  View Inventory
-</Link>
+<Link href="/dashboard/inventory">View Inventory</Link>;
 ```
 
 ### External Link
@@ -66,18 +64,19 @@ import { Link } from '@/components/common';
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `href` | `string` | Required | Link destination (relative or absolute URL) |
-| `children` | `ReactNode` | Required | Link content/text |
-| `variant` | `'default' \| 'primary' \| 'subtle'` | `'default'` | Visual style variant |
-| `external` | `boolean` | Auto-detected | Force external link behavior |
-| `showExternalIcon` | `boolean` | `true` | Show external link icon |
-| `className` | `string` | `undefined` | Additional CSS classes |
+| Prop               | Type                                 | Default       | Description                                 |
+| ------------------ | ------------------------------------ | ------------- | ------------------------------------------- |
+| `href`             | `string`                             | Required      | Link destination (relative or absolute URL) |
+| `children`         | `ReactNode`                          | Required      | Link content/text                           |
+| `variant`          | `'default' \| 'primary' \| 'subtle'` | `'default'`   | Visual style variant                        |
+| `external`         | `boolean`                            | Auto-detected | Force external link behavior                |
+| `showExternalIcon` | `boolean`                            | `true`        | Show external link icon                     |
+| `className`        | `string`                             | `undefined`   | Additional CSS classes                      |
 
 ## Variants
 
 ### Default
+
 - **Use for**: Standard inline links, navigation links
 - **Style**: Blue color, underline on hover
 - **Example**: "View details", "Learn more"
@@ -87,21 +86,27 @@ import { Link } from '@/components/common';
 ```
 
 ### Primary
+
 - **Use for**: Important call-to-action links
 - **Style**: Blue color, bold text, always underlined
 - **Example**: Primary navigation, emphasized links
 
 ```tsx
-<Link href="/get-started" variant="primary">Get Started</Link>
+<Link href="/get-started" variant="primary">
+  Get Started
+</Link>
 ```
 
 ### Subtle
+
 - **Use for**: Secondary navigation, less prominent links
 - **Style**: Gray color, no underline
 - **Example**: Footer links, breadcrumbs, metadata links
 
 ```tsx
-<Link href="/terms" variant="subtle">Terms of Service</Link>
+<Link href="/terms" variant="subtle">
+  Terms of Service
+</Link>
 ```
 
 ## External Link Detection
@@ -125,7 +130,9 @@ You can override detection:
 
 ```tsx
 // Force external treatment
-<Link href="/api/download" external>Download File</Link>
+<Link href="/api/download" external>
+  Download File
+</Link>
 ```
 
 ## Examples
@@ -145,8 +152,7 @@ You can override detection:
 
 ```tsx
 <div className="text-sm text-gray-600 dark:text-gray-400">
-  Need help? Check out our{' '}
-  <Link href="https://docs.example.com">documentation</Link>.
+  Need help? Check out our <Link href="https://docs.example.com">documentation</Link>.
 </div>
 ```
 
@@ -154,8 +160,7 @@ You can override detection:
 
 ```tsx
 <p>
-  To learn more about inventory management,{' '}
-  <Link href="/docs/inventory">read the guide</Link>.
+  To learn more about inventory management, <Link href="/docs/inventory">read the guide</Link>.
 </p>
 ```
 
@@ -163,19 +168,22 @@ You can override detection:
 
 ```tsx
 <footer className="flex gap-4 text-sm">
-  <Link href="/privacy" variant="subtle">Privacy Policy</Link>
-  <Link href="/terms" variant="subtle">Terms of Service</Link>
-  <Link href="/contact" variant="subtle">Contact Us</Link>
+  <Link href="/privacy" variant="subtle">
+    Privacy Policy
+  </Link>
+  <Link href="/terms" variant="subtle">
+    Terms of Service
+  </Link>
+  <Link href="/contact" variant="subtle">
+    Contact Us
+  </Link>
 </footer>
 ```
 
 ### Link with Custom Styling
 
 ```tsx
-<Link 
-  href="/dashboard" 
-  className="text-lg font-bold"
->
+<Link href="/dashboard" className="text-lg font-bold">
   Go to Dashboard
 </Link>
 ```
@@ -235,9 +243,13 @@ router.push('/dashboard');
 
 ```tsx
 <div className="flex items-center gap-2 text-sm">
-  <Link href="/dashboard" variant="subtle">Dashboard</Link>
+  <Link href="/dashboard" variant="subtle">
+    Dashboard
+  </Link>
   <span className="text-gray-400">/</span>
-  <Link href="/dashboard/inventory" variant="subtle">Inventory</Link>
+  <Link href="/dashboard/inventory" variant="subtle">
+    Inventory
+  </Link>
   <span className="text-gray-400">/</span>
   <span className="text-gray-600 dark:text-gray-400">Item Details</span>
 </div>
@@ -246,15 +258,9 @@ router.push('/dashboard');
 ### Card Link
 
 ```tsx
-<Card 
-  interactive 
-  onClick={() => router.push('/item/123')}
-  className="cursor-pointer"
->
-  <h3 className="font-semibold mb-2">Item Name</h3>
-  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-    Description...
-  </p>
+<Card interactive onClick={() => router.push('/item/123')} className="cursor-pointer">
+  <h3 className="mb-2 font-semibold">Item Name</h3>
+  <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Description...</p>
   <Link href="/item/123" variant="primary">
     View Details →
   </Link>

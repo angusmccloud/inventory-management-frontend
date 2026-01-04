@@ -38,18 +38,18 @@ import { Text } from '@/components/common';
 
 ## Typography Scale
 
-| Variant | Size | Weight | Use Case | Default Element |
-|---------|------|--------|----------|-----------------|
-| `h1` | 3xl (30px) | Bold | Page titles | `<h1>` |
-| `h2` | 2xl (24px) | Bold | Section headings | `<h2>` |
-| `h3` | xl (20px) | Semibold | Subsection headings | `<h3>` |
-| `h4` | lg (18px) | Semibold | Card titles | `<h4>` |
-| `h5` | base (16px) | Semibold | Small headings | `<h5>` |
-| `h6` | sm (14px) | Semibold | Tiny headings | `<h6>` |
-| `body` | base (16px) | Normal | Default text | `<p>` |
-| `bodySmall` | sm (14px) | Normal | Smaller text | `<p>` |
-| `caption` | xs (12px) | Normal | Fine print | `<span>` |
-| `label` | sm (14px) | Semibold | Form labels | `<label>` |
+| Variant     | Size        | Weight   | Use Case            | Default Element |
+| ----------- | ----------- | -------- | ------------------- | --------------- |
+| `h1`        | 3xl (30px)  | Bold     | Page titles         | `<h1>`          |
+| `h2`        | 2xl (24px)  | Bold     | Section headings    | `<h2>`          |
+| `h3`        | xl (20px)   | Semibold | Subsection headings | `<h3>`          |
+| `h4`        | lg (18px)   | Semibold | Card titles         | `<h4>`          |
+| `h5`        | base (16px) | Semibold | Small headings      | `<h5>`          |
+| `h6`        | sm (14px)   | Semibold | Tiny headings       | `<h6>`          |
+| `body`      | base (16px) | Normal   | Default text        | `<p>`           |
+| `bodySmall` | sm (14px)   | Normal   | Smaller text        | `<p>`           |
+| `caption`   | xs (12px)   | Normal   | Fine print          | `<span>`        |
+| `label`     | sm (14px)   | Semibold | Form labels         | `<label>`       |
 
 ## Color Variants
 
@@ -172,14 +172,14 @@ Add custom Tailwind classes via `className`:
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `as` | `React.ElementType` | `'p'` | HTML element to render |
-| `variant` | `TextVariant` | `'body'` | Semantic typography variant |
-| `color` | `TextColor` | `'primary'` | Theme-aware text color |
-| `children` | `React.ReactNode` | Required | Text content |
-| `className` | `string` | `undefined` | Additional CSS classes |
-| `weight` | `FontWeight` | `undefined` | Font weight override |
+| Prop        | Type                | Default     | Description                 |
+| ----------- | ------------------- | ----------- | --------------------------- |
+| `as`        | `React.ElementType` | `'p'`       | HTML element to render      |
+| `variant`   | `TextVariant`       | `'body'`    | Semantic typography variant |
+| `color`     | `TextColor`         | `'primary'` | Theme-aware text color      |
+| `children`  | `React.ReactNode`   | Required    | Text content                |
+| `className` | `string`            | `undefined` | Additional CSS classes      |
+| `weight`    | `FontWeight`        | `undefined` | Font weight override        |
 
 ## TypeScript
 
@@ -196,5 +196,5 @@ const props: TextProps = {
 // Polymorphic with element-specific props
 <Text<'a'> as="a" variant="body" href="/link" target="_blank">
   Link
-</Text>
+</Text>;
 ```

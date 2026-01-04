@@ -27,18 +27,18 @@ export default function SuggestPage() {
   const loadFamilyId = async (): Promise<void> => {
     try {
       const userContext = getUserContext();
-      
+
       if (userContext?.familyId) {
         // Use cached familyId from localStorage
         setFamilyId(userContext.familyId);
       } else {
         // Fetch from backend
         const families = await listUserFamilies();
-        
+
         if (families && families.length > 0 && families[0]) {
           const userFamilyId = families[0].familyId;
           setFamilyId(userFamilyId);
-          
+
           // Cache it in localStorage
           if (userContext && typeof window !== 'undefined') {
             userContext.familyId = userFamilyId;
@@ -71,7 +71,9 @@ export default function SuggestPage() {
       if (err instanceof Error) {
         // Handle specific error cases
         if (err.message.includes('403')) {
-          setError('You do not have permission to create suggestions. Please contact your family admin.');
+          setError(
+            'You do not have permission to create suggestions. Please contact your family admin.'
+          );
         } else if (err.message.includes('404')) {
           setError('The selected item no longer exists. Please refresh and try again.');
         } else if (err.message.includes('422')) {
@@ -90,7 +92,7 @@ export default function SuggestPage() {
 
   if (!familyId) {
     return (
-      <div className="max-w-2xl mx-auto p-6">
+      <div className="mx-auto max-w-2xl p-6">
         <Card className="bg-error/10/20 border-error">
           <Text variant="body" className="text-error">
             {error || 'Unable to load family information'}
@@ -101,7 +103,7 @@ export default function SuggestPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="mx-auto max-w-2xl p-6">
       <div className="mb-6">
         <Text variant="h1" className="mb-2">
           Create Suggestion
@@ -112,7 +114,7 @@ export default function SuggestPage() {
       </div>
 
       {error && (
-        <Card className="mb-6 bg-error/10/20 border-error">
+        <Card className="bg-error/10/20 mb-6 border-error">
           <Text variant="body" className="text-error">
             {error}
           </Text>

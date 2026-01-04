@@ -2,16 +2,16 @@
  * @deprecated This page has been retired. NFC URL management now happens
  * in a modal on the main inventory page (InventoryList component).
  * This file is kept for reference only and should be removed in a future cleanup.
- * 
+ *
  * Inventory Item Detail Page
- * 
+ *
  * @description Detailed view of a single inventory item with NFC URL management
  * Features:
  * - Item details (name, quantity, category, location)
  * - Quantity adjustment
  * - NFC URL management (admin only)
  * - Edit and delete actions
- * 
+ *
  * @see specs/006-api-integration/spec.md - User Story 3
  */
 
@@ -110,10 +110,8 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           description="The item you're looking for doesn't exist or you don't have access"
         />
         <div className="mt-6">
-          <Alert severity="error">
-            {error || 'Item not found'}
-          </Alert>
-          <Button variant='primary' onClick={handleBack} className="mt-4">
+          <Alert severity="error">{error || 'Item not found'}</Alert>
+          <Button variant="primary" onClick={handleBack} className="mt-4">
             Back to Inventory
           </Button>
         </div>
@@ -130,8 +128,13 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           size="sm"
           onClick={handleBack}
           leftIcon={
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           }
           className="mb-4"
@@ -144,18 +147,20 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Item Details Card */}
-          <div className="bg-surface rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold text-text-secondary dark:text-white mb-4">
+          <div className="rounded-lg bg-surface p-6 shadow">
+            <h2 className="mb-4 text-xl font-semibold text-text-secondary dark:text-white">
               Item Details
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Text variant="bodySmall">Current Quantity</Text>
-                <Text variant="h2" weight="bold">{item.quantity}</Text>
+                <Text variant="h2" weight="bold">
+                  {item.quantity}
+                </Text>
               </div>
               <div>
                 <Text variant="bodySmall">Unit</Text>
@@ -182,10 +187,10 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
               <div>
                 <Text variant="bodySmall">Status</Text>
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                     item.quantity <= item.lowStockThreshold
-                      ? 'bg-error/10 text-error dark:bg-error/10/30 dark:text-error'
-                      : 'bg-secondary/10 text-secondary-contrast dark:bg-secondary/10/30 dark:text-secondary-contrast'
+                      ? 'dark:bg-error/10/30 bg-error/10 text-error dark:text-error'
+                      : 'dark:bg-secondary/10/30 bg-secondary/10 text-secondary-contrast dark:text-secondary-contrast'
                   }`}
                 >
                   {item.quantity <= item.lowStockThreshold ? 'Low Stock' : 'In Stock'}
@@ -203,11 +208,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                 Edit Item
               </Button>
               {isAdmin && (
-                <Button
-                  variant="warning"
-                  size="md"
-                  onClick={() => setShowDeleteDialog(true)}
-                >
+                <Button variant="warning" size="md" onClick={() => setShowDeleteDialog(true)}>
                   Delete Item
                 </Button>
               )}
@@ -215,21 +216,30 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
 
           {/* NFC URL Management (Admin Only) */}
-          {isAdmin && (
-            <NFCUrlManager itemId={item.itemId} itemName={item.name} />
-          )}
+          {isAdmin && <NFCUrlManager itemId={item.itemId} />}
 
           {/* Suggester Notice */}
           {!isAdmin && (
-            <div className="bg-primary dark:bg-primary/20 border border-primary rounded-lg p-4">
+            <div className="rounded-lg border border-primary bg-primary p-4 dark:bg-primary/20">
               <div className="flex items-start">
-                <svg className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <div>
                   <h4 className="text-sm font-medium text-primary">Admin Access Required</h4>
                   <Text variant="bodySmall" color="primary" className="mt-1">
-                    NFC URL management is only available to family administrators. Contact your admin to generate NFC URLs for this item.
+                    Item link management is only available to family administrators. Contact your
+                    admin to generate item links for this item.
                   </Text>
                 </div>
               </div>
@@ -238,10 +248,10 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="space-y-6 lg:col-span-1">
           {/* Quick Actions */}
-          <div className="bg-surface rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-text-secondary dark:text-white mb-4">
+          <div className="rounded-lg bg-surface p-6 shadow">
+            <h3 className="mb-4 text-lg font-semibold text-text-secondary dark:text-white">
               Quick Actions
             </h3>
             <div className="space-y-3">
@@ -281,14 +291,16 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
           </div>
 
           {/* Item Metadata */}
-          <div className="bg-surface rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-text-secondary dark:text-white mb-4">
+          <div className="rounded-lg bg-surface p-6 shadow">
+            <h3 className="mb-4 text-lg font-semibold text-text-secondary dark:text-white">
               Information
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-text-default">Item ID:</span>
-                <span className="text-text-secondary dark:text-white font-mono text-xs">{item.itemId.split('#').pop()}</span>
+                <span className="font-mono text-xs text-text-secondary dark:text-white">
+                  {item.itemId.split('#').pop()}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-text-default">Created:</span>

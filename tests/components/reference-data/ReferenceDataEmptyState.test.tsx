@@ -13,7 +13,9 @@ describe('ReferenceDataEmptyState', () => {
       render(<ReferenceDataEmptyState type="locations" onAdd={mockOnAdd} />);
 
       expect(screen.getByText('No Storage Locations')).toBeInTheDocument();
-      expect(screen.getByText('Add storage locations to organize where items are stored.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Add storage locations to organize where items are stored.')
+      ).toBeInTheDocument();
     });
 
     it('should render correct button text for locations', () => {
@@ -40,7 +42,9 @@ describe('ReferenceDataEmptyState', () => {
       render(<ReferenceDataEmptyState type="stores" onAdd={mockOnAdd} />);
 
       expect(screen.getByText('No Stores')).toBeInTheDocument();
-      expect(screen.getByText('Add stores to track where items can be purchased.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Add stores to track where items can be purchased.')
+      ).toBeInTheDocument();
     });
 
     it('should render correct button text for stores', () => {

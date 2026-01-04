@@ -1,6 +1,6 @@
 /**
  * Component Tests for SuggestionList
- * 
+ *
  * Tests filtering by status, pagination, and list rendering.
  */
 
@@ -58,23 +58,13 @@ describe('SuggestionList', () => {
 
   describe('Loading and Display', () => {
     it('should show loading state initially', () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       expect(screen.getByText(/loading suggestions/i)).toBeInTheDocument();
     });
 
     it('should load and display suggestions', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -94,12 +84,7 @@ describe('SuggestionList', () => {
         nextToken: undefined,
       });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText(/no suggestions yet/i)).toBeInTheDocument();
@@ -111,12 +96,7 @@ describe('SuggestionList', () => {
         new Error('Failed to load suggestions')
       );
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText(/failed to load suggestions/i)).toBeInTheDocument();
@@ -133,12 +113,7 @@ describe('SuggestionList', () => {
           nextToken: undefined,
         });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText(/failed to load/i)).toBeInTheDocument();
@@ -155,13 +130,7 @@ describe('SuggestionList', () => {
 
   describe('Status Filtering', () => {
     it('should filter by pending status', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="pending"
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} statusFilter="pending" />);
 
       await waitFor(() => {
         expect(suggestionsApi.listSuggestions).toHaveBeenCalledWith(familyId, {
@@ -173,13 +142,7 @@ describe('SuggestionList', () => {
     });
 
     it('should filter by approved status', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="approved"
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} statusFilter="approved" />);
 
       await waitFor(() => {
         expect(suggestionsApi.listSuggestions).toHaveBeenCalledWith(familyId, {
@@ -191,13 +154,7 @@ describe('SuggestionList', () => {
     });
 
     it('should filter by rejected status', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="rejected"
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} statusFilter="rejected" />);
 
       await waitFor(() => {
         expect(suggestionsApi.listSuggestions).toHaveBeenCalledWith(familyId, {
@@ -210,24 +167,14 @@ describe('SuggestionList', () => {
 
     it('should reload suggestions when statusFilter changes', async () => {
       const { rerender } = render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="pending"
-        />
+        <SuggestionList familyId={familyId} isAdmin={true} statusFilter="pending" />
       );
 
       await waitFor(() => {
         expect(suggestionsApi.listSuggestions).toHaveBeenCalledTimes(1);
       });
 
-      rerender(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="approved"
-        />
-      );
+      rerender(<SuggestionList familyId={familyId} isAdmin={true} statusFilter="approved" />);
 
       await waitFor(() => {
         expect(suggestionsApi.listSuggestions).toHaveBeenCalledTimes(2);
@@ -245,13 +192,7 @@ describe('SuggestionList', () => {
         nextToken: undefined,
       });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-          statusFilter="approved"
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} statusFilter="approved" />);
 
       await waitFor(() => {
         expect(screen.getByText(/no approved suggestions found/i)).toBeInTheDocument();
@@ -266,12 +207,7 @@ describe('SuggestionList', () => {
         nextToken: 'next-page-token',
       });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /load more/i })).toBeInTheDocument();
@@ -305,12 +241,7 @@ describe('SuggestionList', () => {
           nextToken: undefined,
         });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -335,12 +266,7 @@ describe('SuggestionList', () => {
         nextToken: undefined,
       });
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -357,12 +283,7 @@ describe('SuggestionList', () => {
         })
         .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /load more/i })).toBeInTheDocument();
@@ -422,12 +343,7 @@ describe('SuggestionList', () => {
         new Error('409: Suggestion was modified by another user')
       );
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -446,12 +362,7 @@ describe('SuggestionList', () => {
         new Error('422: Referenced item has been deleted')
       );
 
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -468,12 +379,7 @@ describe('SuggestionList', () => {
 
   describe('Admin vs Suggester View', () => {
     it('should pass isAdmin=true to suggestion cards for admin', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={true} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -485,12 +391,7 @@ describe('SuggestionList', () => {
     });
 
     it('should pass isAdmin=false to suggestion cards for suggester', async () => {
-      render(
-        <SuggestionList
-          familyId={familyId}
-          isAdmin={false}
-        />
-      );
+      render(<SuggestionList familyId={familyId} isAdmin={false} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();

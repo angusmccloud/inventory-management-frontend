@@ -1,18 +1,18 @@
 /**
  * useQuantityDebounce Hook
- * 
+ *
  * @description Custom React hook for debounced quantity adjustments with optimistic UI updates
  * Batches rapid quantity changes into a single API call after a configurable delay
- * 
+ *
  * Features:
  * - 500ms default debounce delay (configurable)
  * - Optimistic UI updates for immediate feedback
  * - Automatic rollback on API errors
  * - Manual flush capability for navigation/unmount
  * - Error handling with retry support
- * 
+ *
  * @see specs/010-streamline-quantity-controls/contracts/debounce-hook-api.md
- * 
+ *
  * @example
  * ```tsx
  * const { localQuantity, adjust, flush, hasPendingChanges } = useQuantityDebounce({
@@ -23,11 +23,11 @@
  *     return result.quantity;
  *   },
  * });
- * 
+ *
  * // In component
  * <button onClick={() => adjust(1)}>+</button>
  * <span>{localQuantity}</span>
- * 
+ *
  * // Flush on unmount
  * useEffect(() => () => flush(), [flush]);
  * ```
@@ -169,19 +169,19 @@ export function useQuantityDebounce({
   const flush = useCallback(async (): Promise<void> => {
     const currentPendingDelta = pendingDeltaRef.current;
     const currentIsFlushing = isFlushingRef.current;
-    
+
     if (currentPendingDelta === 0 || currentIsFlushing) return;
 
     // Capture the delta we're about to flush
     const deltaToFlush = currentPendingDelta;
     const serverQtyBeforeFlush = serverQuantityRef.current;
-    
+
     console.log('[useQuantityDebounce] Flushing:', {
       deltaToFlush,
       serverQtyBeforeFlush,
       itemId,
     });
-    
+
     // Reset pending delta immediately so new adjustments are tracked separately
     setPendingDelta(0);
     pendingDeltaRef.current = 0;
@@ -191,16 +191,16 @@ export function useQuantityDebounce({
 
     try {
       const newQuantity = await onFlush(itemId, deltaToFlush);
-      
+
       console.log('[useQuantityDebounce] Flush response:', {
         newQuantity,
         deltaToFlush,
       });
-      
+
       // Update server quantity to the API response
       setServerQuantity(newQuantity);
       serverQuantityRef.current = newQuantity;
-      
+
       // Update local quantity: if user made more changes during flush,
       // add those to the new server quantity
       setLocalQuantity((current) => {

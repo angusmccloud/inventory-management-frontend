@@ -1,7 +1,7 @@
 /**
  * Shopping List API Client - Inventory HQ Frontend
  * Feature: 002-shopping-lists
- * 
+ *
  * API client methods for shopping list management operations.
  */
 
@@ -91,17 +91,17 @@ export const listShoppingListItems = async (
   }
 ): Promise<ListShoppingListResponse> => {
   const params = new URLSearchParams();
-  
+
   if (filters?.storeId !== undefined) {
     params.append('storeId', filters.storeId === null ? 'unassigned' : filters.storeId);
   }
   if (filters?.status && filters.status !== 'all') {
     params.append('status', filters.status);
   }
-  
+
   const queryString = params.toString();
   const url = `/families/${familyId}/shopping-list${queryString ? `?${queryString}` : ''}`;
-  
+
   return apiClient.get<ListShoppingListResponse>(url, true);
 };
 
@@ -125,11 +125,7 @@ export const addToShoppingList = async (
   familyId: string,
   data: AddToShoppingListRequest
 ): Promise<ShoppingListItem> => {
-  return apiClient.post<ShoppingListItem>(
-    `/families/${familyId}/shopping-list`,
-    data,
-    true
-  );
+  return apiClient.post<ShoppingListItem>(`/families/${familyId}/shopping-list`, data, true);
 };
 
 /**
@@ -169,10 +165,7 @@ export const removeFromShoppingList = async (
   familyId: string,
   shoppingItemId: string
 ): Promise<void> => {
-  return apiClient.delete<void>(
-    `/families/${familyId}/shopping-list/${shoppingItemId}`,
-    true
-  );
+  return apiClient.delete<void>(`/families/${familyId}/shopping-list/${shoppingItemId}`, true);
 };
 
 /**
@@ -189,4 +182,3 @@ export const toggleShoppingListItemStatus = async (
     version: item.version,
   });
 };
-

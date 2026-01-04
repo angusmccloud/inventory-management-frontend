@@ -1,6 +1,6 @@
 /**
  * Component Tests for SuggestionForm
- * 
+ *
  * Tests type selection, field rendering, validation, and submission.
  */
 
@@ -52,12 +52,7 @@ describe('SuggestionForm', () => {
 
   describe('Type Selection', () => {
     it('should render type selection dropdown with both options', () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       expect(typeSelect).toBeInTheDocument();
@@ -68,24 +63,14 @@ describe('SuggestionForm', () => {
     });
 
     it('should default to add_to_shopping type', () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i) as HTMLSelectElement;
       expect(typeSelect.value).toBe('add_to_shopping');
     });
 
     it('should switch to create_item type when selected', () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -96,12 +81,7 @@ describe('SuggestionForm', () => {
 
   describe('Field Rendering', () => {
     it('should show item selection for add_to_shopping type', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       await waitFor(() => {
         expect(screen.getByLabelText(/select item/i)).toBeInTheDocument();
@@ -112,12 +92,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should show proposed item fields for create_item type', () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -129,12 +104,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should load and display inventory items in dropdown', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       await waitFor(() => {
         expect(inventoryApi.listInventoryItems).toHaveBeenCalledWith(familyId, {
@@ -149,35 +119,20 @@ describe('SuggestionForm', () => {
     });
 
     it('should show notes field for both types', () => {
-      const { rerender } = render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      const { rerender } = render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       expect(screen.getByLabelText(/notes/i)).toBeInTheDocument();
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
 
-      rerender(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      rerender(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       expect(screen.getByLabelText(/notes/i)).toBeInTheDocument();
     });
 
     it('should enforce 500 character limit on notes field', () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const notesField = screen.getByLabelText(/notes/i) as HTMLTextAreaElement;
       expect(notesField.maxLength).toBe(500);
@@ -186,12 +141,7 @@ describe('SuggestionForm', () => {
 
   describe('Validation', () => {
     it('should require item selection for add_to_shopping type', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const submitButton = screen.getByRole('button', { name: /submit/i });
       fireEvent.click(submitButton);
@@ -204,12 +154,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should require item name for create_item type', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -225,12 +170,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should require positive quantity for create_item type', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -252,12 +192,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should require positive threshold for create_item type', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -283,12 +218,7 @@ describe('SuggestionForm', () => {
     it('should submit add_to_shopping suggestion with valid data', async () => {
       mockOnSubmit.mockResolvedValue(undefined);
 
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       await waitFor(() => {
         expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -315,12 +245,7 @@ describe('SuggestionForm', () => {
     it('should submit create_item suggestion with valid data', async () => {
       mockOnSubmit.mockResolvedValue(undefined);
 
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} />);
 
       const typeSelect = screen.getByLabelText(/suggestion type/i);
       fireEvent.change(typeSelect, { target: { value: 'create_item' } });
@@ -352,13 +277,7 @@ describe('SuggestionForm', () => {
     });
 
     it('should disable submit button while submitting', async () => {
-      render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-          isSubmitting={true}
-        />
-      );
+      render(<SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} isSubmitting={true} />);
 
       const submitButton = screen.getByRole('button', { name: /submitting/i });
       expect(submitButton).toBeDisabled();
@@ -366,11 +285,7 @@ describe('SuggestionForm', () => {
 
     it('should call onCancel when cancel button is clicked', () => {
       render(
-        <SuggestionForm
-          familyId={familyId}
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />
+        <SuggestionForm familyId={familyId} onSubmit={mockOnSubmit} onCancel={mockOnCancel} />
       );
 
       const cancelButton = screen.getByRole('button', { name: /cancel/i });

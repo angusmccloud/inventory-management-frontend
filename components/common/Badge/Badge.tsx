@@ -1,7 +1,7 @@
 /**
  * Badge Component
  * Feature: 008-common-components
- * 
+ *
  * Small status or count indicator with multiple variants and sizes.
  */
 
@@ -47,25 +47,25 @@ const dotStyles: Record<BadgeVariant, string> = {
 
 /**
  * Badge component
- * 
+ *
  * Status indicator or count badge with multiple variants and sizes.
  * Can render as text badge or dot-only indicator.
- * 
+ *
  * @example
  * ```tsx
  * // Status badges
  * <Badge variant="success">Active</Badge>
  * <Badge variant="error">Removed</Badge>
  * <Badge variant="warning">Low Stock</Badge>
- * 
+ *
  * // Count badges
  * <Badge variant="primary">{unreadCount}</Badge>
  * <Badge variant="info">12</Badge>
- * 
+ *
  * // Dot indicators
  * <Badge variant="success" dot />
  * <Badge variant="error" dot />
- * 
+ *
  * // Different sizes
  * <Badge size="sm" variant="primary">Small</Badge>
  * <Badge size="lg" variant="success">Large</Badge>
@@ -83,12 +83,7 @@ export const Badge: React.FC<BadgeProps> = ({
   if (dot) {
     return (
       <span
-        className={cn(
-          'inline-block rounded-full border',
-          'w-2 h-2',
-          dotStyles[variant],
-          className
-        )}
+        className={cn('inline-block rounded-full border', 'h-2 w-2', dotStyles[variant], className)}
         {...props}
       />
     );
@@ -99,7 +94,7 @@ export const Badge: React.FC<BadgeProps> = ({
     <span
       className={cn(
         'inline-flex items-center justify-center',
-        'rounded-full font-medium whitespace-nowrap',
+        'whitespace-nowrap rounded-full font-medium',
         'leading-none',
         variantStyles[variant],
         sizeStyles[size],

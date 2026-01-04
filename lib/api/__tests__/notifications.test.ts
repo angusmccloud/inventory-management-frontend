@@ -65,10 +65,7 @@ describe('Notifications API Client', () => {
 
       const result = await listNotifications('family-123');
 
-      expect(mockedApiClient.get).toHaveBeenCalledWith(
-        '/families/family-123/notifications',
-        true
-      );
+      expect(mockedApiClient.get).toHaveBeenCalledWith('/families/family-123/notifications', true);
       expect(result).toEqual(mockNotifications);
     });
 
@@ -199,18 +196,18 @@ describe('Notifications API Client', () => {
       const error = new Error('Unauthorized');
       mockedApiClient.post.mockRejectedValueOnce(error);
 
-      await expect(
-        acknowledgeNotification('family-123', 'notif-abc')
-      ).rejects.toThrow('Unauthorized');
+      await expect(acknowledgeNotification('family-123', 'notif-abc')).rejects.toThrow(
+        'Unauthorized'
+      );
     });
 
     it('handles 404 errors for non-existent notifications', async () => {
       const error = new Error('Notification not found');
       mockedApiClient.post.mockRejectedValueOnce(error);
 
-      await expect(
-        acknowledgeNotification('family-123', 'non-existent')
-      ).rejects.toThrow('Notification not found');
+      await expect(acknowledgeNotification('family-123', 'non-existent')).rejects.toThrow(
+        'Notification not found'
+      );
     });
   });
 
@@ -271,9 +268,7 @@ describe('Notifications API Client', () => {
       const error = new Error('Server error');
       mockedApiClient.get.mockRejectedValueOnce(error);
 
-      await expect(getActiveNotificationCount('family-123')).rejects.toThrow(
-        'Server error'
-      );
+      await expect(getActiveNotificationCount('family-123')).rejects.toThrow('Server error');
     });
   });
 });

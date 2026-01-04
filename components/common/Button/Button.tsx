@@ -1,7 +1,7 @@
 /**
  * Button Component
  * Feature: 008-common-components
- * 
+ *
  * Primary action button with variants for different contexts and built-in loading states.
  */
 
@@ -13,11 +13,15 @@ import type { ButtonProps, ButtonVariant, ButtonSize } from './Button.types';
  * Variant-specific styles mapping
  */
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary disabled:bg-primary/50',
-  secondary: 'bg-secondary text-secondary-contrast hover:bg-secondary-hover focus:ring-secondary disabled:bg-secondary/50',
-  tertiary: 'bg-tertiary text-tertiary-contrast hover:bg-tertiary-hover focus:ring-tertiary disabled:bg-tertiary/50',
+  primary:
+    'bg-primary text-primary-contrast hover:bg-primary-hover focus:ring-primary disabled:bg-primary/50',
+  secondary:
+    'bg-secondary text-secondary-contrast hover:bg-secondary-hover focus:ring-secondary disabled:bg-secondary/50',
+  tertiary:
+    'bg-tertiary text-tertiary-contrast hover:bg-tertiary-hover focus:ring-tertiary disabled:bg-tertiary/50',
   danger: 'bg-error text-error-contrast hover:bg-error-hover focus:ring-error disabled:bg-error/50',
-  warning: 'bg-warning text-warning-contrast hover:bg-warning-hover focus:ring-warning disabled:bg-warning/50',
+  warning:
+    'bg-warning text-warning-contrast hover:bg-warning-hover focus:ring-warning disabled:bg-warning/50',
 };
 
 /**
@@ -48,14 +52,7 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
         fill="currentColor"
@@ -67,19 +64,19 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
 
 /**
  * Button component with variants, sizes, and loading states
- * 
+ *
  * @example
  * ```tsx
  * // Primary action
  * <Button variant="primary" onClick={handleSave}>
  *   Save Changes
  * </Button>
- * 
+ *
  * // With loading state
  * <Button variant="primary" loading={isSaving} onClick={handleSave}>
  *   Save Changes
  * </Button>
- * 
+ *
  * // With icons
  * <Button variant="warning" leftIcon={<TrashIcon className="h-5 w-5" />}>
  *   Delete Item
@@ -104,7 +101,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const isDisabled = disabled || loading;
-    
+
     // Determine responsive content visibility
     const showAtBreakpoint = responsiveText?.showAt || 'md';
     const hideOnMobileClass = responsiveText ? `hidden ${showAtBreakpoint}:inline` : undefined;
@@ -119,7 +116,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           // Base styles
           'inline-flex items-center justify-center gap-2',
-          'font-semibold rounded-md',
+          'rounded-md font-semibold',
           'transition-colors duration-200',
           'focus:outline-none focus:ring-2 focus:ring-offset-2',
           'disabled:cursor-not-allowed disabled:opacity-60',
@@ -136,17 +133,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {loading && <LoadingSpinner size={size} />}
         {!loading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
-        
+
         {/* Mobile content (if responsiveText with mobileContent) */}
         {!loading && mobileContent && (
-          <span className={`${showAtBreakpoint}:hidden`}>
-            {mobileContent}
-          </span>
+          <span className={`${showAtBreakpoint}:hidden`}>{mobileContent}</span>
         )}
-        
+
         {/* Desktop content (responsive or always visible) */}
         <span className={hideOnMobileClass}>{children}</span>
-        
+
         {!loading && rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
       </button>
     );

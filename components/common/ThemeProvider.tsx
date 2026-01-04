@@ -1,7 +1,7 @@
 /**
  * ThemeProvider Component
  * Feature: 012-theme-toggle
- * 
+ *
  * Provides theme context with three modes: light, dark, and auto (system preference).
  * Automatically detects OS theme preference and allows manual override.
  * Persists user preference in localStorage.
@@ -46,13 +46,18 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
             // Fetch from backend
             const serverTheme = await getThemePreference(userContext.memberId);
             console.log('[ThemeProvider] Loaded theme from server:', serverTheme);
-            
+
             // Only update if different from current (localStorage cache)
             if (serverTheme !== mode) {
-              console.log('[ThemeProvider] Server theme differs from cache, updating from', mode, 'to', serverTheme);
+              console.log(
+                '[ThemeProvider] Server theme differs from cache, updating from',
+                mode,
+                'to',
+                serverTheme
+              );
               setModeState(serverTheme);
               ThemeStorage.set(serverTheme); // Update cache
-              
+
               // Force apply the new theme
               const html = document.documentElement;
               if (serverTheme === 'light') {
@@ -65,7 +70,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
             } else {
               console.log('[ThemeProvider] Server theme matches cache:', serverTheme);
             }
-            
+
             setSynced(true);
             return;
           }
@@ -73,7 +78,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
           console.error('Failed to load theme from server, using cached theme:', error);
         }
       }
-      
+
       // If not authenticated or API failed, we're already using cached theme from initial state
       setSynced(true);
     };
@@ -84,24 +89,30 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   // Apply theme based on mode
   useEffect(() => {
     console.log('[ThemeProvider] Applying theme mode:', mode);
-    
+
     // Force remove/add classes to ensure state is correct
     const html = document.documentElement;
-    
+
     if (mode === 'light') {
       html.classList.remove('dark');
       setApplied('light');
-      console.log('[ThemeProvider] Applied light theme, dark class removed:', !html.classList.contains('dark'));
+      console.log(
+        '[ThemeProvider] Applied light theme, dark class removed:',
+        !html.classList.contains('dark')
+      );
       return; // Explicit return for consistency
     } else if (mode === 'dark') {
       html.classList.add('dark');
       setApplied('dark');
-      console.log('[ThemeProvider] Applied dark theme, dark class added:', html.classList.contains('dark'));
+      console.log(
+        '[ThemeProvider] Applied dark theme, dark class added:',
+        html.classList.contains('dark')
+      );
       return; // Explicit return for consistency
     } else {
       // Auto mode: follow system preference
       const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
+
       const updateTheme = (e: MediaQueryList | MediaQueryListEvent) => {
         if (e.matches) {
           document.documentElement.classList.add('dark');
@@ -140,9 +151,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, applied, setMode }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={{ mode, applied, setMode }}>{children}</ThemeContext.Provider>
   );
 }
 

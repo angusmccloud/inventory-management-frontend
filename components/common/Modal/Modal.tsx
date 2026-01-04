@@ -80,23 +80,20 @@ export default function Modal({
 
         {/* Modal panel */}
         <div
-          className={`relative w-full ${sizeClasses[size]} inline-block align-bottom bg-surface-elevated rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle`}
+          className={`relative w-full ${sizeClasses[size]} inline-block transform overflow-hidden rounded-lg bg-surface-elevated text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-            <h2
-              id="modal-title"
-              className="text-xl font-semibold text-text-default"
-            >
+          <div className="flex items-center justify-between border-b border-border px-6 py-4">
+            <h2 id="modal-title" className="text-xl font-semibold text-text-default">
               {title}
             </h2>
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="rounded-md p-1 hover:bg-surface transition-colors"
+                className="rounded-md p-1 transition-colors hover:bg-surface"
                 aria-label="Close modal"
               >
                 <XMarkIcon className="h-5 w-5 text-text-secondary" />
@@ -105,9 +102,7 @@ export default function Modal({
           </div>
 
           {/* Content */}
-          <div className="px-6 py-4 max-h-[calc(100vh-12rem)] overflow-y-auto">
-            {children}
-          </div>
+          <div className="max-h-[calc(100vh-12rem)] overflow-y-auto px-6 py-4">{children}</div>
         </div>
       </div>
     </div>

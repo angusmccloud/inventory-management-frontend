@@ -65,7 +65,7 @@ export const listSuggestions = async (
   params?: ListSuggestionsParams
 ): Promise<ListSuggestionsResponse> => {
   const queryParams = new URLSearchParams();
-  
+
   if (params?.status) {
     queryParams.append('status', params.status);
   }
@@ -78,7 +78,7 @@ export const listSuggestions = async (
 
   const queryString = queryParams.toString();
   const url = `/families/${familyId}/suggestions${queryString ? `?${queryString}` : ''}`;
-  
+
   return apiClient.get<ListSuggestionsResponse>(url, true);
 };
 
@@ -89,10 +89,7 @@ export const getSuggestion = async (
   familyId: string,
   suggestionId: string
 ): Promise<Suggestion> => {
-  return apiClient.get<Suggestion>(
-    `/families/${familyId}/suggestions/${suggestionId}`,
-    true
-  );
+  return apiClient.get<Suggestion>(`/families/${familyId}/suggestions/${suggestionId}`, true);
 };
 
 /**

@@ -1,6 +1,6 @@
 /**
  * NotificationItem Component
- * 
+ *
  * Displays an individual low-stock notification with status badge,
  * quantity information, and acknowledge action for admins.
  */
@@ -10,12 +10,12 @@
 import { LowStockNotification, LowStockNotificationStatus } from '@/types/entities';
 import { Badge, Text, IconButton } from '@/components/common';
 import type { BadgeVariant } from '@/components/common/Badge/Badge.types';
-import { ShoppingCartIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon, PencilIcon } from '@/components/common/icons';
 
 interface NotificationItemProps {
   notification: LowStockNotification;
   onAddToShoppingList: (notification: LowStockNotification) => void;
-  onEdit: (notification: LowStockNotification) => void;
+  onEdit?: (notification: LowStockNotification) => void;
   isAdmin: boolean;
   processingId?: string | null;
 }
@@ -77,16 +77,15 @@ export default function NotificationItem({
   const isProcessing = processingId === notification.notificationId;
   // Reference isAdmin to avoid unused-variable TypeScript errors
   void isAdmin;
-  
 
   return (
     <li className="px-4 py-4 sm:px-6" data-testid="notification-item">
       <div className="flex items-center justify-between">
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             {/* Low stock icon */}
             <svg
-              className="h-5 w-5 text-error flex-shrink-0"
+              className="h-5 w-5 flex-shrink-0 text-error"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -99,33 +98,33 @@ export default function NotificationItem({
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
-            
+
             <Text as="h3" variant="body" weight="medium" className="truncate text-lg">
               {notification.itemName}
             </Text>
-            
+
             {/* Status badge */}
             <Badge variant={statusVariant} data-testid="status-badge">
               {getStatusDisplayText(notification.status)}
             </Badge>
           </div>
-          
-          <div className="mt-2 flex flex-col sm:flex-row sm:gap-4 text-sm text-text-default">
+
+          <div className="mt-2 flex flex-col text-sm text-text-default sm:flex-row sm:gap-4">
             {/* Quantity info */}
             <div data-testid="quantity-info">
               <span className="font-semibold text-text-default">Current:</span>{' '}
-              <span className="text-error font-medium">{notification.currentQuantity}</span>
+              <span className="font-medium text-error">{notification.currentQuantity}</span>
               {' / '}
               <span className="font-semibold text-text-default">Threshold:</span>{' '}
               {notification.threshold}
             </div>
-            
+
             {/* Timestamp */}
             <div data-testid="timestamp">
               <span className="font-semibold text-text-default">Low Stock Alert:</span>{' '}
               {formatDate(notification.createdAt)}
             </div>
-            
+
             {/* Resolved timestamp if applicable */}
             {notification.resolvedAt && (
               <div data-testid="resolved-timestamp">
@@ -135,9 +134,9 @@ export default function NotificationItem({
             )}
           </div>
         </div>
-        
+
         {/* Action buttons */}
-        <div className="ml-4 flex-shrink-0 flex gap-2">
+        <div className="ml-4 flex flex-shrink-0 gap-2">
           {/* Reconcile button - show for active and acknowledged notifications */}
           {(notification.status === 'active' || notification.status === 'acknowledged') && (
             <IconButton
@@ -145,12 +144,12 @@ export default function NotificationItem({
               aria-label="Reconcile item"
               variant="secondary"
               size="md"
-              onClick={() => onEdit(notification)}
+              onClick={() => onEdit?.(notification)}
               data-testid="reconcile-button"
               disabled={isProcessing}
             />
           )}
-          
+
           {/* Add to Shopping List button - show for active and acknowledged notifications */}
           {(notification.status === 'active' || notification.status === 'acknowledged') && (
             <IconButton
@@ -163,7 +162,7 @@ export default function NotificationItem({
               disabled={isProcessing}
             />
           )}
-          
+
           {/* Acknowledge/Resolve actions removed from this view; admin actions are handled elsewhere */}
         </div>
       </div>

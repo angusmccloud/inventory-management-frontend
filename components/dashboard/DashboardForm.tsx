@@ -7,15 +7,8 @@ import { Alert } from '@/components/common/Alert/Alert';
 import { Radio } from '@/components/common/Radio/Radio';
 import { Checkbox } from '@/components/common/Checkbox/Checkbox';
 import { Text } from '@/components/common/Text/Text';
-import { 
-  createDashboard, 
-  getDashboard,
-  updateDashboard 
-} from '@/lib/api/dashboards';
-import { 
-  CreateDashboardInput, 
-  DashboardType 
-} from '@/types/dashboard';
+import { createDashboard, getDashboard, updateDashboard } from '@/lib/api/dashboards';
+import { CreateDashboardInput, DashboardType } from '@/types/dashboard';
 import { listInventoryItems } from '@/lib/api/inventory';
 import { listStorageLocations } from '@/lib/api/reference-data';
 import { InventoryItem, StorageLocation } from '@/types/entities';
@@ -27,7 +20,12 @@ interface DashboardFormProps {
   onCancel: () => void;
 }
 
-export default function DashboardForm({ familyId, dashboardId, onSuccess, onCancel }: DashboardFormProps) {
+export default function DashboardForm({
+  familyId,
+  dashboardId,
+  onSuccess,
+  onCancel,
+}: DashboardFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +57,7 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
 
   const loadDashboardData = async (): Promise<void> => {
     if (!dashboardId) return;
-    
+
     try {
       setLoading(true);
       const dashboardData = await getDashboard(dashboardId);
@@ -75,7 +73,8 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         // Public shape: { dashboard: { title, type, ... }, items: [...] }
         title = (dashboardData as any).dashboard.title || '';
         type = (dashboardData as any).dashboard.type || 'location';
-        locationIds = (dashboardData as any).locationIds ?? (dashboardData as any).dashboard.locationIds ?? [];
+        locationIds =
+          (dashboardData as any).locationIds ?? (dashboardData as any).dashboard.locationIds ?? [];
         itemIds = (dashboardData as any).itemIds ?? (dashboardData as any).dashboard.itemIds ?? [];
       } else {
         // Admin/admin API shape: dashboard object inline
@@ -146,7 +145,7 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
           locationIds: formData.type === 'location' ? formData.locationIds : undefined,
           itemIds: formData.type === 'items' ? formData.itemIds : undefined,
         });
-        
+
         onSuccess(dashboardId);
       } else {
         // Create new dashboard
@@ -158,14 +157,19 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         };
 
         const result = await createDashboard(input);
-        const newDashboardId = (result as any).dashboardId ?? (result as any).dashboard?.dashboardId;
+        const newDashboardId =
+          (result as any).dashboardId ?? (result as any).dashboard?.dashboardId;
         const shareableUrl = `${window.location.origin}/d/${newDashboardId}`;
 
         onSuccess(newDashboardId, shareableUrl);
       }
     } catch (err) {
       console.error(`Failed to ${dashboardId ? 'update' : 'create'} dashboard:`, err);
-      setError(err instanceof Error ? err.message : `Failed to ${dashboardId ? 'update' : 'create'} dashboard`);
+      setError(
+        err instanceof Error
+          ? err.message
+          : `Failed to ${dashboardId ? 'update' : 'create'} dashboard`
+      );
     } finally {
       setLoading(false);
     }
@@ -189,7 +193,9 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         name="dashboardType"
         label="List Type"
         value={formData.type}
-        onChange={(value) => setFormData({ ...formData, type: value as DashboardType, locationIds: [], itemIds: [] })}
+        onChange={(value) =>
+          setFormData({ ...formData, type: value as DashboardType, locationIds: [], itemIds: [] })
+        }
         options={[
           {
             value: 'location',
@@ -206,13 +212,15 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
 
       {/* Location Selection */}
       {formData.type === 'location' && (
-        <div className="pt-4 border-t border-border">
-          <label className="block text-sm font-medium text-text-primary mb-2">
+        <div className="border-t border-border pt-4">
+          <label className="mb-2 block text-sm font-medium text-text-primary">
             Select Locations
           </label>
-          <div className="space-y-2 max-h-60 overflow-y-auto border border-border rounded-md p-3 bg-surface">
+          <div className="max-h-60 space-y-2 overflow-y-auto rounded-md border border-border bg-surface p-3">
             {locations.length === 0 ? (
-              <Text variant="bodySmall" color="tertiary">No locations available</Text>
+              <Text variant="bodySmall" color="tertiary">
+                No locations available
+              </Text>
             ) : (
               locations.map((location) => (
                 <Checkbox
@@ -228,7 +236,9 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
                     } else {
                       setFormData({
                         ...formData,
-                        locationIds: formData.locationIds.filter((id) => id !== location.locationId),
+                        locationIds: formData.locationIds.filter(
+                          (id) => id !== location.locationId
+                        ),
                       });
                     }
                   }}
@@ -237,18 +247,17 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
             )}
           </div>
           <Text variant="caption" color="tertiary" className="mt-1">
-            {formData.locationIds.length} location{formData.locationIds.length !== 1 ? 's' : ''} selected
+            {formData.locationIds.length} location{formData.locationIds.length !== 1 ? 's' : ''}{' '}
+            selected
           </Text>
         </div>
       )}
 
       {/* Item Selection */}
       {formData.type === 'items' && (
-        <div className="pt-4 border-t border-border">
-          <label className="block text-sm font-medium text-text-primary mb-2">
-            Select Items
-          </label>
-          
+        <div className="border-t border-border pt-4">
+          <label className="mb-2 block text-sm font-medium text-text-primary">Select Items</label>
+
           <Input
             placeholder="Search items..."
             value={itemSearchQuery}
@@ -256,14 +265,17 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
             className="mb-3"
           />
 
-          <div className="space-y-2 max-h-96 overflow-y-auto border border-border rounded-md p-3 bg-surface">
+          <div className="max-h-96 space-y-2 overflow-y-auto rounded-md border border-border bg-surface p-3">
             {inventoryItems.length === 0 ? (
-              <Text variant="bodySmall" color="tertiary">No items available</Text>
+              <Text variant="bodySmall" color="tertiary">
+                No items available
+              </Text>
             ) : (
               inventoryItems
-                .filter((item) =>
-                  itemSearchQuery.length === 0 ||
-                  item.name.toLowerCase().includes(itemSearchQuery.toLowerCase())
+                .filter(
+                  (item) =>
+                    itemSearchQuery.length === 0 ||
+                    item.name.toLowerCase().includes(itemSearchQuery.toLowerCase())
                 )
                 .map((item) => (
                   <Checkbox
@@ -304,7 +316,13 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
             (formData.type === 'items' && formData.itemIds.length === 0)
           }
         >
-          {loading ? (dashboardId ? 'Updating...' : 'Creating...') : (dashboardId ? 'Update List' : 'Create List')}
+          {loading
+            ? dashboardId
+              ? 'Updating...'
+              : 'Creating...'
+            : dashboardId
+              ? 'Update List'
+              : 'Create List'}
         </Button>
         <Button variant="secondary" onClick={onCancel} disabled={loading}>
           Cancel

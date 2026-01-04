@@ -1,6 +1,6 @@
 /**
  * PageContainer Component
- * 
+ *
  * Provides consistent padding and max-width container for all dashboard pages.
  * Ensures uniform layout across the application.
  */
@@ -16,11 +16,7 @@ export interface PageContainerProps {
 
 // One spot for styling content wrapper, but not needed right now.
 export function PageContainer({ children }: PageContainerProps) {
-  return (
-    <div>
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 }
 
 export default PageContainer;

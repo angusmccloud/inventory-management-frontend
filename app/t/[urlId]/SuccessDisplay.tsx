@@ -40,21 +40,13 @@ export default function SuccessDisplay({
     return data.newQuantity;
   };
 
-  const {
-    localQuantity,
-    pendingDelta,
-    isFlushing,
-    error,
-    adjust,
-    flush,
-    retry,
-    clearError,
-  } = useQuantityDebounce({
-    itemId: urlId,
-    initialQuantity,
-    onFlush: handleFlush,
-    delay: 500,
-  });
+  const { localQuantity, pendingDelta, isFlushing, error, adjust, flush, retry, clearError } =
+    useQuantityDebounce({
+      itemId: urlId,
+      initialQuantity,
+      onFlush: handleFlush,
+      delay: 500,
+    });
 
   // Auto-flush on page unload
   useEffect(() => {
@@ -70,35 +62,32 @@ export default function SuccessDisplay({
 
   // Calculate the change from initial state (what the NFC tap resulted in)
   const changeFromInitial = localQuantity - initialQuantity;
-  const changeMessage = changeFromInitial < 0 
-    ? `Reduced by ${Math.abs(changeFromInitial)}`
-    : changeFromInitial > 0
-    ? `Increased by ${changeFromInitial}`
-    : 'No change';
+  const changeMessage =
+    changeFromInitial < 0
+      ? `Reduced by ${Math.abs(changeFromInitial)}`
+      : changeFromInitial > 0
+        ? `Increased by ${changeFromInitial}`
+        : 'No change';
 
   return (
-    <div className="bg-surface rounded-lg shadow-lg p-8 text-center">
+    <div className="rounded-lg bg-surface p-8 text-center shadow-lg">
       {/* Item Name */}
-      <h1 className="text-2xl font-bold text-text-secondary dark:text-white mb-6">
-        {itemName}
-      </h1>
+      <h1 className="mb-6 text-2xl font-bold text-text-secondary dark:text-white">{itemName}</h1>
 
       {/* Adjustment Details */}
-      <div className="bg-surface-elevated rounded-lg p-6 mb-6">
-        <div className="flex items-center justify-center gap-4 mb-4">
+      <div className="mb-6 rounded-lg bg-surface-elevated p-6">
+        <div className="mb-4 flex items-center justify-center gap-4">
           <div className="text-center">
-            <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-1">
+            <Text variant="bodySmall" color="primary" className="mb-1 uppercase tracking-wide">
               Previous
             </Text>
             <Text variant="h1" weight="bold">
               {previousQuantity}
             </Text>
           </div>
-          <div className="text-2xl text-text-default">
-            →
-          </div>
+          <div className="text-2xl text-text-default">→</div>
           <div className="text-center">
-            <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-1">
+            <Text variant="bodySmall" color="primary" className="mb-1 uppercase tracking-wide">
               Current
             </Text>
             <Text variant="h1" weight="bold" className="text-secondary-contrast">
@@ -113,21 +102,15 @@ export default function SuccessDisplay({
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-error/10/20 rounded-lg">
-          <Text variant="bodySmall" color="error">{error.message}</Text>
-          <div className="flex gap-2 mt-2">
-            <Button
-              variant="warning"
-              size="sm"
-              onClick={retry}
-            >
+        <div className="bg-error/10/20 mb-6 rounded-lg p-4">
+          <Text variant="bodySmall" color="error">
+            {error.message}
+          </Text>
+          <div className="mt-2 flex gap-2">
+            <Button variant="warning" size="sm" onClick={retry}>
               Retry
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={clearError}
-            >
+            <Button variant="secondary" size="sm" onClick={clearError}>
               Dismiss
             </Button>
           </div>
@@ -145,7 +128,7 @@ export default function SuccessDisplay({
       </Text>
 
       {/* Adjustment Controls with Debouncing */}
-      <div className="flex justify-center mb-6">
+      <div className="mb-6 flex justify-center">
         <QuantityControls
           quantity={localQuantity}
           onIncrement={() => adjust(1)}
@@ -160,7 +143,7 @@ export default function SuccessDisplay({
 
       {/* Offline Warning */}
       {!isOnline && (
-        <div className="mb-6 p-4 bg-warning/10 rounded-lg">
+        <div className="mb-6 rounded-lg bg-warning/10 p-4">
           <Text variant="bodySmall" color="warning">
             You are currently offline. Changes will be saved when connection is restored.
           </Text>

@@ -42,51 +42,51 @@ import { getThemeClasses } from '@/lib/theme';
 
 ### Brand Colors
 
-| Token | Light Mode | Dark Mode | Usage |
-|-------|------------|-----------|-------|
-| `primary` | Blue (#0ea5e9) | Light Blue (#38bdf8) | Primary actions, links |
-| `primary-contrast` | White | Dark Gray | Text on primary |
-| `primary-hover` | Darker Blue | Lighter Blue | Hover states |
-| `secondary` | Indigo (#6366f1) | Light Indigo (#818cf8) | Secondary actions |
-| `secondary-contrast` | White | Dark Gray | Text on secondary |
-| `secondary-hover` | Darker Indigo | Lighter Indigo | Hover states |
+| Token                | Light Mode       | Dark Mode              | Usage                  |
+| -------------------- | ---------------- | ---------------------- | ---------------------- |
+| `primary`            | Blue (#0ea5e9)   | Light Blue (#38bdf8)   | Primary actions, links |
+| `primary-contrast`   | White            | Dark Gray              | Text on primary        |
+| `primary-hover`      | Darker Blue      | Lighter Blue           | Hover states           |
+| `secondary`          | Indigo (#6366f1) | Light Indigo (#818cf8) | Secondary actions      |
+| `secondary-contrast` | White            | Dark Gray              | Text on secondary      |
+| `secondary-hover`    | Darker Indigo    | Lighter Indigo         | Hover states           |
 
 ### Surface Colors
 
-| Token | Light Mode | Dark Mode | Usage |
-|-------|------------|-----------|-------|
-| `surface` | White | Gray-800 | Cards, panels |
-| `surface-elevated` | Gray-50 | Gray-700 | Modals, dropdowns |
-| `surface-hover` | Gray-100 | Gray-600 | Hover states |
-| `background` | Gray-50 | Gray-900 | Page background |
+| Token              | Light Mode | Dark Mode | Usage             |
+| ------------------ | ---------- | --------- | ----------------- |
+| `surface`          | White      | Gray-800  | Cards, panels     |
+| `surface-elevated` | Gray-50    | Gray-700  | Modals, dropdowns |
+| `surface-hover`    | Gray-100   | Gray-600  | Hover states      |
+| `background`       | Gray-50    | Gray-900  | Page background   |
 
 ### Text Colors
 
-| Token | Light Mode | Dark Mode | Usage |
-|-------|------------|-----------|-------|
-| `text-primary` | Gray-900 | Gray-100 | Headings, body text |
-| `text-secondary` | Gray-500 | Gray-400 | Captions, labels |
-| `text-disabled` | Gray-300 | Gray-600 | Disabled text |
+| Token            | Light Mode | Dark Mode | Usage               |
+| ---------------- | ---------- | --------- | ------------------- |
+| `text-primary`   | Gray-900   | Gray-100  | Headings, body text |
+| `text-secondary` | Gray-500   | Gray-400  | Captions, labels    |
+| `text-disabled`  | Gray-300   | Gray-600  | Disabled text       |
 
 ### Border Colors
 
-| Token | Light Mode | Dark Mode | Usage |
-|-------|------------|-----------|-------|
-| `border` | Gray-200 | Gray-700 | Default borders |
-| `border-focus` | Blue | Light Blue | Focus rings |
+| Token          | Light Mode | Dark Mode  | Usage           |
+| -------------- | ---------- | ---------- | --------------- |
+| `border`       | Gray-200   | Gray-700   | Default borders |
+| `border-focus` | Blue       | Light Blue | Focus rings     |
 
 ### Semantic Colors
 
-| Token | Light Mode | Dark Mode | Usage |
-|-------|------------|-----------|-------|
-| `success` | Green-500 | Green-400 | Success messages |
-| `success-contrast` | White | Dark Gray | Text on success |
-| `warning` | Amber-500 | Amber-400 | Warnings |
-| `warning-contrast` | White | Dark Gray | Text on warning |
-| `error` | Red-500 | Red-400 | Errors |
-| `error-contrast` | White | Dark Gray | Text on error |
-| `info` | Blue-500 | Blue-400 | Info messages |
-| `info-contrast` | White | Dark Gray | Text on info |
+| Token              | Light Mode | Dark Mode | Usage            |
+| ------------------ | ---------- | --------- | ---------------- |
+| `success`          | Green-500  | Green-400 | Success messages |
+| `success-contrast` | White      | Dark Gray | Text on success  |
+| `warning`          | Amber-500  | Amber-400 | Warnings         |
+| `warning-contrast` | White      | Dark Gray | Text on warning  |
+| `error`            | Red-500    | Red-400   | Errors           |
+| `error-contrast`   | White      | Dark Gray | Text on error    |
+| `info`             | Blue-500   | Blue-400  | Info messages    |
+| `info-contrast`    | White      | Dark Gray | Text on info     |
 
 ## Common Patterns
 
@@ -231,6 +231,7 @@ import { getThemeClasses } from '@/lib/theme';
 ## Accessibility
 
 All color combinations are tested to meet **WCAG 2.1 AA** contrast requirements:
+
 - Normal text: 4.5:1 minimum contrast
 - Large text (18pt+): 3:1 minimum contrast
 - UI components: 3:1 minimum contrast
@@ -240,6 +241,7 @@ All color combinations are tested to meet **WCAG 2.1 AA** contrast requirements:
 ### Browser DevTools
 
 Test dark mode in Chrome/Edge/Safari:
+
 1. Open DevTools (F12)
 2. Open Command Palette (Cmd/Ctrl + Shift + P)
 3. Type "Rendering"
@@ -249,12 +251,15 @@ Test dark mode in Chrome/Edge/Safari:
 ### System Preferences
 
 **macOS:**
+
 - System Settings → Appearance → Dark/Light
 
 **Windows:**
+
 - Settings → Personalization → Colors → Choose your mode
 
 **Linux (GNOME):**
+
 - Settings → Appearance → Style → Light/Dark
 
 ## Extending the Theme
@@ -290,9 +295,7 @@ theme: {
 3. **Use in components:**
 
 ```tsx
-<div className="bg-my-new-color text-white">
-  New color!
-</div>
+<div className="bg-my-new-color text-white">New color!</div>
 ```
 
 ### Modifying Existing Colors
@@ -351,7 +354,9 @@ If you have existing components with hardcoded colors, migrate them to use theme
 Use Tailwind's opacity modifier:
 
 ```tsx
-<div className="bg-primary/50">  {/* 50% opacity */}
+<div className="bg-primary/50">
+  {' '}
+  {/* 50% opacity */}
   Semi-transparent
 </div>
 ```

@@ -79,12 +79,7 @@ describe('NotificationList', () => {
     it('renders a list of notifications', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       expect(screen.getByTestId('notification-list')).toBeInTheDocument();
       expect(screen.getByText('Milk')).toBeInTheDocument();
@@ -96,12 +91,7 @@ describe('NotificationList', () => {
     it('renders all notification items', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       const items = screen.getAllByTestId('notification-item');
       expect(items).toHaveLength(4);
@@ -110,12 +100,7 @@ describe('NotificationList', () => {
     it('sorts notifications by createdAt (newest first)', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       const items = screen.getAllByTestId('notification-item');
       // Butter (Jan 16) should be first, then Milk (Jan 15), Bread (Jan 14), Eggs (Jan 13)
@@ -128,12 +113,7 @@ describe('NotificationList', () => {
 
   describe('Empty State', () => {
     it('shows empty state when no notifications exist', () => {
-      render(
-        <NotificationList
-          notifications={[]}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={[]} {...defaultProps} />);
 
       expect(screen.getByTestId('empty-state')).toBeInTheDocument();
       expect(screen.getByText('No notifications')).toBeInTheDocument();
@@ -143,16 +123,10 @@ describe('NotificationList', () => {
     });
 
     it('shows filtered empty state message when filter returns no results', () => {
-      const notifications = [
-        createMockNotification({ status: 'active' }),
-      ];
+      const notifications = [createMockNotification({ status: 'active' })];
 
       render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          statusFilter="resolved"
-        />
+        <NotificationList notifications={notifications} {...defaultProps} statusFilter="resolved" />
       );
 
       expect(screen.getByTestId('empty-state')).toBeInTheDocument();
@@ -160,12 +134,7 @@ describe('NotificationList', () => {
     });
 
     it('does not show notification list when empty', () => {
-      render(
-        <NotificationList
-          notifications={[]}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={[]} {...defaultProps} />);
 
       expect(screen.queryByTestId('notification-list')).not.toBeInTheDocument();
     });
@@ -176,11 +145,7 @@ describe('NotificationList', () => {
       const notifications = createMockNotifications();
 
       render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          statusFilter="all"
-        />
+        <NotificationList notifications={notifications} {...defaultProps} statusFilter="all" />
       );
 
       const items = screen.getAllByTestId('notification-item');
@@ -190,12 +155,7 @@ describe('NotificationList', () => {
     it('shows all notifications when statusFilter is undefined', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       const items = screen.getAllByTestId('notification-item');
       expect(items).toHaveLength(4);
@@ -205,11 +165,7 @@ describe('NotificationList', () => {
       const notifications = createMockNotifications();
 
       render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          statusFilter="active"
-        />
+        <NotificationList notifications={notifications} {...defaultProps} statusFilter="active" />
       );
 
       const items = screen.getAllByTestId('notification-item');
@@ -240,11 +196,7 @@ describe('NotificationList', () => {
       const notifications = createMockNotifications();
 
       render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          statusFilter="resolved"
-        />
+        <NotificationList notifications={notifications} {...defaultProps} statusFilter="resolved" />
       );
 
       const items = screen.getAllByTestId('notification-item');
@@ -255,17 +207,9 @@ describe('NotificationList', () => {
 
   describe('Props Passing', () => {
     it('passes isAdmin prop to NotificationItem components', () => {
-      const notifications = [
-        createMockNotification({ status: 'active', itemName: 'Milk' }),
-      ];
+      const notifications = [createMockNotification({ status: 'active', itemName: 'Milk' })];
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          isAdmin={true}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} isAdmin={true} />);
 
       // Admin should see acknowledge button on active notifications
       expect(screen.getByTestId('acknowledge-button')).toBeInTheDocument();
@@ -279,13 +223,7 @@ describe('NotificationList', () => {
         }),
       ];
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-          isAdmin={true}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} isAdmin={true} />);
 
       const button = screen.getByTestId('acknowledge-button');
       button.click();
@@ -298,12 +236,7 @@ describe('NotificationList', () => {
     it('renders notifications in a list with proper role', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       expect(screen.getByRole('list')).toBeInTheDocument();
     });
@@ -311,12 +244,7 @@ describe('NotificationList', () => {
     it('has proper test IDs for testing', () => {
       const notifications = createMockNotifications();
 
-      render(
-        <NotificationList
-          notifications={notifications}
-          {...defaultProps}
-        />
-      );
+      render(<NotificationList notifications={notifications} {...defaultProps} />);
 
       expect(screen.getByTestId('notification-list')).toBeInTheDocument();
     });

@@ -1,7 +1,7 @@
 /**
  * Shopping List Page
  * Feature: 002-shopping-lists
- * 
+ *
  * Main page for viewing and managing family shopping list.
  */
 
@@ -21,13 +21,13 @@ export default function ShoppingListPage() {
   useEffect(() => {
     // Get family ID from user context
     const userContext = getUserContext();
-    
+
     if (!userContext?.familyId) {
       // Redirect to dashboard if no family is selected
       router.push('/dashboard');
       return;
     }
-    
+
     setFamilyId(userContext.familyId);
     setIsLoading(false);
   }, [router]);
@@ -42,8 +42,7 @@ export default function ShoppingListPage() {
 
   return (
     <PageContainer>
-        <ShoppingList familyId={familyId} />
+      <ShoppingList familyId={familyId} />
     </PageContainer>
   );
 }
-

@@ -1,7 +1,7 @@
 /**
  * StoreFilter Component
  * Feature: 002-shopping-lists
- * 
+ *
  * Multi-select filter dropdown for viewing shopping list by multiple stores.
  */
 
@@ -17,11 +17,7 @@ interface StoreFilterProps {
   onStoreChange: (storeIds: string[]) => void;
 }
 
-export default function StoreFilter({
-  stores,
-  selectedStoreIds,
-  onStoreChange,
-}: StoreFilterProps) {
+export default function StoreFilter({ stores, selectedStoreIds, onStoreChange }: StoreFilterProps) {
   if (!stores || stores.length === 0) {
     return null;
   }
@@ -52,4 +48,3 @@ export default function StoreFilter({
     </div>
   );
 }
-

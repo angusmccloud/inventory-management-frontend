@@ -1,6 +1,6 @@
 /**
  * Radio Component
- * 
+ *
  * Accessible radio button group with consistent styling.
  * Supports theming and follows WCAG 2.1 AA standards.
  */
@@ -30,12 +30,9 @@ export const Radio: React.FC<RadioProps> = ({
     <div className={className}>
       {/* Group Label */}
       {label && (
-        <label
-          id={`${groupId}-label`}
-          className="block text-sm font-medium text-text-primary mb-2"
-        >
+        <label id={`${groupId}-label`} className="mb-2 block text-sm font-medium text-text-primary">
           {label}
-          {required && <span className="text-error ml-1">*</span>}
+          {required && <span className="ml-1 text-error">*</span>}
         </label>
       )}
 
@@ -43,11 +40,7 @@ export const Radio: React.FC<RadioProps> = ({
       <div
         role="radiogroup"
         aria-labelledby={label ? `${groupId}-label` : undefined}
-        aria-describedby={
-          helpText || error
-            ? `${groupId}-${error ? 'error' : 'help'}`
-            : undefined
-        }
+        aria-describedby={helpText || error ? `${groupId}-${error ? 'error' : 'help'}` : undefined}
         className="space-y-2"
       >
         {options.map((option) => {
@@ -59,8 +52,8 @@ export const Radio: React.FC<RadioProps> = ({
             <label
               key={option.value}
               htmlFor={optionId}
-              className={`flex items-start cursor-pointer ${
-                isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+              className={`flex cursor-pointer items-start ${
+                isDisabled ? 'cursor-not-allowed opacity-50' : ''
               }`}
             >
               <input
@@ -71,24 +64,14 @@ export const Radio: React.FC<RadioProps> = ({
                 checked={isChecked}
                 onChange={(e) => !isDisabled && onChange(e.target.value)}
                 disabled={isDisabled}
-                className={`
-                  mt-0.5 h-4 w-4 flex-shrink-0
-                  border-2 rounded-full
-                  ${hasError ? 'border-error' : 'border-border'}
-                  ${
-                    isChecked
-                      ? 'bg-primary border-primary text-primary-contrast'
-                      : 'bg-surface border-border'
-                  }
-                  focus:ring-2 focus:ring-primary focus:ring-offset-2
-                  disabled:cursor-not-allowed disabled:opacity-50
-                  transition-colors hover:border-primary-hover
-                `}
+                className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded-full border-2 ${hasError ? 'border-error' : 'border-border'} ${
+                  isChecked
+                    ? 'border-primary bg-primary text-primary-contrast'
+                    : 'border-border bg-surface'
+                } transition-colors hover:border-primary-hover focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
               />
               <div className="ml-3 flex-1">
-                <span className="text-sm text-text-primary">
-                  {option.label}
-                </span>
+                <span className="text-sm text-text-primary">{option.label}</span>
                 {option.description && (
                   <Text variant="caption" color="secondary" className="mt-0.5">
                     {option.description}
@@ -102,13 +85,7 @@ export const Radio: React.FC<RadioProps> = ({
 
       {/* Help Text */}
       {helpText && !error && (
-        <Text
-          as="p"
-          variant="caption"
-          color="secondary"
-          id={`${groupId}-help`}
-          className="mt-1.5"
-        >
+        <Text as="p" variant="caption" color="secondary" id={`${groupId}-help`} className="mt-1.5">
           {helpText}
         </Text>
       )}

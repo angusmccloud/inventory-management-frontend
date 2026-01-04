@@ -1,9 +1,9 @@
 /**
  * NFC Page Error Boundary
- * 
+ *
  * @description Error page for invalid or inactive NFC URLs
  * Route: /t/[urlId]/error
- * 
+ *
  * @see specs/006-api-integration/spec.md - User Story 1
  */
 
@@ -20,7 +20,7 @@ interface ErrorPageProps {
 
 /**
  * Error boundary for NFC adjustment page
- * 
+ *
  * WCAG 2.1 AA compliant with proper color contrast
  */
 export default function Error({ error, reset }: ErrorPageProps) {
@@ -30,13 +30,13 @@ export default function Error({ error, reset }: ErrorPageProps) {
   }, [error]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="w-full max-w-md">
-        <div className="bg-surface rounded-lg shadow-lg p-8 text-center">
+        <div className="rounded-lg bg-surface p-8 text-center shadow-lg">
           {/* Error Icon */}
-          <div className="mx-auto w-16 h-16 bg-tertiary/10/30 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-tertiary/10/30 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full">
             <svg
-              className="w-10 h-10 text-tertiary-contrast"
+              className="h-10 w-10 text-tertiary-contrast"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
           </div>
 
           {/* Error Title */}
-          <h1 className="text-2xl font-bold text-text-secondary dark:text-white mb-2">
+          <h1 className="mb-2 text-2xl font-bold text-text-secondary dark:text-white">
             Something Went Wrong
           </h1>
 
@@ -63,8 +63,8 @@ export default function Error({ error, reset }: ErrorPageProps) {
 
           {/* Error Details (in development) */}
           {process.env.NODE_ENV === 'development' && (
-            <div className="mb-6 p-4 bg-surface-elevated rounded-lg text-left">
-              <Text variant="caption" color="primary" className="font-mono break-all">
+            <div className="mb-6 rounded-lg bg-surface-elevated p-4 text-left">
+              <Text variant="caption" color="primary" className="break-all font-mono">
                 {error.message}
               </Text>
             </div>
@@ -73,12 +73,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
           {/* Action Buttons */}
           <div className="space-y-3">
             {/* Try Again Button */}
-            <Button
-              variant="primary"
-              size="md"
-              fullWidth
-              onClick={reset}
-            >
+            <Button variant="primary" size="md" fullWidth onClick={reset}>
               Try Again
             </Button>
 
@@ -89,7 +84,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
           </div>
 
           {/* Support Information */}
-          <div className="mt-8 pt-6 border-t border-border">
+          <div className="mt-8 border-t border-border pt-6">
             <Text variant="caption" color="primary">
               Need help? Contact your family administrator to verify the NFC tag configuration.
             </Text>

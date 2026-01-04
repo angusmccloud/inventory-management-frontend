@@ -54,8 +54,10 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
       <RoleSelector value={role} onChange={setRole} disabled={isSubmitting} />
 
       {error && (
-        <div className="p-3 bg-error/10 border border-error rounded-lg">
-          <Text variant="bodySmall" color="error">{error}</Text>
+        <div className="rounded-lg border border-error bg-error/10 p-3">
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
@@ -71,12 +73,7 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
         </Button>
 
         {onCancel && (
-          <Button
-            type="button"
-            variant="warning"
-            onClick={onCancel}
-            disabled={isSubmitting}
-          >
+          <Button type="button" variant="warning" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
         )}
@@ -84,4 +81,3 @@ export function InviteMemberForm({ onSubmit, onCancel }: InviteMemberFormProps) 
     </form>
   );
 }
-

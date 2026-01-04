@@ -17,9 +17,7 @@ Contextual message display for notifications and feedback with severity-based st
 ```tsx
 import { Alert } from '@/components/common';
 
-<Alert severity="success">
-  Item successfully added to inventory.
-</Alert>
+<Alert severity="success">Item successfully added to inventory.</Alert>;
 ```
 
 ### Alert with Title
@@ -35,16 +33,18 @@ import { Alert } from '@/components/common';
 ```tsx
 const [showAlert, setShowAlert] = useState(true);
 
-{showAlert && (
-  <Alert 
-    severity="warning" 
-    title="Low Stock Warning"
-    dismissible 
-    onDismiss={() => setShowAlert(false)}
-  >
-    Several items are running low. Consider restocking soon.
-  </Alert>
-)}
+{
+  showAlert && (
+    <Alert
+      severity="warning"
+      title="Low Stock Warning"
+      dismissible
+      onDismiss={() => setShowAlert(false)}
+    >
+      Several items are running low. Consider restocking soon.
+    </Alert>
+  );
+}
 ```
 
 ### Error Alert
@@ -57,14 +57,14 @@ const [showAlert, setShowAlert] = useState(true);
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `severity` | `'info' \| 'success' \| 'warning' \| 'error'` | Required | Determines color scheme and icon |
-| `title` | `string` | `undefined` | Optional bold heading |
-| `children` | `ReactNode` | Required | Alert message content |
-| `dismissible` | `boolean` | `false` | Show close button |
-| `onDismiss` | `() => void` | `undefined` | Callback when dismissed |
-| `className` | `string` | `undefined` | Additional CSS classes |
+| Prop          | Type                                          | Default     | Description                      |
+| ------------- | --------------------------------------------- | ----------- | -------------------------------- |
+| `severity`    | `'info' \| 'success' \| 'warning' \| 'error'` | Required    | Determines color scheme and icon |
+| `title`       | `string`                                      | `undefined` | Optional bold heading            |
+| `children`    | `ReactNode`                                   | Required    | Alert message content            |
+| `dismissible` | `boolean`                                     | `false`     | Show close button                |
+| `onDismiss`   | `() => void`                                  | `undefined` | Callback when dismissed          |
+| `className`   | `string`                                      | `undefined` | Additional CSS classes           |
 
 ## Accessibility
 
@@ -77,21 +77,25 @@ const [showAlert, setShowAlert] = useState(true);
 ## Severity Variants
 
 ### Info (Blue)
+
 - Use for: General information, tips, feature announcements
 - Icon: Information circle
 - Example: "Your changes have been saved automatically"
 
 ### Success (Green)
+
 - Use for: Successful operations, confirmations
 - Icon: Check circle
 - Example: "Item added to inventory successfully"
 
 ### Warning (Yellow)
+
 - Use for: Cautions, non-critical issues, reminders
 - Icon: Exclamation triangle
 - Example: "This item is running low on stock"
 
 ### Error (Red)
+
 - Use for: Failures, validation errors, critical issues
 - Icon: X circle
 - Example: "Failed to connect to server. Please try again"
@@ -101,21 +105,21 @@ const [showAlert, setShowAlert] = useState(true);
 ### Form Validation Error
 
 ```tsx
-{formError && (
-  <Alert severity="error" dismissible onDismiss={() => setFormError(null)}>
-    {formError}
-  </Alert>
-)}
+{
+  formError && (
+    <Alert severity="error" dismissible onDismiss={() => setFormError(null)}>
+      {formError}
+    </Alert>
+  );
+}
 ```
 
 ### Success Message with Auto-dismiss
 
 ```tsx
-{successMessage && (
-  <Alert severity="success">
-    {successMessage}
-  </Alert>
-)}
+{
+  successMessage && <Alert severity="success">{successMessage}</Alert>;
+}
 
 // In your submit handler:
 setSuccessMessage('Changes saved!');
@@ -126,8 +130,8 @@ setTimeout(() => setSuccessMessage(null), 5000);
 
 ```tsx
 <Alert severity="info" title="New Feature Available">
-  Check out the new shopping list feature! 
-  <a href="/dashboard/shopping-list" className="underline ml-1">
+  Check out the new shopping list feature!
+  <a href="/dashboard/shopping-list" className="ml-1 underline">
     Try it now
   </a>
 </Alert>

@@ -48,9 +48,7 @@ describe('NotificationItem', () => {
     it('renders notification item name correctly', () => {
       const notification = createMockNotification({ itemName: 'Bread' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.getByText('Bread')).toBeInTheDocument();
     });
@@ -61,9 +59,7 @@ describe('NotificationItem', () => {
         threshold: 10,
       });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       const quantityInfo = screen.getByTestId('quantity-info');
       expect(quantityInfo).toHaveTextContent('3');
@@ -75,9 +71,7 @@ describe('NotificationItem', () => {
         createdAt: '2024-01-15T10:30:00Z',
       });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.getByTestId('timestamp')).toBeInTheDocument();
     });
@@ -88,9 +82,7 @@ describe('NotificationItem', () => {
         resolvedAt: '2024-01-16T14:00:00Z',
       });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.getByTestId('resolved-timestamp')).toBeInTheDocument();
     });
@@ -101,9 +93,7 @@ describe('NotificationItem', () => {
         resolvedAt: null,
       });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.queryByTestId('resolved-timestamp')).not.toBeInTheDocument();
     });
@@ -113,9 +103,7 @@ describe('NotificationItem', () => {
     it('displays "Active" status with red styling for active notifications', () => {
       const notification = createMockNotification({ status: 'active' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Active');
@@ -125,9 +113,7 @@ describe('NotificationItem', () => {
     it('displays "Acknowledged" status with yellow styling for acknowledged notifications', () => {
       const notification = createMockNotification({ status: 'acknowledged' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Acknowledged');
@@ -137,9 +123,7 @@ describe('NotificationItem', () => {
     it('displays "Resolved" status with green styling for resolved notifications', () => {
       const notification = createMockNotification({ status: 'resolved' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       const badge = screen.getByTestId('status-badge');
       expect(badge).toHaveTextContent('Resolved');
@@ -151,9 +135,7 @@ describe('NotificationItem', () => {
     it('shows acknowledge button for admin users on active notifications', () => {
       const notification = createMockNotification({ status: 'active' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} isAdmin={true} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} isAdmin={true} />);
 
       expect(screen.getByTestId('acknowledge-button')).toBeInTheDocument();
     });
@@ -161,9 +143,7 @@ describe('NotificationItem', () => {
     it('does not show acknowledge button for non-admin users', () => {
       const notification = createMockNotification({ status: 'active' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.queryByTestId('acknowledge-button')).not.toBeInTheDocument();
     });
@@ -171,9 +151,7 @@ describe('NotificationItem', () => {
     it('does not show acknowledge button for acknowledged notifications', () => {
       const notification = createMockNotification({ status: 'acknowledged' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} isAdmin={true} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} isAdmin={true} />);
 
       expect(screen.queryByTestId('acknowledge-button')).not.toBeInTheDocument();
     });
@@ -181,9 +159,7 @@ describe('NotificationItem', () => {
     it('does not show acknowledge button for resolved notifications', () => {
       const notification = createMockNotification({ status: 'resolved' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} isAdmin={true} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} isAdmin={true} />);
 
       expect(screen.queryByTestId('acknowledge-button')).not.toBeInTheDocument();
     });
@@ -194,9 +170,7 @@ describe('NotificationItem', () => {
         status: 'active',
       });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} isAdmin={true} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} isAdmin={true} />);
 
       const button = screen.getByTestId('acknowledge-button');
       fireEvent.click(button);
@@ -210,9 +184,7 @@ describe('NotificationItem', () => {
     it('renders as a list item', () => {
       const notification = createMockNotification();
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} />);
 
       expect(screen.getByTestId('notification-item').tagName).toBe('LI');
     });
@@ -220,9 +192,7 @@ describe('NotificationItem', () => {
     it('has proper test IDs for all key elements', () => {
       const notification = createMockNotification({ status: 'active' });
 
-      render(
-        <NotificationItem notification={notification} {...defaultProps} isAdmin={true} />
-      );
+      render(<NotificationItem notification={notification} {...defaultProps} isAdmin={true} />);
 
       expect(screen.getByTestId('notification-item')).toBeInTheDocument();
       expect(screen.getByTestId('status-badge')).toBeInTheDocument();

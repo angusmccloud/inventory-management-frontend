@@ -1,7 +1,7 @@
 /**
  * Input Component
  * Feature: 008-common-components
- * 
+ *
  * Form input component with validation states, labels, and icon support.
  */
 
@@ -30,20 +30,20 @@ const validationStyles: Record<InputValidationState, string> = {
 
 /**
  * Input component for form fields
- * 
+ *
  * @example
  * ```tsx
  * // Basic text input
- * <Input 
+ * <Input
  *   label="Item Name"
  *   value={name}
  *   onChange={(e) => setName(e.target.value)}
  *   placeholder="Enter item name"
  *   required
  * />
- * 
+ *
  * // With validation error
- * <Input 
+ * <Input
  *   label="Quantity"
  *   type="number"
  *   value={quantity}
@@ -75,13 +75,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     // Generate unique ID if not provided
     const inputId = id || React.useId();
-    
+
     // Determine validation state from props
-    const effectiveValidationState: InputValidationState = 
-      error ? 'error' : 
-      success ? 'success' : 
-      validationState || 'default';
-    
+    const effectiveValidationState: InputValidationState = error
+      ? 'error'
+      : success
+        ? 'success'
+        : validationState || 'default';
+
     // Help text or error/success message
     const feedbackMessage = error || success || helpText;
     const feedbackId = feedbackMessage ? `${inputId}-feedback` : undefined;
@@ -90,24 +91,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className={cn('w-full', wrapperClassName)}>
         {/* Label */}
         {label && (
-          <label 
-            htmlFor={inputId}
-            className="block text-sm font-semibold text-text-primary mb-1.5"
-          >
+          <label htmlFor={inputId} className="mb-1.5 block text-sm font-semibold text-text-primary">
             {label}
-            {required && <span className="text-error ml-1">*</span>}
+            {required && <span className="ml-1 text-error">*</span>}
           </label>
         )}
-        
+
         {/* Input wrapper (for icons) */}
         <div className="relative">
           {/* Left icon */}
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+            <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
               {leftIcon}
             </div>
           )}
-          
+
           {/* Input element */}
           <input
             ref={ref}
@@ -122,7 +120,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'text-text-primary placeholder:text-text-disabled',
               'transition-colors duration-200',
               'focus:outline-none focus:ring-2 focus:ring-offset-0',
-              'disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-surface-elevated',
+              'disabled:cursor-not-allowed disabled:bg-surface-elevated disabled:opacity-60',
               // Size styles
               sizeStyles[size],
               // Validation styles
@@ -135,15 +133,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             {...props}
           />
-          
+
           {/* Right icon */}
           {rightIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary">
               {rightIcon}
             </div>
           )}
         </div>
-        
+
         {/* Feedback message (help text, error, or success) */}
         {feedbackMessage && (
           <Text

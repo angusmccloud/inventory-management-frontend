@@ -24,7 +24,7 @@ export const ThemeStorage = {
    */
   get(): ThemeMode | null {
     if (typeof window === 'undefined') return null;
-    
+
     try {
       const value = localStorage.getItem(THEME_KEY);
       return isValidTheme(value) ? value : null;
@@ -40,11 +40,11 @@ export const ThemeStorage = {
    */
   set(theme: ThemeMode): void {
     if (typeof window === 'undefined') return;
-    
+
     if (!isValidTheme(theme)) {
       throw new Error(`Invalid theme value: ${theme}`);
     }
-    
+
     try {
       localStorage.setItem(THEME_KEY, theme);
     } catch (error) {
@@ -57,7 +57,7 @@ export const ThemeStorage = {
    */
   remove(): void {
     if (typeof window === 'undefined') return;
-    
+
     try {
       localStorage.removeItem(THEME_KEY);
     } catch (error) {

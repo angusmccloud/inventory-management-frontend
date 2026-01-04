@@ -1,7 +1,7 @@
 /**
  * PageHeader Component Type Definitions
  * Feature: 008-common-components
- * 
+ *
  * Page title header with optional breadcrumbs, description, and actions.
  */
 
@@ -15,7 +15,7 @@ export interface Breadcrumb {
    * Breadcrumb label
    */
   label: string;
-  
+
   /**
    * Breadcrumb link destination (if clickable)
    * If not provided, breadcrumb is rendered as plain text (current page)
@@ -26,9 +26,9 @@ export interface Breadcrumb {
 /**
  * PageHeader component props
  * Page title header with optional breadcrumbs, description, and actions.
- * 
+ *
  * @example
- * <PageHeader 
+ * <PageHeader
  *   title="Inventory"
  *   description="Manage your household items and supplies"
  *   action={
@@ -37,9 +37,9 @@ export interface Breadcrumb {
  *     </Button>
  *   }
  * />
- * 
+ *
  * @example
- * <PageHeader 
+ * <PageHeader
  *   breadcrumbs={[
  *     { label: 'Dashboard', href: '/dashboard' },
  *     { label: 'Settings', href: '/settings' },
@@ -57,32 +57,32 @@ export interface PageHeaderProps {
    * Page title (main heading)
    */
   title: string;
-  
+
   /**
    * Page description (optional subtitle/supporting text)
    */
   description?: string;
-  
+
   /**
    * Breadcrumb navigation (optional, shown above title)
    */
   breadcrumbs?: Breadcrumb[];
-  
+
   /**
    * Primary action button (top-right)
    */
   action?: React.ReactNode;
-  
+
   /**
    * Additional actions (shown after primary action)
    */
   secondaryActions?: React.ReactNode[];
-  
+
   /**
    * Additional CSS classes
    */
   className?: string;
-  
+
   /**
    * Enable vertical layout stacking on mobile devices
    * When true, title/description and actions stack vertically on mobile (<md breakpoint)

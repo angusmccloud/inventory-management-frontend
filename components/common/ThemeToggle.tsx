@@ -31,7 +31,8 @@ export function ThemeToggle() {
     }
   };
 
-  const buttonBaseClasses = 'px-4 py-2 text-sm font-medium transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
+  const buttonBaseClasses =
+    'px-4 py-2 text-sm font-medium transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
   const activeClasses = 'bg-primary text-white';
   const inactiveClasses = 'bg-surface-secondary text-text-secondary hover:bg-surface-tertiary';
 
@@ -39,7 +40,7 @@ export function ThemeToggle() {
     <div
       role="radiogroup"
       aria-label="Theme selection"
-      className="inline-flex rounded-lg bg-surface-secondary p-1 gap-1"
+      className="bg-surface-secondary inline-flex gap-1 rounded-lg p-1"
     >
       <div
         role="radio"

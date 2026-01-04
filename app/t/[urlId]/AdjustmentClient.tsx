@@ -1,9 +1,9 @@
 /**
  * Adjustment Client Component
- * 
+ *
  * @description Client-side component for interactive +/- inventory adjustments
  * Provides real-time quantity updates with debounced API calls
- * 
+ *
  * Features:
  * - Debounced API calls (500ms delay, batches rapid clicks)
  * - Optimistic UI updates for immediate feedback
@@ -11,7 +11,7 @@
  * - Touch-friendly buttons (44x44px minimum)
  * - Auto-flush on navigation/page unload
  * - Offline detection with disabled state
- * 
+ *
  * @see specs/006-api-integration/spec.md - User Story 2
  * @see specs/010-streamline-quantity-controls/spec.md - User Story 1
  * @see specs/010-streamline-quantity-controls/contracts/nfc-adjustment-api.yaml
@@ -35,7 +35,7 @@ interface AdjustmentClientProps {
 
 /**
  * Client component for additional adjustments after initial NFC tap
- * 
+ *
  * WCAG 2.1 AA compliant with 44x44px touch targets
  * Uses debounced API calls to reduce server load (500ms delay)
  */
@@ -72,21 +72,13 @@ export default function AdjustmentClient({
   );
 
   // Initialize debounce hook
-  const {
-    localQuantity,
-    hasPendingChanges,
-    isFlushing,
-    error,
-    adjust,
-    flush,
-    retry,
-    clearError,
-  } = useQuantityDebounce({
-    itemId: urlId,
-    initialQuantity,
-    onFlush: handleFlush,
-    delay: 500, // 500ms debounce delay
-  });
+  const { localQuantity, hasPendingChanges, isFlushing, error, adjust, flush, retry, clearError } =
+    useQuantityDebounce({
+      itemId: urlId,
+      initialQuantity,
+      onFlush: handleFlush,
+      delay: 500, // 500ms debounce delay
+    });
 
   /**
    * Flush pending changes on navigation/unmount
@@ -136,8 +128,8 @@ export default function AdjustmentClient({
   return (
     <div className="space-y-6">
       {/* Current Quantity Display */}
-      <div className="bg-surface-elevated rounded-lg p-6">
-        <Text variant="bodySmall" color="primary" className="uppercase tracking-wide mb-2">
+      <div className="rounded-lg bg-surface-elevated p-6">
+        <Text variant="bodySmall" color="primary" className="mb-2 uppercase tracking-wide">
           Current Quantity
         </Text>
         <div className="flex items-center gap-3">
@@ -145,7 +137,7 @@ export default function AdjustmentClient({
             {localQuantity}
           </Text>
           {hasPendingChanges && (
-            <span className="text-warning text-2xl" title="Changes pending">
+            <span className="text-2xl text-warning" title="Changes pending">
               *
             </span>
           )}
@@ -165,13 +157,13 @@ export default function AdjustmentClient({
       {/* Error Message */}
       {error && (
         <div
-          className="bg-error/10 border border-error rounded-lg p-4"
+          className="rounded-lg border border-error bg-error/10 p-4"
           role="alert"
           aria-live="assertive"
         >
           <div className="flex items-start">
             <svg
-              className="w-5 h-5 text-error mr-3 flex-shrink-0 mt-0.5"
+              className="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-error"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -185,25 +177,15 @@ export default function AdjustmentClient({
               />
             </svg>
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-error">
-                Adjustment Error
-              </h3>
+              <h3 className="text-sm font-medium text-error">Adjustment Error</h3>
               <Text variant="bodySmall" color="error" className="mt-1">
                 {error.message}
               </Text>
-              <div className="flex gap-2 mt-2">
-                <Button
-                  variant="warning"
-                  size="sm"
-                  onClick={retry}
-                >
+              <div className="mt-2 flex gap-2">
+                <Button variant="warning" size="sm" onClick={retry}>
                   Retry
                 </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={clearError}
-                >
+                <Button variant="secondary" size="sm" onClick={clearError}>
                   Dismiss
                 </Button>
               </div>
@@ -248,7 +230,7 @@ export default function AdjustmentClient({
       </div>
 
       {/* Additional Info */}
-      <div className="pt-4 border-t border-border">
+      <div className="border-t border-border pt-4">
         <Text variant="caption" color="primary" className="text-center">
           Changes are saved automatically after a brief delay. You can close this page anytime.
         </Text>

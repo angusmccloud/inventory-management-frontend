@@ -28,41 +28,33 @@ const tabs = [
 
 const [activeTab, setActiveTab] = useState('overview');
 
-<TabNavigation 
-  tabs={tabs}
-  activeTab={activeTab}
-  onChange={setActiveTab}
-/>
+<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />;
 ```
 
 ### Tabs with Icons
 
 ```tsx
-import { 
-  ArchiveBoxIcon, 
-  ShoppingCartIcon, 
-  UsersIcon 
-} from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon, ShoppingCartIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 const tabs = [
-  { 
-    id: 'inventory', 
+  {
+    id: 'inventory',
     label: 'Inventory',
-    icon: <ArchiveBoxIcon />
+    icon: <ArchiveBoxIcon />,
   },
-  { 
-    id: 'shopping', 
+  {
+    id: 'shopping',
     label: 'Shopping List',
-    icon: <ShoppingCartIcon />
+    icon: <ShoppingCartIcon />,
   },
-  { 
-    id: 'members', 
+  {
+    id: 'members',
     label: 'Members',
-    icon: <UsersIcon />
+    icon: <UsersIcon />,
   },
 ];
 
-<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />;
 ```
 
 ### Tabs with Badges
@@ -74,7 +66,7 @@ const tabs = [
   { id: 'expired', label: 'Expired', badge: 2 },
 ];
 
-<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />;
 ```
 
 ### Tabs with Disabled State
@@ -86,13 +78,13 @@ const tabs = [
   { id: 'advanced', label: 'Advanced' },
 ];
 
-<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+<TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />;
 ```
 
 ### Vertical Tabs
 
 ```tsx
-<TabNavigation 
+<TabNavigation
   tabs={settingsTabs}
   activeTab={activeSection}
   onChange={setActiveSection}
@@ -102,27 +94,28 @@ const tabs = [
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `tabs` | `Tab[]` | Required | Array of tab definitions |
-| `activeTab` | `string` | Required | Currently active tab ID |
-| `onChange` | `(tabId: string) => void` | Required | Tab change callback |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Tab layout direction |
-| `className` | `string` | `undefined` | Additional CSS classes |
+| Prop          | Type                         | Default        | Description              |
+| ------------- | ---------------------------- | -------------- | ------------------------ |
+| `tabs`        | `Tab[]`                      | Required       | Array of tab definitions |
+| `activeTab`   | `string`                     | Required       | Currently active tab ID  |
+| `onChange`    | `(tabId: string) => void`    | Required       | Tab change callback      |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Tab layout direction     |
+| `className`   | `string`                     | `undefined`    | Additional CSS classes   |
 
 ### Tab Object
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `id` | `string` | Required | Unique tab identifier |
-| `label` | `string` | Required | Tab visible text |
-| `icon` | `ReactNode` | `undefined` | Optional icon component |
-| `disabled` | `boolean` | `false` | Disable tab interaction |
-| `badge` | `number` | `undefined` | Optional count badge |
+| Property   | Type        | Default     | Description             |
+| ---------- | ----------- | ----------- | ----------------------- |
+| `id`       | `string`    | Required    | Unique tab identifier   |
+| `label`    | `string`    | Required    | Tab visible text        |
+| `icon`     | `ReactNode` | `undefined` | Optional icon component |
+| `disabled` | `boolean`   | `false`     | Disable tab interaction |
+| `badge`    | `number`    | `undefined` | Optional count badge    |
 
 ## Keyboard Navigation
 
 ### Horizontal Orientation
+
 - **Arrow Right**: Move to next tab
 - **Arrow Left**: Move to previous tab
 - **Home**: Jump to first tab
@@ -130,6 +123,7 @@ const tabs = [
 - **Tab**: Move focus out of tab list
 
 ### Vertical Orientation
+
 - **Arrow Down**: Move to next tab
 - **Arrow Up**: Move to previous tab
 - **Home**: Jump to first tab
@@ -160,12 +154,8 @@ const tabs = [
 const [activeTab, setActiveTab] = useState('overview');
 
 <div>
-  <TabNavigation 
-    tabs={tabs}
-    activeTab={activeTab}
-    onChange={setActiveTab}
-  />
-  
+  <TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+
   {/* Tab Panels */}
   <div className="mt-4">
     {activeTab === 'overview' && (
@@ -179,7 +169,7 @@ const [activeTab, setActiveTab] = useState('overview');
       </div>
     )}
   </div>
-</div>
+</div>;
 ```
 
 ## Examples
@@ -188,30 +178,26 @@ const [activeTab, setActiveTab] = useState('overview');
 
 ```tsx
 const dashboardTabs = [
-  { 
-    id: 'inventory', 
+  {
+    id: 'inventory',
     label: 'Inventory',
     icon: <ArchiveBoxIcon />,
-    badge: inventoryCount
+    badge: inventoryCount,
   },
-  { 
-    id: 'shopping', 
+  {
+    id: 'shopping',
     label: 'Shopping List',
     icon: <ShoppingCartIcon />,
-    badge: shoppingItemCount
+    badge: shoppingItemCount,
   },
-  { 
-    id: 'members', 
+  {
+    id: 'members',
     label: 'Members',
-    icon: <UsersIcon />
+    icon: <UsersIcon />,
   },
 ];
 
-<TabNavigation 
-  tabs={dashboardTabs}
-  activeTab={currentView}
-  onChange={setCurrentView}
-/>
+<TabNavigation tabs={dashboardTabs} activeTab={currentView} onChange={setCurrentView} />;
 ```
 
 ### Settings Sidebar
@@ -226,18 +212,16 @@ const settingsSections = [
 
 <div className="flex gap-6">
   <aside className="w-48">
-    <TabNavigation 
+    <TabNavigation
       tabs={settingsSections}
       activeTab={activeSection}
       onChange={setActiveSection}
       orientation="vertical"
     />
   </aside>
-  
-  <main className="flex-1">
-    {/* Settings content */}
-  </main>
-</div>
+
+  <main className="flex-1">{/* Settings content */}</main>
+</div>;
 ```
 
 ### Inventory Filters
@@ -251,14 +235,10 @@ const filterTabs = [
 ];
 
 <div>
-  <TabNavigation 
-    tabs={filterTabs}
-    activeTab={selectedLocation}
-    onChange={setSelectedLocation}
-  />
-  
+  <TabNavigation tabs={filterTabs} activeTab={selectedLocation} onChange={setSelectedLocation} />
+
   <InventoryList items={filteredItems} />
-</div>
+</div>;
 ```
 
 ## Best Practices
@@ -305,11 +285,7 @@ const handleTabChange = (tabId: string) => {
   router.push(`?${params.toString()}`);
 };
 
-<TabNavigation 
-  tabs={tabs}
-  activeTab={activeTab}
-  onChange={handleTabChange}
-/>
+<TabNavigation tabs={tabs} activeTab={activeTab} onChange={handleTabChange} />;
 ```
 
 ### Lazy Loading Tab Content
@@ -317,7 +293,7 @@ const handleTabChange = (tabId: string) => {
 ```tsx
 <div>
   <TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-  
+
   <div className="mt-4">
     {activeTab === 'overview' && <OverviewPanel />}
     {activeTab === 'details' && <DetailsPanel />}

@@ -5,7 +5,8 @@ import { SnackbarProvider } from '@/contexts/SnackbarContext';
 
 export const metadata: Metadata = {
   title: 'Inventory HQ',
-  description: 'Manage your household inventory, shopping lists, and notifications with your family',
+  description:
+    'Manage your household inventory, shopping lists, and notifications with your family',
 };
 
 export const viewport: Viewport = {
@@ -14,11 +15,7 @@ export const viewport: Viewport = {
   themeColor: '#FFFFFF', // Match light mode background color
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -38,11 +35,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen antialiased bg-background text-text-default">
+      <body className="min-h-screen bg-background text-text-default antialiased">
         <ThemeProvider>
-          <SnackbarProvider>
-            {children}
-          </SnackbarProvider>
+          <SnackbarProvider>{children}</SnackbarProvider>
         </ThemeProvider>
       </body>
     </html>

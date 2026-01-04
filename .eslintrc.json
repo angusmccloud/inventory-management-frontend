@@ -1,10 +1,5 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript",
-    "prettier"
-  ],
-  "plugins": ["prettier"],
+  "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-unused-vars": [
@@ -19,7 +14,6 @@
     "prefer-const": "error",
     "no-var": "error",
     "eqeqeq": ["error", "always"],
-    "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off"
   },

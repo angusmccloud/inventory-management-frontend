@@ -25,7 +25,7 @@ import {
   TrashIcon,
   QrCodeIcon,
   LightBulbIcon,
-} from '@heroicons/react/24/outline';
+} from '@/components/common/icons';
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -106,10 +106,14 @@ function InventoryListItem({
               {item.name}
             </Text>
             {isLowStock && (
-              <Badge variant="warning" size="sm">Low Stock</Badge>
+              <Badge variant="warning" size="sm">
+                Low Stock
+              </Badge>
             )}
             {item.status === 'archived' && (
-              <Badge variant="warning" size="sm">Archived</Badge>
+              <Badge variant="warning" size="sm">
+                Archived
+              </Badge>
             )}
           </div>
           <div className="mt-2 flex flex-col text-sm text-text-secondary sm:flex-row sm:items-center sm:gap-4">
@@ -157,6 +161,7 @@ function InventoryListItem({
               {item.notes}
             </Text>
           )}
+
           {/* Error Display */}
           {error && (
             <div className="mt-2 flex items-center gap-2 text-sm">
@@ -202,9 +207,9 @@ function InventoryListItem({
                 variant="secondary"
                 size="sm"
                 leftIcon={<QrCodeIcon className="h-4 w-4" />}
-                title="Manage NFC URLs"
+                title="Manage item link"
               >
-                NFC URLs
+                Item Link
               </Button>
               <Button
                 onClick={() => onEdit(item)}
@@ -266,7 +271,7 @@ export default function InventoryList({
         if (mounted) setShoppingListItems(resp.items || []);
       } catch (err) {
         // non-blocking: log and continue
-        // eslint-disable-next-line no-console
+
         console.warn('Failed to load shopping list items', err);
       }
     };
@@ -375,13 +380,10 @@ export default function InventoryList({
         <Modal
           isOpen={true}
           onClose={handleCloseNFCModal}
-          title={`NFC URLs - ${nfcModalItem.name}`}
+          title={`Item Link - ${nfcModalItem.name}`}
           size="lg"
         >
-          <NFCUrlManager
-            itemId={nfcModalItem.itemId}
-            itemName={nfcModalItem.name}
-          />
+          <NFCUrlManager itemId={nfcModalItem.itemId} />
         </Modal>
       )}
     </div>

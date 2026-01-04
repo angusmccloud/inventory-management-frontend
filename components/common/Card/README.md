@@ -55,6 +55,7 @@ Control the shadow depth to indicate hierarchy and layering:
 ```
 
 **Use Cases**:
+
 - **Flat**: Subtle containers, list items, inline forms
 - **Low**: Default cards, content sections, dashboard widgets
 - **Medium**: Featured content, expanded details, sidebar panels
@@ -105,8 +106,8 @@ import { useRouter } from 'next/navigation';
 const router = useRouter();
 
 // Clickable card (navigates to item details)
-<Card 
-  interactive 
+<Card
+  interactive
   onClick={() => router.push(`/items/${item.id}`)}
 >
   <h3>{item.name}</h3>
@@ -117,7 +118,7 @@ const router = useRouter();
 </Card>
 
 // Interactive card with keyboard support (Enter/Space)
-<Card 
+<Card
   interactive
   onClick={handleExpand}
   onKeyDown={(e) => {
@@ -132,6 +133,7 @@ const router = useRouter();
 ```
 
 **Interactive Mode Features**:
+
 - Hover effect (darker background)
 - Increased shadow on hover
 - Cursor pointer
@@ -146,17 +148,19 @@ const router = useRouter();
 <Card elevation="low" padding="md">
   <div className="flex items-start justify-between">
     <div>
-      <h3 className="font-semibold text-lg">{item.name}</h3>
-      <p className="text-text-secondary text-sm">{item.location}</p>
+      <h3 className="text-lg font-semibold">{item.name}</h3>
+      <p className="text-sm text-text-secondary">{item.location}</p>
     </div>
-    <Badge variant={item.status === 'active' ? 'success' : 'default'}>
-      {item.status}
-    </Badge>
+    <Badge variant={item.status === 'active' ? 'success' : 'default'}>{item.status}</Badge>
   </div>
   <p className="mt-2 text-text-secondary">{item.description}</p>
   <div className="mt-4 flex gap-2">
-    <Button size="sm" variant="secondary">Edit</Button>
-    <Button size="sm" variant="danger">Delete</Button>
+    <Button size="sm" variant="secondary">
+      Edit
+    </Button>
+    <Button size="sm" variant="danger">
+      Delete
+    </Button>
   </div>
 </Card>
 ```
@@ -165,14 +169,12 @@ const router = useRouter();
 
 ```tsx
 <Card elevation="low" padding="lg">
-  <div className="flex items-center justify-between mb-4">
+  <div className="mb-4 flex items-center justify-between">
     <h2 className="text-xl font-bold">Total Items</h2>
     <PackageIcon className="h-8 w-8 text-primary" />
   </div>
   <p className="text-4xl font-bold">{itemCount}</p>
-  <p className="text-sm text-text-secondary mt-1">
-    +{recentCount} added this week
-  </p>
+  <p className="mt-1 text-sm text-text-secondary">+{recentCount} added this week</p>
 </Card>
 ```
 
@@ -181,10 +183,10 @@ const router = useRouter();
 ```tsx
 <Card padding="none">
   {/* Header */}
-  <div className="p-4 border-b bg-surface-elevated">
+  <div className="border-b bg-surface-elevated p-4">
     <h2 className="font-semibold">Settings</h2>
   </div>
-  
+
   {/* Body with custom padding */}
   <div className="p-6">
     <form>
@@ -192,9 +194,9 @@ const router = useRouter();
       <Input label="Email" />
     </form>
   </div>
-  
+
   {/* Footer */}
-  <div className="p-4 border-t bg-surface-elevated flex justify-end gap-2">
+  <div className="flex justify-end gap-2 border-t bg-surface-elevated p-4">
     <Button variant="secondary">Cancel</Button>
     <Button variant="primary">Save</Button>
   </div>
@@ -205,12 +207,8 @@ const router = useRouter();
 
 ```tsx
 <div className="space-y-3">
-  {items.map(item => (
-    <Card 
-      key={item.id}
-      interactive
-      onClick={() => selectItem(item.id)}
-    >
+  {items.map((item) => (
+    <Card key={item.id} interactive onClick={() => selectItem(item.id)}>
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-medium">{item.name}</h3>
@@ -309,14 +307,14 @@ const router = useRouter();
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `elevation` | `'flat' \| 'low' \| 'medium' \| 'high'` | `'low'` | Shadow/elevation level |
-| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` | Internal padding size |
-| `interactive` | `boolean` | `false` | Enable hover effects and click handling |
-| `children` | `React.ReactNode` | Required | Card content |
-| `className` | `string` | `undefined` | Additional CSS classes |
-| `onClick` | `() => void` | `undefined` | Click handler (pairs with interactive) |
+| Prop          | Type                                    | Default     | Description                             |
+| ------------- | --------------------------------------- | ----------- | --------------------------------------- |
+| `elevation`   | `'flat' \| 'low' \| 'medium' \| 'high'` | `'low'`     | Shadow/elevation level                  |
+| `padding`     | `'none' \| 'sm' \| 'md' \| 'lg'`        | `'md'`      | Internal padding size                   |
+| `interactive` | `boolean`                               | `false`     | Enable hover effects and click handling |
+| `children`    | `React.ReactNode`                       | Required    | Card content                            |
+| `className`   | `string`                                | `undefined` | Additional CSS classes                  |
+| `onClick`     | `() => void`                            | `undefined` | Click handler (pairs with interactive)  |
 
 Plus all standard HTML div attributes (`id`, `aria-*`, `data-*`, etc.)
 
@@ -336,5 +334,5 @@ const props: CardProps = {
 
 // Using with refs
 const cardRef = useRef<HTMLDivElement>(null);
-<Card ref={cardRef}>Content</Card>
+<Card ref={cardRef}>Content</Card>;
 ```

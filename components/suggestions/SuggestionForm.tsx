@@ -131,13 +131,14 @@ export function SuggestionForm({
             Create Suggestion
           </Text>
           <Text variant="body" className="text-text-default">
-            Suggest adding an existing item to the shopping list or propose a new item for inventory.
+            Suggest adding an existing item to the shopping list or propose a new item for
+            inventory.
           </Text>
         </div>
 
         {/* Type Selection */}
         <div>
-          <label htmlFor="type" className="block text-sm font-medium mb-2">
+          <label htmlFor="type" className="mb-2 block text-sm font-medium">
             Suggestion Type
           </label>
           <Select
@@ -154,7 +155,7 @@ export function SuggestionForm({
         {/* Add to Shopping - Item Selection */}
         {type === 'add_to_shopping' && (
           <div>
-            <label htmlFor="itemId" className="block text-sm font-medium mb-2">
+            <label htmlFor="itemId" className="mb-2 block text-sm font-medium">
               Select Item <span className="text-error">*</span>
             </label>
             {isLoadingItems ? (
@@ -188,7 +189,7 @@ export function SuggestionForm({
         {type === 'create_item' && (
           <>
             <div>
-              <label htmlFor="proposedItemName" className="block text-sm font-medium mb-2">
+              <label htmlFor="proposedItemName" className="mb-2 block text-sm font-medium">
                 Item Name <span className="text-error">*</span>
               </label>
               <Input
@@ -205,7 +206,7 @@ export function SuggestionForm({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="proposedQuantity" className="block text-sm font-medium mb-2">
+                <label htmlFor="proposedQuantity" className="mb-2 block text-sm font-medium">
                   Quantity <span className="text-error">*</span>
                 </label>
                 <Input
@@ -220,7 +221,7 @@ export function SuggestionForm({
               </div>
 
               <div>
-                <label htmlFor="proposedThreshold" className="block text-sm font-medium mb-2">
+                <label htmlFor="proposedThreshold" className="mb-2 block text-sm font-medium">
                   Low Stock Threshold <span className="text-error">*</span>
                 </label>
                 <Input
@@ -239,7 +240,7 @@ export function SuggestionForm({
 
         {/* Optional Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium mb-2">
+          <label htmlFor="notes" className="mb-2 block text-sm font-medium">
             Notes (Optional)
           </label>
           <textarea
@@ -247,19 +248,19 @@ export function SuggestionForm({
             value={notes}
             onChange={handleNotesChange}
             placeholder="Add any additional details..."
-            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-surface-elevated dark:border-border dark:text-white"
+            className="w-full rounded-md border border-border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary dark:border-border dark:bg-surface-elevated dark:text-white"
             rows={3}
             disabled={isSubmitting}
             maxLength={500}
           />
-          <Text variant="caption" className="text-text-secondary mt-1">
+          <Text variant="caption" className="mt-1 text-text-secondary">
             {notes.length}/500 characters
           </Text>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="p-3 bg-error/10/20 border border-error rounded-md">
+          <div className="bg-error/10/20 rounded-md border border-error p-3">
             <Text variant="body" className="text-error">
               {error}
             </Text>
@@ -267,7 +268,7 @@ export function SuggestionForm({
         )}
 
         {/* Actions */}
-        <div className="flex gap-3 justify-end">
+        <div className="flex justify-end gap-3">
           {onCancel && (
             <Button variant="warning" onClick={onCancel} disabled={isSubmitting}>
               Cancel

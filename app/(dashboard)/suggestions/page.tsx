@@ -16,7 +16,7 @@ export default function SuggestionsPage() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-  
+
   // Define tabs for TabNavigation
   const filterTabs: Tab[] = [
     { id: 'pending', label: 'Pending' },
@@ -32,23 +32,23 @@ export default function SuggestionsPage() {
   const loadFamilyId = async (): Promise<void> => {
     try {
       const userContext = getUserContext();
-      
+
       // Check user role
       if (userContext?.role === 'admin') {
         setIsAdmin(true);
       }
-      
+
       if (userContext?.familyId) {
         // Use cached familyId from localStorage
         setFamilyId(userContext.familyId);
       } else {
         // Fetch from backend
         const families = await listUserFamilies();
-        
+
         if (families && families.length > 0 && families[0]) {
           const userFamilyId = families[0].familyId;
           setFamilyId(userFamilyId);
-          
+
           // Cache it in localStorage
           if (userContext && typeof window !== 'undefined') {
             userContext.familyId = userFamilyId;
@@ -77,12 +77,14 @@ export default function SuggestionsPage() {
   if (!familyId || error) {
     return (
       <PageContainer>
-          <Card>
-            <Text variant="h2" className="mb-4">Error</Text>
-            <Text variant="body" className="text-red-600">
-              {error || 'Unable to load family information. Please try again.'}
-            </Text>
-          </Card>
+        <Card>
+          <Text variant="h2" className="mb-4">
+            Error
+          </Text>
+          <Text variant="body" className="text-red-600">
+            {error || 'Unable to load family information. Please try again.'}
+          </Text>
+        </Card>
       </PageContainer>
     );
   }
@@ -122,7 +124,9 @@ export default function SuggestionsPage() {
       <SuggestionList
         familyId={familyId}
         isAdmin={isAdmin}
-        statusFilter={statusFilter === 'all' ? undefined : statusFilter as 'pending' | 'approved' | 'rejected'}
+        statusFilter={
+          statusFilter === 'all' ? undefined : (statusFilter as 'pending' | 'approved' | 'rejected')
+        }
         onSuggestionUpdate={handleSuggestionUpdate}
       />
     </PageContainer>

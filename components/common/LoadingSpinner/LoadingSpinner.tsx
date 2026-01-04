@@ -1,7 +1,7 @@
 /**
  * LoadingSpinner Component
  * Feature: 008-common-components
- * 
+ *
  * Animated loading indicator with multiple size variants.
  */
 
@@ -22,22 +22,22 @@ const sizeStyles: Record<SpinnerSize, string> = {
 
 /**
  * LoadingSpinner component
- * 
+ *
  * Animated circular loading indicator with customizable sizes.
  * Uses CSS animations for smooth rotation.
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage
  * <LoadingSpinner />
- * 
+ *
  * // Different sizes
  * <LoadingSpinner size="sm" />
  * <LoadingSpinner size="xl" />
- * 
+ *
  * // Centered with label
  * <LoadingSpinner size="lg" center label="Loading your items..." />
- * 
+ *
  * // Conditional rendering
  * {isLoading && <LoadingSpinner size="md" />}
  * ```
@@ -52,15 +52,11 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div
       role="status"
       aria-label={label}
-      className={cn(
-        'inline-block',
-        center && 'mx-auto',
-        className
-      )}
+      className={cn('inline-block', center && 'mx-auto', className)}
     >
       <div
         className={cn(
-          'rounded-full border-solid animate-spin',
+          'animate-spin rounded-full border-solid',
           'border-secondary border-t-transparent',
           sizeStyles[size]
         )}
@@ -71,9 +67,13 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   if (center) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[200px] gap-3">
+      <div className="flex min-h-[200px] flex-col items-center justify-center gap-3">
         {spinner}
-        {label && <Text variant="bodySmall" color="secondary">{label}</Text>}
+        {label && (
+          <Text variant="bodySmall" color="secondary">
+            {label}
+          </Text>
+        )}
       </div>
     );
   }

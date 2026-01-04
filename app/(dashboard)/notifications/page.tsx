@@ -121,8 +121,6 @@ export default function NotificationsPage() {
     }
   }, [error]);
 
-  
-
   // Handle add to shopping list
   const handleAddToShoppingList = async (notification: LowStockNotification) => {
     if (!userContext?.familyId) {

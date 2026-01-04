@@ -1,6 +1,6 @@
 /**
  * QuantityControls Component Tests
- * 
+ *
  * @see specs/010-streamline-quantity-controls/contracts/quantity-controls-component.md
  */
 
@@ -141,7 +141,7 @@ describe('QuantityControls', () => {
       render(<QuantityControls {...defaultProps} disabled />);
 
       const buttons = screen.getAllByRole('button');
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toBeDisabled();
       });
     });
@@ -211,7 +211,7 @@ describe('QuantityControls', () => {
       render(<QuantityControls {...defaultProps} />);
 
       const buttons = screen.getAllByRole('button');
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toHaveClass('focus:ring-2', 'focus:ring-offset-2');
       });
     });
@@ -244,17 +244,10 @@ describe('QuantityControls', () => {
     });
 
     it('should handle disabled state at boundaries', () => {
-      render(
-        <QuantityControls
-          {...defaultProps}
-          quantity={0}
-          minQuantity={0}
-          maxQuantity={0}
-        />
-      );
+      render(<QuantityControls {...defaultProps} quantity={0} minQuantity={0} maxQuantity={0} />);
 
       const buttons = screen.getAllByRole('button');
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toBeDisabled();
       });
     });

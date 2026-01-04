@@ -1,6 +1,6 @@
 /**
  * Family API Client - Inventory HQ Frontend
- * 
+ *
  * API client methods for family management operations.
  */
 
@@ -26,7 +26,10 @@ export interface UserFamilyMembership {
  * List all families the current user is a member of
  */
 export const listUserFamilies = async (): Promise<UserFamilyMembership[]> => {
-  const response = await apiClient.get<{ families: UserFamilyMembership[] }>('/user/families', true);
+  const response = await apiClient.get<{ families: UserFamilyMembership[] }>(
+    '/user/families',
+    true
+  );
   return response.families;
 };
 

@@ -1,6 +1,6 @@
 /**
  * Notifications API Client - Inventory HQ Frontend
- * 
+ *
  * API client methods for low-stock notification operations.
  */
 
@@ -22,14 +22,14 @@ export const listNotifications = async (
   status?: LowStockNotificationStatus
 ): Promise<LowStockNotification[]> => {
   const params = new URLSearchParams();
-  
+
   if (status) {
     params.append('status', status);
   }
-  
+
   const queryString = params.toString();
   const url = `/families/${familyId}/notifications${queryString ? `?${queryString}` : ''}`;
-  
+
   const response = await apiClient.get<ListNotificationsResponse>(url, true);
   return response.notifications;
 };
@@ -73,9 +73,7 @@ export const resolveNotification = async (
  * @param familyId - The family ID
  * @returns Promise with count of active notifications
  */
-export const getActiveNotificationCount = async (
-  familyId: string
-): Promise<number> => {
+export const getActiveNotificationCount = async (familyId: string): Promise<number> => {
   const notifications = await listNotifications(familyId, 'active');
   return notifications.length;
 };

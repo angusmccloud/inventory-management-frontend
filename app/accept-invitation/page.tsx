@@ -1,7 +1,7 @@
 /**
  * Accept Invitation Page
  * Feature: 003-member-management
- * 
+ *
  * Public page for accepting family invitations
  */
 
@@ -94,10 +94,10 @@ function AcceptInvitationContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-surface rounded-2xl shadow-xl p-8">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+        <div className="w-full max-w-md rounded-2xl bg-surface p-8 shadow-xl">
           <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-4">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <svg
                 className="h-10 w-10 text-primary"
                 fill="none"
@@ -112,13 +112,13 @@ function AcceptInvitationContent() {
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-text-default mb-2">
-              Welcome to the Family! 🎉
-            </h1>
+            <h1 className="mb-2 text-2xl font-bold text-text-default">Welcome to the Family! 🎉</h1>
             <Text variant="body" color="secondary" className="mb-4">
               Your invitation has been accepted successfully.
             </Text>
-            <Text variant="bodySmall" color="secondary">Redirecting to dashboard...</Text>
+            <Text variant="bodySmall" color="secondary">
+              Redirecting to dashboard...
+            </Text>
           </div>
         </div>
       </div>
@@ -126,12 +126,10 @@ function AcceptInvitationContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-surface rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text-default mb-2">
-            Accept Family Invitation
-          </h1>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <div className="w-full max-w-md rounded-2xl bg-surface p-8 shadow-xl">
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-3xl font-bold text-text-default">Accept Family Invitation</h1>
           <Text variant="body" color="secondary">
             You've been invited to join a family inventory
           </Text>
@@ -144,7 +142,7 @@ function AcceptInvitationContent() {
         )}
 
         {!token ? (
-          <div className="text-center py-6">
+          <div className="py-6 text-center">
             <Text variant="body" color="secondary">
               Invalid invitation link. Please check your email for the correct link.
             </Text>
@@ -218,4 +216,3 @@ export default function AcceptInvitationPage() {
     </Suspense>
   );
 }
-

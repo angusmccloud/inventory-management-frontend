@@ -1,6 +1,6 @@
 /**
  * Component Tests for SuggestionCard
- * 
+ *
  * Tests approve/reject button visibility based on role and status,
  * status badges, and user interactions.
  */
@@ -56,12 +56,7 @@ describe('SuggestionCard', () => {
         reviewedAt: '2025-12-02T10:00:00Z',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={approvedSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={approvedSuggestion} isAdmin={true} />);
 
       const badge = screen.getByText(/approved/i);
       expect(badge).toBeInTheDocument();
@@ -77,12 +72,7 @@ describe('SuggestionCard', () => {
         rejectionNotes: 'Not needed',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={rejectedSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={rejectedSuggestion} isAdmin={true} />);
 
       const badge = screen.getByText(/rejected/i);
       expect(badge).toBeInTheDocument();
@@ -106,12 +96,7 @@ describe('SuggestionCard', () => {
     });
 
     it('should hide approve/reject buttons for suggester', () => {
-      render(
-        <SuggestionCard
-          suggestion={baseSuggestion}
-          isAdmin={false}
-        />
-      );
+      render(<SuggestionCard suggestion={baseSuggestion} isAdmin={false} />);
 
       expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /reject/i })).not.toBeInTheDocument();
@@ -160,12 +145,7 @@ describe('SuggestionCard', () => {
     });
 
     it('should hide buttons when callbacks are not provided', () => {
-      render(
-        <SuggestionCard
-          suggestion={baseSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={baseSuggestion} isAdmin={true} />);
 
       expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /reject/i })).not.toBeInTheDocument();
@@ -174,12 +154,7 @@ describe('SuggestionCard', () => {
 
   describe('Suggestion Content Display', () => {
     it('should display add_to_shopping suggestion details', () => {
-      render(
-        <SuggestionCard
-          suggestion={baseSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={baseSuggestion} isAdmin={true} />);
 
       expect(screen.getByText('Milk')).toBeInTheDocument();
       expect(screen.getByText(/add to shopping/i)).toBeInTheDocument();
@@ -202,12 +177,7 @@ describe('SuggestionCard', () => {
         updatedAt: '2025-12-01T10:00:00Z',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={createItemSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={createItemSuggestion} isAdmin={true} />);
 
       expect(screen.getByText('Organic Bread')).toBeInTheDocument();
       expect(screen.getByText(/new item/i)).toBeInTheDocument();
@@ -223,12 +193,7 @@ describe('SuggestionCard', () => {
         notes: 'Running low on this item',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={suggestionWithNotes}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={suggestionWithNotes} isAdmin={true} />);
 
       expect(screen.getByText('Running low on this item')).toBeInTheDocument();
     });
@@ -242,12 +207,7 @@ describe('SuggestionCard', () => {
         rejectionNotes: 'Already have enough stock',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={rejectedSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={rejectedSuggestion} isAdmin={true} />);
 
       expect(screen.getByText(/reason/i)).toBeInTheDocument();
       expect(screen.getByText('Already have enough stock')).toBeInTheDocument();
@@ -261,12 +221,7 @@ describe('SuggestionCard', () => {
         reviewedAt: '2025-12-02T15:30:00Z',
       };
 
-      render(
-        <SuggestionCard
-          suggestion={approvedSuggestion}
-          isAdmin={true}
-        />
-      );
+      render(<SuggestionCard suggestion={approvedSuggestion} isAdmin={true} />);
 
       expect(screen.getByText(/approved on/i)).toBeInTheDocument();
     });

@@ -1,6 +1,6 @@
 /**
  * EditItemForm Component
- * 
+ *
  * Form for editing an existing inventory item.
  */
 
@@ -9,7 +9,12 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { updateInventoryItem } from '@/lib/api/inventory';
 import { listStorageLocations, listStores } from '@/lib/api/reference-data';
-import { InventoryItem, UpdateInventoryItemRequest, StorageLocation, Store } from '@/types/entities';
+import {
+  InventoryItem,
+  UpdateInventoryItemRequest,
+  StorageLocation,
+  Store,
+} from '@/types/entities';
 import { Input, Select, Button, Text } from '@/components/common';
 import { ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import { Modal } from '@/components/common';
@@ -73,12 +78,12 @@ export default function EditItemForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    
+
     if (!formData.name?.trim()) {
       setError('Item name is required');
       return;
     }
-    
+
     setError('');
     setLoading(true);
 
@@ -157,7 +162,9 @@ export default function EditItemForm({
             label="Low Stock Threshold"
             type="number"
             value={formData.lowStockThreshold}
-            onChange={(e) => setFormData({ ...formData, lowStockThreshold: Number(e.target.value) })}
+            onChange={(e) =>
+              setFormData({ ...formData, lowStockThreshold: Number(e.target.value) })
+            }
             min={0}
             required
             disabled={loading}
@@ -207,7 +214,7 @@ export default function EditItemForm({
             rows={3}
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default dark:bg-surface-elevated ring-1 ring-inset ring-border placeholder:text-text-secondary dark:placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default ring-1 ring-inset ring-border placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-surface-elevated dark:placeholder:text-text-secondary sm:text-sm"
             disabled={loading}
           />
         </div>
@@ -215,7 +222,9 @@ export default function EditItemForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
@@ -241,12 +250,7 @@ export default function EditItemForm({
           </Button>
         )}
         {onCancel && (
-          <Button
-            type="button"
-            variant="warning"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="warning" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
         )}
@@ -261,34 +265,42 @@ export default function EditItemForm({
           size="sm"
         >
           <div className="space-y-4">
-            <Text variant="body">Are you sure you want to archive this item? This action can be reversed in Settings.</Text>
+            <Text variant="body">
+              Are you sure you want to archive this item? This action can be reversed in Settings.
+            </Text>
             {archiveError && (
               <div className="rounded-md bg-error/10 p-2">
-                <Text variant="bodySmall" color="error">{archiveError}</Text>
+                <Text variant="bodySmall" color="error">
+                  {archiveError}
+                </Text>
               </div>
             )}
             <div className="flex justify-end gap-3">
-              <Button variant="tertiary" onClick={() => setShowArchiveConfirm(false)} disabled={archiving}>
+              <Button
+                variant="tertiary"
+                onClick={() => setShowArchiveConfirm(false)}
+                disabled={archiving}
+              >
                 Cancel
               </Button>
               <Button
                 variant="warning"
-                  onClick={async () => {
-                    setArchiveError('');
-                    setArchiving(true);
-                    try {
-                      // Follow the exact flow used on the inventory page: call the archive endpoint
-                      const res = await archiveInventoryItem(familyId, item.itemId);
-                      if (res && res.itemId) {
-                        onSuccess(res as InventoryItem);
-                      }
-                      setShowArchiveConfirm(false);
-                    } catch (err) {
-                      setArchiveError(err instanceof Error ? err.message : 'Failed to archive item');
-                    } finally {
-                      setArchiving(false);
+                onClick={async () => {
+                  setArchiveError('');
+                  setArchiving(true);
+                  try {
+                    // Follow the exact flow used on the inventory page: call the archive endpoint
+                    const res = await archiveInventoryItem(familyId, item.itemId);
+                    if (res && res.itemId) {
+                      onSuccess(res as InventoryItem);
                     }
-                  }}
+                    setShowArchiveConfirm(false);
+                  } catch (err) {
+                    setArchiveError(err instanceof Error ? err.message : 'Failed to archive item');
+                  } finally {
+                    setArchiving(false);
+                  }
+                }}
                 disabled={archiving}
               >
                 {archiving ? 'Archiving...' : 'Archive'}

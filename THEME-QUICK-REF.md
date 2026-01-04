@@ -3,6 +3,7 @@
 ## Basic Usage
 
 ### Buttons
+
 ```tsx
 // Primary action
 <button className="bg-primary text-primary-contrast hover:bg-primary-hover">Save</button>
@@ -18,22 +19,25 @@
 ```
 
 ### Cards
+
 ```tsx
-<div className="bg-surface border border-border rounded-lg p-4">
-  <h3 className="text-text-primary font-semibold">Card Title</h3>
+<div className="rounded-lg border border-border bg-surface p-4">
+  <h3 className="font-semibold text-text-primary">Card Title</h3>
   <p className="text-text-secondary">Card description</p>
 </div>
 ```
 
 ### Forms
+
 ```tsx
-<input 
-  className="bg-surface border border-border text-text-primary focus:border-border-focus focus:ring-2 focus:ring-primary/20"
+<input
+  className="border border-border bg-surface text-text-primary focus:border-border-focus focus:ring-2 focus:ring-primary/20"
   type="text"
 />
 ```
 
 ### Notifications
+
 ```tsx
 // Success
 <div className="bg-success text-success-contrast p-3 rounded">✓ Success!</div>
@@ -50,18 +54,18 @@
 
 ## Color Tokens
 
-| Use Case | Class | Example |
-|----------|-------|---------|
-| Primary button | `bg-primary text-primary-contrast` | Save, Submit |
-| Secondary button | `bg-secondary text-secondary-contrast` | Cancel, Back |
-| Card background | `bg-surface` | Content cards |
-| Page background | `bg-background` | Main page |
-| Heading text | `text-text-primary` | H1, H2, H3 |
-| Body text | `text-text-primary` | Paragraphs |
-| Label/caption | `text-text-secondary` | Form labels |
-| Disabled text | `text-text-disabled` | Inactive elements |
-| Border | `border-border` | Card borders |
-| Focus ring | `border-border-focus` | Input focus |
+| Use Case         | Class                                  | Example           |
+| ---------------- | -------------------------------------- | ----------------- |
+| Primary button   | `bg-primary text-primary-contrast`     | Save, Submit      |
+| Secondary button | `bg-secondary text-secondary-contrast` | Cancel, Back      |
+| Card background  | `bg-surface`                           | Content cards     |
+| Page background  | `bg-background`                        | Main page         |
+| Heading text     | `text-text-primary`                    | H1, H2, H3        |
+| Body text        | `text-text-primary`                    | Paragraphs        |
+| Label/caption    | `text-text-secondary`                  | Form labels       |
+| Disabled text    | `text-text-disabled`                   | Inactive elements |
+| Border           | `border-border`                        | Card borders      |
+| Focus ring       | `border-border-focus`                  | Input focus       |
 
 ## Helper Function
 
@@ -89,7 +93,8 @@ import { getThemeClasses } from '@/lib/theme';
 
 **Browser DevTools**: Cmd/Ctrl+Shift+P → "Rendering" → "Emulate CSS media feature prefers-color-scheme" → "dark"
 
-**System**: 
+**System**:
+
 - macOS: System Settings → Appearance
 - Windows: Settings → Personalization → Colors
 - Linux: Settings → Appearance

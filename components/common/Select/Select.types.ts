@@ -1,7 +1,7 @@
 /**
  * Select Component Types
  * Feature: 008-common-components
- * 
+ *
  * Type definitions for dropdown selection components.
  */
 
@@ -16,12 +16,12 @@ export interface SelectOption<T = string> {
    * Display label
    */
   label: string;
-  
+
   /**
    * Option value
    */
   value: T;
-  
+
   /**
    * Disable this option
    * @default false
@@ -31,7 +31,7 @@ export interface SelectOption<T = string> {
 
 /**
  * Select component props (dropdown selection)
- * 
+ *
  * @example
  * ```tsx
  * const storageOptions = [
@@ -39,8 +39,8 @@ export interface SelectOption<T = string> {
  *   { label: 'Fridge', value: 'fridge' },
  *   { label: 'Freezer', value: 'freezer' },
  * ];
- * 
- * <Select 
+ *
+ * <Select
  *   label="Storage Location"
  *   options={storageOptions}
  *   value={location}
@@ -50,24 +50,25 @@ export interface SelectOption<T = string> {
  * />
  * ```
  */
-export interface SelectProps<T = string> 
-  extends BaseInputProps, 
+export interface SelectProps<T = string>
+  extends
+    BaseInputProps,
     Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'onChange' | 'value'> {
   /**
    * Select options (optional if using children pattern)
    */
   options?: SelectOption<T>[];
-  
+
   /**
    * Placeholder option (shown when no value selected)
    */
   placeholder?: string;
-  
+
   /**
    * Selected value
    */
   value?: T;
-  
+
   /**
    * Change handler (receives typed value, not event)
    */

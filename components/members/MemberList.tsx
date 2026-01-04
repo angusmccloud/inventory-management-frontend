@@ -27,7 +27,7 @@ export function MemberList({
 }: MemberListProps) {
   if (members.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <svg
           className="mx-auto h-12 w-12 text-gray-400"
           fill="none"
@@ -62,4 +62,3 @@ export function MemberList({
     </div>
   );
 }
-

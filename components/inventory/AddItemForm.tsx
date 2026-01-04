@@ -1,6 +1,6 @@
 /**
  * AddItemForm Component
- * 
+ *
  * Form for adding a new inventory item.
  */
 
@@ -9,7 +9,12 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { createInventoryItem } from '@/lib/api/inventory';
 import { listStorageLocations, listStores } from '@/lib/api/reference-data';
-import { InventoryItem, CreateInventoryItemRequest, StorageLocation, Store } from '@/types/entities';
+import {
+  InventoryItem,
+  CreateInventoryItemRequest,
+  StorageLocation,
+  Store,
+} from '@/types/entities';
 import { Input, Select, Button, Text } from '@/components/common';
 import type { SelectOption } from '@/components/common';
 
@@ -19,11 +24,7 @@ interface AddItemFormProps {
   onCancel?: () => void;
 }
 
-export default function AddItemForm({
-  familyId,
-  onSuccess,
-  onCancel,
-}: AddItemFormProps) {
+export default function AddItemForm({ familyId, onSuccess, onCancel }: AddItemFormProps) {
   const [formData, setFormData] = useState<CreateInventoryItemRequest>({
     name: '',
     quantity: 0,
@@ -62,12 +63,12 @@ export default function AddItemForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       setError('Item name is required');
       return;
     }
-    
+
     setError('');
     setLoading(true);
 
@@ -148,7 +149,9 @@ export default function AddItemForm({
             label="Low Stock Threshold"
             type="number"
             value={formData.lowStockThreshold}
-            onChange={(e) => setFormData({ ...formData, lowStockThreshold: Number(e.target.value) })}
+            onChange={(e) =>
+              setFormData({ ...formData, lowStockThreshold: Number(e.target.value) })
+            }
             min={0}
             required
             disabled={loading}
@@ -198,7 +201,7 @@ export default function AddItemForm({
             rows={3}
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 bg-surface px-3 py-2 text-text-default ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
             placeholder="Additional notes about this item"
             disabled={loading}
           />
@@ -207,7 +210,9 @@ export default function AddItemForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
@@ -222,12 +227,7 @@ export default function AddItemForm({
           {loading ? 'Adding...' : 'Add Item'}
         </Button>
         {onCancel && (
-          <Button
-            type="button"
-            variant="warning"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="warning" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
         )}

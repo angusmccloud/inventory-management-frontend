@@ -1,19 +1,19 @@
 /**
  * Alert Component
  * Feature: 008-common-components
- * 
+ *
  * Contextual message display for notifications and feedback with severity variants.
  */
 
 'use client';
 
 import * as React from 'react';
-import { 
-  InformationCircleIcon, 
-  CheckCircleIcon, 
+import {
+  InformationCircleIcon,
+  CheckCircleIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
-  XMarkIcon 
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { AlertProps, AlertSeverity } from './Alert.types';
 import { cn } from '@/lib/cn';
@@ -62,7 +62,7 @@ const getSeverityConfig = (severity: AlertSeverity) => {
       role: 'alert' as const,
     },
   };
-  
+
   return configs[severity];
 };
 
@@ -70,34 +70,22 @@ const getSeverityConfig = (severity: AlertSeverity) => {
  * Alert component
  */
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ 
-    severity, 
-    title, 
-    children, 
-    dismissible = false, 
-    onDismiss,
-    className,
-    ...props 
-  }, ref) => {
+  ({ severity, title, children, dismissible = false, onDismiss, className, ...props }, ref) => {
     const config = getSeverityConfig(severity);
     const IconComponent = config.iconComponent;
-    
+
     return (
       <div
         ref={ref}
         role={config.role}
         aria-live={severity === 'error' || severity === 'warning' ? 'assertive' : 'polite'}
-        className={cn(
-          'rounded-lg border p-4',
-          config.container,
-          className
-        )}
+        className={cn('rounded-lg border p-4', config.container, className)}
         {...props}
       >
         <div className="flex items-center gap-3">
           {/* Icon */}
           <IconComponent className={cn('h-5 w-5 flex-shrink-0', config.icon)} />
-          
+
           {/* Content */}
           <div className="flex-1 space-y-1">
             {title && (
@@ -105,11 +93,9 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
                 {title}
               </Text>
             )}
-            <div className={cn('text-sm', config.text)}>
-              {children}
-            </div>
+            <div className={cn('text-sm', config.text)}>{children}</div>
           </div>
-          
+
           {/* Dismiss button */}
           {dismissible && onDismiss && (
             <IconButton

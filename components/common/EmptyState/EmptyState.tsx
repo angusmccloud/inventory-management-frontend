@@ -1,7 +1,7 @@
 /**
  * EmptyState Component
  * Feature: 008-common-components
- * 
+ *
  * Placeholder displayed when no data is available in a list or view.
  */
 
@@ -16,74 +16,57 @@ import { cn } from '@/lib/cn';
 /**
  * EmptyState component
  */
-export const EmptyState: React.FC<EmptyStateProps> = ({ 
-  icon, 
-  title, 
-  description, 
+export const EmptyState: React.FC<EmptyStateProps> = ({
+  icon,
+  title,
+  description,
   action,
   secondaryAction,
-  className 
+  className,
 }) => {
   return (
-    <div 
-      className={cn(
-        'flex flex-col items-center justify-center text-center py-12 px-4',
-        className
-      )}
+    <div
+      className={cn('flex flex-col items-center justify-center px-4 py-12 text-center', className)}
     >
       {/* Icon */}
       {icon && (
         <div className="mb-4 text-gray-400 dark:text-gray-500">
-          {React.isValidElement(icon) 
-            ? React.cloneElement(icon as React.ReactElement<{ className?: string }>, { 
+          {React.isValidElement(icon)
+            ? React.cloneElement(icon as React.ReactElement<{ className?: string }>, {
                 className: cn(
                   'h-12 w-12 mx-auto',
                   (icon as React.ReactElement<{ className?: string }>).props.className
-                )
+                ),
               })
-            : icon
-          }
+            : icon}
         </div>
       )}
-      
+
       {/* Title */}
-      <Text 
-        variant="h3" 
-        className="mb-2 text-gray-900 dark:text-gray-100"
-      >
+      <Text variant="h3" className="mb-2 text-gray-900 dark:text-gray-100">
         {title}
       </Text>
-      
+
       {/* Description */}
       {description && (
-        <Text 
-          variant="body" 
-          className="mb-6 text-gray-600 dark:text-gray-400 max-w-md"
-        >
+        <Text variant="body" className="mb-6 max-w-md text-gray-600 dark:text-gray-400">
           {description}
         </Text>
       )}
-      
+
       {/* Actions */}
       {(action || secondaryAction) && (
-        <div className="flex flex-col gap-3 items-center">
+        <div className="flex flex-col items-center gap-3">
           {/* Primary Action */}
           {action && (
-            <Button
-              variant={action.variant || 'primary'}
-              onClick={action.onClick}
-            >
+            <Button variant={action.variant || 'primary'} onClick={action.onClick}>
               {action.label}
             </Button>
           )}
-          
+
           {/* Secondary Action */}
           {secondaryAction && (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={secondaryAction.onClick}
-            >
+            <Button variant="secondary" size="sm" onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </Button>
           )}

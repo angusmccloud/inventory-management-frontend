@@ -1,6 +1,6 @@
 /**
  * CreateFamilyForm Component
- * 
+ *
  * Form for creating a new family.
  */
 
@@ -18,22 +18,19 @@ interface CreateFamilyFormProps {
   onCancel?: () => void;
 }
 
-export default function CreateFamilyForm({
-  onSuccess,
-  onCancel,
-}: CreateFamilyFormProps) {
+export default function CreateFamilyForm({ onSuccess, onCancel }: CreateFamilyFormProps) {
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    
+
     if (!name.trim()) {
       setError('Family name is required');
       return;
     }
-    
+
     setError('');
     setLoading(true);
 
@@ -63,7 +60,9 @@ export default function CreateFamilyForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
@@ -79,13 +78,7 @@ export default function CreateFamilyForm({
           {loading ? 'Creating...' : 'Create Family'}
         </Button>
         {onCancel && (
-          <Button
-            type="button"
-            variant="secondary"
-            size="md"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="secondary" size="md" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
         )}

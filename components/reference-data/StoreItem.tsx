@@ -1,8 +1,8 @@
 'use client';
 
-import { ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import type { Store } from '../../types/entities';
 import { Button, Text } from '@/components/common';
+import { ShoppingCartIcon, PencilIcon, ArchiveBoxIcon } from '@/components/common/icons';
 
 interface StoreItemProps {
   store: Store;
@@ -11,26 +11,17 @@ interface StoreItemProps {
   isDeleting?: boolean;
 }
 
-export default function StoreItem({
-  store,
-  onEdit,
-  onDelete,
-  isDeleting = false,
-}: StoreItemProps) {
+export default function StoreItem({ store, onEdit, onDelete, isDeleting = false }: StoreItemProps) {
   return (
-    <div className="px-4 py-4 flex items-center sm:px-6 hover:bg-surface-elevated dark:hover:bg-surface-elevated">
+    <div className="flex items-center px-4 py-4 hover:bg-surface-elevated dark:hover:bg-surface-elevated sm:px-6">
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <svg className="h-10 w-10 text-text-default" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+              <ShoppingCartIcon className="h-10 w-10 text-text-default" />
             </div>
             <div className="ml-4">
-              <h3 className="text-sm font-medium text-text-default">
-                {store.name}
-              </h3>
+              <h3 className="text-sm font-medium text-text-default">{store.name}</h3>
               {store.address && (
                 <Text variant="bodySmall" className="mt-1">
                   {store.address}
@@ -38,17 +29,13 @@ export default function StoreItem({
               )}
             </div>
           </div>
-          <div className="ml-4 flex-shrink-0 flex space-x-2">
+          <div className="ml-4 flex flex-shrink-0 space-x-2">
             <Button
               variant="secondary"
               size="sm"
               onClick={() => onEdit(store)}
               disabled={isDeleting}
-              leftIcon={
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              }
+              leftIcon={<PencilIcon className="h-4 w-4" />}
             >
               Edit
             </Button>

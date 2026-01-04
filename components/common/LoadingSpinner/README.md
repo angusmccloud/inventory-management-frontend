@@ -60,6 +60,7 @@ import { LoadingSpinner } from '@/components/common';
 ## Common Patterns
 
 ### Button Loading State
+
 ```tsx
 import { Button, LoadingSpinner } from '@/components/common';
 
@@ -72,10 +73,11 @@ import { Button, LoadingSpinner } from '@/components/common';
   ) : (
     'Save Changes'
   )}
-</Button>
+</Button>;
 ```
 
 ### Page Loading
+
 ```tsx
 import { LoadingSpinner } from '@/components/common';
 
@@ -91,6 +93,7 @@ function InventoryPage() {
 ```
 
 ### Card Loading
+
 ```tsx
 import { Card, LoadingSpinner } from '@/components/common';
 
@@ -102,10 +105,11 @@ import { Card, LoadingSpinner } from '@/components/common';
   ) : (
     <CardContent data={data} />
   )}
-</Card>
+</Card>;
 ```
 
 ### Form Submission
+
 ```tsx
 import { Button, LoadingSpinner } from '@/components/common';
 
@@ -115,7 +119,7 @@ function AddItemForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       await addItem(formData);
     } finally {
@@ -126,7 +130,7 @@ function AddItemForm() {
   return (
     <form onSubmit={handleSubmit}>
       {/* Form fields */}
-      
+
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
           <>
@@ -143,26 +147,29 @@ function AddItemForm() {
 ```
 
 ### Data Fetching with Suspense Fallback
+
 ```tsx
 import { LoadingSpinner } from '@/components/common';
 import { Suspense } from 'react';
 
 <Suspense fallback={<LoadingSpinner center size="xl" label="Loading..." />}>
   <AsyncComponent />
-</Suspense>
+</Suspense>;
 ```
 
 ### Inline Loading
+
 ```tsx
 import { LoadingSpinner } from '@/components/common';
 
 <div className="flex items-center gap-2">
   <LoadingSpinner size="sm" />
   <span className="text-sm text-text-secondary">Fetching updates...</span>
-</div>
+</div>;
 ```
 
 ### List Loading
+
 ```tsx
 import { LoadingSpinner } from '@/components/common';
 
@@ -171,7 +178,7 @@ function ItemList({ items, isLoading }: ItemListProps) {
     return (
       <div className="space-y-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-2 p-4 bg-surface rounded">
+          <div key={i} className="flex items-center gap-2 rounded bg-surface p-4">
             <LoadingSpinner size="sm" />
             <div className="text-text-secondary">Loading item {i}...</div>
           </div>
@@ -199,12 +206,12 @@ function ItemList({ items, isLoading }: ItemListProps) {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Spinner size (sm=16px, md=24px, lg=32px, xl=48px) |
-| `label` | `string` | `'Loading...'` | Accessible label for screen readers |
-| `center` | `boolean` | `false` | Center spinner in container with flex wrapper |
-| `className` | `string` | - | Additional CSS classes for the spinner |
+| Prop        | Type                           | Default        | Description                                       |
+| ----------- | ------------------------------ | -------------- | ------------------------------------------------- |
+| `size`      | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'`         | Spinner size (sm=16px, md=24px, lg=32px, xl=48px) |
+| `label`     | `string`                       | `'Loading...'` | Accessible label for screen readers               |
+| `center`    | `boolean`                      | `false`        | Center spinner in container with flex wrapper     |
+| `className` | `string`                       | -              | Additional CSS classes for the spinner            |
 
 ## Size Guidelines
 
@@ -216,6 +223,7 @@ function ItemList({ items, isLoading }: ItemListProps) {
 ## Animation
 
 The spinner uses CSS `animate-spin` utility from Tailwind CSS:
+
 - **Duration**: 1 second per rotation
 - **Timing**: Linear (constant speed)
 - **Performance**: GPU-accelerated using CSS transforms

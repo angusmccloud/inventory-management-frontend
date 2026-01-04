@@ -11,13 +11,13 @@ interface DeleteConfirmDialogProps {
   isDeleting?: boolean;
 }
 
-export default function DeleteConfirmDialog({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  type, 
+export default function DeleteConfirmDialog({
+  isOpen,
+  onClose,
+  onConfirm,
+  type,
   name,
-  isDeleting = false 
+  isDeleting = false,
 }: DeleteConfirmDialogProps) {
   const entityType = type === 'location' ? 'storage location' : 'store';
 

@@ -22,9 +22,7 @@ export default function StoreForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const isNameValid = 
-    name.trim().length > 0 &&
-    name.trim().length <= 100;
+  const isNameValid = name.trim().length > 0 && name.trim().length <= 100;
 
   const canSubmit = isNameValid && !isSubmitting;
 
@@ -36,11 +34,14 @@ export default function StoreForm({
     setSubmitError(null);
 
     try {
-      await onSubmit({
-        name: name.trim(),
-        address: address.trim() || undefined,
-      }, keepModalOpen);
-      
+      await onSubmit(
+        {
+          name: name.trim(),
+          address: address.trim() || undefined,
+        },
+        keepModalOpen
+      );
+
       // Reset form if keeping modal open
       if (keepModalOpen) {
         setName('');
@@ -76,7 +77,11 @@ export default function StoreForm({
         maxLength={100}
         placeholder="e.g., Walmart, Target, Costco"
         required
-        helpText={!initialData ? `${name.length}/100 characters - Press Enter to quickly add multiple stores` : `${name.length}/100 characters`}
+        helpText={
+          !initialData
+            ? `${name.length}/100 characters - Press Enter to quickly add multiple stores`
+            : `${name.length}/100 characters`
+        }
         autoFocus
         disabled={isSubmitting}
       />
@@ -90,40 +95,37 @@ export default function StoreForm({
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           rows={3}
-          className="mt-1 block w-full rounded-md border-0 px-3 py-2 bg-surface text-text-default ring-1 ring-inset ring-border placeholder:text-text-secondary dark:placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary dark:focus:ring-primary sm:text-sm"
+          className="mt-1 block w-full rounded-md border-0 bg-surface px-3 py-2 text-text-default ring-1 ring-inset ring-border placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary dark:placeholder:text-text-secondary dark:focus:ring-primary sm:text-sm"
           placeholder="Store location or address"
         />
       </div>
 
       {submitError && (
-        <div className="rounded-md bg-error/10/20 p-4">
+        <div className="bg-error/10/20 rounded-md p-4">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-error" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
               </svg>
             </div>
             <div className="ml-3">
-              <Text variant="bodySmall" color="error">{submitError}</Text>
+              <Text variant="bodySmall" color="error">
+                {submitError}
+              </Text>
             </div>
           </div>
         </div>
       )}
 
       <div className="flex justify-end space-x-3">
-        <Button
-          type="button"
-          onClick={onCancel}
-          disabled={isSubmitting}
-          variant="warning"
-        >
+        <Button type="button" onClick={onCancel} disabled={isSubmitting} variant="warning">
           Cancel
         </Button>
-        <Button
-          type="submit"
-          disabled={!canSubmit}
-          variant="primary"
-        >
+        <Button type="submit" disabled={!canSubmit} variant="primary">
           {isSubmitting ? 'Saving...' : initialData ? 'Update Store' : 'Add Store'}
         </Button>
       </div>

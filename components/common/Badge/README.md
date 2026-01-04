@@ -87,6 +87,7 @@ import { Badge } from '@/components/common';
 ## Common Patterns
 
 ### Item Status
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -98,14 +99,13 @@ function ItemStatus({ status }: { status: string }) {
   };
 
   return (
-    <Badge variant={variantMap[status] as any}>
-      {status.replace('-', ' ').toUpperCase()}
-    </Badge>
+    <Badge variant={variantMap[status] as any}>{status.replace('-', ' ').toUpperCase()}</Badge>
   );
 }
 ```
 
 ### Count Badge
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -121,6 +121,7 @@ function NotificationBadge({ count }: { count: number }) {
 ```
 
 ### Shopping List Priority
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -150,6 +151,7 @@ function ShoppingListItem({ item }: { item: Item }) {
 ```
 
 ### Status with Dot
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -157,15 +159,14 @@ function UserStatus({ isOnline }: { isOnline: boolean }) {
   return (
     <div className="flex items-center gap-2">
       <Badge variant={isOnline ? 'success' : 'default'} dot />
-      <span className="text-sm text-text-secondary">
-        {isOnline ? 'Online' : 'Offline'}
-      </span>
+      <span className="text-sm text-text-secondary">{isOnline ? 'Online' : 'Offline'}</span>
     </div>
   );
 }
 ```
 
 ### List with Badges
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -176,9 +177,7 @@ function InventoryList({ items }: { items: Item[] }) {
         <li key={item.id} className="flex items-center justify-between p-4">
           <div>
             <h3 className="font-medium">{item.name}</h3>
-            <p className="text-sm text-text-secondary">
-              Quantity: {item.quantity}
-            </p>
+            <p className="text-sm text-text-secondary">Quantity: {item.quantity}</p>
           </div>
           <div className="flex gap-2">
             <Badge variant="success" size="sm">
@@ -198,6 +197,7 @@ function InventoryList({ items }: { items: Item[] }) {
 ```
 
 ### Category Tags
+
 ```tsx
 import { Badge } from '@/components/common';
 
@@ -215,6 +215,7 @@ function ItemTags({ tags }: { tags: string[] }) {
 ```
 
 ### Notification Badge on Button
+
 ```tsx
 import { Button, Badge } from '@/components/common';
 import { BellIcon } from '@heroicons/react/24/outline';
@@ -222,13 +223,9 @@ import { BellIcon } from '@heroicons/react/24/outline';
 function NotificationButton({ unreadCount }: { unreadCount: number }) {
   return (
     <Button variant="secondary" className="relative">
-      <BellIcon className="w-5 h-5" />
+      <BellIcon className="h-5 w-5" />
       {unreadCount > 0 && (
-        <Badge 
-          variant="error" 
-          size="sm"
-          className="absolute -top-1 -right-1"
-        >
+        <Badge variant="error" size="sm" className="absolute -right-1 -top-1">
           {unreadCount > 99 ? '99+' : unreadCount}
         </Badge>
       )}
@@ -246,25 +243,25 @@ function NotificationButton({ unreadCount }: { unreadCount: number }) {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'default'` | Badge color variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Badge size |
-| `children` | `React.ReactNode` | - | Badge content (text or number) |
-| `dot` | `boolean` | `false` | Render as dot indicator (ignores children) |
-| `className` | `string` | - | Additional CSS classes |
-| `...props` | `React.HTMLAttributes<HTMLSpanElement>` | - | All standard span attributes |
+| Prop        | Type                                                                    | Default     | Description                                |
+| ----------- | ----------------------------------------------------------------------- | ----------- | ------------------------------------------ |
+| `variant`   | `'default' \| 'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'default'` | Badge color variant                        |
+| `size`      | `'sm' \| 'md' \| 'lg'`                                                  | `'md'`      | Badge size                                 |
+| `children`  | `React.ReactNode`                                                       | -           | Badge content (text or number)             |
+| `dot`       | `boolean`                                                               | `false`     | Render as dot indicator (ignores children) |
+| `className` | `string`                                                                | -           | Additional CSS classes                     |
+| `...props`  | `React.HTMLAttributes<HTMLSpanElement>`                                 | -           | All standard span attributes               |
 
 ## Variant Colors
 
-| Variant | Use Case | Color |
-|---------|----------|-------|
-| `default` | Neutral, tags, categories | Gray |
-| `primary` | Brand-related, counts, highlights | Blue |
-| `success` | Active, completed, positive status | Green |
-| `warning` | Low stock, caution, attention needed | Yellow |
-| `error` | Removed, failed, critical status | Red |
-| `info` | Informational, help, guidance | Light Blue |
+| Variant   | Use Case                             | Color      |
+| --------- | ------------------------------------ | ---------- |
+| `default` | Neutral, tags, categories            | Gray       |
+| `primary` | Brand-related, counts, highlights    | Blue       |
+| `success` | Active, completed, positive status   | Green      |
+| `warning` | Low stock, caution, attention needed | Yellow     |
+| `error`   | Removed, failed, critical status     | Red        |
+| `info`    | Informational, help, guidance        | Light Blue |
 
 ## Size Guidelines
 

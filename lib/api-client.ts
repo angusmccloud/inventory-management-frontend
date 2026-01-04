@@ -1,6 +1,6 @@
 /**
  * API Client Base - Inventory HQ Frontend
- * 
+ *
  * Centralized HTTP client with error handling, authentication,
  * and standardized request/response processing with automatic token refresh.
  */
@@ -56,7 +56,7 @@ const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   return localStorage.getItem('auth_token');
 };
 
@@ -68,12 +68,12 @@ const shouldRefreshToken = (token: string): boolean => {
   if (!payload || !payload['exp']) {
     return true;
   }
-  
+
   const expiration = payload['exp'] as number;
   const now = Math.floor(Date.now() / 1000);
-  
+
   // Refresh if expired or expiring within the buffer window
-  return expiration <= (now + TOKEN_REFRESH_BUFFER);
+  return expiration <= now + TOKEN_REFRESH_BUFFER;
 };
 
 /**
@@ -85,14 +85,14 @@ const request = async <T>(
   isRetry = false
 ): Promise<T> => {
   const { method, headers = {}, body, requireAuth = true } = options;
-  
+
   // Proactively check and refresh token before making the request
   if (requireAuth && !isRetry) {
     const token = getAuthToken();
     if (token && shouldRefreshToken(token)) {
       console.log('Token expired or expiring soon, refreshing proactively...');
       const refreshSuccess = await refreshAccessToken();
-      
+
       if (!refreshSuccess) {
         console.log('Proactive token refresh failed, logging out...');
         clearAuth();
@@ -108,52 +108,48 @@ const request = async <T>(
       console.log('Proactive token refresh successful');
     }
   }
-  
+
   // Build URL (remove trailing slash from base and leading slash from endpoint to avoid double slashes)
   const baseUrl = API_BASE_URL.replace(/\/$/, '');
   const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${baseUrl}${path}`;
-  
+
   // Build headers
   const requestHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     ...headers,
   };
-  
+
   // Add authentication header if required
   if (requireAuth) {
     const token = getAuthToken();
     if (token) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
     } else {
-      throw new ApiClientError(
-        'Authentication required',
-        401,
-        'UNAUTHORIZED'
-      );
+      throw new ApiClientError('Authentication required', 401, 'UNAUTHORIZED');
     }
   }
-  
+
   // Build request config
   const config: RequestInit = {
     method,
     headers: requestHeaders,
   };
-  
+
   if (body) {
     config.body = JSON.stringify(body);
   }
-  
+
   try {
     // Make request
     const response = await fetch(url, config);
-    
+
     // Handle 401 Unauthorized - attempt token refresh (fallback/safety net)
     if (response.status === 401 && requireAuth && !isRetry) {
       console.log('Received 401 despite proactive check, attempting token refresh as fallback...');
-      
+
       const refreshSuccess = await refreshAccessToken();
-      
+
       if (refreshSuccess) {
         console.log('Fallback token refresh successful, retrying request...');
         // Retry the request with the new token
@@ -172,42 +168,33 @@ const request = async <T>(
         );
       }
     }
-    
+
     // Handle other non-2xx responses
     if (!response.ok) {
       await handleErrorResponse(response);
     }
-    
+
     // Handle 204 No Content
     if (response.status === 204) {
       return undefined as T;
     }
-    
+
     // Parse JSON response
     const data: ApiSuccess<T> = await response.json();
     return data.data;
-    
   } catch (error) {
     // Re-throw ApiClientError instances
     if (error instanceof ApiClientError) {
       throw error;
     }
-    
+
     // Handle network errors
     if (error instanceof TypeError) {
-      throw new ApiClientError(
-        'Network error - please check your connection',
-        0,
-        'NETWORK_ERROR'
-      );
+      throw new ApiClientError('Network error - please check your connection', 0, 'NETWORK_ERROR');
     }
-    
+
     // Handle other errors
-    throw new ApiClientError(
-      'An unexpected error occurred',
-      500,
-      'UNKNOWN_ERROR'
-    );
+    throw new ApiClientError('An unexpected error occurred', 500, 'UNKNOWN_ERROR');
   }
 };
 
@@ -216,7 +203,7 @@ const request = async <T>(
  */
 const handleErrorResponse = async (response: Response): Promise<never> => {
   let errorData: ApiError;
-  
+
   try {
     errorData = await response.json();
   } catch {
@@ -227,7 +214,7 @@ const handleErrorResponse = async (response: Response): Promise<never> => {
       'HTTP_ERROR'
     );
   }
-  
+
   // Throw structured error
   throw new ApiClientError(
     errorData.error.message,
@@ -247,28 +234,28 @@ export const apiClient = {
   get: <T>(endpoint: string, requireAuth = true): Promise<T> => {
     return request<T>(endpoint, { method: 'GET', requireAuth });
   },
-  
+
   /**
    * POST request
    */
   post: <T>(endpoint: string, body?: unknown, requireAuth = true): Promise<T> => {
     return request<T>(endpoint, { method: 'POST', body, requireAuth });
   },
-  
+
   /**
    * PUT request
    */
   put: <T>(endpoint: string, body?: unknown, requireAuth = true): Promise<T> => {
     return request<T>(endpoint, { method: 'PUT', body, requireAuth });
   },
-  
+
   /**
    * PATCH request
    */
   patch: <T>(endpoint: string, body?: unknown, requireAuth = true): Promise<T> => {
     return request<T>(endpoint, { method: 'PATCH', body, requireAuth });
   },
-  
+
   /**
    * DELETE request
    */
@@ -291,10 +278,10 @@ export const getErrorMessage = (error: unknown): string => {
   if (isApiClientError(error)) {
     return error.message;
   }
-  
+
   if (error instanceof Error) {
     return error.message;
   }
-  
+
   return 'An unexpected error occurred';
 };

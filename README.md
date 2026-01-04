@@ -134,6 +134,7 @@ npm start
 **Error**: `Failed to fetch` or `Network error`
 
 **Solution**:
+
 1. Verify backend is running: `curl http://localhost:3001/health`
 2. Check `.env.local` has correct `NEXT_PUBLIC_API_URL`
 3. Ensure no CORS issues (backend CORS is set to allow all origins in dev)
@@ -144,7 +145,8 @@ npm start
 
 **Explanation**: We're using mock authentication for local development. Real Cognito authentication will be configured during deployment (Task T030).
 
-**Current Behavior**: 
+**Current Behavior**:
+
 - Login accepts any email/password
 - Creates a mock JWT token stored in localStorage
 - All API requests use mock authorization
@@ -152,6 +154,7 @@ npm start
 ### Styles not loading
 
 **Solution**:
+
 ```bash
 rm -rf .next
 npm run dev
@@ -196,10 +199,12 @@ inventory-management-frontend/
 ## Features
 
 ### User Roles
+
 - **Admin**: Full access to manage inventory, family members, and settings
 - **Suggester**: View-only access with ability to submit suggestions
 
 ### Core Features
+
 - Family inventory management
 - Low-stock notifications
 - Shopping list management
@@ -226,7 +231,7 @@ describe('InventoryList', () => {
   it('should display inventory items', () => {
     const items = [{ id: '1', name: 'Item 1', quantity: 5 }];
     render(<InventoryList items={items} />);
-    
+
     expect(screen.getByText('Item 1')).toBeInTheDocument();
   });
 });

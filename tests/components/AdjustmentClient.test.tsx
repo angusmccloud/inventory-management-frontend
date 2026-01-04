@@ -1,9 +1,9 @@
 /**
  * Tests: Adjustment Client Component
- * 
+ *
  * @description Unit tests for interactive +/- adjustment buttons
  * Tests optimistic UI updates, error recovery, loading states, and accessibility
- * 
+ *
  * @see specs/006-api-integration/tasks.md - T032
  */
 
@@ -52,12 +52,8 @@ describe('AdjustmentClient Component', () => {
     it('should display helper text', () => {
       render(<AdjustmentClient {...mockProps} />);
 
-      expect(
-        screen.getByText('Make additional adjustments:')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Changes are saved automatically/)
-      ).toBeInTheDocument();
+      expect(screen.getByText('Make additional adjustments:')).toBeInTheDocument();
+      expect(screen.getByText(/Changes are saved automatically/)).toBeInTheDocument();
     });
   });
 
@@ -188,7 +184,7 @@ describe('AdjustmentClient Component', () => {
 
       // First click should work (1 -> 0)
       fireEvent.click(decrementButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText('0')).toBeInTheDocument();
         expect(screen.queryByText('Updating...')).not.toBeInTheDocument();
@@ -241,9 +237,7 @@ describe('AdjustmentClient Component', () => {
 
   describe('Error Recovery', () => {
     it('should rollback optimistic update on API error', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       render(<AdjustmentClient {...mockProps} />);
 
@@ -291,9 +285,7 @@ describe('AdjustmentClient Component', () => {
     it('should clear error message after 5 seconds', async () => {
       jest.useFakeTimers();
 
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       render(<AdjustmentClient {...mockProps} />);
 
@@ -344,10 +336,7 @@ describe('AdjustmentClient Component', () => {
       (global.fetch as jest.Mock).mockImplementationOnce(
         () =>
           new Promise((resolve) =>
-            setTimeout(
-              () => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }),
-              100
-            )
+            setTimeout(() => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }), 100)
           )
       );
 
@@ -373,10 +362,7 @@ describe('AdjustmentClient Component', () => {
       (global.fetch as jest.Mock).mockImplementationOnce(
         () =>
           new Promise((resolve) =>
-            setTimeout(
-              () => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }),
-              100
-            )
+            setTimeout(() => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }), 100)
           )
       );
 
@@ -397,10 +383,7 @@ describe('AdjustmentClient Component', () => {
       (global.fetch as jest.Mock).mockImplementationOnce(
         () =>
           new Promise((resolve) =>
-            setTimeout(
-              () => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }),
-              100
-            )
+            setTimeout(() => resolve({ ok: true, json: async () => ({ newQuantity: 6 }) }), 100)
           )
       );
 
@@ -450,14 +433,8 @@ describe('AdjustmentClient Component', () => {
         name: /decrease quantity by 1/i,
       });
 
-      expect(incrementButton).toHaveAttribute(
-        'aria-label',
-        'Increase quantity by 1'
-      );
-      expect(decrementButton).toHaveAttribute(
-        'aria-label',
-        'Decrease quantity by 1'
-      );
+      expect(incrementButton).toHaveAttribute('aria-label', 'Increase quantity by 1');
+      expect(decrementButton).toHaveAttribute('aria-label', 'Decrease quantity by 1');
     });
 
     it('should have aria-disabled when buttons are disabled', () => {
@@ -471,9 +448,7 @@ describe('AdjustmentClient Component', () => {
     });
 
     it('should have aria-live region for API errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       render(<AdjustmentClient {...mockProps} />);
 

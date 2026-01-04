@@ -1,6 +1,6 @@
 /**
  * NotificationList Component
- * 
+ *
  * Displays a list of low-stock notifications with filtering by status.
  */
 
@@ -13,17 +13,16 @@ import { Text } from '@/components/common';
 interface NotificationListProps {
   notifications: LowStockNotification[];
   onAddToShoppingList: (notification: LowStockNotification) => void;
-  onEdit: (notification: LowStockNotification) => void;
+  onEdit?: (notification: LowStockNotification) => void;
   isAdmin: boolean;
   processingId?: string | null;
+  statusFilter?: string;
 }
 
 /**
  * Sort notifications by createdAt (newest first)
  */
-const sortNotifications = (
-  notifications: LowStockNotification[]
-): LowStockNotification[] => {
+const sortNotifications = (notifications: LowStockNotification[]): LowStockNotification[] => {
   return [...notifications].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
@@ -35,12 +34,18 @@ export default function NotificationList({
   onEdit,
   isAdmin,
   processingId,
+  statusFilter,
 }: NotificationListProps) {
-  const sortedNotifications = sortNotifications(notifications);
+  const filtered =
+    statusFilter && statusFilter !== 'all'
+      ? notifications.filter((n) => n.status === statusFilter)
+      : notifications;
+
+  const sortedNotifications = sortNotifications(filtered);
 
   if (sortedNotifications.length === 0) {
     return (
-      <div className="text-center py-12" data-testid="empty-state">
+      <div className="py-12 text-center" data-testid="empty-state">
         <svg
           className="mx-auto h-12 w-12 text-text-secondary"
           fill="none"
@@ -64,7 +69,10 @@ export default function NotificationList({
   }
 
   return (
-    <div className="overflow-hidden bg-surface shadow sm:rounded-md" data-testid="notification-list">
+    <div
+      className="overflow-hidden bg-surface shadow sm:rounded-md"
+      data-testid="notification-list"
+    >
       <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
         {sortedNotifications.map((notification) => (
           <NotificationItem

@@ -19,10 +19,7 @@ export async function createInvitation(
   familyId: string,
   request: CreateInvitationRequest
 ): Promise<Invitation> {
-  return apiClient.post<Invitation>(
-    `/families/${familyId}/invitations`,
-    request
-  );
+  return apiClient.post<Invitation>(`/families/${familyId}/invitations`, request);
 }
 
 /**
@@ -41,25 +38,15 @@ export async function listInvitations(
 /**
  * Get invitation details
  */
-export async function getInvitation(
-  familyId: string,
-  invitationId: string
-): Promise<Invitation> {
-  return apiClient.get<Invitation>(
-    `/families/${familyId}/invitations/${invitationId}`
-  );
+export async function getInvitation(familyId: string, invitationId: string): Promise<Invitation> {
+  return apiClient.get<Invitation>(`/families/${familyId}/invitations/${invitationId}`);
 }
 
 /**
  * Revoke a pending invitation
  */
-export async function revokeInvitation(
-  familyId: string,
-  invitationId: string
-): Promise<void> {
-  return apiClient.delete<void>(
-    `/families/${familyId}/invitations/${invitationId}`
-  );
+export async function revokeInvitation(familyId: string, invitationId: string): Promise<void> {
+  return apiClient.delete<void>(`/families/${familyId}/invitations/${invitationId}`);
 }
 
 /**
@@ -74,4 +61,3 @@ export async function acceptInvitation(
     false // No auth required
   );
 }
-

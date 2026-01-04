@@ -18,10 +18,7 @@ Page title header with breadcrumbs, description, and action buttons for consiste
 ```tsx
 import { PageHeader } from '@/components/common';
 
-<PageHeader 
-  title="Inventory"
-  description="Manage your household items and supplies"
-/>
+<PageHeader title="Inventory" description="Manage your household items and supplies" />;
 ```
 
 ### Page Header with Action
@@ -29,7 +26,7 @@ import { PageHeader } from '@/components/common';
 ```tsx
 import { Button } from '@/components/common';
 
-<PageHeader 
+<PageHeader
   title="Shopping List"
   description="Items you need to purchase"
   action={
@@ -37,13 +34,13 @@ import { Button } from '@/components/common';
       Add Item
     </Button>
   }
-/>
+/>;
 ```
 
 ### Page Header with Breadcrumbs
 
 ```tsx
-<PageHeader 
+<PageHeader
   breadcrumbs={[
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Settings', href: '/dashboard/settings' },
@@ -60,7 +57,7 @@ import { Button } from '@/components/common';
 import { Button, IconButton } from '@/components/common';
 import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 
-<PageHeader 
+<PageHeader
   title="Inventory"
   action={
     <Button variant="primary" onClick={handleAddItem}>
@@ -68,39 +65,34 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
     </Button>
   }
   secondaryActions={[
-    <IconButton 
-      icon={<CogIcon />} 
-      aria-label="Settings" 
-      onClick={handleSettings}
-      key="settings"
-    />,
-    <IconButton 
-      icon={<QuestionMarkCircleIcon />} 
-      aria-label="Help" 
+    <IconButton icon={<CogIcon />} aria-label="Settings" onClick={handleSettings} key="settings" />,
+    <IconButton
+      icon={<QuestionMarkCircleIcon />}
+      aria-label="Help"
       onClick={handleHelp}
       key="help"
     />,
   ]}
-/>
+/>;
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | Required | Main page heading text |
-| `description` | `string` | `undefined` | Optional description below title |
-| `breadcrumbs` | `Breadcrumb[]` | `undefined` | Breadcrumb navigation items |
-| `action` | `ReactNode` | `undefined` | Primary action button (top-right) |
-| `secondaryActions` | `ReactNode[]` | `undefined` | Additional action buttons |
-| `className` | `string` | `undefined` | Additional CSS classes |
+| Prop               | Type           | Default     | Description                       |
+| ------------------ | -------------- | ----------- | --------------------------------- |
+| `title`            | `string`       | Required    | Main page heading text            |
+| `description`      | `string`       | `undefined` | Optional description below title  |
+| `breadcrumbs`      | `Breadcrumb[]` | `undefined` | Breadcrumb navigation items       |
+| `action`           | `ReactNode`    | `undefined` | Primary action button (top-right) |
+| `secondaryActions` | `ReactNode[]`  | `undefined` | Additional action buttons         |
+| `className`        | `string`       | `undefined` | Additional CSS classes            |
 
 ### Breadcrumb Object
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `label` | `string` | Breadcrumb text |
-| `href` | `string` | Link destination (optional, omit for current page) |
+| Property | Type     | Description                                        |
+| -------- | -------- | -------------------------------------------------- |
+| `label`  | `string` | Breadcrumb text                                    |
+| `href`   | `string` | Link destination (optional, omit for current page) |
 
 ## Examples
 
@@ -108,7 +100,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 
 ```tsx
 // Inventory Page
-<PageHeader 
+<PageHeader
   title="Inventory"
   description={`${itemCount} items across ${locationCount} locations`}
   action={
@@ -119,7 +111,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 />
 
 // Shopping List Page
-<PageHeader 
+<PageHeader
   title="Shopping List"
   description={`${itemCount} items to purchase`}
   action={
@@ -135,7 +127,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 />
 
 // Members Page
-<PageHeader 
+<PageHeader
   title="Family Members"
   description={`${memberCount} active members`}
   action={
@@ -149,11 +141,8 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ### Settings Pages
 
 ```tsx
-<PageHeader 
-  breadcrumbs={[
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Settings' },
-  ]}
+<PageHeader
+  breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Settings' }]}
   title="Family Settings"
   description="Configure your family inventory preferences"
 />
@@ -162,7 +151,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ### Detail Pages
 
 ```tsx
-<PageHeader 
+<PageHeader
   breadcrumbs={[
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Inventory', href: '/dashboard/inventory' },
@@ -178,7 +167,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
   secondaryActions={[
     <Button variant="secondary" onClick={handleEdit} key="edit">
       Edit
-    </Button>
+    </Button>,
   ]}
 />
 ```
@@ -186,7 +175,7 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ### Admin Pages
 
 ```tsx
-<PageHeader 
+<PageHeader
   breadcrumbs={[
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Settings', href: '/dashboard/settings' },
@@ -213,16 +202,19 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ## Layout Guidelines
 
 ### Title Length
+
 - **Ideal**: 1-5 words
 - **Max**: Single line on desktop (wraps on mobile)
 - **Consider**: Long titles may push actions to next line
 
 ### Description Length
+
 - **Ideal**: 10-20 words
 - **Max**: 2-3 lines
 - **Use for**: Context, counts, status, or helpful hints
 
 ### Actions
+
 - **Primary**: Main CTA (Add, Create, Invite, etc.)
 - **Secondary**: Supporting actions (Settings, Help, Export, etc.)
 - **Max**: 1 primary + 2-3 secondary actions
@@ -230,15 +222,18 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ## Responsive Behavior
 
 ### Desktop (lg+)
+
 - Title and actions on same line
 - Breadcrumbs above title
 - Description below title
 
 ### Tablet (md)
+
 - Same as desktop
 - Actions may wrap if too many
 
 ### Mobile (sm)
+
 - Actions may stack vertically
 - Title may wrap to multiple lines
 - Breadcrumbs may truncate with ellipsis
@@ -256,17 +251,15 @@ import { CogIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 ### Dynamic Description
 
 ```tsx
-const description = loading 
-  ? 'Loading...'
-  : `${itemCount} items in inventory`;
+const description = loading ? 'Loading...' : `${itemCount} items in inventory`;
 
-<PageHeader title="Inventory" description={description} />
+<PageHeader title="Inventory" description={description} />;
 ```
 
 ### Conditional Actions
 
 ```tsx
-<PageHeader 
+<PageHeader
   title="Members"
   action={
     canInvite ? (
@@ -281,7 +274,7 @@ const description = loading
 ### Multiple Action Buttons
 
 ```tsx
-<PageHeader 
+<PageHeader
   title="Reports"
   secondaryActions={[
     <Button variant="secondary" onClick={handleExport} key="export">
@@ -289,7 +282,7 @@ const description = loading
     </Button>,
     <Button variant="secondary" onClick={handlePrint} key="print">
       Print
-    </Button>
+    </Button>,
   ]}
   action={
     <Button variant="primary" onClick={handleGenerate}>
@@ -311,7 +304,7 @@ const description = loading
 ### Custom Spacing
 
 ```tsx
-<PageHeader 
+<PageHeader
   title="Inventory"
   className="mb-8" // Override default mb-6
 />
@@ -326,7 +319,7 @@ const description = loading
 </div>
 <div className="hidden md:block">
   {/* Desktop: Regular button */}
-  <PageHeader 
+  <PageHeader
     title="Inventory"
     action={<Button>Add Item</Button>}
   />

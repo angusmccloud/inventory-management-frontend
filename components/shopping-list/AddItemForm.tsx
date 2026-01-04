@@ -1,7 +1,7 @@
 /**
  * AddItemForm Component
  * Feature: 002-shopping-lists
- * 
+ *
  * Form to add items to shopping list (from inventory or free-text).
  */
 
@@ -41,21 +41,19 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
   // Search inventory items for autocomplete
   const searchInventoryItems = async (query: string) => {
     if (!query.trim()) return [];
-    
+
     try {
       const result = await listInventoryItems(familyId, { archived: false });
       const lowerQuery = query.toLowerCase();
-      
+
       // Create store lookup map for enrichment
       const storeMap = new Map<string, Store>();
       stores.forEach((store) => {
         storeMap.set(store.storeId, store);
       });
-      
+
       return result.items
-        .filter((item: InventoryItem) => 
-          item.name.toLowerCase().includes(lowerQuery)
-        )
+        .filter((item: InventoryItem) => item.name.toLowerCase().includes(lowerQuery))
         .slice(0, 10) // Limit to 10 results
         .map((item: InventoryItem) => ({
           value: item.itemId,
@@ -116,15 +114,18 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
         createdInventoryItemId = created.itemId;
       }
 
-      await onSubmit({
-        itemId: selectedInventoryId || createdInventoryItemId || null,
-        name: name.trim(),
-        quantity: quantity === '' ? null : Number(quantity),
-        unit: unit.trim() || null,
-        storeId: storeId || null,
-        notes: notes.trim() || null,
-      }, keepModalOpen);
-      
+      await onSubmit(
+        {
+          itemId: selectedInventoryId || createdInventoryItemId || null,
+          name: name.trim(),
+          quantity: quantity === '' ? null : Number(quantity),
+          unit: unit.trim() || null,
+          storeId: storeId || null,
+          notes: notes.trim() || null,
+        },
+        keepModalOpen
+      );
+
       // Reset form on success
       if (keepModalOpen) {
         // Quick add: keep store and unit, clear name/quantity/notes
@@ -199,7 +200,8 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             emptyMessage="No matching items in inventory"
           />
           <Text variant="caption" color="secondary" className="mt-1">
-            Tip: Press Enter to quickly add multiple items. Start typing to see items from your inventory.
+            Tip: Press Enter to quickly add multiple items. Start typing to see items from your
+            inventory.
           </Text>
         </div>
 
@@ -261,7 +263,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 bg-surface px-3 py-2 text-text-default ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
             placeholder="Add any notes..."
             maxLength={500}
             disabled={isSubmitting}
@@ -276,7 +278,8 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
                 Track in Inventory
               </Text>
               <Text variant="caption" color="secondary">
-                Create a matching inventory item with this name, same units and preferred store. Threshold set to 0 and no default storage location.
+                Create a matching inventory item with this name, same units and preferred store.
+                Threshold set to 0 and no default storage location.
               </Text>
             </div>
             <ToggleButton
@@ -293,30 +296,21 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={isSubmitting}
-          className="flex-1"
-        >
+        <Button type="submit" variant="primary" disabled={isSubmitting} className="flex-1">
           {isSubmitting ? 'Adding...' : 'Add Item'}
         </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
+        <Button type="button" variant="secondary" onClick={onCancel} disabled={isSubmitting}>
           Cancel
         </Button>
       </div>
     </form>
   );
 }
-

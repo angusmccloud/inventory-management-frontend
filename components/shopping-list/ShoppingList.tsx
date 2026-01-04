@@ -1,14 +1,14 @@
 /**
  * ShoppingList Container Component
  * Feature: 002-shopping-lists
- * 
+ *
  * Main container for shopping list functionality.
  */
 
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
+import {
   ShoppingListItem,
   StoreGroupSummary,
   listShoppingListItems,
@@ -37,13 +37,13 @@ interface ShoppingListProps {
   familyId: string;
 }
 
-type ModalState = 
+type ModalState =
   | { type: 'none' }
   | { type: 'add' }
   | { type: 'edit'; item: ShoppingListItem }
   | { type: 'suggest' };
 
-type DialogState = 
+type DialogState =
   | { type: 'none' }
   | { type: 'confirm'; item: ShoppingListItem; action: 'remove' }
   | { type: 'error'; message: string }
@@ -74,21 +74,21 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       // Load all shopping list items and inventory items in parallel
       const [shoppingResult, inventoryResult] = await Promise.all([
         listShoppingListItems(familyId, {}),
-        listInventoryItems(familyId, { archived: false })
+        listInventoryItems(familyId, { archived: false }),
       ]);
-      
+
       // Track initially purchased items
       const purchasedIds = new Set(
         shoppingResult.items
-          .filter(item => item.status === 'purchased')
-          .map(item => item.shoppingItemId)
+          .filter((item) => item.status === 'purchased')
+          .map((item) => item.shoppingItemId)
       );
       setInitialPurchasedIds(purchasedIds);
-      
+
       setAllItems(shoppingResult.items);
       setInventoryItems(inventoryResult.items);
       setStores(shoppingResult.groupedByStore || []);
@@ -105,17 +105,15 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   }, [familyId]);
 
   // Create inventory lookup maps
-  const inventoryById = new Map(
-    inventoryItems.map(item => [item.itemId, item])
-  );
+  const inventoryById = new Map(inventoryItems.map((item) => [item.itemId, item]));
   const inventoryByName = new Map(
-    inventoryItems.map(item => [item.name.toLowerCase().trim(), item])
+    inventoryItems.map((item) => [item.name.toLowerCase().trim(), item])
   );
 
   // Enrich shopping list items with inventory notes
-  const enrichedItems = allItems.map(item => {
+  const enrichedItems = allItems.map((item) => {
     let inventoryNotes = item.inventoryNotes; // Use backend-provided notes if available
-    
+
     // If no notes yet, try to match by itemId or name
     if (!inventoryNotes) {
       if (item.itemId) {
@@ -126,7 +124,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         inventoryNotes = inventoryItem?.notes || null;
       }
     }
-    
+
     return {
       ...item,
       inventoryNotes,
@@ -135,50 +133,49 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
 
   // Filter items based on selected stores (frontend filtering)
   // Empty array = show all stores
-  let items = selectedStoreIds.length === 0
-    ? enrichedItems
-    : enrichedItems.filter(item => {
-        const itemStoreId = item.storeId || 'unassigned';
-        return selectedStoreIds.includes(itemStoreId);
-      });
-  
+  let items =
+    selectedStoreIds.length === 0
+      ? enrichedItems
+      : enrichedItems.filter((item) => {
+          const itemStoreId = item.storeId || 'unassigned';
+          return selectedStoreIds.includes(itemStoreId);
+        });
+
   // When "Show Archive" is disabled (default), hide initially purchased items
   // Don't reapply filter to newly purchased items (only hide items that were purchased on load)
   if (!showArchive) {
-    items = items.filter(item => !initialPurchasedIds.has(item.shoppingItemId));
+    items = items.filter((item) => !initialPurchasedIds.has(item.shoppingItemId));
   }
 
   // Handle toggle status - optimistic update
   const handleToggleStatus = async (item: ShoppingListItem) => {
     try {
       const updatedItem = await toggleShoppingListItemStatus(familyId, item);
-      
+
       // Debug: Log the updated item to see what fields we get back
-      console.log('Toggle status - original item:', { 
+      console.log('Toggle status - original item:', {
         shoppingItemId: item.shoppingItemId,
         name: item.name,
-        storeId: item.storeId, 
+        storeId: item.storeId,
         storeName: item.storeName,
-        status: item.status 
+        status: item.status,
       });
-      console.log('Toggle status - updated item:', { 
+      console.log('Toggle status - updated item:', {
         shoppingItemId: updatedItem.shoppingItemId,
         name: updatedItem.name,
-        storeId: updatedItem.storeId, 
+        storeId: updatedItem.storeId,
         storeName: updatedItem.storeName,
-        status: updatedItem.status 
+        status: updatedItem.status,
       });
-      
+
       // Update item in state without full reload
-      setAllItems(prevItems => 
-        prevItems.map(i => 
-          i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i
-        )
+      setAllItems((prevItems) =>
+        prevItems.map((i) => (i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i))
       );
     } catch (err) {
       setDialogState({
         type: 'error',
-        message: err instanceof Error ? err.message : 'Failed to update item status'
+        message: err instanceof Error ? err.message : 'Failed to update item status',
       });
     }
   };
@@ -187,43 +184,44 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   const handleAddItem = async (data: any, keepModalOpen: boolean = false) => {
     try {
       const newItem = await addToShoppingList(familyId, data);
-      
+
       // Show success snackbar first
       showSnackbar({
         variant: 'success',
         text: `${newItem.name} added to shopping list`,
       });
-      
+
       // Only close modal if not quick-adding
       if (!keepModalOpen) {
         setModalState({ type: 'none' });
       }
-      
+
       // Add new item to state
-      setAllItems(prevItems => [...prevItems, newItem]);
-      
+      setAllItems((prevItems) => [...prevItems, newItem]);
+
       // Update store summary if needed
       if (newItem.storeName) {
-        const storeExists = stores.find(s => s.storeName === newItem.storeName);
+        const storeExists = stores.find((s) => s.storeName === newItem.storeName);
         if (!storeExists) {
-          setStores(prevStores => [
+          setStores((prevStores) => [
             ...prevStores,
             {
               storeId: newItem.storeId,
               storeName: newItem.storeName || 'Unassigned',
               itemCount: 1,
               pendingCount: newItem.status === 'pending' ? 1 : 0,
-            }
+            },
           ]);
         } else {
           // Update existing store count
-          setStores(prevStores =>
-            prevStores.map(s =>
+          setStores((prevStores) =>
+            prevStores.map((s) =>
               s.storeName === newItem.storeName
                 ? {
                     ...s,
                     itemCount: s.itemCount + 1,
-                    pendingCount: newItem.status === 'pending' ? s.pendingCount + 1 : s.pendingCount,
+                    pendingCount:
+                      newItem.status === 'pending' ? s.pendingCount + 1 : s.pendingCount,
                   }
                 : s
             )
@@ -238,20 +236,18 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   // Handle edit item - update in state without reload
   const handleEditItem = async (data: any) => {
     if (modalState.type !== 'edit') return;
-    
+
     try {
       const updatedItem = await updateShoppingListItem(
-        familyId, 
-        modalState.item.shoppingItemId, 
+        familyId,
+        modalState.item.shoppingItemId,
         data
       );
       setModalState({ type: 'none' });
-      
+
       // Update item in state
-      setAllItems(prevItems => 
-        prevItems.map(i => 
-          i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i
-        )
+      setAllItems((prevItems) =>
+        prevItems.map((i) => (i.shoppingItemId === updatedItem.shoppingItemId ? updatedItem : i))
       );
     } catch (err) {
       throw err; // Let form handle the error
@@ -270,7 +266,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       setModalState({ type: 'none' });
       setDialogState({
         type: 'success',
-        message: 'Suggestion submitted successfully! An admin will review it soon.'
+        message: 'Suggestion submitted successfully! An admin will review it soon.',
       });
     } catch (err) {
       throw err; // Let form handle the error
@@ -280,21 +276,19 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   // Confirm remove item - remove from state without reload
   const confirmRemoveItem = async () => {
     if (dialogState.type !== 'confirm' || dialogState.action !== 'remove') return;
-    
+
     const item = dialogState.item;
     setDialogState({ type: 'none' });
 
     try {
       await removeFromShoppingList(familyId, item.shoppingItemId);
-      
+
       // Remove item from state
-      setAllItems(prevItems => 
-        prevItems.filter(i => i.shoppingItemId !== item.shoppingItemId)
-      );
+      setAllItems((prevItems) => prevItems.filter((i) => i.shoppingItemId !== item.shoppingItemId));
     } catch (err) {
       setDialogState({
         type: 'error',
-        message: err instanceof Error ? err.message : 'Failed to remove item'
+        message: err instanceof Error ? err.message : 'Failed to remove item',
       });
     }
   };
@@ -347,23 +341,17 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         title="Shopping List"
         description={`${items.length} ${items.length === 1 ? 'item' : 'items'} total`}
         mobileVertical={true}
-        action={isAdmin ? (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setModalState({ type: 'add' })}
-          >
-            Add Item
-          </Button>
-        ) : (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setModalState({ type: 'suggest' })}
-          >
-            Suggest
-          </Button>
-        )}
+        action={
+          isAdmin ? (
+            <Button variant="primary" size="md" onClick={() => setModalState({ type: 'add' })}>
+              Add Item
+            </Button>
+          ) : (
+            <Button variant="primary" size="md" onClick={() => setModalState({ type: 'suggest' })}>
+              Suggest
+            </Button>
+          )
+        }
         secondaryActions={[
           <div key="filters" className="flex items-end gap-4">
             <StoreFilter
@@ -372,7 +360,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
               onStoreChange={setSelectedStoreIds}
             />
             <div className="flex flex-col gap-1">
-              <Text variant="bodySmall" className="text-text-default font-medium">
+              <Text variant="bodySmall" className="font-medium text-text-default">
                 Show Archive
               </Text>
               <ToggleButton
@@ -384,7 +372,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
                 variant="primary"
               />
             </div>
-          </div>
+          </div>,
         ]}
       />
 
@@ -393,12 +381,16 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         <EmptyState
           icon={<ShoppingCartIcon />}
           title="Your shopping list is empty."
-          description={isAdmin ? "Add items to get started." : "No items on the shopping list yet."}
-          action={isAdmin ? {
-            label: "Add Item",
-            onClick: () => setModalState({ type: 'add' }),
-            variant: "primary"
-          } : undefined}
+          description={isAdmin ? 'Add items to get started.' : 'No items on the shopping list yet.'}
+          action={
+            isAdmin
+              ? {
+                  label: 'Add Item',
+                  onClick: () => setModalState({ type: 'add' }),
+                  variant: 'primary',
+                }
+              : undefined
+          }
         />
       ) : (
         // Grouped by store view with responsive grid (always show headers)
@@ -406,13 +398,13 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           {sortedStoreNames.map((storeName) => {
             const storeItems = groupedItems[storeName];
             if (!storeItems) return null;
-            
+
             return (
               <div key={storeName}>
-                <Text variant="h3" className="text-text-default mb-4">
+                <Text variant="h3" className="mb-4 text-text-default">
                   {storeName}
                 </Text>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {storeItems.map((item) => (
                     <ShoppingListItemComponent
                       key={item.shoppingItemId}
@@ -436,14 +428,14 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
           <div className="flex min-h-screen items-center justify-center px-4 text-center sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 transition-opacity dark:bg-opacity-80"
               onClick={() => setModalState({ type: 'none' })}
             />
 
             {/* Modal panel */}
-            <div className="relative w-[90%] max-w-full inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="relative inline-block w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
               <div>
-                <Text variant="h3" className="text-text-default mb-4">
+                <Text variant="h3" className="mb-4 text-text-default">
                   {modalState.type === 'add' && 'Add Item to Shopping List'}
                   {modalState.type === 'edit' && 'Edit Shopping List Item'}
                   {modalState.type === 'suggest' && 'Create Suggestion'}
@@ -519,4 +511,3 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
     </div>
   );
 }
-

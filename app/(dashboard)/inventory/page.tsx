@@ -1,6 +1,6 @@
 /**
  * Inventory Page - Inventory HQ
- * 
+ *
  * Main page for managing family inventory items.
  */
 
@@ -10,11 +10,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
-import {
-  listInventoryItems,
-  archiveInventoryItem,
-  deleteInventoryItem,
-} from '@/lib/api/inventory';
+import { listInventoryItems, archiveInventoryItem, deleteInventoryItem } from '@/lib/api/inventory';
 import { addToShoppingList } from '@/lib/api/shoppingList';
 import { listStorageLocations, listStores } from '@/lib/api/reference-data';
 import { isApiClientError } from '@/lib/api-client';
@@ -25,7 +21,15 @@ import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
 import DashboardManager, { DashboardManagerRef } from '@/components/dashboard/DashboardManager';
 import DashboardForm from '@/components/dashboard/DashboardForm';
-import { Text, Button, Alert, PageHeader, PageLoading, PageContainer, TabNavigation } from '@/components/common';
+import {
+  Text,
+  Button,
+  Alert,
+  PageHeader,
+  PageLoading,
+  PageContainer,
+  TabNavigation,
+} from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
@@ -64,7 +68,9 @@ export default function InventoryPage() {
   const enrichItem = (item: InventoryItem): InventoryItem => ({
     ...item,
     locationName: item.locationId ? locationMap.get(item.locationId)?.name : undefined,
-    preferredStoreName: item.preferredStoreId ? storeMap.get(item.preferredStoreId)?.name : undefined,
+    preferredStoreName: item.preferredStoreId
+      ? storeMap.get(item.preferredStoreId)?.name
+      : undefined,
   });
 
   useEffect(() => {
@@ -74,23 +80,23 @@ export default function InventoryPage() {
   const loadFamilyId = async (): Promise<void> => {
     try {
       const userContext = getUserContext();
-      
+
       // Check user role
       if (userContext?.role === 'admin') {
         setIsAdmin(true);
       }
-      
+
       if (userContext?.familyId) {
         // Use cached familyId from localStorage
         setFamilyId(userContext.familyId);
       } else {
         // Fetch from backend
         const families = await listUserFamilies();
-        
+
         if (families && families.length > 0 && families[0]) {
           const userFamilyId = families[0].familyId;
           setFamilyId(userFamilyId);
-          
+
           // Cache it in localStorage
           if (userContext && typeof window !== 'undefined') {
             userContext.familyId = userFamilyId;
@@ -123,7 +129,7 @@ export default function InventoryPage() {
 
   const loadInventory = async (): Promise<void> => {
     if (!familyId) return;
-    
+
     setLoading(true);
     setError('');
 
@@ -154,7 +160,9 @@ export default function InventoryPage() {
       const enrichedItems = (response.items || []).map((item: InventoryItem) => ({
         ...item,
         locationName: item.locationId ? newLocationMap.get(item.locationId)?.name : undefined,
-        preferredStoreName: item.preferredStoreId ? newStoreMap.get(item.preferredStoreId)?.name : undefined,
+        preferredStoreName: item.preferredStoreId
+          ? newStoreMap.get(item.preferredStoreId)?.name
+          : undefined,
       }));
 
       setItems(enrichedItems);
@@ -172,9 +180,9 @@ export default function InventoryPage() {
   };
 
   const handleItemUpdated = (updatedItem: InventoryItem): void => {
-    setItems(items.map((item) => 
-      item.itemId === updatedItem.itemId ? enrichItem(updatedItem) : item
-    ));
+    setItems(
+      items.map((item) => (item.itemId === updatedItem.itemId ? enrichItem(updatedItem) : item))
+    );
     setModalState({ type: 'none' });
   };
 
@@ -213,7 +221,7 @@ export default function InventoryPage() {
         quantity: 1,
         notes: null,
       });
-      
+
       // Show success snackbar
       showSnackbar({
         variant: 'success',
@@ -230,7 +238,7 @@ export default function InventoryPage() {
         setError('');
         return;
       }
-      
+
       // Show error snackbar for other errors
       showSnackbar({
         variant: 'error',
@@ -246,13 +254,13 @@ export default function InventoryPage() {
 
   if (!familyId) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <Text variant="body" className="text-text-default">
           Please create a family first from the dashboard.
         </Text>
         <Button
           variant="primary"
-          onClick={() => window.location.href = '/dashboard'}
+          onClick={() => (window.location.href = '/dashboard')}
           className="mt-4"
         >
           Go to Dashboard
@@ -263,11 +271,12 @@ export default function InventoryPage() {
 
   return (
     <PageContainer>
-        {/* Header */}
-        <PageHeader
-          title="Inventory"
-          description="Manage your family's inventory items and tracking lists"
-          action={isAdmin ? (
+      {/* Header */}
+      <PageHeader
+        title="Inventory"
+        description="Manage your family's inventory items and tracking lists"
+        action={
+          isAdmin ? (
             activeTab === 'inventory' ? (
               <Button
                 variant="primary"
@@ -279,14 +288,12 @@ export default function InventoryPage() {
                 Add Item
               </Button>
             ) : activeTab === 'tracking-lists' ? (
-              <Button
-                variant="primary"
-                onClick={() => setModalState({ type: 'addDashboard' })}
-              >
+              <Button variant="primary" onClick={() => setModalState({ type: 'addDashboard' })}>
                 Create New List
               </Button>
             ) : undefined
-          ) : undefined}
+          ) : undefined
+        }
       />
 
       {error && (
@@ -296,11 +303,7 @@ export default function InventoryPage() {
       )}
 
       {/* Tab Navigation */}
-      <TabNavigation
-        tabs={tabs}
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
+      <TabNavigation tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       {/* Inventory Tab */}
       {activeTab === 'inventory' && (
@@ -318,7 +321,7 @@ export default function InventoryPage() {
 
       {/* Tracking Lists Tab */}
       {activeTab === 'tracking-lists' && (
-        <DashboardManager 
+        <DashboardManager
           ref={dashboardManagerRef}
           familyId={familyId}
           onEdit={(dashboardId) => setModalState({ type: 'editDashboard', dashboardId })}
@@ -331,7 +334,7 @@ export default function InventoryPage() {
           <div className="flex min-h-screen items-center justify-center px-4 text-center sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity"
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 transition-opacity dark:bg-opacity-80"
               onClick={() => {
                 console.log('Modal overlay clicked');
                 setModalState({ type: 'none' });
@@ -339,9 +342,9 @@ export default function InventoryPage() {
             />
 
             {/* Modal panel */}
-            <div className="relative w-[90%] max-w-full inline-block align-bottom bg-surface rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="relative inline-block w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
               <div>
-                <Text variant="h3" className="text-text-default mb-4">
+                <Text variant="h3" className="mb-4 text-text-default">
                   {modalState.type === 'add' && 'Add New Item'}
                   {modalState.type === 'edit' && 'Edit Item'}
                   {modalState.type === 'addDashboard' && 'Create New List'}

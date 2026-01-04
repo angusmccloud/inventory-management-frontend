@@ -1,11 +1,11 @@
 /**
  * NFC Adjustment Page
- * 
+ *
  * @description Server-side rendered page for NFC-triggered inventory adjustments.
  * Route: /t/[urlId]
- * 
+ *
  * User Story: User taps NFC tag → browser opens page → quantity auto-adjusts → feedback displayed
- * 
+ *
  * @see specs/006-api-integration/spec.md - User Story 1
  * @see specs/006-api-integration/contracts/nfc-adjustment-api.yaml
  */
@@ -66,7 +66,7 @@ async function performAdjustment(urlId: string): Promise<AdjustmentResponse> {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.log('[NFC] Error response:', errorData);
-      
+
       if (response.status === 404) {
         return {
           success: false,
@@ -112,7 +112,7 @@ async function performAdjustment(urlId: string): Promise<AdjustmentResponse> {
 
 /**
  * NFC Adjustment Page Component (Server Component)
- * 
+ *
  * Automatically applies -1 adjustment on page load
  * Mobile-responsive design with WCAG 2.1 AA compliance
  */
@@ -133,7 +133,7 @@ export default async function NfcPage({ params }: NfcPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-4 dark:from-gray-900 dark:to-gray-800">
       <div className="w-full max-w-md">
         {/* Success State */}
         {result.success && (
@@ -148,11 +148,11 @@ export default async function NfcPage({ params }: NfcPageProps) {
 
         {/* Error State */}
         {!result.success && result.code !== 'NOT_FOUND' && (
-          <div className="bg-surface rounded-lg shadow-lg p-8 text-center">
+          <div className="rounded-lg bg-surface p-8 text-center shadow-lg">
             {/* Error Icon */}
-            <div className="mx-auto w-16 h-16 bg-error/10/30 rounded-full flex items-center justify-center mb-6">
+            <div className="bg-error/10/30 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full">
               <svg
-                className="w-10 h-10 text-error"
+                className="h-10 w-10 text-error"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -168,7 +168,7 @@ export default async function NfcPage({ params }: NfcPageProps) {
             </div>
 
             {/* Error Title */}
-            <h1 className="text-2xl font-bold text-text-secondary dark:text-white mb-2">
+            <h1 className="mb-2 text-2xl font-bold text-text-secondary dark:text-white">
               Adjustment Failed
             </h1>
 
@@ -185,7 +185,7 @@ export default async function NfcPage({ params }: NfcPageProps) {
             )}
 
             {/* Retry Instructions */}
-            <div className="mt-8 p-4 bg-surface-elevated rounded-lg">
+            <div className="mt-8 rounded-lg bg-surface-elevated p-4">
               <Text variant="bodySmall" color="primary">
                 Try tapping the NFC tag again or contact support if the problem persists.
               </Text>

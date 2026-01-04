@@ -1,6 +1,6 @@
 /**
  * Theme Test Page
- * 
+ *
  * Page to verify theme colors and reusable components.
  * Navigate to /theme-test to see this page.
  */
@@ -27,13 +27,7 @@ import {
   ToggleButton,
 } from '@/components/common';
 import { useSnackbar } from '@/contexts/SnackbarContext';
-import { 
-  PencilIcon, 
-  TrashIcon, 
-  HeartIcon,
-  BellIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, HeartIcon, BellIcon, UserIcon } from '@heroicons/react/24/outline';
 
 export default function ThemeTestPage() {
   const { showSnackbar } = useSnackbar();
@@ -65,30 +59,42 @@ export default function ThemeTestPage() {
           <Text as="h2" variant="h2" className="mb-4">
             Theme Colors
           </Text>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-primary" />
-              <Text variant="bodySmall" color="secondary">Primary</Text>
+              <Text variant="bodySmall" color="secondary">
+                Primary
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-secondary" />
-              <Text variant="bodySmall" color="secondary">Secondary</Text>
+              <Text variant="bodySmall" color="secondary">
+                Secondary
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-tertiary" />
-              <Text variant="bodySmall" color="secondary">Tertiary</Text>
+              <Text variant="bodySmall" color="secondary">
+                Tertiary
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-success" />
-              <Text variant="bodySmall" color="secondary">Success</Text>
+              <Text variant="bodySmall" color="secondary">
+                Success
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-warning" />
-              <Text variant="bodySmall" color="secondary">Warning</Text>
+              <Text variant="bodySmall" color="secondary">
+                Warning
+              </Text>
             </div>
             <div className="space-y-2">
               <div className="h-16 rounded-md bg-error" />
-              <Text variant="bodySmall" color="secondary">Error</Text>
+              <Text variant="bodySmall" color="secondary">
+                Error
+              </Text>
             </div>
           </div>
         </Card>
@@ -98,7 +104,7 @@ export default function ThemeTestPage() {
           <Text as="h2" variant="h2" className="mb-4">
             Card Components
           </Text>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Card elevation="low" padding="md">
               <Text as="h3" variant="h3" className="mb-2">
                 Standard Card
@@ -112,9 +118,7 @@ export default function ThemeTestPage() {
               <Text as="h3" variant="h3" className="mb-2">
                 Interactive Card
               </Text>
-              <Text color="secondary">
-                Hover over this card to see hover effects.
-              </Text>
+              <Text color="secondary">Hover over this card to see hover effects.</Text>
             </Card>
           </div>
         </div>
@@ -130,9 +134,15 @@ export default function ThemeTestPage() {
             <Button variant="tertiary">Tertiary</Button>
             <Button variant="danger">Danger</Button>
             <Button variant="warning">Warning</Button>
-            <Button variant="primary" size="sm">Small</Button>
-            <Button variant="secondary" size="lg">Large</Button>
-            <Button variant="primary" disabled>Disabled</Button>
+            <Button variant="primary" size="sm">
+              Small
+            </Button>
+            <Button variant="secondary" size="lg">
+              Large
+            </Button>
+            <Button variant="primary" disabled>
+              Disabled
+            </Button>
           </div>
         </Card>
 
@@ -163,42 +173,51 @@ export default function ThemeTestPage() {
             Snackbar Notifications
           </Text>
           <Text variant="body" color="secondary" className="mb-4">
-            Click the buttons below to trigger snackbar notifications. They will appear at the bottom center of the screen and auto-hide after 5 seconds.
+            Click the buttons below to trigger snackbar notifications. They will appear at the
+            bottom center of the screen and auto-hide after 5 seconds.
           </Text>
           <div className="flex flex-wrap gap-3">
-            <Button 
+            <Button
               variant="secondary"
-              onClick={() => showSnackbar({ 
-                variant: 'info', 
-                text: 'This is an informational snackbar message' 
-              })}
+              onClick={() =>
+                showSnackbar({
+                  variant: 'info',
+                  text: 'This is an informational snackbar message',
+                })
+              }
             >
               Show Info Snackbar
             </Button>
-            <Button 
+            <Button
               variant="primary"
-              onClick={() => showSnackbar({ 
-                variant: 'success', 
-                text: 'Operation completed successfully!' 
-              })}
+              onClick={() =>
+                showSnackbar({
+                  variant: 'success',
+                  text: 'Operation completed successfully!',
+                })
+              }
             >
               Show Success Snackbar
             </Button>
-            <Button 
+            <Button
               variant="warning"
-              onClick={() => showSnackbar({ 
-                variant: 'warning', 
-                text: 'Please review this warning message' 
-              })}
+              onClick={() =>
+                showSnackbar({
+                  variant: 'warning',
+                  text: 'Please review this warning message',
+                })
+              }
             >
               Show Warning Snackbar
             </Button>
-            <Button 
+            <Button
               variant="danger"
-              onClick={() => showSnackbar({ 
-                variant: 'error', 
-                text: 'An error occurred. Please try again.' 
-              })}
+              onClick={() =>
+                showSnackbar({
+                  variant: 'error',
+                  text: 'An error occurred. Please try again.',
+                })
+              }
             >
               Show Error Snackbar
             </Button>
@@ -210,7 +229,7 @@ export default function ThemeTestPage() {
           <Text as="h2" variant="h2" className="mb-4">
             Form Components
           </Text>
-          <div className="space-y-4 max-w-md">
+          <div className="max-w-md space-y-4">
             <Input
               label="Text Input"
               value={inputValue}
@@ -218,7 +237,7 @@ export default function ThemeTestPage() {
               placeholder="Enter some text"
               helpText="This is a help text"
             />
-            
+
             <Input
               label="Input with Error"
               value=""
@@ -245,13 +264,17 @@ export default function ThemeTestPage() {
           <Text as="h2" variant="h2" className="mb-4">
             Toggle, Radio & Checkbox Components
           </Text>
-          <div className="space-y-6 max-w-md">
+          <div className="max-w-md space-y-6">
             {/* Toggle Buttons */}
             <div>
-              <Text as="h3" variant="h4" className="mb-3">Toggle Buttons</Text>
+              <Text as="h3" variant="h4" className="mb-3">
+                Toggle Buttons
+              </Text>
               <div className="space-y-3">
                 <div>
-                  <Text variant="label" className="mb-2">Variants</Text>
+                  <Text variant="label" className="mb-2">
+                    Variants
+                  </Text>
                   <div className="space-y-2">
                     <ToggleButton
                       checked={togglePrimary}
@@ -293,7 +316,9 @@ export default function ThemeTestPage() {
                 </div>
 
                 <div>
-                  <Text variant="label" className="mb-2">Sizes</Text>
+                  <Text variant="label" className="mb-2">
+                    Sizes
+                  </Text>
                   <div className="space-y-2">
                     <ToggleButton
                       checked={togglePrimary}
@@ -317,13 +342,15 @@ export default function ThemeTestPage() {
                 </div>
 
                 <div>
-                  <Text variant="label" className="mb-2">States</Text>
+                  <Text variant="label" className="mb-2">
+                    States
+                  </Text>
                   <div className="space-y-2">
                     <ToggleButton
                       checked={toggleWithError}
                       onChange={setToggleWithError}
                       label="Toggle with error"
-                      error={!toggleWithError ? "This field is required" : undefined}
+                      error={!toggleWithError ? 'This field is required' : undefined}
                     />
                     <ToggleButton
                       checked={false}
@@ -350,7 +377,9 @@ export default function ThemeTestPage() {
 
             {/* Radio Buttons */}
             <div>
-              <Text as="h3" variant="h4" className="mb-3">Radio Buttons</Text>
+              <Text as="h3" variant="h4" className="mb-3">
+                Radio Buttons
+              </Text>
               <Radio
                 name="example-radio"
                 label="Choose an option"
@@ -368,7 +397,9 @@ export default function ThemeTestPage() {
 
             {/* Checkboxes */}
             <div>
-              <Text as="h3" variant="h4" className="mb-3">Checkboxes</Text>
+              <Text as="h3" variant="h4" className="mb-3">
+                Checkboxes
+              </Text>
               <div className="space-y-3">
                 <Checkbox
                   checked={checkboxValue}
@@ -376,28 +407,23 @@ export default function ThemeTestPage() {
                   label="I agree to the terms and conditions"
                   required
                 />
-                
+
                 <Checkbox
                   checked={rememberPrefs}
                   onChange={setRememberPrefs}
                   label="Remember my preferences"
                   description="Save your settings for future visits"
                 />
-                
+
                 <Checkbox
                   checked={newsletter}
                   onChange={setNewsletter}
                   label="Subscribe to newsletter"
                   helpText="Receive weekly updates about new features"
                 />
-                
-                <Checkbox
-                  checked={false}
-                  onChange={() => {}}
-                  label="Disabled checkbox"
-                  disabled
-                />
-                
+
+                <Checkbox checked={false} onChange={() => {}} label="Disabled checkbox" disabled />
+
                 <Checkbox
                   checked={false}
                   onChange={() => {}}
@@ -416,7 +442,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-4">
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Status Badges</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Status Badges
+              </Text>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="success">Active</Badge>
                 <Badge variant="error">Removed</Badge>
@@ -427,16 +455,24 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Count Badges</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Count Badges
+              </Text>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="primary">12</Badge>
                 <Badge variant="error">3</Badge>
-                <Badge variant="info" size="sm">99+</Badge>
-                <Badge variant="success" size="lg">5</Badge>
+                <Badge variant="info" size="sm">
+                  99+
+                </Badge>
+                <Badge variant="success" size="lg">
+                  5
+                </Badge>
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Dot Indicators</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Dot Indicators
+              </Text>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Badge variant="success" dot />
@@ -462,7 +498,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-4">
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Variants</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Variants
+              </Text>
               <div className="flex flex-wrap gap-3">
                 <IconButton
                   icon={<PencilIcon className="h-5 w-5" />}
@@ -487,8 +525,10 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Sizes</Text>
-              <div className="flex items-center flex-wrap gap-3">
+              <Text as="h3" variant="h4" className="mb-2">
+                Sizes
+              </Text>
+              <div className="flex flex-wrap items-center gap-3">
                 <IconButton
                   icon={<UserIcon className="h-4 w-4" />}
                   aria-label="Profile"
@@ -510,7 +550,9 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">States</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                States
+              </Text>
               <div className="flex flex-wrap gap-3">
                 <IconButton
                   icon={<PencilIcon className="h-5 w-5" />}
@@ -536,7 +578,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-4">
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Variants</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Variants
+              </Text>
               <div className="space-y-2">
                 <div>
                   <Link href="/inventory" variant="default">
@@ -556,7 +600,9 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">External Links</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                External Links
+              </Text>
               <div className="space-y-2">
                 <div>
                   <Link href="https://github.com" variant="default">
@@ -580,7 +626,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-4">
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Sizes</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Sizes
+              </Text>
               <div className="flex items-center gap-6">
                 <div className="flex flex-col items-center gap-2">
                   <LoadingSpinner size="sm" />
@@ -601,7 +649,9 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Centered with Label</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Centered with Label
+              </Text>
               <Card elevation="medium" padding="md">
                 <LoadingSpinner size="lg" center label="Loading your items..." />
               </Card>
@@ -616,7 +666,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-6">
             <div>
-              <Text as="h3" variant="h4" className="mb-3">Horizontal Tabs</Text>
+              <Text as="h3" variant="h4" className="mb-3">
+                Horizontal Tabs
+              </Text>
               <TabNavigation
                 tabs={[
                   { id: 'overview', label: 'Overview' },
@@ -629,12 +681,17 @@ export default function ThemeTestPage() {
               />
               <Card elevation="medium" padding="md" className="mt-4">
                 <Text variant="body">
-                  Active tab: <Text as="span" variant="body" weight="semibold">{activeTab}</Text>
+                  Active tab:{' '}
+                  <Text as="span" variant="body" weight="semibold">
+                    {activeTab}
+                  </Text>
                 </Text>
               </Card>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-3">Responsive (Auto)</Text>
+              <Text as="h3" variant="h4" className="mb-3">
+                Responsive (Auto)
+              </Text>
               <Text variant="bodySmall" color="secondary" className="mb-2">
                 Shows dropdown on mobile, tabs on desktop
               </Text>
@@ -659,7 +716,9 @@ export default function ThemeTestPage() {
           </Text>
           <div className="space-y-4">
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Typography Variants</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Typography Variants
+              </Text>
               <div className="space-y-2">
                 <Text variant="h1">Heading 1 - Page Title</Text>
                 <Text variant="h2">Heading 2 - Section</Text>
@@ -674,7 +733,9 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Color Variants</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Color Variants
+              </Text>
               <div className="space-y-1">
                 <Text color="primary">Primary text color</Text>
                 <Text color="secondary">Secondary text color</Text>
@@ -686,7 +747,9 @@ export default function ThemeTestPage() {
               </div>
             </div>
             <div>
-              <Text as="h3" variant="h4" className="mb-2">Font Weights</Text>
+              <Text as="h3" variant="h4" className="mb-2">
+                Font Weights
+              </Text>
               <div className="space-y-1">
                 <Text weight="normal">Normal weight text</Text>
                 <Text weight="medium">Medium weight text</Text>
@@ -703,13 +766,13 @@ export default function ThemeTestPage() {
             Surface Variants
           </Text>
           <div className="space-y-3">
-            <div className="p-4 rounded-md bg-surface border border-border">
+            <div className="rounded-md border border-border bg-surface p-4">
               <Text>Surface (default)</Text>
             </div>
-            <div className="p-4 rounded-md bg-surface-elevated border border-border">
+            <div className="rounded-md border border-border bg-surface-elevated p-4">
               <Text>Surface Elevated</Text>
             </div>
-            <div className="p-4 rounded-md bg-surface-hover border border-border">
+            <div className="rounded-md border border-border bg-surface-hover p-4">
               <Text>Surface Hover</Text>
             </div>
           </div>
@@ -720,7 +783,7 @@ export default function ThemeTestPage() {
           <Text as="h3" variant="h3" className="mb-2">
             Testing Instructions
           </Text>
-          <ul className="list-disc list-inside space-y-1 text-text-secondary text-sm">
+          <ul className="list-inside list-disc space-y-1 text-sm text-text-secondary">
             <li>macOS: System Settings → Appearance → Light/Dark</li>
             <li>Windows: Settings → Personalization → Colors</li>
             <li>Browser DevTools: Cmd/Ctrl+Shift+P → "Rendering" → "prefers-color-scheme"</li>

@@ -1,7 +1,7 @@
 /**
  * EmptyState Component Type Definitions
  * Feature: 008-common-components
- * 
+ *
  * Placeholder displayed when no data is available in a list or view.
  */
 
@@ -11,9 +11,9 @@ import { ButtonVariant } from '../Button/Button.types';
 /**
  * EmptyState component props
  * Placeholder displayed when no data is available in a list or view.
- * 
+ *
  * @example
- * <EmptyState 
+ * <EmptyState
  *   icon={<BoxIcon />}
  *   title="No Inventory Items"
  *   description="Add your first item to get started."
@@ -23,9 +23,9 @@ import { ButtonVariant } from '../Button/Button.types';
  *     variant: "primary"
  *   }}
  * />
- * 
+ *
  * @example
- * <EmptyState 
+ * <EmptyState
  *   icon={<UserGroupIcon />}
  *   title="No Members Yet"
  *   description="Invite family members to collaborate."
@@ -44,17 +44,17 @@ export interface EmptyStateProps {
    * Icon to display (React element, usually from Heroicons)
    */
   icon?: React.ReactNode;
-  
+
   /**
    * Primary message title
    */
   title: string;
-  
+
   /**
    * Supporting description text
    */
   description?: string;
-  
+
   /**
    * Primary action button
    */
@@ -63,19 +63,19 @@ export interface EmptyStateProps {
      * Button label
      */
     label: string;
-    
+
     /**
      * Click handler
      */
     onClick: () => void;
-    
+
     /**
      * Button variant
      * @default 'primary'
      */
     variant?: ButtonVariant;
   };
-  
+
   /**
    * Secondary action button (link-style, shown below primary)
    */
@@ -84,13 +84,13 @@ export interface EmptyStateProps {
      * Link label
      */
     label: string;
-    
+
     /**
      * Click handler
      */
     onClick: () => void;
   };
-  
+
   /**
    * Additional CSS classes
    */

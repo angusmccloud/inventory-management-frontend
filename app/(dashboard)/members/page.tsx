@@ -1,7 +1,7 @@
 /**
  * Members Page - Redirect to Settings
  * Feature: 003-member-management
- * 
+ *
  * This page redirects to the Settings page where member management is now located
  */
 

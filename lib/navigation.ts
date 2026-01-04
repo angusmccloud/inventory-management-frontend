@@ -1,6 +1,6 @@
 /**
  * Navigation Configuration
- * 
+ *
  * Single source of truth for dashboard navigation menu items and their access control.
  */
 
@@ -54,13 +54,19 @@ export const navigationItems: NavItem[] = [
     href: '/settings',
     matchPaths: ['/settings', '/settings/reference-data', '/members'],
   },
+  {
+    id: 'help',
+    label: 'Help',
+    href: '/help',
+    matchPaths: ['/help'],
+  },
 ];
 
 /**
  * Get navigation items filtered by user role.
  */
 export function getNavigationItems(isAdmin: boolean): NavItem[] {
-  return navigationItems.filter(item => !item.requiresAdmin || isAdmin);
+  return navigationItems.filter((item) => !item.requiresAdmin || isAdmin);
 }
 
 /**
@@ -71,11 +77,11 @@ export function isNavItemActive(item: NavItem, currentPath: string): boolean {
   if (currentPath === item.href) {
     return true;
   }
-  
+
   // Check additional match paths
   if (item.matchPaths) {
-    return item.matchPaths.some(path => currentPath.startsWith(path));
+    return item.matchPaths.some((path) => currentPath.startsWith(path));
   }
-  
+
   return false;
 }

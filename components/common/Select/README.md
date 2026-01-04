@@ -24,7 +24,7 @@ const storageOptions = [
 ];
 
 // Simple select
-<Select 
+<Select
   label="Storage Location"
   options={storageOptions}
   value={location}
@@ -32,7 +32,7 @@ const storageOptions = [
 />
 
 // With placeholder
-<Select 
+<Select
   label="Category"
   options={categoryOptions}
   value={category}
@@ -41,7 +41,7 @@ const storageOptions = [
 />
 
 // Required field
-<Select 
+<Select
   label="Item Type"
   options={typeOptions}
   value={type}
@@ -56,7 +56,7 @@ const storageOptions = [
 import { Select } from '@/components/common';
 
 // Error state
-<Select 
+<Select
   label="Storage Location"
   options={storageOptions}
   value={location}
@@ -65,7 +65,7 @@ import { Select } from '@/components/common';
 />
 
 // Success state
-<Select 
+<Select
   label="Category"
   options={categoryOptions}
   value={category}
@@ -74,7 +74,7 @@ import { Select } from '@/components/common';
 />
 
 // With help text
-<Select 
+<Select
   label="Priority"
   options={priorityOptions}
   value={priority}
@@ -129,11 +129,7 @@ const categoryOptions: SelectOption<number>[] = [
   { label: 'Meat', value: 3 },
 ];
 
-<Select<number>
-  options={categoryOptions}
-  value={categoryId}
-  onChange={setCategoryId}
-/>
+<Select<number> options={categoryOptions} value={categoryId} onChange={setCategoryId} />;
 ```
 
 ## Form Integration
@@ -161,22 +157,22 @@ function AddItemForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newErrors: { location?: string; category?: string } = {};
-    
+
     if (!location) {
       newErrors.location = 'Please select a storage location';
     }
-    
+
     if (!category) {
       newErrors.category = 'Please select a category';
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     // Submit form...
   };
 
@@ -194,7 +190,7 @@ function AddItemForm() {
         placeholder="Select location..."
         required
       />
-      
+
       <Select
         label="Category"
         options={categoryOptions}
@@ -207,7 +203,7 @@ function AddItemForm() {
         placeholder="Select category..."
         required
       />
-      
+
       <button type="submit">Add Item</button>
     </form>
   );
@@ -217,7 +213,7 @@ function AddItemForm() {
 ## Accessibility
 
 - **Labels**: Always provide a `label` for screen readers
-- **Required Fields**: Automatically adds visual indicator (*)
+- **Required Fields**: Automatically adds visual indicator (\*)
 - **Error States**: Uses `aria-invalid` and `aria-describedby` for error announcements
 - **Help Text**: Associated with select via `aria-describedby`
 - **Focus**: Visible focus ring with proper contrast
@@ -225,59 +221,65 @@ function AddItemForm() {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `options` | `SelectOption<T>[]` | Required | Array of options to display |
-| `label` | `string` | - | Select label text |
-| `placeholder` | `string` | - | Placeholder text for empty state |
-| `value` | `T` | - | Selected value (controlled) |
-| `onChange` | `(value: T) => void` | - | Change handler (receives value, not event) |
-| `helpText` | `string` | - | Help text displayed below select |
-| `error` | `string` | - | Error message (sets validation state to error) |
-| `success` | `string` | - | Success message (sets validation state to success) |
-| `validationState` | `'default' \| 'success' \| 'error'` | `'default'` | Validation state (overridden by error/success) |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Select size |
-| `required` | `boolean` | `false` | Whether field is required |
-| `wrapperClassName` | `string` | - | Additional classes for wrapper div |
-| `className` | `string` | - | Additional classes for select element |
-| `...props` | `React.SelectHTMLAttributes` | - | All standard select attributes |
+| Prop               | Type                                | Default     | Description                                        |
+| ------------------ | ----------------------------------- | ----------- | -------------------------------------------------- |
+| `options`          | `SelectOption<T>[]`                 | Required    | Array of options to display                        |
+| `label`            | `string`                            | -           | Select label text                                  |
+| `placeholder`      | `string`                            | -           | Placeholder text for empty state                   |
+| `value`            | `T`                                 | -           | Selected value (controlled)                        |
+| `onChange`         | `(value: T) => void`                | -           | Change handler (receives value, not event)         |
+| `helpText`         | `string`                            | -           | Help text displayed below select                   |
+| `error`            | `string`                            | -           | Error message (sets validation state to error)     |
+| `success`          | `string`                            | -           | Success message (sets validation state to success) |
+| `validationState`  | `'default' \| 'success' \| 'error'` | `'default'` | Validation state (overridden by error/success)     |
+| `size`             | `'sm' \| 'md' \| 'lg'`              | `'md'`      | Select size                                        |
+| `required`         | `boolean`                           | `false`     | Whether field is required                          |
+| `wrapperClassName` | `string`                            | -           | Additional classes for wrapper div                 |
+| `className`        | `string`                            | -           | Additional classes for select element              |
+| `...props`         | `React.SelectHTMLAttributes`        | -           | All standard select attributes                     |
 
 ## Common Patterns
 
 ### Controlled Select
+
 ```tsx
 const [value, setValue] = useState('');
-<Select options={options} value={value} onChange={setValue} />
+<Select options={options} value={value} onChange={setValue} />;
 ```
 
 ### With Default Value
+
 ```tsx
 const [value, setValue] = useState('pantry'); // default value
-<Select options={storageOptions} value={value} onChange={setValue} />
+<Select options={storageOptions} value={value} onChange={setValue} />;
 ```
 
 ### Dynamic Options
+
 ```tsx
 const [options, setOptions] = useState<SelectOption[]>([]);
 
 useEffect(() => {
-  fetchCategories().then(categories => {
-    setOptions(categories.map(cat => ({
-      label: cat.name,
-      value: cat.id
-    })));
+  fetchCategories().then((categories) => {
+    setOptions(
+      categories.map((cat) => ({
+        label: cat.name,
+        value: cat.id,
+      }))
+    );
   });
 }, []);
 
-<Select options={options} value={selected} onChange={setSelected} />
+<Select options={options} value={selected} onChange={setSelected} />;
 ```
 
 ### Disabled Options
+
 ```tsx
 const options = [
   { label: 'Active', value: 'active' },
   { label: 'Disabled', value: 'disabled', disabled: true },
 ];
 
-<Select options={options} value={value} onChange={setValue} />
+<Select options={options} value={value} onChange={setValue} />;
 ```

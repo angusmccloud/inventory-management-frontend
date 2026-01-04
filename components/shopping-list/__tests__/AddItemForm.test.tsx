@@ -133,9 +133,7 @@ describe('AddItemForm Component', () => {
   });
 
   it('disables buttons while submitting', async () => {
-    mockOnSubmit.mockImplementation(
-      () => new Promise((resolve) => setTimeout(resolve, 100))
-    );
+    mockOnSubmit.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
     render(<AddItemForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
@@ -177,4 +175,3 @@ describe('AddItemForm Component', () => {
     expect(notesInput.maxLength).toBe(500);
   });
 });
-

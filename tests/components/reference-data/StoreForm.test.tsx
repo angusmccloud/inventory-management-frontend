@@ -58,13 +58,12 @@ describe('StoreForm', () => {
 
   describe('Input Trimming', () => {
     it('should trim whitespace from name on submit', async () => {
-      
       render(<StoreForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/store name/i);
       const submitButton = screen.getByRole('button', { name: /add store/i });
 
       fireEvent.change(nameInput, { target: { value: '  Walmart  ' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -81,7 +80,7 @@ describe('StoreForm', () => {
 
     it('should trim whitespace from address on submit', async () => {
       mockCheckStoreName.mockResolvedValue({ available: true });
-      
+
       render(<StoreForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/store name/i);
       const addressInput = screen.getByLabelText(/address/i);
@@ -89,7 +88,7 @@ describe('StoreForm', () => {
 
       fireEvent.change(nameInput, { target: { value: 'Walmart' } });
       fireEvent.change(addressInput, { target: { value: '  123 Main St  ' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -106,13 +105,13 @@ describe('StoreForm', () => {
 
     it('should convert empty address to undefined', async () => {
       mockCheckStoreName.mockResolvedValue({ available: true });
-      
+
       render(<StoreForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/store name/i);
       const submitButton = screen.getByRole('button', { name: /add store/i });
 
       fireEvent.change(nameInput, { target: { value: 'Walmart' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -153,7 +152,7 @@ describe('StoreForm', () => {
   describe('Form Actions', () => {
     it('should call onCancel when Cancel button is clicked', () => {
       render(<StoreForm {...defaultProps} />);
-      
+
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
       fireEvent.click(cancelButton);
 
@@ -162,14 +161,14 @@ describe('StoreForm', () => {
 
     it('should disable submit button when name is empty', () => {
       render(<StoreForm {...defaultProps} />);
-      
+
       const submitButton = screen.getByRole('button', { name: /add store/i });
       expect(submitButton).toBeDisabled();
     });
 
     it('should disable submit button when name is unavailable', async () => {
       mockCheckStoreName.mockResolvedValue({ available: false });
-      
+
       render(<StoreForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/store name/i);
 
@@ -202,7 +201,7 @@ describe('StoreForm', () => {
       const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error'));
 
       render(<StoreForm {...defaultProps} onSubmit={mockOnSubmit} />);
-      
+
       const nameInput = screen.getByLabelText(/store name/i);
       fireEvent.change(nameInput, { target: { value: 'Walmart' } });
 

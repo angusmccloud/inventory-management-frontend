@@ -8,13 +8,13 @@ export interface PageLoadingProps {
    * @default "Loading..."
    */
   message?: string;
-  
+
   /**
    * Whether to use full viewport height
    * @default true
    */
   fullHeight?: boolean;
-  
+
   /**
    * Additional CSS classes
    */

@@ -75,7 +75,11 @@ export function SuggestionList({
 
   const handleReject = async (suggestionId: string, rejectionNotes?: string) => {
     try {
-      await rejectSuggestion(familyId, suggestionId, rejectionNotes ? { rejectionNotes } : undefined);
+      await rejectSuggestion(
+        familyId,
+        suggestionId,
+        rejectionNotes ? { rejectionNotes } : undefined
+      );
       await loadSuggestions(true);
       onSuggestionUpdate?.();
     } catch (err) {
@@ -102,7 +106,7 @@ export function SuggestionList({
   if (error && suggestions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <Text variant="body" className="text-error mb-4">
+        <Text variant="body" className="mb-4 text-error">
           {error}
         </Text>
         <Button variant="secondary" onClick={() => loadSuggestions(true)}>
@@ -127,7 +131,7 @@ export function SuggestionList({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="bg-error/10/20 border border-error rounded-md p-4">
+        <div className="bg-error/10/20 rounded-md border border-error p-4">
           <Text variant="body" className="text-error">
             {error}
           </Text>
@@ -148,11 +152,7 @@ export function SuggestionList({
 
       {hasMore && (
         <div className="flex justify-center pt-4">
-          <Button
-            variant="secondary"
-            onClick={() => loadSuggestions(false)}
-            disabled={isLoading}
-          >
+          <Button variant="secondary" onClick={() => loadSuggestions(false)} disabled={isLoading}>
             {isLoading ? 'Loading...' : 'Load More'}
           </Button>
         </div>

@@ -2,11 +2,7 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -56,21 +52,11 @@
     /* Path Mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/lib/*": [
-        "./lib/*"
-      ],
-      "@/app/*": [
-        "./app/*"
-      ],
-      "@/types/*": [
-        "./types/*"
-      ]
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/app/*": ["./app/*"],
+      "@/types/*": ["./types/*"]
     },
     "allowJs": true
   },
@@ -85,6 +71,10 @@
   "exclude": [
     "node_modules",
     ".next",
-    "out"
+    "out",
+    "tests",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

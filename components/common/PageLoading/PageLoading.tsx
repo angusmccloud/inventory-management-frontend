@@ -1,6 +1,6 @@
 /**
  * PageLoading Component
- * 
+ *
  * Consistent full-page loading state with spinner and message.
  * Ensures proper background color (bg-background) across all pages.
  */
@@ -16,13 +16,13 @@ export interface PageLoadingProps {
    * @default "Loading..."
    */
   message?: string;
-  
+
   /**
    * Whether to use full viewport height
    * @default true
    */
   fullHeight?: boolean;
-  
+
   /**
    * Additional CSS classes
    */
@@ -31,20 +31,20 @@ export interface PageLoadingProps {
 
 /**
  * PageLoading component for consistent loading states
- * 
+ *
  * Features:
  * - Consistent bg-background color
  * - Centered spinner with optional message
  * - Configurable height (full viewport or flexible)
- * 
+ *
  * @example
  * ```tsx
  * // Default usage
  * if (loading) return <PageLoading />;
- * 
+ *
  * // With custom message
  * if (loading) return <PageLoading message="Loading inventory..." />;
- * 
+ *
  * // Flexible height
  * if (loading) return <PageLoading message="Loading..." fullHeight={false} />;
  * ```

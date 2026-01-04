@@ -1,9 +1,9 @@
 /**
  * Usage Summary Widget
- * 
+ *
  * @description Displays usage statistics for family admin dashboard
  * Shows inventory counts, NFC URLs, storage locations, and access analytics
- * 
+ *
  * @see specs/014-inventory-dashboards/spec.md - Dashboard analytics
  */
 
@@ -79,7 +79,7 @@ export default function NFCStatsWidget() {
 
           if (urls.length > 0) {
             itemNFCCount++;
-            
+
             // Sum access counts for all URLs of this item
             const totalItemAccess = urls.reduce((sum, url) => sum + (url.accessCount || 0), 0);
             if (totalItemAccess > 0) {
@@ -98,7 +98,7 @@ export default function NFCStatsWidget() {
 
       // Calculate dashboard NFC count and access stats
       const listNFCCount = dashboards.filter((d) => d.isActive).length;
-      const dashboardAccessCounts: Array<{ name: string; accessCount: number; type: 'dashboard' }> = 
+      const dashboardAccessCounts: Array<{ name: string; accessCount: number; type: 'dashboard' }> =
         dashboards
           .filter((d) => d.accessCount && d.accessCount > 0)
           .map((d) => ({
@@ -129,10 +129,8 @@ export default function NFCStatsWidget() {
 
   if (isLoading) {
     return (
-      <div className="bg-surface shadow sm:rounded-lg p-6">
-        <h3 className="text-lg font-medium text-text-default mb-4">
-          Usage Summary
-        </h3>
+      <div className="bg-surface p-6 shadow sm:rounded-lg">
+        <h3 className="mb-4 text-lg font-medium text-text-default">Usage Summary</h3>
         <div className="flex justify-center py-8">
           <LoadingSpinner size="md" />
         </div>
@@ -142,11 +140,11 @@ export default function NFCStatsWidget() {
 
   if (error) {
     return (
-      <div className="bg-surface shadow sm:rounded-lg p-6">
-        <h3 className="text-lg font-medium text-text-default mb-4">
-          Usage Summary
-        </h3>
-        <Text variant="bodySmall" color="error">{error}</Text>
+      <div className="bg-surface p-6 shadow sm:rounded-lg">
+        <h3 className="mb-4 text-lg font-medium text-text-default">Usage Summary</h3>
+        <Text variant="bodySmall" color="error">
+          {error}
+        </Text>
       </div>
     );
   }
@@ -154,15 +152,13 @@ export default function NFCStatsWidget() {
   return (
     <div className="bg-surface shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
-        <h3 className="text-lg font-medium text-text-default mb-4">
-          Usage Summary
-        </h3>
-        
+        <h3 className="mb-4 text-lg font-medium text-text-default">Usage Summary</h3>
+
         {stats && (
           <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {/* Number of Items in Inventory */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">
                 Items in Inventory
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
@@ -171,8 +167,8 @@ export default function NFCStatsWidget() {
             </div>
 
             {/* Number of Storage Locations */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">
                 Storage Locations
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
@@ -181,44 +177,36 @@ export default function NFCStatsWidget() {
             </div>
 
             {/* Number of Items at Low Stock */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
-                Low Stock Items
-              </dt>
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">Low Stock Items</dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
                 {stats.lowStockItems}
               </dd>
             </div>
 
             {/* Number of List NFCs */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">
                 List NFCs (Dashboards)
               </dt>
-              <dd className="mt-1 text-3xl font-semibold text-text-default">
-                {stats.listNFCs}
-              </dd>
+              <dd className="mt-1 text-3xl font-semibold text-text-default">{stats.listNFCs}</dd>
             </div>
 
             {/* Number of Items with NFCs */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
-                Items with NFCs
-              </dt>
-              <dd className="mt-1 text-3xl font-semibold text-text-default">
-                {stats.itemNFCs}
-              </dd>
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">Items with NFCs</dt>
+              <dd className="mt-1 text-3xl font-semibold text-text-default">{stats.itemNFCs}</dd>
             </div>
 
             {/* Most Accessed Pages */}
-            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
-              <dt className="text-sm font-medium text-text-secondary truncate">
+            <div className="rounded-lg bg-surface-elevated px-4 py-5">
+              <dt className="truncate text-sm font-medium text-text-secondary">
                 Most Accessed Pages
               </dt>
               <dd className="mt-2 space-y-1">
                 {stats.mostAccessedPages.length > 0 ? (
                   stats.mostAccessedPages.map((page, index) => (
-                    <div key={index} className="flex justify-between items-center">
+                    <div key={index} className="flex items-center justify-between">
                       <Text variant="bodySmall" color="primary" className="truncate">
                         {index + 1}. {page.name}
                       </Text>
@@ -228,7 +216,9 @@ export default function NFCStatsWidget() {
                     </div>
                   ))
                 ) : (
-                  <Text variant="bodySmall" color="secondary">No access data</Text>
+                  <Text variant="bodySmall" color="secondary">
+                    No access data
+                  </Text>
                 )}
               </dd>
             </div>

@@ -1,6 +1,6 @@
 /**
  * Settings Page - User Preferences and Reference Data
- * 
+ *
  * Consolidated settings page with tabs for:
  * - Members: Family member and invitation management
  * - App Theme: Theme preferences
@@ -14,9 +14,25 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
-import { TabNavigation, PageLoading, Text, LoadingSpinner, Button, PageHeader, PageContainer } from '@/components/common';
+import {
+  TabNavigation,
+  PageLoading,
+  Text,
+  LoadingSpinner,
+  Button,
+  PageHeader,
+  PageContainer,
+} from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
-import type { UserContext, StorageLocation, Store, Member, Invitation, MemberRole, ListMembersResponse } from '@/types/entities';
+import type {
+  UserContext,
+  StorageLocation,
+  Store,
+  Member,
+  Invitation,
+  MemberRole,
+  ListMembersResponse,
+} from '@/types/entities';
 import StorageLocationList from '@/components/reference-data/StorageLocationList';
 import StorageLocationForm from '@/components/reference-data/StorageLocationForm';
 import StoreList from '@/components/reference-data/StoreList';
@@ -37,15 +53,11 @@ import {
   deleteStore,
 } from '@/lib/api/reference-data';
 import { listMembers, updateMember, removeMember } from '@/lib/api/members';
-import {
-  listInvitations,
-  createInvitation,
-  revokeInvitation,
-} from '@/lib/api/invitations';
+import { listInvitations, createInvitation, revokeInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
-type DialogState = 
+type DialogState =
   | { type: 'none' }
   | { type: 'create-location' }
   | { type: 'edit-location'; location: StorageLocation }
@@ -59,20 +71,20 @@ export default function SettingsPage() {
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<string>('members');
-  
+
   // Reference data state
   const [locations, setLocations] = useState<StorageLocation[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
   const [loadingData, setLoadingData] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Members state
   const [members, setMembers] = useState<Member[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [summary, setSummary] = useState<ListMembersResponse['summary'] | null>(null);
   const [memberToRemove, setMemberToRemove] = useState<Member | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
-  
+
   // Dialog state
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
 
@@ -98,7 +110,7 @@ export default function SettingsPage() {
   // Load reference data when user context is available
   const loadData = useCallback(async () => {
     if (!userContext?.familyId) return;
-    
+
     setLoadingData(true);
     setError(null);
     try {
@@ -128,12 +140,15 @@ export default function SettingsPage() {
   }, [userContext?.familyId, loadData]);
 
   // Storage Location handlers
-  const handleCreateLocation = async (data: { name: string; description?: string }, keepModalOpen: boolean = false) => {
+  const handleCreateLocation = async (
+    data: { name: string; description?: string },
+    keepModalOpen: boolean = false
+  ) => {
     if (!userContext?.familyId) return;
-    
+
     const newLocation = await createStorageLocation(userContext.familyId, data);
     setLocations((prev) => [...prev, newLocation]);
-    
+
     // Only close modal if not quick-adding
     if (!keepModalOpen) {
       setDialogState({ type: 'none' });
@@ -142,7 +157,7 @@ export default function SettingsPage() {
 
   const handleUpdateLocation = async (data: { name: string; description?: string }) => {
     if (!userContext?.familyId || dialogState.type !== 'edit-location') return;
-    
+
     const updated = await updateStorageLocation(
       userContext.familyId,
       dialogState.location.locationId,
@@ -156,7 +171,7 @@ export default function SettingsPage() {
 
   const handleDeleteLocation = async (locationId: string) => {
     if (!userContext?.familyId) return;
-    
+
     try {
       await deleteStorageLocation(userContext.familyId, locationId);
       setLocations((prev) => prev.filter((loc) => loc.locationId !== locationId));
@@ -168,12 +183,15 @@ export default function SettingsPage() {
   };
 
   // Store handlers
-  const handleCreateStore = async (data: { name: string; address?: string }, keepModalOpen: boolean = false) => {
+  const handleCreateStore = async (
+    data: { name: string; address?: string },
+    keepModalOpen: boolean = false
+  ) => {
     if (!userContext?.familyId) return;
-    
+
     const newStore = await createStore(userContext.familyId, data);
     setStores((prev) => [...prev, newStore]);
-    
+
     // Only close modal if not quick-adding
     if (!keepModalOpen) {
       setDialogState({ type: 'none' });
@@ -182,21 +200,18 @@ export default function SettingsPage() {
 
   const handleUpdateStore = async (data: { name: string; address?: string }) => {
     if (!userContext?.familyId || dialogState.type !== 'edit-store') return;
-    
-    const updated = await updateStore(
-      userContext.familyId,
-      dialogState.store.storeId,
-      { ...data, version: dialogState.store.version }
-    );
-    setStores((prev) =>
-      prev.map((store) => (store.storeId === updated.storeId ? updated : store))
-    );
+
+    const updated = await updateStore(userContext.familyId, dialogState.store.storeId, {
+      ...data,
+      version: dialogState.store.version,
+    });
+    setStores((prev) => prev.map((store) => (store.storeId === updated.storeId ? updated : store)));
     setDialogState({ type: 'none' });
   };
 
   const handleDeleteStore = async (storeId: string) => {
     if (!userContext?.familyId) return;
-    
+
     try {
       await deleteStore(userContext.familyId, storeId);
       setStores((prev) => prev.filter((store) => store.storeId !== storeId));
@@ -252,9 +267,7 @@ export default function SettingsPage() {
       });
 
       // Update local state
-      setMembers((prev) =>
-        prev.map((m) => (m.memberId === memberId ? updatedMember : m))
-      );
+      setMembers((prev) => prev.map((m) => (m.memberId === memberId ? updatedMember : m)));
 
       showSnackbar({ variant: 'success', text: `Role updated to ${newRole}` });
 
@@ -311,7 +324,7 @@ export default function SettingsPage() {
   const isLastAdmin = summary ? summary.admins === 1 && userContext.role === 'admin' : false;
 
   const tabs: Tab[] = [
-    { id: 'members', label: 'Members', badge: summary?.total },
+    { id: 'members', label: 'Family', badge: summary?.total },
     { id: 'theme', label: 'App Theme' },
     { id: 'stores', label: 'Manage Stores', badge: stores.length },
     { id: 'locations', label: 'Manage Storage Locations', badge: locations.length },
@@ -319,16 +332,18 @@ export default function SettingsPage() {
 
   return (
     <PageContainer>
-        {/* Header */}
-        <PageHeader
-          title="Settings"
-          description={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
-        />
+      {/* Header */}
+      <PageHeader
+        title="Settings"
+        description={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
+      />
 
       {/* Error Message */}
       {error && (
         <div className="mb-6 rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
@@ -356,12 +371,14 @@ export default function SettingsPage() {
               <>
                 <div className="mb-6 flex items-center justify-between">
                   <div>
-                    <Text variant="h3" className="text-text-default mb-1">
+                    <Text variant="h3" className="mb-1 text-text-default">
                       Family Members
                     </Text>
                     {summary && (
                       <Text variant="bodySmall" color="secondary">
-                        {summary.total} member{summary.total !== 1 ? 's' : ''} ({summary.admins} admin{summary.admins !== 1 ? 's' : ''}, {summary.suggesters} suggester{summary.suggesters !== 1 ? 's' : ''})
+                        {summary.total} member{summary.total !== 1 ? 's' : ''} ({summary.admins}{' '}
+                        admin{summary.admins !== 1 ? 's' : ''}, {summary.suggesters} suggester
+                        {summary.suggesters !== 1 ? 's' : ''})
                       </Text>
                     )}
                   </div>
@@ -377,7 +394,7 @@ export default function SettingsPage() {
 
                 {/* Active Members Section */}
                 {isAdmin && invitations.length > 0 && (
-                  <Text variant="h4" className="text-text-default mb-4">
+                  <Text variant="h4" className="mb-4 text-text-default">
                     Active Members
                   </Text>
                 )}
@@ -393,7 +410,7 @@ export default function SettingsPage() {
                 {/* Pending Invitations Section */}
                 {isAdmin && invitations.length > 0 && (
                   <>
-                    <Text variant="h4" className="text-text-default mt-8 mb-4">
+                    <Text variant="h4" className="mb-4 mt-8 text-text-default">
                       Pending Invitations
                     </Text>
                     <InvitationList invitations={invitations} onRevoke={handleRevokeInvitation} />
@@ -407,13 +424,11 @@ export default function SettingsPage() {
         {/* Theme Tab */}
         {activeTab === 'theme' && (
           <div className="rounded-lg border border-border bg-surface p-6">
-            <h2 className="text-lg font-semibold text-text-default mb-4">Appearance</h2>
-            
+            <h2 className="mb-4 text-lg font-semibold text-text-default">Appearance</h2>
+
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-text-default mb-2">
-                  Theme
-                </label>
+                <label className="mb-2 block text-sm font-medium text-text-default">Theme</label>
                 <Text variant="bodySmall" color="secondary" className="mb-3">
                   Choose how the interface looks. Auto mode follows your system preference.
                 </Text>
@@ -446,8 +461,8 @@ export default function SettingsPage() {
                   </div>
                 )}
                 {stores.length === 0 ? (
-                  <ReferenceDataEmptyState 
-                    type="stores" 
+                  <ReferenceDataEmptyState
+                    type="stores"
                     onAdd={() => setDialogState({ type: 'create-store' })}
                   />
                 ) : (
@@ -485,8 +500,8 @@ export default function SettingsPage() {
                   </div>
                 )}
                 {locations.length === 0 ? (
-                  <ReferenceDataEmptyState 
-                    type="locations" 
+                  <ReferenceDataEmptyState
+                    type="locations"
                     onAdd={() => setDialogState({ type: 'create-location' })}
                   />
                 ) : (
@@ -506,16 +521,27 @@ export default function SettingsPage() {
       {(dialogState.type === 'create-location' || dialogState.type === 'edit-location') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
+            <div
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 transition-opacity dark:bg-opacity-80"
+              onClick={() => setDialogState({ type: 'none' })}
+            />
             <div className="relative w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
               <h3 className="mb-4 text-lg font-semibold text-text-default">
-                {dialogState.type === 'create-location' ? 'Add Storage Location' : 'Edit Storage Location'}
+                {dialogState.type === 'create-location'
+                  ? 'Add Storage Location'
+                  : 'Edit Storage Location'}
               </h3>
               <StorageLocationForm
                 familyId={userContext.familyId}
-                onSubmit={dialogState.type === 'create-location' ? handleCreateLocation : handleUpdateLocation}
+                onSubmit={
+                  dialogState.type === 'create-location'
+                    ? handleCreateLocation
+                    : handleUpdateLocation
+                }
                 onCancel={() => setDialogState({ type: 'none' })}
-                initialData={dialogState.type === 'edit-location' ? dialogState.location : undefined}
+                initialData={
+                  dialogState.type === 'edit-location' ? dialogState.location : undefined
+                }
               />
             </div>
           </div>
@@ -526,14 +552,19 @@ export default function SettingsPage() {
       {(dialogState.type === 'create-store' || dialogState.type === 'edit-store') && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div className="fixed inset-0 bg-surface-elevated bg-opacity-75 dark:bg-opacity-80 transition-opacity" onClick={() => setDialogState({ type: 'none' })} />
+            <div
+              className="fixed inset-0 bg-surface-elevated bg-opacity-75 transition-opacity dark:bg-opacity-80"
+              onClick={() => setDialogState({ type: 'none' })}
+            />
             <div className="relative w-[90%] max-w-full transform overflow-hidden rounded-lg bg-surface px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
               <h3 className="mb-4 text-lg font-semibold text-text-default">
                 {dialogState.type === 'create-store' ? 'Add Store' : 'Edit Store'}
               </h3>
               <StoreForm
                 familyId={userContext.familyId}
-                onSubmit={dialogState.type === 'create-store' ? handleCreateStore : handleUpdateStore}
+                onSubmit={
+                  dialogState.type === 'create-store' ? handleCreateStore : handleUpdateStore
+                }
                 onCancel={() => setDialogState({ type: 'none' })}
                 initialData={dialogState.type === 'edit-store' ? dialogState.store : undefined}
               />
@@ -544,17 +575,17 @@ export default function SettingsPage() {
 
       {/* Invite Member Dialog */}
       {dialogState.type === 'invite-member' && (
-        <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setDialogState({ type: 'none' });
             }
           }}
         >
-          <div className="bg-surface rounded-lg shadow-xl border border-border w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-border bg-surface shadow-xl">
             <div className="p-6">
-              <Text variant="h2" className="text-text-default mb-6">
+              <Text variant="h2" className="mb-6 text-text-default">
                 Invite New Member
               </Text>
               <InviteMemberForm

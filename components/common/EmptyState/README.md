@@ -23,7 +23,7 @@ import { InboxIcon } from '@heroicons/react/24/outline';
   icon={<InboxIcon />}
   title="No Items Found"
   description="Start by adding your first inventory item."
-/>
+/>;
 ```
 
 ### With Primary Action
@@ -36,11 +36,11 @@ import { PlusIcon } from '@heroicons/react/24/outline';
   title="No Items Yet"
   description="Add your first item to get started with inventory management."
   action={{
-    label: "Add Item",
+    label: 'Add Item',
     onClick: () => setShowAddForm(true),
-    variant: "primary"
+    variant: 'primary',
   }}
-/>
+/>;
 ```
 
 ### With Primary and Secondary Actions
@@ -56,15 +56,15 @@ const router = useRouter();
   title="No Members Yet"
   description="Invite family members to collaborate on your inventory."
   action={{
-    label: "Invite Member",
+    label: 'Invite Member',
     onClick: handleInvite,
-    variant: "primary"
+    variant: 'primary',
   }}
   secondaryAction={{
-    label: "Learn More About Member Roles",
-    onClick: () => router.push('/docs/members')
+    label: 'Learn More About Member Roles',
+    onClick: () => router.push('/docs/members'),
   }}
-/>
+/>;
 ```
 
 ### Without Icon
@@ -74,28 +74,28 @@ const router = useRouter();
   title="Search Returned No Results"
   description="Try adjusting your search terms or filters."
   action={{
-    label: "Clear Filters",
+    label: 'Clear Filters',
     onClick: handleClearFilters,
-    variant: "secondary"
+    variant: 'secondary',
   }}
 />
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `ReactNode` | `undefined` | Icon element (usually Heroicons) |
-| `title` | `string` | Required | Primary message heading |
-| `description` | `string` | `undefined` | Supporting description text |
-| `action` | `object` | `undefined` | Primary action button config |
-| `action.label` | `string` | Required | Button text |
-| `action.onClick` | `() => void` | Required | Button click handler |
-| `action.variant` | `ButtonVariant` | `'primary'` | Button style variant |
-| `secondaryAction` | `object` | `undefined` | Secondary action config |
-| `secondaryAction.label` | `string` | Required | Link text |
-| `secondaryAction.onClick` | `() => void` | Required | Link click handler |
-| `className` | `string` | `undefined` | Additional CSS classes |
+| Prop                      | Type            | Default     | Description                      |
+| ------------------------- | --------------- | ----------- | -------------------------------- |
+| `icon`                    | `ReactNode`     | `undefined` | Icon element (usually Heroicons) |
+| `title`                   | `string`        | Required    | Primary message heading          |
+| `description`             | `string`        | `undefined` | Supporting description text      |
+| `action`                  | `object`        | `undefined` | Primary action button config     |
+| `action.label`            | `string`        | Required    | Button text                      |
+| `action.onClick`          | `() => void`    | Required    | Button click handler             |
+| `action.variant`          | `ButtonVariant` | `'primary'` | Button style variant             |
+| `secondaryAction`         | `object`        | `undefined` | Secondary action config          |
+| `secondaryAction.label`   | `string`        | Required    | Link text                        |
+| `secondaryAction.onClick` | `() => void`    | Required    | Link click handler               |
+| `className`               | `string`        | `undefined` | Additional CSS classes           |
 
 ## Icon Guidelines
 
@@ -112,10 +112,7 @@ const router = useRouter();
 Icons are automatically sized to `h-12 w-12`. You can override with custom className:
 
 ```tsx
-<EmptyState
-  icon={<InboxIcon className="h-16 w-16" />}
-  title="No Items"
-/>
+<EmptyState icon={<InboxIcon className="h-16 w-16" />} title="No Items" />
 ```
 
 ## Examples
@@ -128,13 +125,13 @@ Icons are automatically sized to `h-12 w-12`. You can override with custom class
   title="No Inventory Items"
   description="Start tracking your pantry, fridge, and storage items."
   action={{
-    label: "Add Your First Item",
+    label: 'Add Your First Item',
     onClick: () => setShowAddItemForm(true),
-    variant: "primary"
+    variant: 'primary',
   }}
   secondaryAction={{
-    label: "Import from Spreadsheet",
-    onClick: handleImport
+    label: 'Import from Spreadsheet',
+    onClick: handleImport,
   }}
 />
 ```
@@ -147,8 +144,8 @@ Icons are automatically sized to `h-12 w-12`. You can override with custom class
   title="Shopping List is Empty"
   description="Add items from your inventory or create custom items."
   action={{
-    label: "Add Item",
-    onClick: () => setShowAddForm(true)
+    label: 'Add Item',
+    onClick: () => setShowAddForm(true),
   }}
 />
 ```
@@ -161,9 +158,9 @@ Icons are automatically sized to `h-12 w-12`. You can override with custom class
   title="No Results Found"
   description={`No items match "${searchQuery}". Try a different search term.`}
   action={{
-    label: "Clear Search",
+    label: 'Clear Search',
     onClick: () => setSearchQuery(''),
-    variant: "secondary"
+    variant: 'secondary',
   }}
 />
 ```
@@ -175,9 +172,9 @@ Icons are automatically sized to `h-12 w-12`. You can override with custom class
   title="No Items Match Filters"
   description="Try adjusting your category or location filters."
   action={{
-    label: "Clear All Filters",
+    label: 'Clear All Filters',
     onClick: handleClearFilters,
-    variant: "secondary"
+    variant: 'secondary',
   }}
 />
 ```

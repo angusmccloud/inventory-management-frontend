@@ -1,7 +1,7 @@
 /**
  * Dashboard API Client
  * Feature: 014-inventory-dashboards
- * 
+ *
  * API client methods for dashboard operations (both authenticated admin and unauthenticated public).
  */
 
@@ -19,13 +19,11 @@ import {
 
 /**
  * Get dashboard with items for public viewing (unauthenticated)
- * 
+ *
  * @param dashboardId - Dashboard ID in format {familyId}_{randomString}
  * @returns Dashboard with items
  */
-export const getDashboardPublic = async (
-  dashboardId: string
-): Promise<DashboardWithItems> => {
+export const getDashboardPublic = async (dashboardId: string): Promise<DashboardWithItems> => {
   const response = await apiClient.get<DashboardWithItems>(`/d/${dashboardId}`, false);
 
   // Attach missing location names when possible. For public dashboards of type
@@ -46,7 +44,7 @@ export const getDashboardPublic = async (
 
 /**
  * Adjust item quantity from dashboard (unauthenticated)
- * 
+ *
  * @param dashboardId - Dashboard ID
  * @param itemId - Item UUID
  * @param adjustment - Quantity adjustment (positive or negative)
@@ -67,7 +65,7 @@ export const adjustDashboardItemQuantity = async (
 
 /**
  * Record dashboard access for analytics (unauthenticated)
- * 
+ *
  * @param dashboardId - Dashboard ID
  */
 export const recordDashboardAccess = async (dashboardId: string): Promise<void> => {
@@ -81,7 +79,7 @@ export const recordDashboardAccess = async (dashboardId: string): Promise<void> 
 
 /**
  * List all dashboards for a family (authenticated admin only)
- * 
+ *
  * @param includeInactive - Whether to include inactive dashboards
  * @returns Array of dashboard list items
  */
@@ -92,21 +90,21 @@ export const listDashboards = async (
   if (includeInactive) {
     params.append('includeInactive', 'true');
   }
-  
+
   const queryString = params.toString();
   const url = `/api/dashboards${queryString ? `?${queryString}` : ''}`;
-  
+
   const response = await apiClient.get<{ dashboards: DashboardListItem[] }>(
     url,
     true // Authenticated
   );
-  
+
   return response.dashboards;
 };
 
 /**
  * Get dashboard details (authenticated admin only)
- * 
+ *
  * @param dashboardId - Dashboard ID
  * @returns Dashboard details
  */
@@ -126,30 +124,34 @@ export const getDashboard = async (dashboardId: string): Promise<DashboardWithIt
       });
     } else {
       // Collect unique missing location IDs
-      const missing = Array.from(new Set(response.items
-        .filter((it) => it.locationId && !it.locationName)
-        .map((it) => it.locationId!)
-      ));
+      const missing: string[] = Array.from(
+        new Set(
+          response.items
+            .filter((it) => it.locationId && !it.locationName)
+            .map((it) => String(it.locationId))
+        )
+      );
 
       if (missing.length > 0) {
         try {
           // dashboardId format is {familyId}_{random}. Extract familyId.
-          const familyId = (response.dashboard?.dashboardId || dashboardId).split('_')[0];
+          const familyId = String((response.dashboard?.dashboardId || dashboardId).split('_')[0]);
 
           const locMap = new Map<string, string>();
-          await Promise.all(missing.map(async (locId) => {
+          for (const locId of missing) {
+            if (!locId) continue;
             try {
               const loc = await getStorageLocation(familyId, locId);
-              if (loc && (loc.name || loc.locationName)) {
+              if (loc && loc.name) {
                 // prefer `name` property (StorageLocation type)
-                locMap.set(locId, (loc.name as string) || (loc.locationName as string));
+                locMap.set(locId, loc.name as string);
               }
             } catch (err) {
               // ignore failures for individual lookups
-              // eslint-disable-next-line no-console
+
               console.warn('Failed to fetch storage location', locId, err);
             }
-          }));
+          }
 
           if (locMap.size > 0) {
             response.items.forEach((it) => {
@@ -160,7 +162,7 @@ export const getDashboard = async (dashboardId: string): Promise<DashboardWithIt
           }
         } catch (err) {
           // If enrichment fails, do not block the response
-          // eslint-disable-next-line no-console
+
           console.warn('Failed to enrich dashboard item location names', err);
         }
       }
@@ -172,36 +174,28 @@ export const getDashboard = async (dashboardId: string): Promise<DashboardWithIt
 
 /**
  * Create new dashboard (authenticated admin only)
- * 
+ *
  * @param data - Create dashboard input
  * @returns Created dashboard
  */
-export const createDashboard = async (
-  data: CreateDashboardInput
-): Promise<DashboardWithItems> => {
+export const createDashboard = async (data: CreateDashboardInput): Promise<DashboardWithItems> => {
   return apiClient.post<DashboardWithItems>('/api/dashboards', data, true);
 };
 
 /**
  * Update dashboard configuration (authenticated admin only)
- * 
+ *
  * @param data - Update dashboard input with dashboardId
  * @returns Updated dashboard
  */
-export const updateDashboard = async (
-  data: UpdateDashboardInput
-): Promise<DashboardWithItems> => {
+export const updateDashboard = async (data: UpdateDashboardInput): Promise<DashboardWithItems> => {
   const { dashboardId, ...updateData } = data;
-  return apiClient.patch<DashboardWithItems>(
-    `/api/dashboards/${dashboardId}`,
-    updateData,
-    true
-  );
+  return apiClient.patch<DashboardWithItems>(`/api/dashboards/${dashboardId}`, updateData, true);
 };
 
 /**
  * Delete dashboard (authenticated admin only)
- * 
+ *
  * @param dashboardId - Dashboard ID to delete
  */
 export const deleteDashboard = async (dashboardId: string): Promise<void> => {
@@ -211,13 +205,11 @@ export const deleteDashboard = async (dashboardId: string): Promise<void> => {
 /**
  * Rotate dashboard URL (authenticated admin only)
  * Creates new dashboard with same config, deactivates old one
- * 
+ *
  * @param dashboardId - Dashboard ID to rotate
  * @returns Rotation response with old and new dashboard IDs
  */
-export const rotateDashboard = async (
-  dashboardId: string
-): Promise<DashboardRotationResponse> => {
+export const rotateDashboard = async (dashboardId: string): Promise<DashboardRotationResponse> => {
   return apiClient.post<DashboardRotationResponse>(
     `/api/dashboards/${dashboardId}/rotate`,
     {},

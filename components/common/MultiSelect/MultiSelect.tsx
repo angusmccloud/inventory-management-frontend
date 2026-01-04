@@ -1,7 +1,7 @@
 /**
  * MultiSelect Component
  * Feature: 008-common-components
- * 
+ *
  * Multi-select dropdown component for selecting multiple options.
  */
 
@@ -44,7 +44,7 @@ export default function MultiSelect<T extends string = string>({
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-    
+
     return undefined;
   }, [isOpen]);
 
@@ -69,19 +69,16 @@ export default function MultiSelect<T extends string = string>({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-text-default mb-1"
-        >
+        <label htmlFor={id} className="mb-1 block text-sm font-medium text-text-default">
           {label}
         </label>
       )}
-      
+
       <div
-        className="min-h-[42px] w-full rounded-md border border-border bg-surface px-3 py-2 text-sm cursor-pointer flex items-center justify-between gap-2"
+        className="flex min-h-[42px] w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex-1 flex flex-wrap gap-1">
+        <div className="flex flex-1 flex-wrap gap-1">
           {value.length === 0 ? (
             <span className="text-text-subtle">{placeholder}</span>
           ) : (
@@ -105,22 +102,22 @@ export default function MultiSelect<T extends string = string>({
           )}
         </div>
         <ChevronDownIcon
-          className={`h-5 w-5 text-text-subtle transition-transform ${
-            isOpen ? 'transform rotate-180' : ''
+          className={`text-text-subtle h-5 w-5 transition-transform ${
+            isOpen ? 'rotate-180 transform' : ''
           }`}
         />
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full rounded-md border border-border bg-surface shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-border bg-surface shadow-lg">
           {options.map((option) => {
             const isSelected = value.includes(option.value);
             return (
               <div
                 key={String(option.value)}
-                className={`px-3 py-2 cursor-pointer hover:bg-surface-hover ${
+                className={`cursor-pointer px-3 py-2 hover:bg-surface-hover ${
                   isSelected ? 'bg-primary/10' : ''
-                } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                } ${option.disabled ? 'cursor-not-allowed opacity-50' : ''}`}
                 onClick={() => !option.disabled && toggleOption(option.value)}
               >
                 <div className="flex items-center gap-2">

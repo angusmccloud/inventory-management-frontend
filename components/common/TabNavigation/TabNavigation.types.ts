@@ -1,7 +1,7 @@
 /**
  * TabNavigation Component Type Definitions
  * Feature: 008-common-components
- * 
+ *
  * Tab-based content switching with keyboard navigation.
  */
 
@@ -15,23 +15,23 @@ export interface Tab {
    * Unique tab identifier
    */
   id: string;
-  
+
   /**
    * Tab label (visible text)
    */
   label: string;
-  
+
   /**
    * Tab icon (optional, shown before label)
    */
   icon?: React.ReactNode;
-  
+
   /**
    * Disable this tab
    * @default false
    */
   disabled?: boolean;
-  
+
   /**
    * Badge count (optional, shown after label)
    */
@@ -41,22 +41,22 @@ export interface Tab {
 /**
  * TabNavigation component props
  * Tab-based content switching with keyboard navigation.
- * 
+ *
  * @example
  * const tabs = [
  *   { id: 'inventory', label: 'Inventory', icon: <BoxIcon /> },
  *   { id: 'shopping', label: 'Shopping List', badge: 5 },
  *   { id: 'members', label: 'Members' },
  * ];
- * 
- * <TabNavigation 
+ *
+ * <TabNavigation
  *   tabs={tabs}
  *   activeTab={activeTab}
  *   onChange={setActiveTab}
  * />
- * 
+ *
  * @example
- * <TabNavigation 
+ * <TabNavigation
  *   tabs={settingsTabs}
  *   activeTab={currentSection}
  *   onChange={handleSectionChange}
@@ -68,23 +68,23 @@ export interface TabNavigationProps {
    * Array of tab definitions
    */
   tabs: Tab[];
-  
+
   /**
    * Currently active tab ID
    */
   activeTab: string;
-  
+
   /**
    * Tab change handler
    */
   onChange: (tabId: string) => void;
-  
+
   /**
    * Tab orientation
    * @default 'horizontal'
    */
   orientation?: 'horizontal' | 'vertical';
-  
+
   /**
    * Responsive display mode
    * Feature: 011-mobile-responsive-ui
@@ -94,7 +94,7 @@ export interface TabNavigationProps {
    * @default 'tabs'
    */
   responsiveMode?: 'tabs' | 'dropdown' | 'auto';
-  
+
   /**
    * Additional CSS classes
    */

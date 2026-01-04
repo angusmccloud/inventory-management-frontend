@@ -1,6 +1,6 @@
 /**
  * NFC URL Manager Component
- * 
+ *
  * @description Admin component for managing NFC URLs for inventory items
  * Features:
  * - Display list of active/inactive NFC URLs
@@ -8,7 +8,7 @@
  * - Copy URLs to clipboard
  * - Rotate (deactivate old, create new) URLs
  * - View access statistics
- * 
+ *
  * @see specs/006-api-integration/spec.md - User Story 3
  * @see specs/006-api-integration/contracts/nfc-url-management-api.yaml
  */
@@ -20,10 +20,11 @@ import { nfcUrlsApi } from '@/lib/api/nfcUrls';
 import type { NFCUrl } from '@/types/entities';
 import { Button } from '@/components/common/Button/Button';
 import { Text } from '@/components/common/Text/Text';
+import { Alert } from '@/components/common/Alert/Alert';
+import Dialog from '@/components/common/Dialog';
 
 interface NFCUrlManagerProps {
   itemId: string;
-  itemName: string;
 }
 
 interface NFCUrlManagerState {
@@ -37,11 +38,11 @@ interface NFCUrlManagerState {
 
 /**
  * Admin component for NFC URL management
- * 
+ *
  * Authorization: Admin role required (enforced by API)
  * WCAG 2.1 AA compliant
  */
-export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) {
+export default function NFCUrlManager({ itemId }: NFCUrlManagerProps) {
   const [state, setState] = useState<NFCUrlManagerState>({
     urls: [],
     isLoading: true,
@@ -52,6 +53,8 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
   });
 
   const [rotateConfirmUrlId, setRotateConfirmUrlId] = useState<string | null>(null);
+  const [deactivateConfirmUrlId, setDeactivateConfirmUrlId] = useState<string | null>(null);
+  const [deactivatingUrlId, setDeactivatingUrlId] = useState<string | null>(null);
 
   /**
    * Load NFC URLs for item
@@ -73,7 +76,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to load NFC URLs',
+        error: error instanceof Error ? error.message : 'Failed to load item link',
         isLoading: false,
       }));
     }
@@ -87,7 +90,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
     try {
       const newUrl = await nfcUrlsApi.create(itemId);
-      
+
       // Add new URL to list
       setState((prev) => ({
         ...prev,
@@ -97,7 +100,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to generate NFC URL',
+        error: error instanceof Error ? error.message : 'Failed to generate item link',
         isGenerating: false,
       }));
     }
@@ -110,9 +113,9 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
     try {
       const fullUrl = nfcUrlsApi.getFullUrl(urlId);
       await navigator.clipboard.writeText(fullUrl);
-      
+
       setState((prev) => ({ ...prev, copiedUrlId: urlId }));
-      
+
       // Clear copied state after 2 seconds
       setTimeout(() => {
         setState((prev) => ({ ...prev, copiedUrlId: null }));
@@ -120,7 +123,7 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: 'Failed to copy URL to clipboard',
+        error: 'Failed to copy link to clipboard',
       }));
     }
   };
@@ -134,23 +137,45 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
 
     try {
       const response = await nfcUrlsApi.rotate(itemId, urlId);
-      
+
       // Replace old URL with new one
       setState((prev) => ({
         ...prev,
-        urls: prev.urls.map((url) =>
-          url.urlId === urlId
-            ? { ...url, isActive: false }
-            : url
-        ).concat(response.newUrl),
+        urls: prev.urls
+          .map((url) => (url.urlId === urlId ? { ...url, isActive: false } : url))
+          .concat(response.newUrl),
         isRotating: null,
       }));
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to rotate NFC URL',
+        error: error instanceof Error ? error.message : 'Failed to update item link',
         isRotating: null,
       }));
+    }
+  };
+
+  /**
+   * Deactivate an existing item link without generating a replacement
+   */
+  const handleDeactivate = async (urlId: string) => {
+    setState((prev) => ({ ...prev, error: null }));
+    setDeactivatingUrlId(urlId);
+    setDeactivateConfirmUrlId(null);
+
+    try {
+      await nfcUrlsApi.deactivate(itemId, urlId);
+      setState((prev) => ({
+        ...prev,
+        urls: prev.urls.map((url) => (url.urlId === urlId ? { ...url, isActive: false } : url)),
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Failed to deactivate item link',
+      }));
+    } finally {
+      setDeactivatingUrlId(null);
     }
   };
 
@@ -167,209 +192,178 @@ export default function NFCUrlManager({ itemId, itemName }: NFCUrlManagerProps) 
     });
   };
 
+  const hasActiveLink = state.urls.some((url) => url.isActive);
+
   if (state.isLoading) {
     return (
-      <div className="bg-surface rounded-lg shadow p-6">
+      <div className="rounded-lg bg-surface p-6 shadow">
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          <span className="ml-3 text-text-secondary">Loading NFC URLs...</span>
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+          <span className="ml-3 text-text-secondary">Loading item link...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-surface rounded-lg shadow">
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-text-default">
-              NFC URLs
-            </h3>
-            <Text variant="bodySmall" color="secondary" className="mt-1">
-              Manage scannable URLs for {itemName}
-            </Text>
-          </div>
-          <Button
-            variant="primary"
-            size="md"
-            onClick={handleGenerate}
-            disabled={state.isGenerating}
-            loading={state.isGenerating}
-          >
-            {state.isGenerating ? 'Generating...' : '+ Generate NFC URL'}
-          </Button>
+    <div className="flex flex-col gap-6">
+      {state.error && (
+        <Alert severity="error" title="Something went wrong">
+          {state.error}
+        </Alert>
+      )}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="space-y-1">
+          <Text variant="body">
+            Create and manage a unique URL link for this item for use with an NFC or other
+            automation shortcuts.
+          </Text>
+          <Text variant="bodySmall" color="secondary">
+            {hasActiveLink
+              ? 'Share this link with your household or automations. Update or deactivate it at any time.'
+              : 'Generate a new link when you are ready to share access to this item.'}
+          </Text>
         </div>
+        <Button
+          variant="primary"
+          size="md"
+          onClick={handleGenerate}
+          disabled={state.isGenerating || hasActiveLink}
+          loading={state.isGenerating}
+          title={
+            hasActiveLink
+              ? 'Deactivate or update the existing link before generating a new one'
+              : undefined
+          }
+        >
+          {state.isGenerating ? 'Generating...' : 'Generate Link'}
+        </Button>
       </div>
 
-      {/* Error Message */}
-      {state.error && (
-        <div className="mx-6 mt-4 bg-error/10 border border-error/30 rounded-lg p-4" role="alert">
-          <div className="flex items-start">
-            <svg className="w-5 h-5 text-error mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <h4 className="text-sm font-medium text-error">Error</h4>
-              <Text variant="bodySmall" color="error" className="mt-1">{state.error}</Text>
-            </div>
-          </div>
+      {state.urls.length === 0 ? (
+        <div className="py-4 text-center">
+          <svg
+            className="mx-auto h-12 w-12 text-text-disabled"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-text-default">No item link yet</h3>
+          <Text variant="bodySmall" color="secondary" className="mt-1">
+            Generate your first item link to enable tap-to-adjust or automation functionality.
+          </Text>
         </div>
-      )}
-
-      {/* NFC URLs List */}
-      <div className="p-6">
-        {state.urls.length === 0 ? (
-          <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-text-default">No NFC URLs</h3>
-            <Text variant="bodySmall" color="secondary" className="mt-1">
-              Generate your first NFC URL to enable tap-to-adjust functionality
-            </Text>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {state.urls
-              .slice()
-              .sort((a, b) => {
-                // Active URLs first
-                if (a.isActive && !b.isActive) return -1;
-                if (!a.isActive && b.isActive) return 1;
-                // Then by creation date (newest first)
-                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-              })
-              .map((url) => (
-              <div
-                key={url.urlId}
-                className={`border rounded-lg p-4 ${
-                  url.isActive
-                    ? 'border-secondary/30 bg-secondary/10'
-                    : 'border-border bg-surface-elevated'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    {/* Status Badge */}
-                    <div className="flex items-center mb-2">
+      ) : (
+        <div className="space-y-6">
+          {state.urls
+            .slice()
+            .sort((a, b) => {
+              if (a.isActive && !b.isActive) return -1;
+              if (!a.isActive && b.isActive) return 1;
+              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            })
+            .map((url) => (
+              <div key={url.urlId} className="flex flex-col gap-4 py-2">
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="flex-1 space-y-3">
+                    <div className="flex items-center gap-2">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           url.isActive
-                            ? 'bg-secondary/20 text-secondary-contrast'
-                            : 'bg-surface-elevated text-text-default'
+                            ? 'bg-secondary text-secondary-contrast'
+                            : 'bg-border text-text-secondary'
                         }`}
                       >
                         {url.isActive ? 'Active' : 'Inactive'}
                       </span>
                       {url.accessCount > 0 && (
-                        <span className="ml-2 text-xs text-text-secondary">
+                        <span className="text-xs text-text-secondary">
                           {url.accessCount} {url.accessCount === 1 ? 'access' : 'accesses'}
                         </span>
                       )}
                     </div>
 
-                    {/* URL Display */}
-                    <div className="flex items-center mb-2">
-                      <code className="text-sm font-mono text-text-default bg-surface px-3 py-1 rounded border border-border truncate">
-                        {nfcUrlsApi.getFullUrl(url.urlId)}
-                      </code>
-                    </div>
+                    <code className="block truncate rounded-lg border border-border bg-surface-elevated px-3 py-2 font-mono text-sm text-text-default">
+                      {nfcUrlsApi.getFullUrl(url.urlId)}
+                    </code>
 
-                    {/* Metadata */}
-                    <div className="text-xs text-text-secondary space-y-1">
-                      <Text variant="caption" color="secondary">Created: {formatDate(url.createdAt)}</Text>
+                    <div className="space-y-1 text-xs text-text-secondary">
+                      <Text variant="caption" color="secondary">
+                        Created: {formatDate(url.createdAt)}
+                      </Text>
                       {url.lastAccessedAt && (
-                        <Text variant="caption" color="secondary">Last accessed: {formatDate(url.lastAccessedAt)}</Text>
+                        <Text variant="caption" color="secondary">
+                          Last accessed: {formatDate(url.lastAccessedAt)}
+                        </Text>
                       )}
                     </div>
                   </div>
-
-                  {/* Actions */}
-                  <div className="ml-4 flex flex-col gap-2">
-                    {/* Copy Button */}
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleCopy(url.urlId)}
-                    >
-                      {state.copiedUrlId === url.urlId ? (
-                        <span className="flex items-center text-secondary-contrast">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          Copied!
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          Copy
-                        </span>
-                      )}
-                    </Button>
-
-                    {/* Rotate Button */}
-                    {url.isActive && (
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        onClick={() => setRotateConfirmUrlId(url.urlId)}
-                        disabled={state.isRotating === url.urlId}
-                        loading={state.isRotating === url.urlId}
-                      >
-                        {state.isRotating === url.urlId ? (
-                          <span className="flex items-center">
-                            Rotating...
-                          </span>
-                        ) : (
-                          <span className="flex items-center">
-                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            Rotate
-                          </span>
-                        )}
+                  {url.isActive && (
+                    <div className="flex flex-col gap-2 md:w-56">
+                      <Button variant="secondary" size="sm" onClick={() => handleCopy(url.urlId)}>
+                        {state.copiedUrlId === url.urlId ? 'Link Copied!' : 'Copy Link'}
                       </Button>
-                    )}
-                  </div>
+
+                      <>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => setRotateConfirmUrlId(url.urlId)}
+                          disabled={state.isRotating === url.urlId}
+                          loading={state.isRotating === url.urlId}
+                        >
+                          {state.isRotating === url.urlId ? 'Updating...' : 'Update URL'}
+                        </Button>
+                        <Button
+                          variant="warning"
+                          size="sm"
+                          onClick={() => setDeactivateConfirmUrlId(url.urlId)}
+                          disabled={deactivatingUrlId === url.urlId}
+                          loading={deactivatingUrlId === url.urlId}
+                        >
+                          {deactivatingUrlId === url.urlId ? 'Deactivating...' : 'Deactivate'}
+                        </Button>
+                      </>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
-          </div>
-        )}
-      </div>
-
-      {/* Rotate Confirmation Dialog */}
-      {rotateConfirmUrlId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="rotate-dialog-title">
-          <div className="bg-surface rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 id="rotate-dialog-title" className="text-lg font-semibold text-text-default mb-2">
-              Rotate NFC URL?
-            </h3>
-            <Text variant="bodySmall" color="secondary" className="mb-4">
-              This will deactivate the current URL and generate a new one. The old URL will stop working immediately. You'll need to update any physical NFC tags with the new URL.
-            </Text>
-            <div className="flex gap-3 justify-end">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setRotateConfirmUrlId(null)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="warning"
-                size="sm"
-                onClick={() => handleRotate(rotateConfirmUrlId)}
-              >
-                Rotate URL
-              </Button>
-            </div>
-          </div>
         </div>
+      )}
+      {/* Update Link Confirmation Dialog */}
+      {rotateConfirmUrlId && (
+        <Dialog
+          isOpen={true}
+          type="primary"
+          title="Update Item Link"
+          message="Updating this item link will deactivate the current URL and generate a new one. The previous link stops working immediately, so update any NFC tags or automations with the new link right after this change."
+          confirmLabel="Update URL"
+          cancelLabel="Cancel"
+          onConfirm={() => handleRotate(rotateConfirmUrlId)}
+          onCancel={() => setRotateConfirmUrlId(null)}
+        />
+      )}
+
+      {/* Deactivate Link Confirmation Dialog */}
+      {deactivateConfirmUrlId && (
+        <Dialog
+          isOpen={true}
+          type="warning"
+          title="Deactivate Item Link"
+          message="Deactivating this link immediately disables it. Anyone who has the current URL will no longer be able to adjust this item until you generate a new link."
+          confirmLabel="Deactivate"
+          cancelLabel="Cancel"
+          onConfirm={() => handleDeactivate(deactivateConfirmUrlId)}
+          onCancel={() => setDeactivateConfirmUrlId(null)}
+        />
       )}
     </div>
   );

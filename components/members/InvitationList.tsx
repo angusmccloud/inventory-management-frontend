@@ -17,7 +17,7 @@ interface InvitationListProps {
 export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
   if (invitations.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <svg
           className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
           fill="none"
@@ -62,23 +62,20 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
         return (
           <div
             key={invitation.invitationId}
-            className="bg-surface rounded-lg shadow-sm border border-border p-4"
+            className="rounded-lg border border-border bg-surface p-4 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <h4 className="text-sm font-semibold text-text-default">
-                    {invitation.email}
-                  </h4>
+                <div className="mb-2 flex items-center gap-2">
+                  <h4 className="text-sm font-semibold text-text-default">{invitation.email}</h4>
                   <Badge variant={roleVariants[invitation.role]} size="sm">
                     {invitation.role}
                   </Badge>
                 </div>
 
-                <div className="flex items-center gap-2 mb-2">
+                <div className="mb-2 flex items-center gap-2">
                   <Badge variant={statusVariants[invitation.status]} size="sm">
-                    {invitation.status.charAt(0).toUpperCase() +
-                      invitation.status.slice(1)}
+                    {invitation.status.charAt(0).toUpperCase() + invitation.status.slice(1)}
                   </Badge>
 
                   {invitation.status === 'pending' && !isExpired && (
@@ -88,7 +85,7 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                   )}
 
                   {invitation.status === 'pending' && isExpired && (
-                    <span className="text-xs text-error font-medium">Expired</span>
+                    <span className="text-xs font-medium text-error">Expired</span>
                   )}
                 </div>
 
@@ -115,4 +112,3 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
     </div>
   );
 }
-

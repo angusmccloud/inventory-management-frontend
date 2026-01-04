@@ -1,6 +1,6 @@
 /**
  * Dashboard Home Page - Inventory HQ
- * 
+ *
  * Main dashboard with overview and family setup.
  */
 
@@ -33,7 +33,7 @@ export default function DashboardPage() {
     try {
       // First, fetch all families the user is a member of
       const families = await listUserFamilies();
-      
+
       if (!families || families.length === 0 || !families[0]) {
         // No families found, show create form
         setShowCreateFamily(true);
@@ -48,9 +48,9 @@ export default function DashboardPage() {
         setLoading(false);
         return;
       }
-      
+
       const userFamilyId = firstFamily.familyId;
-      
+
       // Update user context with familyId AND role from the family member relationship
       const userContext = getUserContext();
       if (userContext) {
@@ -83,7 +83,7 @@ export default function DashboardPage() {
   const handleFamilyCreated = (newFamily: Family): void => {
     setFamily(newFamily);
     setShowCreateFamily(false);
-    
+
     // Update user context with familyId and role (creator is always admin)
     const userContext = getUserContext();
     if (userContext) {
@@ -103,14 +103,15 @@ export default function DashboardPage() {
   if (showCreateFamily) {
     return (
       <PageContainer>
-        <div className="max-w-2xl mx-auto">
+        <div className="mx-auto max-w-2xl">
           <div className="bg-surface shadow sm:rounded-lg">
             <div className="px-4 py-5 sm:p-6">
               <h2 className="text-lg font-medium text-text-default">
                 Welcome! Let's create your family
               </h2>
               <Text variant="bodySmall" color="primary" className="mt-2">
-                To get started, create a family account. You'll be the administrator and can invite other family members later.
+                To get started, create a family account. You'll be the administrator and can invite
+                other family members later.
               </Text>
               <div className="mt-5">
                 <CreateFamilyForm onSuccess={handleFamilyCreated} />
@@ -132,79 +133,82 @@ export default function DashboardPage() {
 
         {error && (
           <div className="rounded-md bg-error/10 p-4">
-            <Text variant="bodySmall" color="error">{error}</Text>
+            <Text variant="bodySmall" color="error">
+              {error}
+            </Text>
           </div>
         )}
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <button
-          onClick={() => router.push('/inventory')}
-          className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-text-default">View Inventory</h3>
-            <Text variant="bodySmall" color="primary" className="mt-2">
-              See all your family's items
-            </Text>
-          </div>
-        </button>
-
-        <button
-          onClick={() => router.push('/inventory?action=add')}
-          className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-text-default">Add Item</h3>
-            <Text variant="bodySmall" color="primary" className="mt-2">
-              Add a new inventory item
-            </Text>
-          </div>
-        </button>
-
-        <button
-          onClick={() => router.push('/shopping-list')}
-          className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-text-default">View Shopping List</h3>
-            <Text variant="bodySmall" color="primary" className="mt-2">
-              Manage your shopping list
-            </Text>
-          </div>
-        </button>
-      </div>
-
-      {/* Stats */}
-      <div className="bg-surface shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg font-medium text-text-default">Family Information</h3>
-          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm font-medium text-text-default">Family Name</dt>
-              <dd className="mt-1 text-lg font-semibold text-text-default">
-                {family?.name}
-              </dd>
+          <button
+            onClick={() => router.push('/inventory')}
+            className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:hover:border-border"
+          >
+            <div className="text-center">
+              <h3 className="text-lg font-medium text-text-default">View Inventory</h3>
+              <Text variant="bodySmall" color="primary" className="mt-2">
+                See all your family's items
+              </Text>
             </div>
-            <div>
-              <dt className="text-sm font-medium text-text-default">Created</dt>
-              <dd className="mt-1 text-lg font-semibold text-text-default">
-                {family?.createdAt ? new Date(family.createdAt).toLocaleDateString() : 'N/A'}
-              </dd>
-            </div>
-          </dl>
+          </button>
 
-          {/* Family Members */}
-          {members.length > 0 && (
-            <div className="mt-6">
-              <dt className="text-sm font-medium text-text-default">Family Members</dt>
-              <dd className="mt-1 text-lg font-semibold text-text-default">
-                {members.map((m) => m.name).join(members.length > 2 ? ', ' : ' and ').replace(/, ([^,]*)$/, ', and $1')}
-              </dd>
+          <button
+            onClick={() => router.push('/inventory?action=add')}
+            className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:hover:border-border"
+          >
+            <div className="text-center">
+              <h3 className="text-lg font-medium text-text-default">Add Item</h3>
+              <Text variant="bodySmall" color="primary" className="mt-2">
+                Add a new inventory item
+              </Text>
             </div>
-          )}
+          </button>
+
+          <button
+            onClick={() => router.push('/shopping-list')}
+            className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:hover:border-border"
+          >
+            <div className="text-center">
+              <h3 className="text-lg font-medium text-text-default">View Shopping List</h3>
+              <Text variant="bodySmall" color="primary" className="mt-2">
+                Manage your shopping list
+              </Text>
+            </div>
+          </button>
         </div>
-      </div>
+
+        {/* Stats */}
+        <div className="bg-surface shadow sm:rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg font-medium text-text-default">Family Information</h3>
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <dt className="text-sm font-medium text-text-default">Family Name</dt>
+                <dd className="mt-1 text-lg font-semibold text-text-default">{family?.name}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-text-default">Created</dt>
+                <dd className="mt-1 text-lg font-semibold text-text-default">
+                  {family?.createdAt ? new Date(family.createdAt).toLocaleDateString() : 'N/A'}
+                </dd>
+              </div>
+            </dl>
+
+            {/* Family Members */}
+            {members.length > 0 && (
+              <div className="mt-6">
+                <dt className="text-sm font-medium text-text-default">Family Members</dt>
+                <dd className="mt-1 text-lg font-semibold text-text-default">
+                  {members
+                    .map((m) => m.name)
+                    .join(members.length > 2 ? ', ' : ' and ')
+                    .replace(/, ([^,]*)$/, ', and $1')}
+                </dd>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* NFC URL Statistics (Admin Only) */}
         {family && getUserContext()?.role === 'admin' && <NFCStatsWidget />}

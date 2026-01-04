@@ -36,6 +36,7 @@ import { Button } from '@/components/common';
 ## Variants
 
 ### Primary (Default)
+
 Main call-to-action with high contrast. Use for the primary action on a page.
 
 ```tsx
@@ -45,6 +46,7 @@ Main call-to-action with high contrast. Use for the primary action on a page.
 ```
 
 ### Secondary
+
 Alternative actions with lower visual weight. Use for secondary actions.
 
 ```tsx
@@ -54,6 +56,7 @@ Alternative actions with lower visual weight. Use for secondary actions.
 ```
 
 ### Danger
+
 Destructive actions like delete or remove. Use sparingly for irreversible actions.
 
 ```tsx
@@ -82,8 +85,8 @@ Shows a spinner and automatically disables the button during asynchronous operat
 ```tsx
 const [isSaving, setIsSaving] = useState(false);
 
-<Button 
-  variant="primary" 
+<Button
+  variant="primary"
   loading={isSaving}
   onClick={async () => {
     setIsSaving(true);
@@ -92,7 +95,7 @@ const [isSaving, setIsSaving] = useState(false);
   }}
 >
   Save Changes
-</Button>
+</Button>;
 ```
 
 ## Icons
@@ -113,7 +116,7 @@ import { PlusIcon, TrashIcon, ArrowRightIcon } from '@heroicons/react/24/outline
 </Button>
 
 // Both icons
-<Button 
+<Button
   leftIcon={<PlusIcon className="h-5 w-5" />}
   rightIcon={<ArrowRightIcon className="h-5 w-5" />}
 >
@@ -121,7 +124,7 @@ import { PlusIcon, TrashIcon, ArrowRightIcon } from '@heroicons/react/24/outline
 </Button>
 
 // Icon with loading state (spinner replaces left icon)
-<Button 
+<Button
   leftIcon={<PlusIcon className="h-5 w-5" />}
   loading={isAdding}
 >
@@ -130,6 +133,7 @@ import { PlusIcon, TrashIcon, ArrowRightIcon } from '@heroicons/react/24/outline
 ```
 
 **Icon Sizes**:
+
 - Small button: `h-4 w-4`
 - Medium button: `h-5 w-5`
 - Large button: `h-6 w-6`
@@ -164,9 +168,7 @@ Stretch button to fill container width (useful for mobile forms):
 Add additional Tailwind classes via `className`:
 
 ```tsx
-<Button className="mt-4 shadow-lg">
-  Custom Styled Button
-</Button>
+<Button className="mt-4 shadow-lg">Custom Styled Button</Button>
 ```
 
 ## Form Integration
@@ -252,7 +254,7 @@ Buttons automatically work as form submit buttons:
 ### Form Actions
 
 ```tsx
-<div className="flex gap-2 justify-end">
+<div className="flex justify-end gap-2">
   <Button variant="secondary" onClick={handleCancel}>
     Cancel
   </Button>
@@ -290,19 +292,19 @@ Buttons automatically work as form submit buttons:
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'primary' \| 'secondary' \| 'danger'` | `'primary'` | Button visual style |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size |
-| `loading` | `boolean` | `false` | Show loading spinner, disable interaction |
-| `fullWidth` | `boolean` | `false` | Stretch to container width |
-| `disabled` | `boolean` | `false` | Disable button |
-| `leftIcon` | `React.ReactNode` | `undefined` | Icon before text |
-| `rightIcon` | `React.ReactNode` | `undefined` | Icon after text |
-| `className` | `string` | `undefined` | Additional CSS classes |
-| `children` | `React.ReactNode` | Required | Button label text |
-| `onClick` | `() => void` | `undefined` | Click handler |
-| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | HTML button type |
+| Prop        | Type                                   | Default     | Description                               |
+| ----------- | -------------------------------------- | ----------- | ----------------------------------------- |
+| `variant`   | `'primary' \| 'secondary' \| 'danger'` | `'primary'` | Button visual style                       |
+| `size`      | `'sm' \| 'md' \| 'lg'`                 | `'md'`      | Button size                               |
+| `loading`   | `boolean`                              | `false`     | Show loading spinner, disable interaction |
+| `fullWidth` | `boolean`                              | `false`     | Stretch to container width                |
+| `disabled`  | `boolean`                              | `false`     | Disable button                            |
+| `leftIcon`  | `React.ReactNode`                      | `undefined` | Icon before text                          |
+| `rightIcon` | `React.ReactNode`                      | `undefined` | Icon after text                           |
+| `className` | `string`                               | `undefined` | Additional CSS classes                    |
+| `children`  | `React.ReactNode`                      | Required    | Button label text                         |
+| `onClick`   | `() => void`                           | `undefined` | Click handler                             |
+| `type`      | `'button' \| 'submit' \| 'reset'`      | `'button'`  | HTML button type                          |
 
 Plus all standard HTML button attributes (`disabled`, `type`, `form`, etc.)
 
@@ -322,5 +324,5 @@ const props: ButtonProps = {
 
 // Using with refs
 const buttonRef = useRef<HTMLButtonElement>(null);
-<Button ref={buttonRef}>Click me</Button>
+<Button ref={buttonRef}>Click me</Button>;
 ```

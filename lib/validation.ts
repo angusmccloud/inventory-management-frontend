@@ -1,6 +1,6 @@
 /**
  * Validation Utilities - Inventory HQ Frontend
- * 
+ *
  * Client-side validation helpers using Zod schemas.
  * Provides form validation and error formatting.
  */
@@ -27,10 +27,7 @@ export interface ValidationResult<T> {
 /**
  * Validate data against a Zod schema
  */
-export const validate = <T>(
-  schema: ZodSchema<T>,
-  data: unknown
-): ValidationResult<T> => {
+export const validate = <T>(schema: ZodSchema<T>, data: unknown): ValidationResult<T> => {
   try {
     const validated = schema.parse(data);
     return {
@@ -44,7 +41,7 @@ export const validate = <T>(
         errors: formatZodErrors(error),
       };
     }
-    
+
     return {
       success: false,
       errors: [{ field: 'unknown', message: 'Validation failed' }],
@@ -72,7 +69,7 @@ export const getFieldError = (
   if (!errors) {
     return undefined;
   }
-  
+
   const error = errors.find((err) => err.field === fieldName);
   return error?.message;
 };
@@ -196,15 +193,17 @@ export const loginFormSchema = z.object({
 });
 
 // Register form
-export const registerFormSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string(),
-  name: nameSchema,
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+export const registerFormSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    name: nameSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 /**
  * Type inference helpers

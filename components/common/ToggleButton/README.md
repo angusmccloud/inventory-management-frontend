@@ -23,13 +23,7 @@ import { ToggleButton } from '@/components/common';
 function MyComponent() {
   const [isEnabled, setIsEnabled] = useState(false);
 
-  return (
-    <ToggleButton
-      checked={isEnabled}
-      onChange={setIsEnabled}
-      label="Enable notifications"
-    />
-  );
+  return <ToggleButton checked={isEnabled} onChange={setIsEnabled} label="Enable notifications" />;
 }
 ```
 
@@ -111,7 +105,7 @@ function MyComponent() {
     name="terms_agreement"
     required
   />
-  
+
   <button type="submit">Submit</button>
 </form>
 ```
@@ -123,7 +117,7 @@ function MyComponent() {
   checked={accepted}
   onChange={setAccepted}
   label="Accept terms and conditions"
-  error={!accepted ? "You must accept the terms to continue" : undefined}
+  error={!accepted ? 'You must accept the terms to continue' : undefined}
   required
 />
 ```
@@ -142,22 +136,22 @@ function MyComponent() {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `checked` | `boolean` | **Required** | Whether the toggle is in the "on" state |
-| `onChange` | `(checked: boolean) => void` | **Required** | Change handler - receives new checked state |
-| `label` | `string` | **Required** | Label text for accessibility |
-| `visibleLabel` | `string` | `undefined` | Optional visible label (if different from aria-label) |
-| `description` | `string` | `undefined` | Optional description text shown below label |
-| `variant` | `ToggleButtonVariant` | `'primary'` | Visual variant: `primary`, `secondary`, `tertiary`, `success`, `warning`, `error` |
-| `size` | `ToggleButtonSize` | `'md'` | Size: `sm`, `md`, `lg` |
-| `disabled` | `boolean` | `false` | Whether the toggle is disabled |
-| `required` | `boolean` | `false` | Whether this field is required |
-| `error` | `string` | `undefined` | Error message (shows red styling) |
-| `helpText` | `string` | `undefined` | Help text shown below the toggle |
-| `name` | `string` | `undefined` | HTML name attribute for forms |
-| `className` | `string` | `''` | Additional CSS classes |
-| `testId` | `string` | `undefined` | Test ID for testing |
+| Prop           | Type                         | Default      | Description                                                                       |
+| -------------- | ---------------------------- | ------------ | --------------------------------------------------------------------------------- |
+| `checked`      | `boolean`                    | **Required** | Whether the toggle is in the "on" state                                           |
+| `onChange`     | `(checked: boolean) => void` | **Required** | Change handler - receives new checked state                                       |
+| `label`        | `string`                     | **Required** | Label text for accessibility                                                      |
+| `visibleLabel` | `string`                     | `undefined`  | Optional visible label (if different from aria-label)                             |
+| `description`  | `string`                     | `undefined`  | Optional description text shown below label                                       |
+| `variant`      | `ToggleButtonVariant`        | `'primary'`  | Visual variant: `primary`, `secondary`, `tertiary`, `success`, `warning`, `error` |
+| `size`         | `ToggleButtonSize`           | `'md'`       | Size: `sm`, `md`, `lg`                                                            |
+| `disabled`     | `boolean`                    | `false`      | Whether the toggle is disabled                                                    |
+| `required`     | `boolean`                    | `false`      | Whether this field is required                                                    |
+| `error`        | `string`                     | `undefined`  | Error message (shows red styling)                                                 |
+| `helpText`     | `string`                     | `undefined`  | Help text shown below the toggle                                                  |
+| `name`         | `string`                     | `undefined`  | HTML name attribute for forms                                                     |
+| `className`    | `string`                     | `''`         | Additional CSS classes                                                            |
+| `testId`       | `string`                     | `undefined`  | Test ID for testing                                                               |
 
 ## Accessibility
 

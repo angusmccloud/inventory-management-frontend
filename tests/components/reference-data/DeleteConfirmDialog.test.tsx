@@ -47,7 +47,7 @@ describe('DeleteConfirmDialog', () => {
   describe('Actions', () => {
     it('should call onConfirm when Delete button is clicked', () => {
       render(<DeleteConfirmDialog {...defaultProps} />);
-      
+
       const deleteButton = screen.getByRole('button', { name: /^delete$/i });
       fireEvent.click(deleteButton);
 
@@ -56,7 +56,7 @@ describe('DeleteConfirmDialog', () => {
 
     it('should call onClose when Cancel button is clicked', () => {
       render(<DeleteConfirmDialog {...defaultProps} />);
-      
+
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
       fireEvent.click(cancelButton);
 
@@ -65,7 +65,7 @@ describe('DeleteConfirmDialog', () => {
 
     it('should disable buttons when isDeleting is true', () => {
       render(<DeleteConfirmDialog {...defaultProps} isDeleting={true} />);
-      
+
       const deleteButton = screen.getByRole('button', { name: /deleting/i });
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
 

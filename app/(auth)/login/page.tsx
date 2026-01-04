@@ -1,6 +1,6 @@
 /**
  * Login Page - Inventory HQ
- * 
+ *
  * Provides authentication interface for users to sign in or register.
  * Uses Cognito for authentication via API endpoints.
  */
@@ -21,6 +21,8 @@ function LoginForm() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState<boolean>(true);
+  const [agreedToTerms, setAgreedToTerms] = useState<boolean>(true);
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -50,9 +52,9 @@ function LoginForm() {
           setLoading(false);
           return;
         }
-        
+
         const response = await register(email, password, name);
-        
+
         if (response.success && response.requiresVerification) {
           setSuccess(response.message || 'Check your email for a verification code!');
           setViewMode('verify');
@@ -67,7 +69,7 @@ function LoginForm() {
       } else if (viewMode === 'verify') {
         // Handle email verification
         const response = await confirmEmail(email, verificationCode);
-        
+
         if (response.success) {
           setSuccess(response.message || 'Email verified! You can now log in.');
           setViewMode('login');
@@ -78,7 +80,7 @@ function LoginForm() {
       } else if (viewMode === 'forgot-password') {
         // Handle forgot password - send reset code
         const response = await forgotPassword(email);
-        
+
         if (response.success) {
           setSuccess(response.message || 'Password reset code sent to your email!');
           setViewMode('reset-password');
@@ -92,15 +94,15 @@ function LoginForm() {
           setLoading(false);
           return;
         }
-        
+
         if (newPassword.length < 8) {
           setError('Password must be at least 8 characters');
           setLoading(false);
           return;
         }
-        
+
         const response = await confirmForgotPassword(email, verificationCode, newPassword);
-        
+
         if (response.success) {
           setSuccess(response.message || 'Password reset successful! You can now log in.');
           setViewMode('login');
@@ -113,7 +115,7 @@ function LoginForm() {
       } else {
         // Handle login
         const response = await login(email, password);
-        
+
         if (response.success) {
           router.push('/dashboard');
         } else if (response.requiresVerification) {
@@ -198,8 +200,12 @@ function LoginForm() {
               // Verification code input
               <>
                 <div className="mb-4 text-sm text-text-secondary">
-                  <Text variant="bodySmall" color="secondary">We sent a verification code to:</Text>
-                  <Text variant="bodySmall" weight="semibold">{email}</Text>
+                  <Text variant="bodySmall" color="secondary">
+                    We sent a verification code to:
+                  </Text>
+                  <Text variant="bodySmall" weight="semibold">
+                    {email}
+                  </Text>
                 </div>
                 <Input
                   id="code"
@@ -296,26 +302,61 @@ function LoginForm() {
                   minLength={8}
                   helpText={viewMode === 'register' ? 'Must be at least 8 characters' : undefined}
                 />
+                {viewMode === 'register' && (
+                  <div className="mt-2 space-y-2 text-sm">
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={agreedToPrivacy}
+                        onChange={(e) => setAgreedToPrivacy(e.target.checked)}
+                        className="mt-1 h-4 w-4 rounded border-border"
+                      />
+                      <span className="text-text-primary">
+                        I agree to the{' '}
+                        <a
+                          href="/privacy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline"
+                        >
+                          Privacy Policy
+                        </a>
+                      </span>
+                    </label>
+
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={agreedToTerms}
+                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                        className="mt-1 h-4 w-4 rounded border-border"
+                      />
+                      <span className="text-text-primary">
+                        I agree to the{' '}
+                        <a
+                          href="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline"
+                        >
+                          Terms of Use
+                        </a>
+                      </span>
+                    </label>
+                  </div>
+                )}
               </>
             )}
           </div>
 
-          {success && (
-            <Alert severity="success">
-              {success}
-            </Alert>
-          )}
+          {success && <Alert severity="success">{success}</Alert>}
 
-          {error && (
-            <Alert severity="error">
-              {error}
-            </Alert>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
 
           <div className="flex flex-col items-center space-y-4">
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || (viewMode === 'register' && !(agreedToPrivacy && agreedToTerms))}
               loading={loading}
               variant="primary"
               fullWidth
@@ -334,23 +375,17 @@ function LoginForm() {
 
           {viewMode === 'login' && (
             <div className="flex flex-col items-center">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={switchToForgotPassword}
-              >
+              <Button variant="secondary" size="sm" onClick={switchToForgotPassword}>
                 Forgot your password?
               </Button>
             </div>
           )}
 
           <div className="flex flex-col items-center">
-            {viewMode === 'verify' || viewMode === 'forgot-password' || viewMode === 'reset-password' ? (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={switchToLogin}
-              >
+            {viewMode === 'verify' ||
+            viewMode === 'forgot-password' ||
+            viewMode === 'reset-password' ? (
+              <Button variant="secondary" size="sm" onClick={switchToLogin}>
                 Back to sign in
               </Button>
             ) : (

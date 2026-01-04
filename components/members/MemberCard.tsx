@@ -35,19 +35,19 @@ export function MemberCard({
   };
 
   return (
-    <div className="bg-surface rounded-lg shadow-sm border border-border p-4 hover:shadow-md transition-shadow">
+    <div className="rounded-lg border border-border bg-surface p-4 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <h3 className="text-lg font-semibold text-text-default">
               {member.name}
-              {isCurrentUser && (
-                <span className="ml-2 text-sm text-text-secondary">(You)</span>
-              )}
+              {isCurrentUser && <span className="ml-2 text-sm text-text-secondary">(You)</span>}
             </h3>
           </div>
 
-          <Text variant="bodySmall" color="secondary" className="mb-3">{member.email}</Text>
+          <Text variant="bodySmall" color="secondary" className="mb-3">
+            {member.email}
+          </Text>
 
           <div className="flex items-center gap-2">
             <Badge variant={roleVariants[member.role]} size="sm">
@@ -65,16 +65,13 @@ export function MemberCard({
         </div>
 
         {canManage && member.status === 'active' && (
-          <div className="flex flex-col gap-2 ml-4">
+          <div className="ml-4 flex flex-col gap-2">
             {onUpdateRole && (
               <Button
                 variant="secondary"
                 size="sm"
                 onClick={() =>
-                  onUpdateRole(
-                    member.memberId,
-                    member.role === 'admin' ? 'suggester' : 'admin'
-                  )
+                  onUpdateRole(member.memberId, member.role === 'admin' ? 'suggester' : 'admin')
                 }
                 disabled={isCurrentUser}
                 title={isCurrentUser ? 'Cannot change your own role' : 'Toggle role'}
@@ -100,4 +97,3 @@ export function MemberCard({
     </div>
   );
 }
-

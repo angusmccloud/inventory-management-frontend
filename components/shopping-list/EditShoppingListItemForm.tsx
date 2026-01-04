@@ -1,7 +1,7 @@
 /**
  * EditShoppingListItemForm Component
  * Feature: 002-shopping-lists
- * 
+ *
  * Form to edit shopping list item details.
  */
 
@@ -20,11 +20,11 @@ interface EditShoppingListItemFormProps {
   onCancel: () => void;
 }
 
-export default function EditShoppingListItemForm({ 
+export default function EditShoppingListItemForm({
   familyId,
-  item, 
-  onSubmit, 
-  onCancel 
+  item,
+  onSubmit,
+  onCancel,
 }: EditShoppingListItemFormProps) {
   const [name, setName] = useState(item.name);
   const [quantity, setQuantity] = useState<number | ''>(item.quantity || '');
@@ -158,7 +158,7 @@ export default function EditShoppingListItemForm({
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
-            className="mt-1 block w-full rounded-md border-0 px-3 py-2 text-text-default bg-surface ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full rounded-md border-0 bg-surface px-3 py-2 text-text-default ring-1 ring-inset ring-border placeholder:text-text-disabled focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
             placeholder="Add any notes..."
             maxLength={500}
             disabled={isSubmitting}
@@ -168,30 +168,21 @@ export default function EditShoppingListItemForm({
 
       {error && (
         <div className="rounded-md bg-error/10 p-4">
-          <Text variant="bodySmall" color="error">{error}</Text>
+          <Text variant="bodySmall" color="error">
+            {error}
+          </Text>
         </div>
       )}
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={isSubmitting}
-          className="flex-1"
-        >
+        <Button type="submit" variant="primary" disabled={isSubmitting} className="flex-1">
           {isSubmitting ? 'Saving...' : 'Save Changes'}
         </Button>
-        <Button
-          type="button"
-          variant="warning"
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
+        <Button type="button" variant="warning" onClick={onCancel} disabled={isSubmitting}>
           Cancel
         </Button>
       </div>
     </form>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Checkbox Component
- * 
+ *
  * Accessible checkbox with consistent styling.
  * Supports theming and follows WCAG 2.1 AA standards.
  */
@@ -30,8 +30,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     <div className={className}>
       <label
         htmlFor={id}
-        className={`flex items-start cursor-pointer ${
-          disabled ? 'opacity-50 cursor-not-allowed' : ''
+        className={`flex cursor-pointer items-start ${
+          disabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
         <input
@@ -46,33 +46,17 @@ export const Checkbox: React.FC<CheckboxProps> = ({
               ? `${id}-${error ? 'error' : description ? 'desc' : 'help'}`
               : undefined
           }
-          className={`
-            mt-0.5 h-4 w-4 flex-shrink-0
-            rounded border-2
-            ${hasError ? 'border-error' : 'border-border'}
-            ${
-              checked
-                ? 'bg-primary border-primary text-primary-contrast'
-                : 'bg-surface border-border'
-            }
-            focus:ring-2 focus:ring-primary focus:ring-offset-2
-            disabled:cursor-not-allowed disabled:opacity-50
-            transition-colors hover:border-primary-hover
-          `}
+          className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded border-2 ${hasError ? 'border-error' : 'border-border'} ${
+            checked ? 'border-primary bg-primary text-primary-contrast' : 'border-border bg-surface'
+          } transition-colors hover:border-primary-hover focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
         />
         <div className="ml-3 flex-1">
           <span className="text-sm text-text-primary">
             {label}
-            {required && <span className="text-error ml-1">*</span>}
+            {required && <span className="ml-1 text-error">*</span>}
           </span>
           {description && (
-            <Text
-              as="p"
-              variant="caption"
-              color="secondary"
-              id={`${id}-desc`}
-              className="mt-0.5"
-            >
+            <Text as="p" variant="caption" color="secondary" id={`${id}-desc`} className="mt-0.5">
               {description}
             </Text>
           )}
@@ -81,13 +65,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 
       {/* Help Text */}
       {helpText && !error && (
-        <Text
-          as="p"
-          variant="caption"
-          color="secondary"
-          id={`${id}-help`}
-          className="mt-1.5 ml-7"
-        >
+        <Text as="p" variant="caption" color="secondary" id={`${id}-help`} className="ml-7 mt-1.5">
           {helpText}
         </Text>
       )}
@@ -100,7 +78,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           color="error"
           id={`${id}-error`}
           role="alert"
-          className="mt-1.5 ml-7"
+          className="ml-7 mt-1.5"
         >
           {error}
         </Text>

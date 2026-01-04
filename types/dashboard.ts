@@ -1,7 +1,7 @@
 /**
  * Dashboard Types - Frontend
  * Feature: 014-inventory-dashboards
- * 
+ *
  * TypeScript types for Dashboard entities on the frontend.
  * These types may differ from backend types as they represent client-facing data.
  */

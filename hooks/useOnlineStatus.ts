@@ -1,15 +1,15 @@
 /**
  * useOnlineStatus Hook
- * 
+ *
  * @description Custom React hook to detect online/offline status
  * Uses browser navigator.onLine API and listens to online/offline events
- * 
+ *
  * @returns {boolean} isOnline - Current online status
- * 
+ *
  * @example
  * ```tsx
  * const isOnline = useOnlineStatus();
- * 
+ *
  * return (
  *   <button disabled={!isOnline}>
  *     {isOnline ? 'Save' : 'Offline'}

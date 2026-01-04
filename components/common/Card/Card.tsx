@@ -1,7 +1,7 @@
 /**
  * Card Component
  * Feature: 008-common-components
- * 
+ *
  * Container component for grouping related content with consistent styling,
  * elevation, padding, and optional interactive behavior.
  */
@@ -32,7 +32,7 @@ const paddingStyles: Record<CardPadding, string> = {
 
 /**
  * Card component for consistent content containers
- * 
+ *
  * @example
  * ```tsx
  * // Basic card
@@ -40,15 +40,15 @@ const paddingStyles: Record<CardPadding, string> = {
  *   <h3>Card Title</h3>
  *   <p>Card content goes here...</p>
  * </Card>
- * 
+ *
  * // Interactive/clickable card
- * <Card 
- *   interactive 
+ * <Card
+ *   interactive
  *   onClick={() => router.push(`/items/${item.id}`)}
  * >
  *   <ItemSummary item={item} />
  * </Card>
- * 
+ *
  * // Card with custom padding
  * <Card padding="none">
  *   <div className="p-4 border-b">Header</div>
@@ -58,14 +58,7 @@ const paddingStyles: Record<CardPadding, string> = {
  */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   (
-    {
-      children,
-      elevation = 'low',
-      padding = 'md',
-      interactive = false,
-      className,
-      ...props
-    },
+    { children, elevation = 'low', padding = 'md', interactive = false, className, ...props },
     ref
   ) => {
     return (
@@ -73,7 +66,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           // Base styles
-          'bg-surface rounded-lg border border-border',
+          'rounded-lg border border-border bg-surface',
           'transition-shadow duration-200',
           // Elevation/shadow
           elevationStyles[elevation],

@@ -1,7 +1,7 @@
 /**
  * ToggleButton Component
  * Feature: 008-common-components
- * 
+ *
  * Accessible toggle button with consistent theming.
  * Supports all theme variants and follows WCAG 2.1 AA standards.
  */
@@ -11,7 +11,11 @@
 import * as React from 'react';
 import { cn } from '@/lib/cn';
 import { Text } from '@/components/common/Text/Text';
-import type { ToggleButtonProps, ToggleButtonVariant, ToggleButtonSize } from './ToggleButton.types';
+import type {
+  ToggleButtonProps,
+  ToggleButtonVariant,
+  ToggleButtonSize,
+} from './ToggleButton.types';
 
 /**
  * Variant-specific styles for the toggle background when active
@@ -46,7 +50,7 @@ const sizeStyles: Record<ToggleButtonSize, { container: string; thumb: string }>
 
 /**
  * ToggleButton Component
- * 
+ *
  * A styled toggle switch that follows design system theming.
  * Accessible with proper ARIA attributes and keyboard support.
  */
@@ -92,7 +96,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
             htmlFor={id}
             className={cn(
               'text-sm font-medium text-text-primary',
-              disabled && 'opacity-50 cursor-not-allowed'
+              disabled && 'cursor-not-allowed opacity-50'
             )}
           >
             {displayLabel}
@@ -119,20 +123,17 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
             // Base styles
             'relative inline-flex flex-shrink-0 rounded-full transition-colors duration-200 ease-in-out',
             'focus:outline-none focus:ring-2 focus:ring-offset-2',
-            
+
             // Size
             sizeStyles[size].container,
-            
+
             // Active/Inactive state
             checked
-              ? cn(
-                  variantStyles[variant],
-                  'focus:ring-' + variant.toLowerCase()
-                )
+              ? cn(variantStyles[variant], 'focus:ring-' + variant.toLowerCase())
               : 'bg-border focus:ring-border',
-            
+
             // Disabled state
-            disabled && 'opacity-50 cursor-not-allowed',
+            disabled && 'cursor-not-allowed opacity-50',
             !disabled && 'cursor-pointer'
           )}
           style={{
@@ -164,17 +165,17 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
             className={cn(
               'pointer-events-none inline-block rounded-full bg-white shadow-lg',
               'transform transition duration-200 ease-in-out',
-              
+
               // Size
               sizeStyles[size].thumb,
-              
+
               // Position based on checked state
               checked
                 ? size === 'sm'
                   ? 'translate-x-4'
                   : size === 'md'
-                  ? 'translate-x-5'
-                  : 'translate-x-7'
+                    ? 'translate-x-5'
+                    : 'translate-x-7'
                 : 'translate-x-0.5'
             )}
             style={{
@@ -187,34 +188,21 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 
       {/* Description */}
       {description && (
-        <Text
-          id={`${id}-desc`}
-          variant="bodySmall"
-          className="text-text-secondary mt-1"
-        >
+        <Text id={`${id}-desc`} variant="bodySmall" className="mt-1 text-text-secondary">
           {description}
         </Text>
       )}
 
       {/* Help Text */}
       {helpText && !hasError && (
-        <Text
-          id={`${id}-help`}
-          variant="bodySmall"
-          className="text-text-secondary mt-1"
-        >
+        <Text id={`${id}-help`} variant="bodySmall" className="mt-1 text-text-secondary">
           {helpText}
         </Text>
       )}
 
       {/* Error Message */}
       {hasError && (
-        <Text
-          id={`${id}-error`}
-          variant="bodySmall"
-          className="text-error mt-1"
-          role="alert"
-        >
+        <Text id={`${id}-error`} variant="bodySmall" className="mt-1 text-error" role="alert">
           {error}
         </Text>
       )}

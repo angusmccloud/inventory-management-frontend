@@ -11,12 +11,7 @@ interface SuggestionCardProps {
   onReject?: (suggestionId: string, rejectionNotes?: string) => Promise<void>;
 }
 
-export function SuggestionCard({
-  suggestion,
-  isAdmin,
-  onApprove,
-  onReject,
-}: SuggestionCardProps) {
+export function SuggestionCard({ suggestion, isAdmin, onApprove, onReject }: SuggestionCardProps) {
   const [isApproving, setIsApproving] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -75,12 +70,12 @@ export function SuggestionCard({
 
   return (
     <>
-      <Card className="hover:shadow-md transition-shadow">
+      <Card className="transition-shadow hover:shadow-md">
         <div className="space-y-4">
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="mb-1 flex items-center gap-2">
                 {getStatusBadge()}
                 <Badge variant="info">
                   {suggestion.type === 'add_to_shopping' ? 'Add to Shopping' : 'New Item'}
@@ -126,8 +121,8 @@ export function SuggestionCard({
             )}
 
             {suggestion.notes && (
-              <div className="pt-2 border-t border-border">
-                <Text variant="caption" className="text-text-secondary mb-1">
+              <div className="border-t border-border pt-2">
+                <Text variant="caption" className="mb-1 text-text-secondary">
                   Notes:
                 </Text>
                 <Text variant="body" className="text-text-default">
@@ -137,13 +132,13 @@ export function SuggestionCard({
             )}
 
             {suggestion.status !== 'pending' && suggestion.reviewedBy && (
-              <div className="pt-2 border-t border-border">
+              <div className="border-t border-border pt-2">
                 <Text variant="caption" className="text-text-secondary">
                   {suggestion.status === 'approved' ? 'Approved' : 'Rejected'} on{' '}
                   {formatDate(suggestion.reviewedAt!)}
                 </Text>
                 {suggestion.rejectionNotes && (
-                  <Text variant="body" className="text-text-default mt-1">
+                  <Text variant="body" className="mt-1 text-text-default">
                     Reason: {suggestion.rejectionNotes}
                   </Text>
                 )}
@@ -153,7 +148,7 @@ export function SuggestionCard({
 
           {/* Actions */}
           {showActions && (
-            <div className="flex gap-2 pt-2 border-t border-border">
+            <div className="flex gap-2 border-t border-border pt-2">
               <Button
                 variant="primary"
                 size="sm"
@@ -177,26 +172,26 @@ export function SuggestionCard({
 
       {/* Reject Modal */}
       {showRejectModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-surface rounded-lg max-w-md w-full p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="w-full max-w-md rounded-lg bg-surface p-6">
             <Text variant="h3" className="mb-4">
               Reject Suggestion
             </Text>
-            <Text variant="body" className="text-text-default mb-4">
+            <Text variant="body" className="mb-4 text-text-default">
               Optionally provide a reason for rejecting this suggestion.
             </Text>
             <textarea
               value={rejectionNotes}
               onChange={(e) => setRejectionNotes(e.target.value)}
               placeholder="Rejection reason (optional)"
-              className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-surface-elevated dark:border-border dark:text-white mb-4"
+              className="mb-4 w-full rounded-md border border-border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary dark:border-border dark:bg-surface-elevated dark:text-white"
               rows={3}
               maxLength={500}
             />
-            <Text variant="caption" className="text-text-secondary mb-4">
+            <Text variant="caption" className="mb-4 text-text-secondary">
               {rejectionNotes.length}/500 characters
             </Text>
-            <div className="flex gap-3 justify-end">
+            <div className="flex justify-end gap-3">
               <Button
                 variant="warning"
                 onClick={() => {

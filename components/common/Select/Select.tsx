@@ -1,7 +1,7 @@
 /**
  * Select Component
  * Feature: 008-common-components
- * 
+ *
  * Dropdown selection component with validation states and consistent styling.
  */
 
@@ -13,7 +13,7 @@ import { Text } from '@/components/common/Text/Text';
 
 /**
  * Select component for dropdown selections
- * 
+ *
  * @example
  * ```tsx
  * // Basic select
@@ -21,17 +21,17 @@ import { Text } from '@/components/common/Text/Text';
  *   { label: 'Pantry', value: 'pantry' },
  *   { label: 'Fridge', value: 'fridge' },
  * ];
- * 
- * <Select 
+ *
+ * <Select
  *   label="Storage Location"
  *   options={options}
  *   value={location}
  *   onChange={setLocation}
  *   required
  * />
- * 
+ *
  * // With validation error
- * <Select 
+ * <Select
  *   label="Category"
  *   options={categoryOptions}
  *   value={category}
@@ -64,13 +64,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ) => {
     // Generate unique ID if not provided
     const selectId = id || React.useId();
-    
+
     // Determine validation state from props
-    const effectiveValidationState: InputValidationState = 
-      error ? 'error' : 
-      success ? 'success' : 
-      validationState || 'default';
-    
+    const effectiveValidationState: InputValidationState = error
+      ? 'error'
+      : success
+        ? 'success'
+        : validationState || 'default';
+
     // Help text or error/success message
     const feedbackMessage = error || success || helpText;
     const feedbackId = feedbackMessage ? `${selectId}-feedback` : undefined;
@@ -86,15 +87,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       <div className={cn('w-full', wrapperClassName)}>
         {/* Label */}
         {label && (
-          <label 
-            htmlFor={selectId}
-            className="block text-sm font-medium text-text-default mb-1"
-          >
+          <label htmlFor={selectId} className="mb-1 block text-sm font-medium text-text-default">
             {label}
-            {required && <span className="text-error ml-1">*</span>}
+            {required && <span className="ml-1 text-error">*</span>}
           </label>
         )}
-        
+
         {/* Select element */}
         <select
           ref={ref}
@@ -105,7 +103,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           value={value as any} // Type assertion for generic value
           onChange={handleChange}
           style={{
-            backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
             backgroundPosition: 'right 0.75rem center',
             backgroundSize: '1.25rem',
             backgroundRepeat: 'no-repeat',
@@ -143,11 +142,11 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   {placeholder}
                 </option>
               )}
-              
+
               {/* Options from props */}
               {options?.map((option) => (
-                <option 
-                  key={String(option.value)} 
+                <option
+                  key={String(option.value)}
                   value={option.value as any}
                   disabled={option.disabled}
                 >
@@ -157,7 +156,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             </>
           )}
         </select>
-        
+
         {/* Feedback message (help text, error, or success) */}
         {feedbackMessage && (
           <Text

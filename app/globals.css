@@ -41,15 +41,15 @@
   --color-success: 23 125 108; /* #177D6C */
   --color-success-contrast: 255 255 255; /* #FFFFFF */
   --color-success-hover: 0 76 63; /* #004C3F - darker for hover */
-  
+
   --color-warning: 197 102 37; /* C56625 */
   --color-warning-contrast: 255 255 255; /* white */
   --color-warning-hover: 160 74 16; /* A04A10 */
-  
+
   --color-error: 220 38 38; /* red */
   --color-error-contrast: 255 255 255;
   --color-error-hover: 185 28 28; /* darker red for hover */
-  
+
   --color-info: 59 130 246; /* blue */
   --color-info-contrast: 255 255 255;
   --color-info-hover: 37 99 235; /* darker blue for hover */
@@ -95,15 +95,15 @@
   --color-success: 23 125 108; /* #177D6C */
   --color-success-contrast: 255 255 255; /* #FFFFFF */
   --color-success-hover: 0 76 63; /* #004C3F */
-  
+
   --color-warning: 197 102 37; /* C56625 */
   --color-warning-contrast: 255 255 255; /* white */
   --color-warning-hover: 160 74 16; /* A04A10 */
-  
+
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */
   --color-error-hover: 248 180 176; /* lighter error for hover */
-  
+
   --color-info: 96 165 250; /* blue */
   --color-info-contrast: 17 24 39;
   --color-info-hover: 59 130 246; /* darker blue for hover */
@@ -148,15 +148,15 @@
   --color-success: 23 125 108; /* #177D6C */
   --color-success-contrast: 255 255 255; /* #FFFFFF */
   --color-success-hover: 0 76 63; /* #004C3F */
-  
+
   --color-warning: 197 102 37; /* C56625 */
   --color-warning-contrast: 255 255 255; /* white */
   --color-warning-hover: 160 74 16; /* A04A10 */
-  
+
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */
   --color-error-hover: 248 180 176; /* lighter error for hover */
-  
+
   --color-info: 96 165 250; /* blue */
   --color-info-contrast: 17 24 39;
   --color-info-hover: 59 130 246; /* darker blue for hover */

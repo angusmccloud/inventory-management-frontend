@@ -1,7 +1,7 @@
 /**
  * Visual Regression Tests for Theme Color System
  * Feature: 009-theme-color-update
- * 
+ *
  * Tests visual consistency of theme colors in light and dark modes.
  * For actual visual regression testing, integrate with Percy, Chromatic, or Playwright.
  */
@@ -47,19 +47,19 @@ describe('Theme Visual Regression Tests', () => {
 
 /**
  * Setup Instructions for Automated Visual Regression Testing
- * 
+ *
  * 1. Choose a visual testing service:
  *    - Percy: npm install --save-dev @percy/cli @percy/playwright
  *    - Chromatic: npm install --save-dev chromatic
- * 
+ *
  * 2. Add scripts to package.json:
  *    "test:visual": "percy exec -- playwright test"
- * 
+ *
  * 3. Configure environment variables:
  *    PERCY_TOKEN=<your-token>
- * 
+ *
  * 4. Create baseline snapshots:
  *    npm run test:visual
- * 
+ *
  * 5. On subsequent runs, visual diffs will be highlighted in the service UI
  */

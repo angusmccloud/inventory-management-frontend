@@ -17,14 +17,14 @@ import { useSnackbar } from '@/contexts/SnackbarContext';
 
 function MyComponent() {
   const { showSnackbar } = useSnackbar();
-  
+
   const handleSuccess = () => {
     showSnackbar({
       variant: 'success',
       text: 'Operation completed successfully!',
     });
   };
-  
+
   return <button onClick={handleSuccess}>Save</button>;
 }
 ```
@@ -51,14 +51,15 @@ showSnackbar({ variant: 'error', text: 'Error message' });
 interface SnackbarConfig {
   variant: 'info' | 'success' | 'warning' | 'error';
   text: string;
-  autoHide?: boolean;           // Default: true
-  autoHideDuration?: number;    // Default: 5000ms (5 seconds)
+  autoHide?: boolean; // Default: true
+  autoHideDuration?: number; // Default: 5000ms (5 seconds)
 }
 ```
 
 ### Examples
 
 **Default auto-hide (5 seconds)**
+
 ```typescript
 showSnackbar({
   variant: 'success',
@@ -67,6 +68,7 @@ showSnackbar({
 ```
 
 **Custom auto-hide duration**
+
 ```typescript
 showSnackbar({
   variant: 'warning',
@@ -76,6 +78,7 @@ showSnackbar({
 ```
 
 **No auto-hide (requires manual dismiss)**
+
 ```typescript
 showSnackbar({
   variant: 'error',
@@ -85,6 +88,7 @@ showSnackbar({
 ```
 
 **Manual dismiss**
+
 ```typescript
 const { showSnackbar, hideSnackbar } = useSnackbar();
 

@@ -74,7 +74,7 @@ describe('ShoppingListItem Component', () => {
 
   it('shows unassigned label when no store', () => {
     const unassignedItem = { ...pendingItem, storeId: null, storeName: null };
-    
+
     render(
       <ShoppingListItemComponent
         item={unassignedItem}
@@ -110,9 +110,7 @@ describe('ShoppingListItem Component', () => {
   });
 
   it('disables checkbox while toggling', async () => {
-    mockOnToggleStatus.mockImplementation(
-      () => new Promise((resolve) => setTimeout(resolve, 100))
-    );
+    mockOnToggleStatus.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
     render(
       <ShoppingListItemComponent
@@ -190,4 +188,3 @@ describe('ShoppingListItem Component', () => {
     expect(mockOnRemove).toHaveBeenCalledWith(pendingItem);
   });
 });
-

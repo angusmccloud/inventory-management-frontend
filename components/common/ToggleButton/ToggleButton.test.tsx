@@ -27,20 +27,14 @@ describe('ToggleButton', () => {
 
     it('renders with visible label different from aria-label', () => {
       render(
-        <ToggleButton
-          {...defaultProps}
-          label="Accessibility label"
-          visibleLabel="Display Label"
-        />
+        <ToggleButton {...defaultProps} label="Accessibility label" visibleLabel="Display Label" />
       );
       expect(screen.getByText('Display Label')).toBeInTheDocument();
       expect(screen.getByRole('switch')).toHaveAttribute('aria-label', 'Accessibility label');
     });
 
     it('renders with description', () => {
-      render(
-        <ToggleButton {...defaultProps} description="This is a description" />
-      );
+      render(<ToggleButton {...defaultProps} description="This is a description" />);
       expect(screen.getByText('This is a description')).toBeInTheDocument();
     });
 
@@ -56,9 +50,7 @@ describe('ToggleButton', () => {
     });
 
     it('applies custom className', () => {
-      const { container } = render(
-        <ToggleButton {...defaultProps} className="custom-class" />
-      );
+      const { container } = render(<ToggleButton {...defaultProps} className="custom-class" />);
       expect(container.firstChild).toHaveClass('custom-class');
     });
 
@@ -118,7 +110,7 @@ describe('ToggleButton', () => {
     it('calls onChange when clicked', () => {
       const onChange = jest.fn();
       render(<ToggleButton {...defaultProps} onChange={onChange} checked={false} />);
-      
+
       fireEvent.click(screen.getByRole('switch'));
       expect(onChange).toHaveBeenCalledWith(true);
     });
@@ -126,7 +118,7 @@ describe('ToggleButton', () => {
     it('toggles from checked to unchecked', () => {
       const onChange = jest.fn();
       render(<ToggleButton {...defaultProps} onChange={onChange} checked={true} />);
-      
+
       fireEvent.click(screen.getByRole('switch'));
       expect(onChange).toHaveBeenCalledWith(false);
     });
@@ -134,7 +126,7 @@ describe('ToggleButton', () => {
     it('responds to Space key', () => {
       const onChange = jest.fn();
       render(<ToggleButton {...defaultProps} onChange={onChange} checked={false} />);
-      
+
       const toggle = screen.getByRole('switch');
       fireEvent.keyDown(toggle, { key: ' ' });
       expect(onChange).toHaveBeenCalledWith(true);
@@ -143,7 +135,7 @@ describe('ToggleButton', () => {
     it('responds to Enter key', () => {
       const onChange = jest.fn();
       render(<ToggleButton {...defaultProps} onChange={onChange} checked={false} />);
-      
+
       const toggle = screen.getByRole('switch');
       fireEvent.keyDown(toggle, { key: 'Enter' });
       expect(onChange).toHaveBeenCalledWith(true);
@@ -152,7 +144,7 @@ describe('ToggleButton', () => {
     it('does not toggle when disabled', () => {
       const onChange = jest.fn();
       render(<ToggleButton {...defaultProps} onChange={onChange} disabled />);
-      
+
       fireEvent.click(screen.getByRole('switch'));
       expect(onChange).not.toHaveBeenCalled();
     });
@@ -239,11 +231,15 @@ describe('ToggleButton', () => {
       const { rerender } = render(
         <ToggleButton {...defaultProps} name="toggle-field" checked={false} />
       );
-      let hiddenInput = document.querySelector('input[type="checkbox"][name="toggle-field"]') as HTMLInputElement;
+      let hiddenInput = document.querySelector(
+        'input[type="checkbox"][name="toggle-field"]'
+      ) as HTMLInputElement;
       expect(hiddenInput?.checked).toBe(false);
 
       rerender(<ToggleButton {...defaultProps} name="toggle-field" checked={true} />);
-      hiddenInput = document.querySelector('input[type="checkbox"][name="toggle-field"]') as HTMLInputElement;
+      hiddenInput = document.querySelector(
+        'input[type="checkbox"][name="toggle-field"]'
+      ) as HTMLInputElement;
       expect(hiddenInput?.checked).toBe(true);
     });
   });

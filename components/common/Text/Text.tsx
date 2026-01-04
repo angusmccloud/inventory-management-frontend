@@ -1,7 +1,7 @@
 /**
  * Text Component
  * Feature: 008-common-components
- * 
+ *
  * Polymorphic typography component with semantic variants for consistent text rendering.
  * Automatically applies theme-based font families, sizes, weights, and colors.
  */
@@ -54,19 +54,19 @@ const weightStyles: Record<FontWeight, string> = {
 
 /**
  * Text component with polymorphic rendering capabilities
- * 
+ *
  * @example
  * ```tsx
  * // Page title
  * <Text as="h1" variant="h1" color="primary">
  *   Inventory Management
  * </Text>
- * 
+ *
  * // Body text
  * <Text variant="body" color="secondary">
  *   Manage your household items and supplies.
  * </Text>
- * 
+ *
  * // Caption
  * <Text variant="caption" color="tertiary">
  *   Last updated {lastUpdated}
@@ -83,7 +83,7 @@ export function Text<T extends React.ElementType = 'p'>({
   ...props
 }: TextProps<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof TextProps<T>>) {
   const Component = as || 'p';
-  
+
   return (
     <Component
       className={cn(

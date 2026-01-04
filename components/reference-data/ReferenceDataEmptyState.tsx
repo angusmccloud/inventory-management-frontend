@@ -10,9 +10,10 @@ interface ReferenceDataEmptyStateProps {
 
 export default function ReferenceDataEmptyState({ type, onAdd }: ReferenceDataEmptyStateProps) {
   const title = type === 'locations' ? 'No Storage Locations' : 'No Stores';
-  const description = type === 'locations' 
-    ? 'Add storage locations to organize where items are stored.'
-    : 'Add stores to track where items can be purchased.';
+  const description =
+    type === 'locations'
+      ? 'Add storage locations to organize where items are stored.'
+      : 'Add stores to track where items can be purchased.';
   const buttonText = type === 'locations' ? 'Add Location' : 'Add Store';
   const icon = type === 'locations' ? <MapPinIcon /> : <ShoppingBagIcon />;
 
@@ -24,7 +25,7 @@ export default function ReferenceDataEmptyState({ type, onAdd }: ReferenceDataEm
       action={{
         label: buttonText,
         onClick: onAdd,
-        variant: 'primary'
+        variant: 'primary',
       }}
     />
   );

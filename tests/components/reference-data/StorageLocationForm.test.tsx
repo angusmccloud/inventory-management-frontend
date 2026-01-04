@@ -59,7 +59,7 @@ describe('StorageLocationForm', () => {
   describe('Real-time Validation', () => {
     it('should check name availability as user types', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: true });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
 
@@ -75,7 +75,7 @@ describe('StorageLocationForm', () => {
 
     it('should show error when name is unavailable', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: false });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
 
@@ -113,13 +113,13 @@ describe('StorageLocationForm', () => {
   describe('Input Trimming', () => {
     it('should trim whitespace from name on submit', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: true });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
       const submitButton = screen.getByRole('button', { name: /add location/i });
 
       fireEvent.change(nameInput, { target: { value: '  Pantry  ' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -136,7 +136,7 @@ describe('StorageLocationForm', () => {
 
     it('should trim whitespace from description on submit', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: true });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
       const descriptionInput = screen.getByLabelText(/description/i);
@@ -144,7 +144,7 @@ describe('StorageLocationForm', () => {
 
       fireEvent.change(nameInput, { target: { value: 'Pantry' } });
       fireEvent.change(descriptionInput, { target: { value: '  Kitchen pantry  ' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -161,13 +161,13 @@ describe('StorageLocationForm', () => {
 
     it('should convert empty description to undefined', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: true });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
       const submitButton = screen.getByRole('button', { name: /add location/i });
 
       fireEvent.change(nameInput, { target: { value: 'Pantry' } });
-      
+
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -208,7 +208,7 @@ describe('StorageLocationForm', () => {
   describe('Form Actions', () => {
     it('should call onCancel when Cancel button is clicked', () => {
       render(<StorageLocationForm {...defaultProps} />);
-      
+
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
       fireEvent.click(cancelButton);
 
@@ -217,14 +217,14 @@ describe('StorageLocationForm', () => {
 
     it('should disable submit button when name is empty', () => {
       render(<StorageLocationForm {...defaultProps} />);
-      
+
       const submitButton = screen.getByRole('button', { name: /add location/i });
       expect(submitButton).toBeDisabled();
     });
 
     it('should disable submit button when name is unavailable', async () => {
       mockCheckStorageLocationName.mockResolvedValue({ available: false });
-      
+
       render(<StorageLocationForm {...defaultProps} />);
       const nameInput = screen.getByLabelText(/location name/i);
 
@@ -257,7 +257,7 @@ describe('StorageLocationForm', () => {
       const mockOnSubmit = jest.fn().mockRejectedValue(new Error('Network error'));
 
       render(<StorageLocationForm {...defaultProps} onSubmit={mockOnSubmit} />);
-      
+
       const nameInput = screen.getByLabelText(/location name/i);
       fireEvent.change(nameInput, { target: { value: 'Pantry' } });
 

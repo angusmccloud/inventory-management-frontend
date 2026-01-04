@@ -1,6 +1,6 @@
 /**
  * Inventory API Client - Inventory HQ Frontend
- * 
+ *
  * API client methods for inventory management operations.
  */
 
@@ -26,7 +26,7 @@ export const listInventoryItems = async (
   }
 ): Promise<ListInventoryResponse> => {
   const params = new URLSearchParams();
-  
+
   if (filters?.locationId) {
     params.append('locationId', filters.locationId);
   }
@@ -39,10 +39,10 @@ export const listInventoryItems = async (
   if (filters?.lowStock !== undefined) {
     params.append('lowStock', String(filters.lowStock));
   }
-  
+
   const queryString = params.toString();
   const url = `/families/${familyId}/inventory${queryString ? `?${queryString}` : ''}`;
-  
+
   return apiClient.get<ListInventoryResponse>(url, true);
 };
 
@@ -109,9 +109,6 @@ export const archiveInventoryItem = async (
 /**
  * Delete inventory item
  */
-export const deleteInventoryItem = async (
-  familyId: string,
-  itemId: string
-): Promise<void> => {
+export const deleteInventoryItem = async (familyId: string, itemId: string): Promise<void> => {
   return apiClient.delete<void>(`/families/${familyId}/inventory/${itemId}`, true);
 };
