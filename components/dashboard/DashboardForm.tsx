@@ -263,14 +263,12 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
               inventoryItems
                 .filter((item) =>
                   itemSearchQuery.length === 0 ||
-                  item.name.toLowerCase().includes(itemSearchQuery.toLowerCase()) ||
-                  item.locationName?.toLowerCase().includes(itemSearchQuery.toLowerCase())
+                  item.name.toLowerCase().includes(itemSearchQuery.toLowerCase())
                 )
                 .map((item) => (
                   <Checkbox
                     key={item.itemId}
                     label={item.name}
-                    description={item.locationName ? `📍 ${item.locationName}` : undefined}
                     checked={formData.itemIds.includes(item.itemId)}
                     onChange={(checked) => {
                       if (checked) {

@@ -73,7 +73,7 @@ export default function DashboardItemCard({
       {/* Location */}
       {item.locationName && (
         <Text variant="bodySmall" color="secondary" className="mb-2">
-          📍 {item.locationName}
+          {item.locationName}
         </Text>
       )}
 

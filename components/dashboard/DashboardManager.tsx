@@ -184,6 +184,7 @@ const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
                 <div className="flex-1 text-xs space-y-1">
                   <Text variant="caption" color="secondary">Type: {dashboard.type === 'location' ? 'Location-based' : 'Item-based'}</Text>
                   <Text variant="caption" color="secondary">Created: {new Date(dashboard.createdAt).toLocaleDateString()}</Text>
+                  <Text variant="caption" color="secondary">Last Accessed: {dashboard.lastAccessedAt ? new Date(dashboard.lastAccessedAt).toLocaleDateString() : 'Never'}</Text>
                   <Text variant="caption" color="secondary">Accessed: {dashboard.accessCount} times</Text>
                 </div>
                 
@@ -217,20 +218,20 @@ const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
               {/* Bottom action buttons - equally sized */}
               <div className="grid grid-cols-3 gap-2">
                 <Button
-                  variant="warning"
-                  size="sm"
-                  onClick={() => handleRotateUrl(dashboard.dashboardId)}
-                  className="w-full"
-                >
-                  Rotate
-                </Button>
-                <Button
                   variant="secondary"
                   size="sm"
                   onClick={() => handleEditDashboard(dashboard.dashboardId)}
                   className="w-full"
                 >
                   Edit
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleRotateUrl(dashboard.dashboardId)}
+                  className="w-full"
+                >
+                  Rotate URL
                 </Button>
                 <Button
                   variant="warning"

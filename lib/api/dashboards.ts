@@ -6,6 +6,7 @@
  */
 
 import { apiClient } from '../api-client';
+import { getStorageLocation } from './reference-data';
 import {
   DashboardWithItems,
   DashboardListItem,
@@ -25,7 +26,22 @@ import {
 export const getDashboardPublic = async (
   dashboardId: string
 ): Promise<DashboardWithItems> => {
-  return apiClient.get<DashboardWithItems>(`/d/${dashboardId}`, false);
+  const response = await apiClient.get<DashboardWithItems>(`/d/${dashboardId}`, false);
+
+  // Attach missing location names when possible. For public dashboards of type
+  // 'location' the dashboard title represents the location name. For other
+  // public dashboards we cannot call protected reference APIs, so return as-is.
+  if (response && response.items && response.items.length > 0) {
+    if (response.dashboard?.type === 'location') {
+      response.items.forEach((it) => {
+        if (it.locationId && !it.locationName) {
+          it.locationName = response.dashboard.title;
+        }
+      });
+    }
+  }
+
+  return response;
 };
 
 /**
@@ -95,7 +111,63 @@ export const listDashboards = async (
  * @returns Dashboard details
  */
 export const getDashboard = async (dashboardId: string): Promise<DashboardWithItems> => {
-  return apiClient.get<DashboardWithItems>(`/api/dashboards/${dashboardId}`, true);
+  const response = await apiClient.get<DashboardWithItems>(`/api/dashboards/${dashboardId}`, true);
+
+  // Enrich items with missing location names when possible. For dashboards of
+  // type 'location' use the dashboard title; otherwise attempt to fetch
+  // location records for any missing names (requires authenticated access).
+  if (response && response.items && response.items.length > 0) {
+    // If this dashboard represents a single location, use its title
+    if (response.dashboard?.type === 'location') {
+      response.items.forEach((it) => {
+        if (it.locationId && !it.locationName) {
+          it.locationName = response.dashboard.title;
+        }
+      });
+    } else {
+      // Collect unique missing location IDs
+      const missing = Array.from(new Set(response.items
+        .filter((it) => it.locationId && !it.locationName)
+        .map((it) => it.locationId!)
+      ));
+
+      if (missing.length > 0) {
+        try {
+          // dashboardId format is {familyId}_{random}. Extract familyId.
+          const familyId = (response.dashboard?.dashboardId || dashboardId).split('_')[0];
+
+          const locMap = new Map<string, string>();
+          await Promise.all(missing.map(async (locId) => {
+            try {
+              const loc = await getStorageLocation(familyId, locId);
+              if (loc && (loc.name || loc.locationName)) {
+                // prefer `name` property (StorageLocation type)
+                locMap.set(locId, (loc.name as string) || (loc.locationName as string));
+              }
+            } catch (err) {
+              // ignore failures for individual lookups
+              // eslint-disable-next-line no-console
+              console.warn('Failed to fetch storage location', locId, err);
+            }
+          }));
+
+          if (locMap.size > 0) {
+            response.items.forEach((it) => {
+              if (it.locationId && !it.locationName && locMap.has(it.locationId)) {
+                it.locationName = locMap.get(it.locationId) as string;
+              }
+            });
+          }
+        } catch (err) {
+          // If enrichment fails, do not block the response
+          // eslint-disable-next-line no-console
+          console.warn('Failed to enrich dashboard item location names', err);
+        }
+      }
+    }
+  }
+
+  return response;
 };
 
 /**
