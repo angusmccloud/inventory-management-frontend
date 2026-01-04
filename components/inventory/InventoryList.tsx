@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { InventoryItem } from '@/types/entities';
 import { Button, Text, EmptyState, Modal } from '@/components/common';
+import { Badge } from '@/components/common/Badge/Badge';
 import QuantityControls from '@/components/common/QuantityControls';
 import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
@@ -105,14 +106,10 @@ function InventoryListItem({
               {item.name}
             </Text>
             {isLowStock && (
-              <span className="inline-flex items-center rounded-full bg-error/10 px-2.5 py-0.5 text-xs font-medium text-error">
-                Low Stock
-              </span>
+              <Badge variant="warning" size="sm">Low Stock</Badge>
             )}
             {item.status === 'archived' && (
-              <span className="inline-flex items-center rounded-full bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-default">
-                Archived
-              </span>
+              <Badge variant="warning" size="sm">Archived</Badge>
             )}
           </div>
           <div className="mt-2 flex flex-col text-sm text-text-secondary sm:flex-row sm:items-center sm:gap-4">
@@ -211,7 +208,7 @@ function InventoryListItem({
               </Button>
               <Button
                 onClick={() => onEdit(item)}
-                variant="tertiary"
+                variant="secondary"
                 size="sm"
                 leftIcon={<PencilIcon className="h-4 w-4" />}
               >

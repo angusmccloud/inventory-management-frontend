@@ -141,7 +141,7 @@ export default function QuantityControls({
       {/* Decrement Button */}
       <IconButton
         icon={<MinusIcon className="h-5 w-5" />}
-        variant="warning"
+        variant="primary"
         size={size}
         onClick={onDecrement}
         disabled={disabled || isAtMin}

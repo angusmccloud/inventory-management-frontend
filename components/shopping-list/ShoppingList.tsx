@@ -55,7 +55,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]); // Store all inventory items
   const [stores, setStores] = useState<StoreGroupSummary[]>([]);
   const [selectedStoreIds, setSelectedStoreIds] = useState<string[]>([]); // Empty array = all stores
-  const [hidePurchased, setHidePurchased] = useState(true); // Hide purchased items by default
+  const [showArchive, setShowArchive] = useState(false); // "Show Archive" toggle (purchased items treated as archived). Default: false
   const [initialPurchasedIds, setInitialPurchasedIds] = useState<Set<string>>(new Set()); // Track initially purchased items
   const [modalState, setModalState] = useState<ModalState>({ type: 'none' });
   const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
@@ -142,9 +142,9 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         return selectedStoreIds.includes(itemStoreId);
       });
   
-  // Hide initially purchased items if toggle is enabled
+  // When "Show Archive" is disabled (default), hide initially purchased items
   // Don't reapply filter to newly purchased items (only hide items that were purchased on load)
-  if (hidePurchased) {
+  if (!showArchive) {
     items = items.filter(item => !initialPurchasedIds.has(item.shoppingItemId));
   }
 
@@ -373,12 +373,12 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
             />
             <div className="flex flex-col gap-1">
               <Text variant="bodySmall" className="text-text-default font-medium">
-                Hide Purchased
+                Show Archive
               </Text>
               <ToggleButton
-                checked={hidePurchased}
-                onChange={setHidePurchased}
-                label="Hide purchased items"
+                checked={showArchive}
+                onChange={setShowArchive}
+                label="Show archived items"
                 visibleLabel=""
                 size="md"
                 variant="primary"

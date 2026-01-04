@@ -10,10 +10,11 @@
 import { useState, useEffect } from 'react';
 import { AddToShoppingListRequest } from '@/lib/api/shoppingList';
 import { listStores } from '@/lib/api/reference-data';
-import { listInventoryItems } from '@/lib/api/inventory';
+import { listInventoryItems, createInventoryItem } from '@/lib/api/inventory';
 import type { Store, InventoryItem } from '@/types/entities';
 import { Input, Select, Button, Autocomplete } from '@/components/common';
 import { Text } from '@/components/common/Text/Text';
+import { ToggleButton } from '@/components/common/ToggleButton/ToggleButton';
 
 interface AddItemFormProps {
   familyId: string;
@@ -31,6 +32,11 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
   const [error, setError] = useState<string | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
   const [loadingStores, setLoadingStores] = useState<boolean>(true);
+
+  // Track if user picked an existing inventory item (via autocomplete)
+  const [selectedInventoryId, setSelectedInventoryId] = useState<string | null>(null);
+  // If true for a free-text item, create a matching inventory item when submitting
+  const [trackInInventory, setTrackInInventory] = useState<boolean>(false);
 
   // Search inventory items for autocomplete
   const searchInventoryItems = async (query: string) => {
@@ -95,7 +101,23 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
 
     setIsSubmitting(true);
     try {
+      // If requested, create an inventory item first (only for free-text items)
+      let createdInventoryItemId: string | null = null;
+      if (trackInInventory && !selectedInventoryId) {
+        const created = await createInventoryItem(familyId, {
+          name: name.trim(),
+          quantity: 0,
+          unit: unit.trim() || undefined,
+          locationId: undefined,
+          preferredStoreId: storeId || undefined,
+          lowStockThreshold: 0,
+          notes: notes.trim() || undefined,
+        });
+        createdInventoryItemId = created.itemId;
+      }
+
       await onSubmit({
+        itemId: selectedInventoryId || createdInventoryItemId || null,
         name: name.trim(),
         quantity: quantity === '' ? null : Number(quantity),
         unit: unit.trim() || null,
@@ -139,6 +161,13 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       if (option.metadata.unit) {
         setUnit(option.metadata.unit);
       }
+      if (option.value) {
+        setSelectedInventoryId(option.value);
+        setTrackInInventory(false);
+      }
+    } else {
+      // free-text typing clears selection so toggle becomes available
+      setSelectedInventoryId(null);
     }
   };
 
@@ -238,6 +267,28 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             disabled={isSubmitting}
           />
         </div>
+
+        {/* Track in Inventory toggle (only show for free-text/new names) */}
+        {!selectedInventoryId && (
+          <div className="flex items-center justify-between pt-2">
+            <div>
+              <Text variant="bodySmall" className="font-medium">
+                Track in Inventory
+              </Text>
+              <Text variant="caption" color="secondary">
+                Create a matching inventory item with this name, same units and preferred store. Threshold set to 0 and no default storage location.
+              </Text>
+            </div>
+            <ToggleButton
+              checked={trackInInventory}
+              onChange={setTrackInInventory}
+              label="Track in Inventory"
+              visibleLabel=""
+              size="md"
+              variant="primary"
+            />
+          </div>
+        )}
       </div>
 
       {error && (

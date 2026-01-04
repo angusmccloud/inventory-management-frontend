@@ -40,6 +40,7 @@ const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
+    const [copiedDashboardId, setCopiedDashboardId] = useState<string | null>(null);
 
     // Load dashboards on component mount
     useEffect(() => {
@@ -69,9 +70,15 @@ const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
     reloadDashboards: loadDashboards
   }));
 
-  const handleCopyUrl = async (url: string): Promise<void> => {
+  const handleCopyUrl = async (url: string, dashboardId?: string): Promise<void> => {
     try {
       await navigator.clipboard.writeText(url);
+
+      if (dashboardId) {
+        setCopiedDashboardId(dashboardId);
+        setTimeout(() => setCopiedDashboardId(null), 2000);
+      }
+
       showSnackbar({
         variant: 'success',
         text: 'URL copied to clipboard!'
@@ -183,15 +190,26 @@ const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
                 {/* Right side: Large Copy URL button */}
                 <Button
                   variant="secondary"
-                  onClick={() => handleCopyUrl(`${window.location.origin}/d/${dashboard.dashboardId}`)}
+                  onClick={() => handleCopyUrl(`${window.location.origin}/d/${dashboard.dashboardId}`, dashboard.dashboardId)}
                   className="flex-shrink-0 w-24 h-24 !p-0"
                   aria-label="Copy URL"
                 >
                   <div className="flex flex-col items-center justify-center gap-1 h-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                    </svg>
-                    <span className="text-xs font-medium">Copy URL</span>
+                    {copiedDashboardId === dashboard.dashboardId ? (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-xs font-medium">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                        </svg>
+                        <span className="text-xs font-medium">Copy URL</span>
+                      </>
+                    )}
                   </div>
                 </Button>
               </div>

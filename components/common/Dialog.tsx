@@ -33,7 +33,7 @@ export default function Dialog({
   cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
-  showCancel,
+  showCancel = true,
 }: DialogProps) {
   if (!isOpen) return null;
 
