@@ -204,7 +204,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
               </Button>
               {isAdmin && (
                 <Button
-                  variant="danger"
+                  variant="warning"
                   size="md"
                   onClick={() => setShowDeleteDialog(true)}
                 >
@@ -257,7 +257,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
                 + Add Items
               </Button>
               <Button
-                variant="danger"
+                variant="warning"
                 size="md"
                 fullWidth
                 onClick={() => {
@@ -311,7 +311,7 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
       {showDeleteDialog && (
         <Dialog
           isOpen={true}
-          type="error"
+          type="warning"
           title="Delete Item"
           message={`Permanently delete ${item.name}? This cannot be undone.`}
           confirmLabel="Delete"

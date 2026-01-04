@@ -89,7 +89,7 @@ export default function StorageLocationList({
                         Edit
                       </Button>
                       <Button
-                        variant="danger"
+                        variant="warning"
                         size="sm"
                         onClick={() => openDeleteDialog(location)}
                         disabled={deletingId === location.locationId}

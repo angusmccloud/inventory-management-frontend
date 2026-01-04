@@ -85,7 +85,7 @@ export function MemberCard({
 
             {onRemove && (
               <Button
-                variant="danger"
+                variant="warning"
                 size="sm"
                 onClick={() => onRemove(member.memberId)}
                 disabled={isCurrentUser}

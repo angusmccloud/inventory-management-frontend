@@ -28,6 +28,7 @@ export default function EditShoppingListItemForm({
 }: EditShoppingListItemFormProps) {
   const [name, setName] = useState(item.name);
   const [quantity, setQuantity] = useState<number | ''>(item.quantity || '');
+  const [unit, setUnit] = useState<string>(item.unit || '');
   const [storeId, setStoreId] = useState<string>(item.storeId || '');
   const [notes, setNotes] = useState(item.notes || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +69,7 @@ export default function EditShoppingListItemForm({
       await onSubmit({
         name: name.trim(),
         quantity: quantity === '' ? null : Number(quantity),
+        unit: unit.trim() || null,
         storeId: storeId || null,
         notes: notes.trim() || null,
         version: item.version,
@@ -107,6 +109,18 @@ export default function EditShoppingListItemForm({
           onChange={(e) => setQuantity(e.target.value === '' ? '' : Number(e.target.value))}
           placeholder="1"
           min={1}
+          disabled={isSubmitting}
+        />
+
+        {/* Units */}
+        <Input
+          type="text"
+          id="edit-unit"
+          label="Units (optional)"
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          placeholder="e.g., oz, lbs, count"
+          maxLength={50}
           disabled={isSubmitting}
         />
 
@@ -170,7 +184,7 @@ export default function EditShoppingListItemForm({
         </Button>
         <Button
           type="button"
-          variant="danger"
+          variant="warning"
           onClick={onCancel}
           disabled={isSubmitting}
         >

@@ -19,6 +19,7 @@ export interface ShoppingListItem {
   storeName?: string | null; // Denormalized for display
   status: 'pending' | 'purchased';
   quantity: number | null;
+  unit: string | null;
   notes: string | null;
   inventoryNotes?: string | null; // Notes from linked inventory item
   version: number;
@@ -54,6 +55,7 @@ export interface AddToShoppingListRequest {
   name?: string;
   storeId?: string | null;
   quantity?: number | null;
+  unit?: string | null;
   notes?: string | null;
   force?: boolean;
 }
@@ -65,6 +67,7 @@ export interface UpdateShoppingListItemRequest {
   name?: string;
   storeId?: string | null;
   quantity?: number | null;
+  unit?: string | null;
   notes?: string | null;
   version: number;
 }

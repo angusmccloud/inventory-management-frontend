@@ -32,15 +32,15 @@ const variantStyles: Record<ToggleButtonVariant, string> = {
 const sizeStyles: Record<ToggleButtonSize, { container: string; thumb: string }> = {
   sm: {
     container: 'h-5 w-9',
-    thumb: 'h-[18px] w-[18px]',
+    thumb: 'h-4 w-4',
   },
   md: {
     container: 'h-6 w-11',
-    thumb: 'h-[22px] w-[22px]',
+    thumb: 'h-5 w-5',
   },
   lg: {
     container: 'h-7 w-14',
-    thumb: 'h-[26px] w-[26px]',
+    thumb: 'h-6 w-6',
   },
 };
 
@@ -133,16 +133,16 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
             
             // Disabled state
             disabled && 'opacity-50 cursor-not-allowed',
-            !disabled && 'cursor-pointer',
-            
-            // Touch target (minimum 44x44px for mobile)
-            'min-h-[44px] md:min-h-0'
+            !disabled && 'cursor-pointer'
           )}
           style={{
             // Ensure proper focus ring color using CSS variable
             ['--tw-ring-color' as string]: checked
               ? `rgb(var(--color-${variant}))`
               : 'rgb(var(--color-border))',
+            // Prevent height changes
+            minHeight: 'fit-content',
+            maxHeight: 'fit-content',
           }}
         >
           {/* Input for form submission */}
@@ -177,6 +177,10 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
                   : 'translate-x-7'
                 : 'translate-x-0.5'
             )}
+            style={{
+              marginTop: '0.125rem',
+              marginBottom: '0.125rem',
+            }}
           />
         </button>
       </div>

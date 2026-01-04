@@ -8,15 +8,16 @@
 'use client';
 
 import { LowStockNotification, LowStockNotificationStatus } from '@/types/entities';
-import { Badge, Button, Text } from '@/components/common';
+import { Badge, Text, IconButton } from '@/components/common';
 import type { BadgeVariant } from '@/components/common/Badge/Badge.types';
+import { ShoppingCartIcon, PencilIcon } from '@heroicons/react/24/outline';
 
 interface NotificationItemProps {
   notification: LowStockNotification;
-  onAcknowledge: (notificationId: string) => void;
-  onResolve: (notificationId: string) => void;
   onAddToShoppingList: (notification: LowStockNotification) => void;
+  onEdit: (notification: LowStockNotification) => void;
   isAdmin: boolean;
+  processingId?: string | null;
 }
 
 /**
@@ -67,14 +68,14 @@ const getStatusDisplayText = (status: LowStockNotificationStatus): string => {
 
 export default function NotificationItem({
   notification,
-  onAcknowledge,
-  onResolve,
   onAddToShoppingList,
+  onEdit,
   isAdmin,
+  processingId,
 }: NotificationItemProps) {
   const statusVariant = getStatusBadgeVariant(notification.status);
-  const canAcknowledge = isAdmin && notification.status === 'active';
-  const canResolve = isAdmin && (notification.status === 'active' || notification.status === 'acknowledged');
+  const isProcessing = processingId === notification.notificationId;
+  
 
   return (
     <li className="px-4 py-4 sm:px-6" data-testid="notification-item">
@@ -119,7 +120,7 @@ export default function NotificationItem({
             
             {/* Timestamp */}
             <div data-testid="timestamp">
-              <span className="font-semibold text-text-default">Created:</span>{' '}
+              <span className="font-semibold text-text-default">Low Stock Alert:</span>{' '}
               {formatDate(notification.createdAt)}
             </div>
             
@@ -135,57 +136,33 @@ export default function NotificationItem({
         
         {/* Action buttons */}
         <div className="ml-4 flex-shrink-0 flex gap-2">
+          {/* Reconcile button - show for active and acknowledged notifications */}
+          {(notification.status === 'active' || notification.status === 'acknowledged') && (
+            <IconButton
+              icon={<PencilIcon className="h-5 w-5" />}
+              aria-label="Reconcile item"
+              variant="secondary"
+              size="md"
+              onClick={() => onEdit(notification)}
+              data-testid="reconcile-button"
+              disabled={isProcessing}
+            />
+          )}
+          
           {/* Add to Shopping List button - show for active and acknowledged notifications */}
           {(notification.status === 'active' || notification.status === 'acknowledged') && (
-            <Button
+            <IconButton
+              icon={<ShoppingCartIcon className="h-5 w-5" />}
+              aria-label="Add to Shopping List"
+              variant="secondary"
+              size="md"
               onClick={() => onAddToShoppingList(notification)}
-              variant="secondary"
-              size="sm"
               data-testid="add-to-shopping-list-button"
-              title="Add to Shopping List"
-              className="bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 focus:ring-purple-500"
-            >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            </Button>
+              disabled={isProcessing}
+            />
           )}
           
-          {/* Acknowledge button - only for admins on active notifications */}
-          {canAcknowledge && (
-            <Button
-              onClick={() => onAcknowledge(notification.notificationId)}
-              variant="secondary"
-              size="sm"
-              data-testid="acknowledge-button"
-              className="bg-tertiary/10/30 text-tertiary-contrast hover:bg-tertiary/10 dark:hover:bg-tertiary/10/50 focus:ring-yellow-500"
-            >
-              Acknowledge
-            </Button>
-          )}
-          
-          {/* Resolve button - only for admins on active or acknowledged notifications */}
-          {canResolve && (
-            <Button
-              onClick={() => onResolve(notification.notificationId)}
-              variant="secondary"
-              size="sm"
-              data-testid="resolve-button"
-              className="bg-secondary/10/30 text-secondary-contrast hover:bg-secondary/10 dark:hover:bg-secondary/10/50 focus:ring-green-500"
-            >
-              Resolve
-            </Button>
-          )}
+          {/* Acknowledge/Resolve actions removed from this view; admin actions are handled elsewhere */}
         </div>
       </div>
     </li>

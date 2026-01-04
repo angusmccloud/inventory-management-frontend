@@ -53,7 +53,7 @@ export default function StoreItem({
               Edit
             </Button>
             <Button
-              variant="danger"
+              variant="warning"
               size="sm"
               onClick={() => onDelete(store)}
               disabled={isDeleting}

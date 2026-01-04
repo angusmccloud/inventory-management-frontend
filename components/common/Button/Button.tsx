@@ -81,7 +81,7 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
  * </Button>
  * 
  * // With icons
- * <Button variant="danger" leftIcon={<TrashIcon className="h-5 w-5" />}>
+ * <Button variant="warning" leftIcon={<TrashIcon className="h-5 w-5" />}>
  *   Delete Item
  * </Button>
  * ```

@@ -24,7 +24,7 @@ import type { ButtonProps } from '../Button/Button.types';
  * <IconButton 
  *   icon={<TrashIcon />} 
  *   aria-label="Delete item"
- *   variant="danger"
+ *   variant="warning"
  *   loading={isDeleting}
  *   onClick={handleDelete}
  * />

@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { listUserFamilies } from '@/lib/api/families';
@@ -23,7 +23,7 @@ import InventoryList from '@/components/inventory/InventoryList';
 import AddItemForm from '@/components/inventory/AddItemForm';
 import EditItemForm from '@/components/inventory/EditItemForm';
 import Dialog from '@/components/common/Dialog';
-import DashboardManager from '@/components/dashboard/DashboardManager';
+import DashboardManager, { DashboardManagerRef } from '@/components/dashboard/DashboardManager';
 import DashboardForm from '@/components/dashboard/DashboardForm';
 import { Text, Button, Alert, PageHeader, PageLoading, PageContainer, TabNavigation } from '@/components/common';
 import type { Tab } from '@/components/common/TabNavigation/TabNavigation.types';
@@ -43,6 +43,7 @@ type DialogState =
 export default function InventoryPage() {
   const searchParams = useSearchParams();
   const { showSnackbar } = useSnackbar();
+  const dashboardManagerRef = useRef<DashboardManagerRef>(null);
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -318,6 +319,7 @@ export default function InventoryPage() {
       {/* Tracking Lists Tab */}
       {activeTab === 'tracking-lists' && (
         <DashboardManager 
+          ref={dashboardManagerRef}
           familyId={familyId}
           onEdit={(dashboardId) => setModalState({ type: 'editDashboard', dashboardId })}
         />
@@ -366,11 +368,11 @@ export default function InventoryPage() {
                 {modalState.type === 'addDashboard' && (
                   <DashboardForm
                     familyId={familyId}
-                    onSuccess={(_dashboardId, _shareableUrl) => {
+                    onSuccess={async (_dashboardId, _shareableUrl) => {
                       setModalState({ type: 'none' });
                       showSnackbar({ variant: 'success', text: 'List created successfully!' });
-                      // Reload page to refresh dashboard list
-                      window.location.reload();
+                      // Reload dashboard list data
+                      await dashboardManagerRef.current?.reloadDashboards();
                     }}
                     onCancel={() => setModalState({ type: 'none' })}
                   />
@@ -380,11 +382,11 @@ export default function InventoryPage() {
                   <DashboardForm
                     familyId={familyId}
                     dashboardId={modalState.dashboardId}
-                    onSuccess={() => {
+                    onSuccess={async () => {
                       setModalState({ type: 'none' });
                       showSnackbar({ variant: 'success', text: 'List updated successfully!' });
-                      // Reload page to refresh dashboard list
-                      window.location.reload();
+                      // Reload dashboard list data
+                      await dashboardManagerRef.current?.reloadDashboards();
                     }}
                     onCancel={() => setModalState({ type: 'none' })}
                   />
@@ -399,7 +401,7 @@ export default function InventoryPage() {
       {dialogState.type === 'confirm' && (
         <Dialog
           isOpen={true}
-          type="error"
+          type="warning"
           title={dialogState.action === 'archive' ? 'Archive Item' : 'Delete Item'}
           message={
             dialogState.action === 'archive'

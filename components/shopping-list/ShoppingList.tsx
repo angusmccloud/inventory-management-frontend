@@ -481,7 +481,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {dialogState.type === 'confirm' && dialogState.action === 'remove' && (
         <Dialog
           isOpen={true}
-          type="error"
+          type="warning"
           title="Remove Item"
           message={`Remove "${dialogState.item.name}" from shopping list?`}
           confirmLabel="Remove"
@@ -507,7 +507,7 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
       {dialogState.type === 'success' && (
         <Dialog
           isOpen={true}
-          type="alert"
+          type="secondary"
           title="Success"
           message={dialogState.message}
           confirmLabel="OK"

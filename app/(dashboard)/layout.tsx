@@ -9,7 +9,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { isAuthenticated, getUserContext, handleLogout, setUserContext as saveUserContext } from '@/lib/auth';
-import { getActiveNotificationCount } from '@/lib/api/notifications';
+import { getActiveNotificationCount, listNotifications } from '@/lib/api/notifications';
+import { listInventoryItems } from '@/lib/api/inventory';
 import { listUserFamilies } from '@/lib/api/families';
 import { getNavigationItems, isNavItemActive } from '@/lib/navigation';
 import { UserContext } from '@/types/entities';
@@ -33,13 +34,26 @@ export default function DashboardLayout({
   const isAdmin = userContext?.role === 'admin';
   const navItems = getNavigationItems(isAdmin);
 
-  // Fetch active notification count
+  // Fetch active notification count by comparing notifications to active inventory items
   const fetchNotificationCount = useCallback(async (familyId: string) => {
     try {
-      const count = await getActiveNotificationCount(familyId);
-      setActiveNotificationCount(count);
-    } catch {
+      // Fetch notifications and active inventory items in parallel
+      const [notificationsData, inventoryData] = await Promise.all([
+        listNotifications(familyId),
+        listInventoryItems(familyId),
+      ]);
+
+      const activeItemIds = new Set((inventoryData.items || []).map(i => i.itemId));
+
+      // Count only notifications for active items with status 'active'
+      const activeCount = (notificationsData || []).filter(
+        (n) => activeItemIds.has(n.itemId) && n.status === 'active'
+      ).length;
+
+      setActiveNotificationCount(activeCount);
+    } catch (error) {
       // Silently fail - notification count is not critical
+      console.error('Failed to fetch notification count:', error);
       setActiveNotificationCount(0);
     }
   }, []);
@@ -118,35 +132,15 @@ export default function DashboardLayout({
                         : 'border-transparent text-text-secondary hover:border-border hover:text-text-default'
                     }`}
                   >
-                    {item.icon === 'bell' && (
-                      <span className="relative">
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                          />
-                        </svg>
-                        {showBadge && (
-                          <span
-                            className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-xs font-bold text-error-contrast"
-                            data-testid="notification-badge"
-                          >
-                            {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
-                          </span>
-                        )}
+                    <span>{item.label}</span>
+                    {showBadge && (
+                      <span
+                        className="ml-2 inline-flex items-center justify-center rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-warning-contrast min-w-[20px]"
+                        data-testid="notification-badge"
+                      >
+                        {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
                       </span>
                     )}
-                    <span className={item.icon === 'bell' ? 'ml-1 hidden lg:inline' : ''}>
-                      {item.label}
-                    </span>
                   </a>
                 );
               })}
@@ -160,9 +154,11 @@ export default function DashboardLayout({
                   <span className="text-sm text-text-secondary truncate max-w-[150px]">
                     {userContext?.name || userContext?.email}
                   </span>
-                  <Badge variant="info" size="sm">
-                    {userContext?.role}
-                  </Badge>
+                  {userContext?.familyId && (
+                    <Badge variant="info" size="sm">
+                      {userContext?.role}
+                    </Badge>
+                  )}
                 </div>
                 <Button
                   variant="secondary"
@@ -251,9 +247,11 @@ export default function DashboardLayout({
                   <div className="text-sm font-medium text-text-secondary mb-1">
                     {userContext?.name || userContext?.email}
                   </div>
-                  <Badge variant="info" size="sm">
-                    {userContext?.role}
-                  </Badge>
+                  {userContext?.familyId && (
+                    <Badge variant="info" size="sm">
+                      {userContext?.role}
+                    </Badge>
+                  )}
                 </div>
                 <div className="px-2">
                   <Button

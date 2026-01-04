@@ -193,7 +193,7 @@ export default function AdjustmentClient({
               </Text>
               <div className="flex gap-2 mt-2">
                 <Button
-                  variant="danger"
+                  variant="warning"
                   size="sm"
                   onClick={retry}
                 >

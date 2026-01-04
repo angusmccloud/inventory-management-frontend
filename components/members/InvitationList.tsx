@@ -100,7 +100,7 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
 
               {invitation.status === 'pending' && !isExpired && onRevoke && (
                 <Button
-                  variant="danger"
+                  variant="warning"
                   size="sm"
                   onClick={() => onRevoke(invitation.invitationId)}
                   className="ml-4"

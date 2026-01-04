@@ -38,13 +38,13 @@
   --color-border-focus: 34 71 130; /* primary blue for focus */
 
   /* Semantic colors */
-  --color-success: 34 197 94; /* green */
-  --color-success-contrast: 255 255 255;
-  --color-success-hover: 22 163 74; /* darker green for hover */
+  --color-success: 23 125 108; /* #177D6C */
+  --color-success-contrast: 255 255 255; /* #FFFFFF */
+  --color-success-hover: 0 76 63; /* #004C3F - darker for hover */
   
-  --color-warning: 245 158 11; /* amber */
-  --color-warning-contrast: 255 255 255;
-  --color-warning-hover: 217 119 6; /* darker amber for hover */
+  --color-warning: 197 102 37; /* C56625 */
+  --color-warning-contrast: 255 255 255; /* white */
+  --color-warning-hover: 160 74 16; /* A04A10 */
   
   --color-error: 220 38 38; /* red */
   --color-error-contrast: 255 255 255;
@@ -54,23 +54,6 @@
   --color-info-contrast: 255 255 255;
   --color-info-hover: 37 99 235; /* darker blue for hover */
 }
-
-/* 
-Primary:
-Base: 34 71 130; (#224782)
-Lighter: 90 121 168; (#5A79A8)
-Darker: 6 35 79; (#06234F)
-
-Secondary:
-Base: 23 125 108; (#177D6C)
-Lighter: 79 161 148; (#4FA194)
-Darker: 0 76 63; (#004C3F)
-
-Tertiary:
-Base: 55 39 136; (#372788)
-Lighter: 79 64 181; (#4F40B5)
-Darker: 111 98 176; (#6F62B0)
-*/
 
 /* Dark Theme (Class-based and Media Query for compatibility) */
 .dark,
@@ -109,13 +92,13 @@ Darker: 111 98 176; (#6F62B0)
   --color-border-focus: 6 35 79; /* #06234F */
 
   /* Semantic colors */
-  --color-success: 74 222 128; /* green */
-  --color-success-contrast: 17 24 39;
-  --color-success-hover: 34 197 94; /* darker green for hover */
+  --color-success: 23 125 108; /* #177D6C */
+  --color-success-contrast: 255 255 255; /* #FFFFFF */
+  --color-success-hover: 0 76 63; /* #004C3F */
   
-  --color-warning: 251 191 36; /* amber */
-  --color-warning-contrast: 17 24 39;
-  --color-warning-hover: 245 158 11; /* darker amber for hover */
+  --color-warning: 197 102 37; /* C56625 */
+  --color-warning-contrast: 255 255 255; /* white */
+  --color-warning-hover: 160 74 16; /* A04A10 */
   
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */
@@ -162,13 +145,13 @@ Darker: 111 98 176; (#6F62B0)
   --color-border-focus: 6 35 79; /* #06234F */
 
   /* Semantic colors */
-  --color-success: 74 222 128; /* green */
-  --color-success-contrast: 17 24 39;
-  --color-success-hover: 34 197 94; /* darker green for hover */
+  --color-success: 23 125 108; /* #177D6C */
+  --color-success-contrast: 255 255 255; /* #FFFFFF */
+  --color-success-hover: 0 76 63; /* #004C3F */
   
-  --color-warning: 251 191 36; /* amber */
-  --color-warning-contrast: 17 24 39;
-  --color-warning-hover: 245 158 11; /* darker amber for hover */
+  --color-warning: 197 102 37; /* C56625 */
+  --color-warning-contrast: 255 255 255; /* white */
+  --color-warning-hover: 160 74 16; /* A04A10 */
   
   --color-error: 212 166 161; /* #D4A6A1 */
   --color-error-contrast: 68 20 13; /* #44140D */

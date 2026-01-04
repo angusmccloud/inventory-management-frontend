@@ -88,7 +88,7 @@ export default function StoreList({
                         Edit
                       </Button>
                       <Button
-                        variant="danger"
+                        variant="warning"
                         size="sm"
                         onClick={() => openDeleteDialog(store)}
                         disabled={deletingId === store.storeId}

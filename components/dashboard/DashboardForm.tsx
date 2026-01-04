@@ -64,17 +64,13 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
       setLoading(true);
       const dashboardData = await getDashboard(dashboardId);
       
-      // Extract configuration based on dashboard type
-      const locationIds = dashboardData.dashboard.type === 'location'
-        ? Array.from(new Set(dashboardData.items.filter(item => item.locationId).map(item => item.locationId!)))
-        : [];
-      const itemIds = dashboardData.dashboard.type === 'items'
-        ? dashboardData.items.map(item => item.itemId)
-        : [];
+      // API client automatically unwraps the response, so dashboardData is the dashboard object
+      const locationIds = dashboardData.locationIds || [];
+      const itemIds = dashboardData.itemIds || [];
       
       setFormData({
-        name: dashboardData.dashboard.title,
-        type: dashboardData.dashboard.type,
+        name: dashboardData.title,
+        type: dashboardData.type,
         locationIds,
         itemIds,
       });
@@ -93,7 +89,7 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         listInventoryItems(familyId),
       ]);
       setLocations(locationsData);
-      setInventoryItems(inventoryData.items.filter((item: InventoryItem) => item.quantity > 0));
+      setInventoryItems(inventoryData.items);
     } catch (err) {
       console.error('Failed to load locations and items:', err);
     }
@@ -145,9 +141,9 @@ export default function DashboardForm({ familyId, dashboardId, onSuccess, onCanc
         };
 
         const result = await createDashboard(input);
-        const shareableUrl = `${window.location.origin}/d/${result.dashboard.dashboardId}`;
+        const shareableUrl = `${window.location.origin}/d/${result.dashboardId}`;
         
-        onSuccess(result.dashboard.dashboardId, shareableUrl);
+        onSuccess(result.dashboardId, shareableUrl);
       }
     } catch (err) {
       console.error(`Failed to ${dashboardId ? 'update' : 'create'} dashboard:`, err);

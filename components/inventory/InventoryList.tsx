@@ -8,7 +8,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { InventoryItem } from '@/types/entities';
 import { Button, Text, EmptyState, Modal } from '@/components/common';
 import QuantityControls from '@/components/common/QuantityControls';
@@ -16,6 +16,7 @@ import { useQuantityDebounce } from '@/hooks/useQuantityDebounce';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { adjustInventoryQuantity } from '@/lib/api/inventory';
 import NFCUrlManager from '@/components/inventory/NFCUrlManager';
+import { listShoppingListItems, ShoppingListItem } from '@/lib/api/shoppingList';
 import {
   ShoppingCartIcon,
   PencilIcon,
@@ -51,6 +52,7 @@ function InventoryListItem({
   onItemUpdated,
   onSuggest,
   onShowNFCModal,
+  isInShoppingList,
 }: {
   item: InventoryItem;
   familyId: string;
@@ -63,6 +65,7 @@ function InventoryListItem({
   onItemUpdated?: (updatedItem: InventoryItem) => void;
   onSuggest: (item: InventoryItem) => void;
   onShowNFCModal: (item: InventoryItem) => void;
+  isInShoppingList?: boolean;
 }) {
   const isLowStock = item.quantity <= item.lowStockThreshold;
 
@@ -112,7 +115,7 @@ function InventoryListItem({
               </span>
             )}
           </div>
-          <div className="mt-2 flex flex-col text-sm text-text-secondary sm:flex-row sm:gap-4">
+          <div className="mt-2 flex flex-col text-sm text-text-secondary sm:flex-row sm:items-center sm:gap-4">
             {/* Inline Quantity Controls (Admin Only) */}
             {isAdmin && (
               <div className="flex items-center gap-2">
@@ -192,9 +195,10 @@ function InventoryListItem({
                 variant="primary"
                 size="sm"
                 leftIcon={<ShoppingCartIcon className="h-4 w-4" />}
-                title="Add to Shopping List"
+                title={isInShoppingList ? 'Already in shopping list' : 'Add to Shopping List'}
+                disabled={!!isInShoppingList}
               >
-                Add
+                {isInShoppingList ? 'In List' : 'Add'}
               </Button>
               <Button
                 onClick={() => onShowNFCModal(item)}
@@ -207,7 +211,7 @@ function InventoryListItem({
               </Button>
               <Button
                 onClick={() => onEdit(item)}
-                variant="warning"
+                variant="tertiary"
                 size="sm"
                 leftIcon={<PencilIcon className="h-4 w-4" />}
               >
@@ -216,7 +220,7 @@ function InventoryListItem({
               {item.status === 'active' ? (
                 <Button
                   onClick={() => onArchive(item)}
-                  variant="danger"
+                  variant="warning"
                   size="sm"
                   leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
                 >
@@ -225,7 +229,7 @@ function InventoryListItem({
               ) : (
                 <Button
                   onClick={() => onDelete(item)}
-                  variant="danger"
+                  variant="warning"
                   size="sm"
                   leftIcon={<TrashIcon className="h-4 w-4" />}
                 >
@@ -253,6 +257,29 @@ export default function InventoryList({
   const router = useRouter();
   const isOnline = useOnlineStatus();
   const [nfcModalItem, setNfcModalItem] = useState<InventoryItem | null>(null);
+  const [shoppingListItems, setShoppingListItems] = useState<ShoppingListItem[]>([]);
+
+  // Fetch active (pending) shopping list items for this family so we can
+  // disable Add buttons for inventory items already present.
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const resp = await listShoppingListItems(familyId, { status: 'pending' });
+        if (mounted) setShoppingListItems(resp.items || []);
+      } catch (err) {
+        // non-blocking: log and continue
+        // eslint-disable-next-line no-console
+        console.warn('Failed to load shopping list items', err);
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
+  }, [familyId]);
 
   const handleSuggest = (item: InventoryItem) => {
     // Navigate to suggestion form with pre-filled itemId for add_to_shopping type
@@ -317,22 +344,29 @@ export default function InventoryList({
             </Text>
             <div className="overflow-hidden bg-surface shadow sm:rounded-md">
               <ul role="list" className="divide-y divide-border">
-                {locationItems.map((item) => (
-                  <InventoryListItem
-                    key={item.itemId}
-                    item={item}
-                    familyId={familyId}
-                    isAdmin={isAdmin}
-                    isOnline={isOnline}
-                    onEdit={onEdit}
-                    onArchive={onArchive}
-                    onDelete={onDelete}
-                    onAddToShoppingList={onAddToShoppingList}
-                    onItemUpdated={onItemUpdated}
-                    onSuggest={handleSuggest}
-                    onShowNFCModal={handleShowNFCModal}
-                  />
-                ))}
+                {locationItems.map((item) => {
+                  const presentItemIds = new Set(
+                    shoppingListItems.flatMap((s) => (s.itemId ? [s.itemId] : []))
+                  );
+
+                  return (
+                    <InventoryListItem
+                      key={item.itemId}
+                      item={item}
+                      familyId={familyId}
+                      isAdmin={isAdmin}
+                      isOnline={isOnline}
+                      onEdit={onEdit}
+                      onArchive={onArchive}
+                      onDelete={onDelete}
+                      onAddToShoppingList={onAddToShoppingList}
+                      onItemUpdated={onItemUpdated}
+                      onSuggest={handleSuggest}
+                      onShowNFCModal={handleShowNFCModal}
+                      isInShoppingList={!!item.itemId && presentItemIds.has(item.itemId)}
+                    />
+                  );
+                })}
               </ul>
             </div>
           </div>

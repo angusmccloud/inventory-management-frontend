@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Card } from '@/components/common/Card/Card';
 import { Button } from '@/components/common/Button/Button';
 import { Alert } from '@/components/common/Alert/Alert';
 import { Text } from '@/components/common/Text/Text';
+import Dialog from '@/components/common/Dialog';
+import { PageLoading } from '@/components/common/PageLoading/PageLoading';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 import { 
   listDashboards, 
   deleteDashboard, 
@@ -20,19 +23,30 @@ interface DashboardManagerProps {
   onEdit?: (dashboardId: string) => void;
 }
 
-export default function DashboardManager({ familyId: _familyId, onCreateNew, onEdit }: DashboardManagerProps) {
-  // @ts-ignore - dashboards is used in renderListView  
-  const [dashboards, setDashboards] = useState<DashboardListItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+export interface DashboardManagerRef {
+  reloadDashboards: () => Promise<void>;
+}
 
-  // Load dashboards on component mount
-  useEffect(() => {
-    loadDashboards();
-  }, []);
+type DialogState =
+  | { type: 'none' }
+  | { type: 'rotate'; dashboardId: string }
+  | { type: 'delete'; dashboardId: string };
 
-  const loadDashboards = async (): Promise<void> => {
+const DashboardManager = forwardRef<DashboardManagerRef, DashboardManagerProps>(
+  ({ familyId: _familyId, onCreateNew, onEdit }, ref) => {
+    const { showSnackbar } = useSnackbar();
+    // @ts-ignore - dashboards is used in renderListView  
+    const [dashboards, setDashboards] = useState<DashboardListItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [dialogState, setDialogState] = useState<DialogState>({ type: 'none' });
+
+    // Load dashboards on component mount
+    useEffect(() => {
+      loadDashboards();
+    }, []);
+
+    const loadDashboards = async (): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
@@ -50,11 +64,18 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
     }
   };
 
+  // Expose reloadDashboards method via ref
+  useImperativeHandle(ref, () => ({
+    reloadDashboards: loadDashboards
+  }));
+
   const handleCopyUrl = async (url: string): Promise<void> => {
     try {
       await navigator.clipboard.writeText(url);
-      setSuccessMessage('URL copied to clipboard!');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSnackbar({
+        variant: 'success',
+        text: 'URL copied to clipboard!'
+      });
     } catch (err) {
       console.error('Failed to copy URL:', err);
       setError('Failed to copy URL to clipboard');
@@ -66,16 +87,24 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
   };
 
   // @ts-ignore - handleDeleteDashboard is used in renderListView
-  const handleDeleteDashboard = async (dashboardId: string): Promise<void> => {
-    if (!confirm('Are you sure you want to delete this dashboard?')) {
-      return;
-    }
+  const handleDeleteDashboard = (dashboardId: string): void => {
+    setDialogState({ type: 'delete', dashboardId });
+  };
+
+  const confirmDelete = async (): Promise<void> => {
+    if (dialogState.type !== 'delete') return;
+
+    const dashboardId = dialogState.dashboardId;
+    setDialogState({ type: 'none' });
 
     try {
       setLoading(true);
       setError(null);
       await deleteDashboard(dashboardId);
-      setSuccessMessage('Dashboard deleted successfully');
+      showSnackbar({
+        variant: 'success',
+        text: 'List deleted successfully'
+      });
       await loadDashboards();
     } catch (err) {
       console.error('Failed to delete dashboard:', err);
@@ -86,17 +115,25 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
   };
 
   // @ts-ignore - handleRotateUrl is used in renderListView  
-  const handleRotateUrl = async (dashboardId: string): Promise<void> => {
-    if (!confirm('This will deactivate the current URL and generate a new one. Continue?')) {
-      return;
-    }
+  const handleRotateUrl = (dashboardId: string): void => {
+    setDialogState({ type: 'rotate', dashboardId });
+  };
+
+  const confirmRotateUrl = async (): Promise<void> => {
+    if (dialogState.type !== 'rotate') return;
+
+    const dashboardId = dialogState.dashboardId;
+    setDialogState({ type: 'none' });
 
     try {
       setLoading(true);
       setError(null);
       const result = await rotateDashboard(dashboardId);
       const newUrl = `${window.location.origin}/d/${result.newDashboard.dashboardId}`;
-      setSuccessMessage(`URL rotated successfully! New URL: ${newUrl}`);
+      showSnackbar({
+        variant: 'success',
+        text: `URL rotated successfully! New URL: ${newUrl}`
+      });
       await loadDashboards();
     } catch (err) {
       console.error('Failed to rotate URL:', err);
@@ -110,13 +147,9 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
   const renderListView = (): React.ReactElement => (
     <div className="space-y-6 mt-6">
       {error && <Alert severity="error">{error}</Alert>}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
       {loading ? (
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <Text variant="body" color="secondary" className="mt-2">Loading dashboards...</Text>
-        </div>
+        <PageLoading message="Loading Lists..." fullHeight={false} />
       ) : dashboards.length === 0 ? (
         <Card elevation="low" padding="lg">
           <div className="text-center py-8">
@@ -137,42 +170,58 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
               <h3 className="text-lg font-semibold text-text-primary mb-2">
                 {dashboard.title}
               </h3>
-              <div className="text-xs mb-3">
-                <Text variant="caption" color="secondary">Type: {dashboard.type === 'location' ? 'Location-based' : 'Item-based'}</Text>
-                <Text variant="caption" color="secondary">Created: {new Date(dashboard.createdAt).toLocaleDateString()}</Text>
-                <Text variant="caption" color="secondary">Accessed: {dashboard.accessCount} times</Text>
+              
+              {/* Main content area with info on left and Copy URL button on right */}
+              <div className="flex gap-3 mb-3">
+                {/* Left side: Info fields */}
+                <div className="flex-1 text-xs space-y-1">
+                  <Text variant="caption" color="secondary">Type: {dashboard.type === 'location' ? 'Location-based' : 'Item-based'}</Text>
+                  <Text variant="caption" color="secondary">Created: {new Date(dashboard.createdAt).toLocaleDateString()}</Text>
+                  <Text variant="caption" color="secondary">Accessed: {dashboard.accessCount} times</Text>
+                </div>
+                
+                {/* Right side: Large Copy URL button */}
+                <Button
+                  variant="secondary"
+                  onClick={() => handleCopyUrl(`${window.location.origin}/d/${dashboard.dashboardId}`)}
+                  className="flex-shrink-0 w-24 h-24 !p-0"
+                  aria-label="Copy URL"
+                >
+                  <div className="flex flex-col items-center justify-center gap-1 h-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                    </svg>
+                    <span className="text-xs font-medium">Copy URL</span>
+                  </div>
+                </Button>
               </div>
-              <div className="flex flex-col gap-2">
+              
+              {/* Bottom action buttons - equally sized */}
+              <div className="grid grid-cols-3 gap-2">
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => handleRotateUrl(dashboard.dashboardId)}
+                  className="w-full"
+                >
+                  Rotate
+                </Button>
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => handleCopyUrl(`${window.location.origin}/d/${dashboard.dashboardId}`)}
+                  onClick={() => handleEditDashboard(dashboard.dashboardId)}
+                  className="w-full"
                 >
-                  Copy URL
+                  Edit
                 </Button>
-                <div className="flex justify-between gap-2">
-                  <Button
-                    variant="warning"
-                    size="sm"
-                    onClick={() => handleRotateUrl(dashboard.dashboardId)}
-                  >
-                    Rotate URL
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => handleEditDashboard(dashboard.dashboardId)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => handleDeleteDashboard(dashboard.dashboardId)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => handleDeleteDashboard(dashboard.dashboardId)}
+                  className="w-full"
+                >
+                  Delete
+                </Button>
               </div>
             </Card>
           ))}
@@ -184,6 +233,38 @@ export default function DashboardManager({ familyId: _familyId, onCreateNew, onE
   return (
     <div className="max-w-7xl mx-auto">
       {renderListView()}
+
+      {/* Rotate URL Confirmation Dialog */}
+      {dialogState.type === 'rotate' && (
+        <Dialog
+          isOpen={true}
+          type="warning"
+          title="Rotate URL"
+          message="This will deactivate the current URL and generate a new one. Continue?"
+          confirmLabel="Rotate"
+          cancelLabel="Cancel"
+          onConfirm={confirmRotateUrl}
+          onCancel={() => setDialogState({ type: 'none' })}
+        />
+      )}
+
+      {/* Delete Dashboard Confirmation Dialog */}
+      {dialogState.type === 'delete' && (
+        <Dialog
+          isOpen={true}
+          type="warning"
+          title="Delete List"
+          message="Are you sure you want to delete this list? This cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={confirmDelete}
+          onCancel={() => setDialogState({ type: 'none' })}
+        />
+      )}
     </div>
   );
-}
+});
+
+DashboardManager.displayName = 'DashboardManager';
+
+export default DashboardManager;

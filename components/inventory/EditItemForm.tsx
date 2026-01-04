@@ -11,6 +11,9 @@ import { updateInventoryItem } from '@/lib/api/inventory';
 import { listStorageLocations, listStores } from '@/lib/api/reference-data';
 import { InventoryItem, UpdateInventoryItemRequest, StorageLocation, Store } from '@/types/entities';
 import { Input, Select, Button, Text } from '@/components/common';
+import { ArchiveBoxIcon } from '@heroicons/react/24/outline';
+import { Modal } from '@/components/common';
+import { archiveInventoryItem } from '@/lib/api/inventory';
 import type { SelectOption } from '@/components/common';
 
 interface EditItemFormProps {
@@ -18,6 +21,7 @@ interface EditItemFormProps {
   item: InventoryItem;
   onSuccess: (item: InventoryItem) => void;
   onCancel?: () => void;
+  onArchive?: (item: InventoryItem) => Promise<InventoryItem | void> | void;
 }
 
 export default function EditItemForm({
@@ -25,6 +29,7 @@ export default function EditItemForm({
   item,
   onSuccess,
   onCancel,
+  onArchive,
 }: EditItemFormProps) {
   const [formData, setFormData] = useState<UpdateInventoryItemRequest>({
     name: item.name,
@@ -41,6 +46,9 @@ export default function EditItemForm({
   const [locations, setLocations] = useState<StorageLocation[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
   const [loadingReferenceData, setLoadingReferenceData] = useState<boolean>(true);
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState<boolean>(false);
+  const [archiving, setArchiving] = useState<boolean>(false);
+  const [archiveError, setArchiveError] = useState<string>('');
 
   // Load storage locations and stores
   useEffect(() => {
@@ -221,10 +229,21 @@ export default function EditItemForm({
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </Button>
+        {onArchive && item.status === 'active' && (
+          <Button
+            type="button"
+            variant="warning"
+            onClick={() => setShowArchiveConfirm(true)}
+            disabled={loading || archiving}
+            leftIcon={<ArchiveBoxIcon className="h-4 w-4" />}
+          >
+            Archive
+          </Button>
+        )}
         {onCancel && (
           <Button
             type="button"
-            variant="danger"
+            variant="warning"
             onClick={onCancel}
             disabled={loading}
           >
@@ -232,6 +251,52 @@ export default function EditItemForm({
           </Button>
         )}
       </div>
+
+      {/* Archive confirmation modal */}
+      {onArchive && (
+        <Modal
+          isOpen={showArchiveConfirm}
+          onClose={() => setShowArchiveConfirm(false)}
+          title={`Archive ${item.name}?`}
+          size="sm"
+        >
+          <div className="space-y-4">
+            <Text variant="body">Are you sure you want to archive this item? This action can be reversed in Settings.</Text>
+            {archiveError && (
+              <div className="rounded-md bg-error/10 p-2">
+                <Text variant="bodySmall" color="error">{archiveError}</Text>
+              </div>
+            )}
+            <div className="flex justify-end gap-3">
+              <Button variant="tertiary" onClick={() => setShowArchiveConfirm(false)} disabled={archiving}>
+                Cancel
+              </Button>
+              <Button
+                variant="warning"
+                  onClick={async () => {
+                    setArchiveError('');
+                    setArchiving(true);
+                    try {
+                      // Follow the exact flow used on the inventory page: call the archive endpoint
+                      const res = await archiveInventoryItem(familyId, item.itemId);
+                      if (res && res.itemId) {
+                        onSuccess(res as InventoryItem);
+                      }
+                      setShowArchiveConfirm(false);
+                    } catch (err) {
+                      setArchiveError(err instanceof Error ? err.message : 'Failed to archive item');
+                    } finally {
+                      setArchiving(false);
+                    }
+                  }}
+                disabled={archiving}
+              >
+                {archiving ? 'Archiving...' : 'Archive'}
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </form>
   );
 }

@@ -88,7 +88,7 @@ export function RemoveMemberDialog({
           <div className="flex gap-3">
             {!isLastAdmin && (
               <Button
-                variant="danger"
+                variant="warning"
                 onClick={onConfirm}
                 disabled={isRemoving}
                 loading={isRemoving}
@@ -99,7 +99,7 @@ export function RemoveMemberDialog({
             )}
 
             <Button
-              variant="danger"
+              variant="warning"
               onClick={onCancel}
               disabled={isRemoving}
               className={isLastAdmin ? 'flex-1' : ''}

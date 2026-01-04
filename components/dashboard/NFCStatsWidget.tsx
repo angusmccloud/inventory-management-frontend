@@ -1,10 +1,10 @@
 /**
- * NFC URL Usage Statistics Widget
+ * Usage Summary Widget
  * 
- * @description Displays NFC URL statistics for family admin dashboard
- * Shows total URLs, active URLs, and most accessed items
+ * @description Displays usage statistics for family admin dashboard
+ * Shows inventory counts, NFC URLs, storage locations, and access analytics
  * 
- * @see specs/006-api-integration/spec.md - Feature enhancement
+ * @see specs/014-inventory-dashboards/spec.md - Dashboard analytics
  */
 
 'use client';
@@ -13,22 +13,26 @@ import { useEffect, useState } from 'react';
 import { getUserContext } from '@/lib/auth';
 import { listInventoryItems } from '@/lib/api/inventory';
 import { nfcUrlsApi } from '@/lib/api/nfcUrls';
+import { listStorageLocations } from '@/lib/api/reference-data';
+import { listDashboards } from '@/lib/api/dashboards';
 import { LoadingSpinner } from '@/components/common';
 import { Button } from '@/components/common/Button/Button';
 import { Text } from '@/components/common/Text/Text';
 
-interface NFCStats {
-  totalUrls: number;
-  activeUrls: number;
-  itemsWithUrls: number;
-  mostAccessedItem: string | null;
+interface UsageStats {
+  totalInventoryItems: number;
+  lowStockItems: number;
+  totalStorageLocations: number;
+  listNFCs: number;
+  itemNFCs: number;
+  mostAccessedPages: Array<{ name: string; accessCount: number }>;
 }
 
 /**
- * NFC Statistics Widget for Admin Dashboard
+ * Usage Summary Widget for Admin Dashboard
  */
 export default function NFCStatsWidget() {
-  const [stats, setStats] = useState<NFCStats | null>(null);
+  const [stats, setStats] = useState<UsageStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,16 +49,28 @@ export default function NFCStatsWidget() {
         return;
       }
 
-      // Fetch all inventory items
-      const inventoryResponse = await listInventoryItems(userContext.familyId);
-      const items = inventoryResponse.items || [];
+      const familyId = userContext.familyId;
 
-      // Fetch NFC URLs for each item and aggregate stats
-      let totalUrls = 0;
-      let activeUrls = 0;
-      let itemsWithUrls = 0;
-      let maxAccess = 0;
-      let mostAccessedItemName: string | null = null;
+      // Fetch all data in parallel
+      const [inventoryResponse, locationsData, dashboardsData] = await Promise.all([
+        listInventoryItems(familyId),
+        listStorageLocations(familyId).catch(() => []),
+        listDashboards(false).catch(() => []),
+      ]);
+
+      const items = inventoryResponse.items || [];
+      const locations = locationsData || [];
+      const dashboards = dashboardsData || [];
+
+      // Calculate inventory stats
+      const totalInventoryItems = items.length;
+      const lowStockItems = items.filter(
+        (item) => item.lowStockThreshold > 0 && item.quantity <= item.lowStockThreshold
+      ).length;
+
+      // Calculate NFC stats
+      let itemNFCCount = 0;
+      const itemAccessCounts: Array<{ name: string; accessCount: number; type: 'item' }> = [];
 
       for (const item of items) {
         try {
@@ -62,16 +78,16 @@ export default function NFCStatsWidget() {
           const urls = urlsResponse.urls || [];
 
           if (urls.length > 0) {
-            itemsWithUrls++;
-            totalUrls += urls.length;
-            activeUrls += urls.filter((url) => url.isActive).length;
-
-            // Find most accessed URL for this item
-            for (const url of urls) {
-              if (url.accessCount > maxAccess) {
-                maxAccess = url.accessCount;
-                mostAccessedItemName = item.name;
-              }
+            itemNFCCount++;
+            
+            // Sum access counts for all URLs of this item
+            const totalItemAccess = urls.reduce((sum, url) => sum + (url.accessCount || 0), 0);
+            if (totalItemAccess > 0) {
+              itemAccessCounts.push({
+                name: item.name,
+                accessCount: totalItemAccess,
+                type: 'item',
+              });
             }
           }
         } catch (err) {
@@ -80,14 +96,32 @@ export default function NFCStatsWidget() {
         }
       }
 
+      // Calculate dashboard NFC count and access stats
+      const listNFCCount = dashboards.filter((d) => d.isActive).length;
+      const dashboardAccessCounts: Array<{ name: string; accessCount: number; type: 'dashboard' }> = 
+        dashboards
+          .filter((d) => d.accessCount && d.accessCount > 0)
+          .map((d) => ({
+            name: d.title,
+            accessCount: d.accessCount || 0,
+            type: 'dashboard' as const,
+          }));
+
+      // Combine and sort all access counts
+      const allAccessCounts = [...itemAccessCounts, ...dashboardAccessCounts];
+      allAccessCounts.sort((a, b) => b.accessCount - a.accessCount);
+      const mostAccessedPages = allAccessCounts.slice(0, 3);
+
       setStats({
-        totalUrls,
-        activeUrls,
-        itemsWithUrls,
-        mostAccessedItem: mostAccessedItemName,
+        totalInventoryItems,
+        lowStockItems,
+        totalStorageLocations: locations.length,
+        listNFCs: listNFCCount,
+        itemNFCs: itemNFCCount,
+        mostAccessedPages,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load NFC statistics');
+      setError(err instanceof Error ? err.message : 'Failed to load usage statistics');
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +131,7 @@ export default function NFCStatsWidget() {
     return (
       <div className="bg-surface shadow sm:rounded-lg p-6">
         <h3 className="text-lg font-medium text-text-default mb-4">
-          NFC URL Statistics
+          Usage Summary
         </h3>
         <div className="flex justify-center py-8">
           <LoadingSpinner size="md" />
@@ -110,7 +144,7 @@ export default function NFCStatsWidget() {
     return (
       <div className="bg-surface shadow sm:rounded-lg p-6">
         <h3 className="text-lg font-medium text-text-default mb-4">
-          NFC URL Statistics
+          Usage Summary
         </h3>
         <Text variant="bodySmall" color="error">{error}</Text>
       </div>
@@ -121,48 +155,81 @@ export default function NFCStatsWidget() {
     <div className="bg-surface shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-lg font-medium text-text-default mb-4">
-          NFC URL Statistics
+          Usage Summary
         </h3>
         
         {stats && (
-          <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {/* Total URLs */}
+          <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Number of Items in Inventory */}
             <div className="bg-surface-elevated px-4 py-5 rounded-lg">
               <dt className="text-sm font-medium text-text-secondary truncate">
-                Total NFC URLs
+                Items in Inventory
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
-                {stats.totalUrls}
+                {stats.totalInventoryItems}
               </dd>
             </div>
 
-            {/* Active URLs */}
+            {/* Number of Storage Locations */}
             <div className="bg-surface-elevated px-4 py-5 rounded-lg">
               <dt className="text-sm font-medium text-text-secondary truncate">
-                Active URLs
+                Storage Locations
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
-                {stats.activeUrls}
+                {stats.totalStorageLocations}
               </dd>
             </div>
 
-            {/* Items with URLs */}
+            {/* Number of Items at Low Stock */}
             <div className="bg-surface-elevated px-4 py-5 rounded-lg">
               <dt className="text-sm font-medium text-text-secondary truncate">
-                Items with URLs
+                Low Stock Items
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-text-default">
-                {stats.itemsWithUrls}
+                {stats.lowStockItems}
               </dd>
             </div>
 
-            {/* Most Accessed Item */}
+            {/* Number of List NFCs */}
             <div className="bg-surface-elevated px-4 py-5 rounded-lg">
               <dt className="text-sm font-medium text-text-secondary truncate">
-                Most Accessed Item
+                List NFCs (Dashboards)
               </dt>
-              <dd className="mt-1 text-lg font-semibold text-text-default">
-                {stats.mostAccessedItem || 'N/A'}
+              <dd className="mt-1 text-3xl font-semibold text-text-default">
+                {stats.listNFCs}
+              </dd>
+            </div>
+
+            {/* Number of Items with NFCs */}
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
+                Items with NFCs
+              </dt>
+              <dd className="mt-1 text-3xl font-semibold text-text-default">
+                {stats.itemNFCs}
+              </dd>
+            </div>
+
+            {/* Most Accessed Pages */}
+            <div className="bg-surface-elevated px-4 py-5 rounded-lg">
+              <dt className="text-sm font-medium text-text-secondary truncate">
+                Most Accessed Pages
+              </dt>
+              <dd className="mt-2 space-y-1">
+                {stats.mostAccessedPages.length > 0 ? (
+                  stats.mostAccessedPages.map((page, index) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <Text variant="bodySmall" color="primary" className="truncate">
+                        {index + 1}. {page.name}
+                      </Text>
+                      <Text variant="bodySmall" color="secondary" className="ml-2">
+                        ({page.accessCount})
+                      </Text>
+                    </div>
+                  ))
+                ) : (
+                  <Text variant="bodySmall" color="secondary">No access data</Text>
+                )}
               </dd>
             </div>
           </dl>

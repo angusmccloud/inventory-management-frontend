@@ -117,7 +117,7 @@ export default function SuccessDisplay({
           <Text variant="bodySmall" color="error">{error.message}</Text>
           <div className="flex gap-2 mt-2">
             <Button
-              variant="danger"
+              variant="warning"
               size="sm"
               onClick={retry}
             >

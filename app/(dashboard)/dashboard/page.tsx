@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserContext } from '@/lib/auth';
 import { getFamily, listUserFamilies } from '@/lib/api/families';
-import { Family } from '@/types/entities';
+import { listMembers } from '@/lib/api/members';
+import { Family, Member } from '@/types/entities';
 import CreateFamilyForm from '@/components/family/CreateFamilyForm';
 import NFCStatsWidget from '@/components/dashboard/NFCStatsWidget';
 import { PageLoading, PageContainer, PageHeader } from '@/components/common';
@@ -19,6 +20,7 @@ import { Text } from '@/components/common/Text/Text';
 export default function DashboardPage() {
   const router = useRouter();
   const [family, setFamily] = useState<Family | null>(null);
+  const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [showCreateFamily, setShowCreateFamily] = useState<boolean>(false);
@@ -62,6 +64,15 @@ export default function DashboardPage() {
       // Fetch full family details
       const familyData = await getFamily(userFamilyId);
       setFamily(familyData);
+
+      // Fetch family members
+      try {
+        const membersResponse = await listMembers(userFamilyId, false);
+        setMembers(membersResponse.members || []);
+      } catch (membersErr) {
+        console.error('Failed to load family members:', membersErr);
+        // Don't fail the entire page if members can't be loaded
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load family');
     } finally {
@@ -156,7 +167,7 @@ export default function DashboardPage() {
           className="relative rounded-lg border border-border bg-surface px-6 py-5 shadow-sm hover:border-border dark:hover:border-border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <div className="text-center">
-            <h3 className="text-lg font-medium text-text-default">Shopping List</h3>
+            <h3 className="text-lg font-medium text-text-default">View Shopping List</h3>
             <Text variant="bodySmall" color="primary" className="mt-2">
               Manage your shopping list
             </Text>
@@ -182,6 +193,16 @@ export default function DashboardPage() {
               </dd>
             </div>
           </dl>
+
+          {/* Family Members */}
+          {members.length > 0 && (
+            <div className="mt-6">
+              <dt className="text-sm font-medium text-text-default">Family Members</dt>
+              <dd className="mt-1 text-lg font-semibold text-text-default">
+                {members.map((m) => m.name).join(members.length > 2 ? ', ' : ' and ').replace(/, ([^,]*)$/, ', and $1')}
+              </dd>
+            </div>
+          )}
         </div>
       </div>
 

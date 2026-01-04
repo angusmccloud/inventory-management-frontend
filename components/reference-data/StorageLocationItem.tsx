@@ -54,7 +54,7 @@ export default function StorageLocationItem({
               Edit
             </Button>
             <Button
-              variant="danger"
+              variant="warning"
               size="sm"
               onClick={() => onDelete(location)}
               disabled={isDeleting}

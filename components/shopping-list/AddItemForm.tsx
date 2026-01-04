@@ -24,6 +24,7 @@ interface AddItemFormProps {
 export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFormProps) {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState<number | ''>('');
+  const [unit, setUnit] = useState<string>('');
   const [storeId, setStoreId] = useState<string>('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,8 +55,8 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
           value: item.itemId,
           label: item.name,
           metadata: {
-            location: item.preferredStoreId ? (storeMap.get(item.preferredStoreId)?.name || 'Unknown store') : 'No store set',
-            quantity: item.quantity,
+            preferredStoreId: item.preferredStoreId,
+            unit: item.unit,
           },
         }));
     } catch (error) {
@@ -97,13 +98,14 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       await onSubmit({
         name: name.trim(),
         quantity: quantity === '' ? null : Number(quantity),
+        unit: unit.trim() || null,
         storeId: storeId || null,
         notes: notes.trim() || null,
       }, keepModalOpen);
       
       // Reset form on success
       if (keepModalOpen) {
-        // Quick add: keep store, clear name/quantity/notes
+        // Quick add: keep store and unit, clear name/quantity/notes
         setName('');
         setQuantity('');
         setNotes('');
@@ -115,6 +117,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
         // Normal submit: reset everything
         setName('');
         setQuantity('');
+        setUnit('');
         setStoreId('');
         setNotes('');
       }
@@ -122,6 +125,20 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       setError(err instanceof Error ? err.message : 'Failed to add item');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Handle name change and item selection from autocomplete
+  const handleNameChange = (value: string, option?: any) => {
+    setName(value);
+    // If an option was selected (not just typing), auto-populate the store and unit
+    if (option?.metadata) {
+      if (option.metadata.preferredStoreId) {
+        setStoreId(option.metadata.preferredStoreId);
+      }
+      if (option.metadata.unit) {
+        setUnit(option.metadata.unit);
+      }
     }
   };
 
@@ -142,7 +159,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             id="name"
             label="Item Name"
             value={name}
-            onChange={(value) => setName(value)}
+            onChange={handleNameChange}
             onSearch={searchInventoryItems}
             onKeyDown={handleNameKeyDown}
             placeholder="e.g., Paper Towels, Birthday Cake"
@@ -166,6 +183,18 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
           onChange={(e) => setQuantity(e.target.value === '' ? '' : Number(e.target.value))}
           placeholder="1"
           min={1}
+          disabled={isSubmitting}
+        />
+
+        {/* Units */}
+        <Input
+          type="text"
+          id="unit"
+          label="Units (optional)"
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          placeholder="e.g., oz, lbs, count"
+          maxLength={50}
           disabled={isSubmitting}
         />
 

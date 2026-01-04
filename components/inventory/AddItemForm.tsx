@@ -224,7 +224,7 @@ export default function AddItemForm({
         {onCancel && (
           <Button
             type="button"
-            variant="danger"
+            variant="warning"
             onClick={onCancel}
             disabled={loading}
           >

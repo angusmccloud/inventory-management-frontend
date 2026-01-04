@@ -24,7 +24,7 @@ export default function DeleteConfirmDialog({
   return (
     <Dialog
       isOpen={isOpen}
-      type="error"
+      type="warning"
       title={`Archive ${entityType}`}
       message={`Archive ${name}? You can restore it later.`}
       confirmLabel={isDeleting ? 'Archiving...' : 'Archive'}

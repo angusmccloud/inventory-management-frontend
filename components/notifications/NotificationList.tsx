@@ -12,25 +12,11 @@ import { Text } from '@/components/common';
 
 interface NotificationListProps {
   notifications: LowStockNotification[];
-  onAcknowledge: (notificationId: string) => void;
-  onResolve: (notificationId: string) => void;
   onAddToShoppingList: (notification: LowStockNotification) => void;
+  onEdit: (notification: LowStockNotification) => void;
   isAdmin: boolean;
-  statusFilter?: LowStockNotificationStatus | 'all';
+  processingId?: string | null;
 }
-
-/**
- * Filter notifications by status
- */
-const filterNotifications = (
-  notifications: LowStockNotification[],
-  statusFilter?: LowStockNotificationStatus | 'all'
-): LowStockNotification[] => {
-  if (!statusFilter || statusFilter === 'all') {
-    return notifications;
-  }
-  return notifications.filter((n) => n.status === statusFilter);
-};
 
 /**
  * Sort notifications by createdAt (newest first)
@@ -45,14 +31,12 @@ const sortNotifications = (
 
 export default function NotificationList({
   notifications,
-  onAcknowledge,
-  onResolve,
   onAddToShoppingList,
+  onEdit,
   isAdmin,
-  statusFilter,
+  processingId,
 }: NotificationListProps) {
-  const filteredNotifications = filterNotifications(notifications, statusFilter);
-  const sortedNotifications = sortNotifications(filteredNotifications);
+  const sortedNotifications = sortNotifications(notifications);
 
   if (sortedNotifications.length === 0) {
     return (
@@ -73,9 +57,7 @@ export default function NotificationList({
         </svg>
         <h3 className="mt-2 text-sm font-medium text-text-secondary">No notifications</h3>
         <Text variant="bodySmall" color="secondary" className="mt-1">
-          {statusFilter && statusFilter !== 'all'
-            ? `No ${statusFilter} notifications found.`
-            : 'All inventory items are above their thresholds.'}
+          All inventory items are above their thresholds.
         </Text>
       </div>
     );
@@ -88,10 +70,10 @@ export default function NotificationList({
           <NotificationItem
             key={notification.notificationId}
             notification={notification}
-            onAcknowledge={onAcknowledge}
-            onResolve={onResolve}
             onAddToShoppingList={onAddToShoppingList}
+            onEdit={onEdit}
             isAdmin={isAdmin}
+            processingId={processingId}
           />
         ))}
       </ul>

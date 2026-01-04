@@ -9,6 +9,7 @@
 
 import { ShoppingListItem } from '@/lib/api/shoppingList';
 import { useState } from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { Badge, Button, Checkbox } from '@/components/common';
 import { Text } from '@/components/common/Text/Text';
 
@@ -41,61 +42,83 @@ export default function ShoppingListItemComponent({
   const isPurchased = item.status === 'purchased';
 
   return (
-    <div className={`bg-surface rounded-lg shadow-sm border ${isPurchased ? 'border-border bg-surface-elevated bg-surface' : 'border-border'} p-4 flex flex-col h-full`}>
-      {/* Header with checkbox and status */}
-      <div className="flex items-center gap-3 mb-2">
-        <Checkbox
-          label=""
-          checked={isPurchased}
-          onChange={handleToggle}
-          disabled={isToggling}
-          className="flex-shrink-0"
-        />
-        <div className="flex-1 min-w-0">
-          <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>
-            {item.name}{item.quantity ? ` (${item.quantity})` : ''}
-          </h3>
-          {isPurchased && (
-            <Badge variant="success" size="sm" className="mt-1">
-              Purchased
-            </Badge>
+    <div className={`bg-surface rounded-lg shadow-sm border ${isPurchased ? 'border-border bg-surface-elevated bg-surface' : 'border-border'} p-4 h-auto self-start`}>
+      <div className="flex items-center">
+        {/* Content Section */}
+        <div className="min-w-0 flex-1">
+          {/* Header with checkbox and status */}
+          <div className="flex items-center gap-3">
+            <Checkbox
+              label=""
+              checked={isPurchased}
+              onChange={handleToggle}
+              disabled={isToggling}
+              className="flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <h3 className={`text-base font-semibold ${isPurchased ? 'text-text-default line-through' : 'text-text-default'}`}>
+                {item.name}
+                {item.quantity && (
+                  <span className="text-text-subtle">
+                    {' '}({item.quantity}{item.unit ? ` ${item.unit}` : ''})
+                  </span>
+                )}
+              </h3>
+              {isPurchased && (
+                <Badge variant="success" size="sm" className="mt-1">
+                  Purchased
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Item Details */}
+          {(item.inventoryNotes || item.notes) && (
+            <div className="space-y-2 text-sm mt-2">
+              {item.inventoryNotes && (
+                <div className="text-text-subtle text-xs italic border-l-2 border-border pl-2">
+                  {item.inventoryNotes}
+                </div>
+              )}
+              {item.notes && (
+                <Text variant="bodySmall" color="secondary">{item.notes}</Text>
+              )}
+            </div>
           )}
         </div>
-      </div>
 
-      {/* Item Details */}
-      <div className="flex-1 space-y-2 text-sm">
-        {item.inventoryNotes && (
-          <div className="text-text-subtle text-xs italic border-l-2 border-border pl-2">
-            {item.inventoryNotes}
+        {/* Actions */}
+        {!isPurchased && isAdmin && (
+          <div className="ml-4 flex-shrink-0 flex space-x-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => onEdit(item)}
+              leftIcon={
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              }
+              responsiveText={{ showAt: 'md' }}
+              aria-label="Edit item"
+              title="Edit item"
+            >
+              Edit
+            </Button>
+            <Button
+              variant="warning"
+              size="sm"
+              onClick={() => onRemove(item)}
+              leftIcon={<TrashIcon className="h-4 w-4" />}
+              responsiveText={{ showAt: 'md' }}
+              aria-label="Remove item"
+              title="Remove item"
+            >
+              Remove
+            </Button>
           </div>
         )}
-        {item.notes && (
-          <Text variant="bodySmall" color="secondary">{item.notes}</Text>
-        )}
       </div>
-
-      {/* Actions */}
-      {!isPurchased && isAdmin && (
-        <div className="flex gap-2 mt-3">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => onEdit(item)}
-            className="flex-1"
-          >
-            Edit
-          </Button>
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => onRemove(item)}
-            className="flex-1"
-          >
-            Remove
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
