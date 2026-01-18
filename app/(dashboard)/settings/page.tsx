@@ -38,6 +38,7 @@ import StorageLocationForm from '@/components/reference-data/StorageLocationForm
 import StoreList from '@/components/reference-data/StoreList';
 import StoreForm from '@/components/reference-data/StoreForm';
 import ReferenceDataEmptyState from '@/components/reference-data/ReferenceDataEmptyState';
+import NotificationsClient from '../../settings/notifications/NotificationsClient';
 import { MemberList } from '@/components/members/MemberList';
 import { InvitationList } from '@/components/members/InvitationList';
 import { InviteMemberForm } from '@/components/members/InviteMemberForm';
@@ -92,7 +93,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const tabParam = searchParams.get('tab');
-    if (tabParam && ['members', 'theme', 'stores', 'locations'].includes(tabParam)) {
+    if (tabParam && ['members', 'theme', 'stores', 'locations', 'notifications'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, []);
@@ -334,9 +335,35 @@ export default function SettingsPage() {
   const isAdmin = userContext.role === 'admin';
   const isLastAdmin = summary ? summary.admins === 1 && userContext.role === 'admin' : false;
 
+  const headerAction = isAdmin
+    ? activeTab === 'members'
+      ? (
+          <Button variant="primary" onClick={() => setDialogState({ type: 'invite-member' })}>
+            + Invite Member
+          </Button>
+        )
+      : activeTab === 'stores'
+      ? (
+          <Button variant="primary" onClick={() => setDialogState({ type: 'create-store' })}>
+            Add Store
+          </Button>
+        )
+      : activeTab === 'locations'
+      ? (
+          <Button
+            variant="primary"
+            onClick={() => setDialogState({ type: 'create-location' })}
+          >
+            Add Storage Location
+          </Button>
+        )
+      : undefined
+    : undefined;
+
   const tabs: Tab[] = [
     { id: 'members', label: 'Family', badge: summary?.total },
     { id: 'theme', label: 'App Theme' },
+    { id: 'notifications', label: 'Notifications' },
     { id: 'stores', label: 'Manage Stores', badge: stores.length },
     { id: 'locations', label: 'Manage Storage Locations', badge: locations.length },
   ];
@@ -347,6 +374,7 @@ export default function SettingsPage() {
       <PageHeader
         title="Settings"
         description={`Manage your personal preferences and family reference data${!isAdmin ? ' (Reference data is view-only for suggesters)' : ''}`}
+        action={headerAction}
       />
 
       {/* Error Message */}
@@ -380,7 +408,7 @@ export default function SettingsPage() {
               </div>
             ) : (
               <>
-                <div className="mb-6 flex items-center justify-between">
+                <div className="mb-6">
                   <div>
                     <Text variant="h3" className="mb-1 text-text-default">
                       Family Members
@@ -393,14 +421,6 @@ export default function SettingsPage() {
                       </Text>
                     )}
                   </div>
-                  {isAdmin && (
-                    <Button
-                      variant="primary"
-                      onClick={() => setDialogState({ type: 'invite-member' })}
-                    >
-                      + Invite Member
-                    </Button>
-                  )}
                 </div>
 
                 {/* Active Members Section */}
@@ -434,7 +454,7 @@ export default function SettingsPage() {
 
         {/* Theme Tab */}
         {activeTab === 'theme' && (
-          <div className="rounded-lg border border-border bg-surface p-6">
+          <div>
             <h2 className="mb-4 text-lg font-semibold text-text-default">Appearance</h2>
 
             <div className="space-y-4">
@@ -461,16 +481,7 @@ export default function SettingsPage() {
               </div>
             ) : (
               <>
-                {isAdmin && (
-                  <div className="mb-4">
-                    <Button
-                      variant="primary"
-                      onClick={() => setDialogState({ type: 'create-store' })}
-                    >
-                      Add Store
-                    </Button>
-                  </div>
-                )}
+                {/* Primary action moved to PageHeader (top-right) */}
                 {stores.length === 0 ? (
                   <ReferenceDataEmptyState
                     type="stores"
@@ -500,16 +511,7 @@ export default function SettingsPage() {
               </div>
             ) : (
               <>
-                {isAdmin && (
-                  <div className="mb-4">
-                    <Button
-                      variant="primary"
-                      onClick={() => setDialogState({ type: 'create-location' })}
-                    >
-                      Add Storage Location
-                    </Button>
-                  </div>
-                )}
+                {/* Primary action moved to PageHeader (top-right) */}
                 {locations.length === 0 ? (
                   <ReferenceDataEmptyState
                     type="locations"
@@ -524,6 +526,13 @@ export default function SettingsPage() {
                 )}
               </>
             )}
+          </div>
+        )}
+
+        {/* Notifications Tab */}
+        {activeTab === 'notifications' && (
+          <div>
+            <NotificationsClient familyId={userContext.familyId} memberId={userContext.memberId} />
           </div>
         )}
       </div>

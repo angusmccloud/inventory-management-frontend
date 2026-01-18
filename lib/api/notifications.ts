@@ -1,3 +1,34 @@
+export type PreferenceEntry = { channel: string; frequency: string };
+export type NotificationPreference = { notificationType: string; entries: PreferenceEntry[] };
+
+const API_PATH = '/api/notifications/preferences';
+
+export async function getPreferences(familyId: string, memberId: string) {
+  const q = `?familyId=${encodeURIComponent(familyId)}&memberId=${encodeURIComponent(memberId)}`;
+  const res = await fetch(`${API_PATH}${q}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch preferences');
+  const json = await res.json();
+  return json.data;
+}
+
+export async function updatePreferences(
+  familyId: string,
+  memberId: string,
+  preferences: NotificationPreference[],
+  unsubscribeAllEmail?: boolean,
+  expectedVersion?: number
+) {
+  const q = `?familyId=${encodeURIComponent(familyId)}&memberId=${encodeURIComponent(memberId)}`;
+  const res = await fetch(`${API_PATH}${q}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ preferences, unsubscribeAllEmail, expectedVersion }),
+  });
+  if (!res.ok) throw new Error('Failed to update preferences');
+  return (await res.json()).data;
+}
+
+export default { getPreferences, updatePreferences };
 /**
  * Notifications API Client - Inventory HQ Frontend
  *

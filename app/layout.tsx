@@ -3,16 +3,57 @@ import './globals.css';
 import ThemeProvider from '@/components/common/ThemeProvider';
 import { SnackbarProvider } from '@/contexts/SnackbarContext';
 
-export const metadata: Metadata = {
-  title: 'Inventory HQ',
-  description:
-    'Manage your household inventory, shopping lists, and notifications with your family',
-};
-
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: '#FFFFFF', // Match light mode background color
+};
+
+export const metadata: Metadata = {
+  title: {
+    default: "Inventory HQ",
+    template: "%s | Inventory HQ",
+  },
+  description:
+    "Inventory HQ is a simple inventory management app for tracking items, stock, and availability.",
+
+  metadataBase: new URL("https://inventoryhq.io"),
+
+  openGraph: {
+    type: "website",
+    url: "https://inventoryhq.io",
+    title: "Inventory HQ",
+    description:
+      "Inventory HQ is a simple inventory management app for tracking items, stock, and availability.",
+    siteName: "Inventory HQ",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Inventory HQ",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Inventory HQ",
+    description:
+      "Inventory HQ is a simple inventory management app for tracking items, stock, and availability.",
+    images: ["/og-image.png"],
+  },
+
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

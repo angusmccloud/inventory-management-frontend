@@ -63,51 +63,51 @@ export default function DashboardItemCard({
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-md transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-      {/* Item Name and Stock Badge */}
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <h3 className="min-w-0 flex-1 truncate text-base font-semibold text-gray-900 dark:text-gray-100">
-          {item.name}
-        </h3>
-        <span
-          className={`inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium ${stockStatus.color}`}
-        >
-          {stockStatus.label}
-        </span>
-      </div>
+      <div className="flex items-center justify-between gap-3">
+        {/* Left side: Item details and stock badge */}
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-base font-semibold text-gray-900 dark:text-gray-100">
+            {item.name}
+          </h3>
+          {item.locationName && (
+            <Text variant="bodySmall" color="secondary" className="mt-1">
+              {item.locationName}
+            </Text>
+          )}
+          <span
+            className={`mt-2 inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium ${stockStatus.color}`}
+          >
+            {stockStatus.label}
+          </span>
+        </div>
 
-      {/* Location */}
-      {item.locationName && (
-        <Text variant="bodySmall" color="secondary" className="mb-2">
-          {item.locationName}
-        </Text>
-      )}
-
-      {/* Quantity Controls */}
-      <div className="mb-2 flex items-center justify-start gap-2">
-        <IconButton
-          icon={<MinusIcon className="h-4 w-4" />}
-          variant="secondary"
-          size="sm"
-          onClick={() => adjust(-1)}
-          disabled={localQuantity <= 0}
-          aria-label="Decrease quantity"
-        />
-        <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-          {localQuantity}
-          {item.unit ? ` ${item.unit}` : ''}
-        </span>
-        <IconButton
-          icon={<PlusIcon className="h-4 w-4" />}
-          variant="primary"
-          size="sm"
-          onClick={() => adjust(1)}
-          aria-label="Increase quantity"
-        />
+        {/* Right side: Quantity Controls */}
+        <div className="flex flex-shrink-0 items-center gap-2">
+          <IconButton
+            icon={<MinusIcon className="h-4 w-4" />}
+            variant="secondary"
+            size="sm"
+            onClick={() => adjust(-1)}
+            disabled={localQuantity <= 0}
+            aria-label="Decrease quantity"
+          />
+          <span className="min-w-[3rem] text-center text-base font-semibold text-gray-900 dark:text-gray-100">
+            {localQuantity}
+            {item.unit ? ` ${item.unit}` : ''}
+          </span>
+          <IconButton
+            icon={<PlusIcon className="h-4 w-4" />}
+            variant="primary"
+            size="sm"
+            onClick={() => adjust(1)}
+            aria-label="Increase quantity"
+          />
+        </div>
       </div>
 
       {/* Saving Indicator */}
       {hasPendingChanges && (
-        <div className="mb-2 text-center">
+        <div className="mt-2 text-right">
           <span className="inline-flex items-center text-xs text-gray-500 dark:text-gray-400">
             <svg className="mr-1 h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle
