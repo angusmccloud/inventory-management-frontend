@@ -52,7 +52,6 @@ export const navigationItems: NavItem[] = [
     id: 'settings',
     label: 'Settings',
     href: '/settings',
-    matchPaths: ['/settings', '/settings/reference-data', '/members'],
   },
   {
     id: 'help',
