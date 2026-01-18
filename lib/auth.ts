@@ -16,7 +16,10 @@ import {
   resetPassword,
   confirmResetPassword,
 } from 'aws-amplify/auth';
+import type { FetchAuthSessionOptions } from 'aws-amplify/auth';
 import { UserContext } from '@/types/entities';
+
+const USER_ALREADY_AUTHENTICATED_ERROR = 'UserAlreadyAuthenticatedException';
 
 // Configure Amplify
 if (typeof window !== 'undefined') {
@@ -44,6 +47,8 @@ if (typeof window !== 'undefined') {
 const AUTH_TOKEN_KEY = 'auth_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 const USER_CONTEXT_KEY = 'user_context';
+
+type SessionPersistenceOptions = Pick<FetchAuthSessionOptions, 'forceRefresh'>;
 
 /**
  * Cognito configuration (from environment variables)
@@ -197,18 +202,21 @@ export const isTokenExpired = (token: string): boolean => {
  * Returns true if successful, false if refresh fails.
  */
 export const refreshAccessToken = async (): Promise<boolean> => {
+  return persistSessionFromAmplify({ forceRefresh: true });
+};
+
+const persistSessionFromAmplify = async (
+  options?: SessionPersistenceOptions
+): Promise<boolean> => {
   try {
-    // Force refresh of the session
-    const session = await fetchAuthSession({ forceRefresh: true });
+    const session = await fetchAuthSession(options);
 
     const idToken = session.tokens?.idToken?.toString();
     const accessToken = session.tokens?.accessToken?.toString();
 
     if (idToken && accessToken) {
-      // Update stored tokens
       setAuthTokens(idToken, accessToken);
 
-      // Update user context from new token
       const userContext = extractUserContext(idToken);
       if (userContext) {
         setUserContext(userContext);
@@ -219,7 +227,7 @@ export const refreshAccessToken = async (): Promise<boolean> => {
 
     return false;
   } catch (error) {
-    console.error('Token refresh failed:', error);
+    console.error('Token persistence failed:', error);
     return false;
   }
 };
@@ -287,22 +295,15 @@ export const login = async (
     }
 
     if (isSignedIn) {
-      // Get session tokens
-      const session = await fetchAuthSession();
-      const idToken = session.tokens?.idToken?.toString();
-      const accessToken = session.tokens?.accessToken?.toString();
-
-      if (idToken && accessToken) {
-        setAuthTokens(idToken, accessToken);
-
-        // Extract user context from ID token
-        const userContext = extractUserContext(idToken);
-        if (userContext) {
-          setUserContext(userContext);
-        }
+      const persisted = await persistSessionFromAmplify();
+      if (persisted) {
+        return { success: true };
       }
 
-      return { success: true };
+      return {
+        success: false,
+        message: 'Signed in but unable to establish a session. Please try again.',
+      };
     }
 
     return {
@@ -311,6 +312,25 @@ export const login = async (
     };
   } catch (error) {
     console.error('Login error:', error);
+
+    if (isUserAlreadyAuthenticatedError(error)) {
+      const restored = await persistSessionFromAmplify();
+      if (restored) {
+        return { success: true };
+      }
+
+      try {
+        await signOut();
+      } catch (signOutError) {
+        console.error('Failed to clear stale Amplify session:', signOutError);
+      }
+
+      return {
+        success: false,
+        message: 'We cleared a stale session. Please try logging in again.',
+      };
+    }
+
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Login failed',
@@ -534,4 +554,8 @@ export const confirmForgotPassword = async (
       message: error instanceof Error ? error.message : 'Failed to reset password',
     };
   }
+};
+
+const isUserAlreadyAuthenticatedError = (error: unknown): error is Error => {
+  return error instanceof Error && error.name === USER_ALREADY_AUTHENTICATED_ERROR;
 };
