@@ -1,14 +1,25 @@
-export type PreferenceEntry = { channel: string; frequency: string };
-export type NotificationPreference = { notificationType: string; entries: PreferenceEntry[] };
+import { apiClient } from '../api-client';
+import {
+  LowStockNotification,
+  LowStockNotificationStatus,
+  ListNotificationsResponse,
+} from '@/types/entities';
+import {
+  NotificationPreference,
+  NotificationPreferences,
+  NotificationPreferencesResponse,
+} from '@/types/notifications';
 
-const API_PATH = '/api/notifications/preferences';
+export async function getPreferences(
+  familyId: string,
+  memberId: string
+): Promise<NotificationPreferences> {
+  const response = await apiClient.get<NotificationPreferencesResponse>(
+    `/families/${familyId}/members/${memberId}/preferences/notifications`,
+    true
+  );
 
-export async function getPreferences(familyId: string, memberId: string) {
-  const q = `?familyId=${encodeURIComponent(familyId)}&memberId=${encodeURIComponent(memberId)}`;
-  const res = await fetch(`${API_PATH}${q}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Failed to fetch preferences');
-  const json = await res.json();
-  return json.data;
+  return response.data;
 }
 
 export async function updatePreferences(
@@ -18,29 +29,18 @@ export async function updatePreferences(
   unsubscribeAllEmail?: boolean,
   expectedVersion?: number
 ) {
-  const q = `?familyId=${encodeURIComponent(familyId)}&memberId=${encodeURIComponent(memberId)}`;
-  const res = await fetch(`${API_PATH}${q}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ preferences, unsubscribeAllEmail, expectedVersion }),
-  });
-  if (!res.ok) throw new Error('Failed to update preferences');
-  return (await res.json()).data;
+  return apiClient.patch(
+    `/families/${familyId}/members/${memberId}/preferences/notifications`,
+    { preferences, unsubscribeAllEmail, expectedVersion },
+    true
+  );
 }
 
-export default { getPreferences, updatePreferences };
 /**
  * Notifications API Client - Inventory HQ Frontend
  *
  * API client methods for low-stock notification operations.
  */
-
-import { apiClient } from '../api-client';
-import {
-  LowStockNotification,
-  LowStockNotificationStatus,
-  ListNotificationsResponse,
-} from '@/types/entities';
 
 /**
  * List notifications for a family
@@ -108,3 +108,5 @@ export const getActiveNotificationCount = async (familyId: string): Promise<numb
   const notifications = await listNotifications(familyId, 'active');
   return notifications.length;
 };
+
+export default { getPreferences, updatePreferences };

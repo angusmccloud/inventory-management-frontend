@@ -12,9 +12,10 @@ import type { BadgeVariant } from '@/components/common';
 interface InvitationListProps {
   invitations: Invitation[];
   onRevoke?: (invitationId: string) => void;
+  onResend?: (invitationId: string) => void;
 }
 
-export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
+export function InvitationList({ invitations, onRevoke, onResend }: InvitationListProps) {
   if (invitations.length === 0) {
     return (
       <div className="py-12 text-center">
@@ -95,16 +96,27 @@ export function InvitationList({ invitations, onRevoke }: InvitationListProps) {
                 </Text>
               </div>
 
-              {invitation.status === 'pending' && !isExpired && onRevoke && (
-                <Button
-                  variant="warning"
-                  size="sm"
-                  onClick={() => onRevoke(invitation.invitationId)}
-                  className="ml-4"
-                >
-                  Revoke
-                </Button>
-              )}
+              <div className="ml-4 flex gap-2">
+                {invitation.status === 'pending' && isExpired && onResend && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => onResend(invitation.invitationId)}
+                  >
+                    Resend
+                  </Button>
+                )}
+
+                {invitation.status === 'pending' && !isExpired && onRevoke && (
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    onClick={() => onRevoke(invitation.invitationId)}
+                  >
+                    Revoke
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         );

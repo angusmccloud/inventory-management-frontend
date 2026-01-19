@@ -29,6 +29,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
   const [storeId, setStoreId] = useState<string>('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuickAdding, setIsQuickAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
   const [loadingStores, setLoadingStores] = useState<boolean>(true);
@@ -98,6 +99,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
     }
 
     setIsSubmitting(true);
+    setIsQuickAdding(keepModalOpen);
     try {
       // If requested, create an inventory item first (only for free-text items)
       let createdInventoryItemId: string | null = null;
@@ -148,6 +150,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
       setError(err instanceof Error ? err.message : 'Failed to add item');
     } finally {
       setIsSubmitting(false);
+      setIsQuickAdding(false);
     }
   };
 
@@ -195,7 +198,7 @@ export default function AddItemForm({ familyId, onSubmit, onCancel }: AddItemFor
             placeholder="e.g., Paper Towels, Birthday Cake"
             maxLength={100}
             required
-            disabled={isSubmitting}
+            disabled={isSubmitting && !isQuickAdding}
             minSearchLength={2}
             emptyMessage="No matching items in inventory"
           />

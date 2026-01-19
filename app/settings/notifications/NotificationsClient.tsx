@@ -9,6 +9,8 @@ import { Button } from '@/components/common/Button/Button';
 import { Text } from '@/components/common/Text/Text';
 import notificationsApi from '@/lib/api/notifications';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner/LoadingSpinner';
+import { getErrorMessage } from '@/lib/api-client';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 const NOTIFICATION_TYPES = [
   { key: 'LOW_STOCK', label: 'Low Stock' },
@@ -30,29 +32,54 @@ export default function NotificationsClient(props: Props = {}) {
   const searchParams = useSearchParams();
   const familyId = props.familyId ?? searchParams.get('familyId') ?? '';
   const memberId = props.memberId ?? searchParams.get('memberId') ?? '';
+  const { showSnackbar } = useSnackbar();
 
   const [loading, setLoading] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
   const [preferences, setPreferences] = React.useState<any[]>([]);
   const [unsubscribeAllEmail, setUnsubscribeAllEmail] = React.useState(false);
 
   React.useEffect(() => {
-    if (!familyId || !memberId) return;
+    if (!familyId || !memberId) {
+      return;
+    }
     setLoading(true);
     notificationsApi
       .getPreferences(familyId, memberId)
       .then((data) => {
-        const prefs = (data.preferences || []).map((p: any) => ({
+        const defaultFrequency = data?.defaultFrequency ?? 'DAILY';
+        const prefs = (data?.preferences || []).map((p: any) => ({
           ...p,
           entries: (p.entries || []).map((e: any) => {
-            const freq = e.frequency ?? '';
-            const freqs = Array.isArray(freq) ? freq : String(freq || '').split(',').filter(Boolean);
-            return { ...e, frequencies: freqs.length ? freqs : ['DAILY'] };
+            const freq = e.frequency ?? [];
+            const freqs = Array.isArray(freq)
+              ? freq
+              : String(freq || '')
+                  .split(',')
+                  .map((part) => part.trim())
+                  .filter(Boolean);
+            return { ...e, frequencies: freqs.length ? freqs : [defaultFrequency] };
           }),
         }));
-        setPreferences(prefs);
-        setUnsubscribeAllEmail(!!data.unsubscribeAllEmail);
+
+        // Ensure all notification types have entries
+        const ensuredPrefs = NOTIFICATION_TYPES.map(type => {
+          const existing = prefs.find((p: any) => p.notificationType === type.key);
+          if (existing) return existing;
+
+          // Create default entry if not exists
+          return {
+            notificationType: type.key,
+            entries: CHANNELS.map((c) => ({ channel: c, frequencies: [defaultFrequency] }))
+          };
+        });
+
+        setPreferences(ensuredPrefs);
+        setUnsubscribeAllEmail(!!data?.unsubscribeAllEmail);
       })
-      .catch(() => {})
+      .catch(() => {
+        // TODO: show error to user
+      })
       .finally(() => setLoading(false));
   }, [familyId, memberId]);
 
@@ -65,11 +92,16 @@ export default function NotificationsClient(props: Props = {}) {
           ...p,
           entries: p.entries.map((e: any) => {
             if (e.channel !== channel) return e;
-            const freqs: string[] = Array.isArray(e.frequencies) ? [...e.frequencies] : [String(e.frequency || 'DAILY')];
-            const idx = freqs.indexOf(freq);
-            if (idx === -1) freqs.push(freq);
-            else freqs.splice(idx, 1);
-            return { ...e, frequencies: freqs };
+            const currentFreqs = Array.isArray(e.frequencies) ? [...e.frequencies] : [];
+            const idx = currentFreqs.indexOf(freq);
+            if (idx === -1) {
+              // Add frequency if not present
+              currentFreqs.push(freq);
+            } else {
+              // Remove frequency if present
+              currentFreqs.splice(idx, 1);
+            }
+            return { ...e, frequencies: currentFreqs };
           }),
         };
       })
@@ -78,27 +110,28 @@ export default function NotificationsClient(props: Props = {}) {
 
   async function handleSave() {
     if (!familyId || !memberId) return;
-    setLoading(true);
+    setSaving(true);
     try {
       const outPrefs = (preferences || []).map((p: any) => ({
         ...p,
         entries: (p.entries || []).map((e: any) => ({
           channel: e.channel,
-          frequency: Array.isArray(e.frequencies) ? e.frequencies.join(',') : String(e.frequency || 'DAILY'),
+          frequency: Array.isArray(e.frequencies) ? e.frequencies : [String(e.frequency || 'DAILY')],
         })),
       }));
       await notificationsApi.updatePreferences(familyId, memberId, outPrefs, unsubscribeAllEmail);
+      showSnackbar({ variant: 'info', text: 'Notification preferences saved.' });
     } catch (err) {
-      // TODO: show error
+      showSnackbar({ variant: 'error', text: getErrorMessage(err) });
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   }
 
   const emailEnabled = !unsubscribeAllEmail;
 
-  // Reusable component for notification frequency toggles
-  function FrequencyToggles({
+  // Reusable component for notification frequency checkboxes
+  function FrequencyCheckboxes({
     notificationType,
     disabled
   }: {
@@ -106,24 +139,34 @@ export default function NotificationsClient(props: Props = {}) {
     disabled: boolean;
   }) {
     const row = preferences.find((p: any) => p.notificationType === notificationType) || {
-      entries: CHANNELS.map((c) => ({ channel: c, frequency: 'DAILY' }))
+      entries: CHANNELS.map((c) => ({ channel: c, frequencies: ['DAILY'] }))
     };
-    const entry = row.entries?.find((e: any) => e.channel === 'EMAIL') || { frequency: 'DAILY' };
+    const entry = row.entries?.find((e: any) => e.channel === 'EMAIL') || { frequencies: ['DAILY'] };
 
     return (
       <div className="flex items-center gap-3">
         {EMAIL_FREQUENCIES.map((f) => {
-          const checked = entry.frequencies?.includes(f.value) ?? (entry.frequency === f.value);
+          const currentFrequencies = entry.frequencies || [];
+          const checked = currentFrequencies.includes(f.value);
           return (
-            <ToggleButton
+            <label
               key={f.value}
-              label={f.label}
-              visibleLabel={f.label}
-              checked={disabled ? false : checked}
-              onChange={() => handleFrequencyToggle(notificationType, 'EMAIL', f.value)}
-              size="sm"
-              disabled={disabled}
-            />
+              className={`flex items-center gap-2 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  handleFrequencyToggle(notificationType, 'EMAIL', f.value);
+                }}
+                disabled={disabled}
+                className="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed"
+              />
+              <Text variant="bodySmall" className="text-text-primary">
+                {f.label}
+              </Text>
+            </label>
           );
         })}
       </div>
@@ -132,7 +175,15 @@ export default function NotificationsClient(props: Props = {}) {
 
   return (
     <PageContainer>
-      <PageHeader title="Notification Preferences" description="Manage how you receive notifications." />
+      <PageHeader
+        title="Notification Preferences"
+        description="Manage how you receive notifications."
+        action={
+          <Button variant="primary" onClick={handleSave} disabled={loading || saving}>
+            {saving ? 'Saving...' : 'Save preferences'}
+          </Button>
+        }
+      />
 
       {loading ? (
         <div className="flex justify-center py-8"><LoadingSpinner /></div>
@@ -178,7 +229,7 @@ export default function NotificationsClient(props: Props = {}) {
                 {NOTIFICATION_TYPES.map((type) => (
                   <div key={type.key} className="flex items-center justify-between rounded-lg bg-surface-secondary p-3">
                     <Text variant="body" className="font-medium text-text-primary">{type.label}</Text>
-                    <FrequencyToggles notificationType={type.key} disabled={!emailEnabled} />
+                    <FrequencyCheckboxes notificationType={type.key} disabled={!emailEnabled} />
                   </div>
                 ))}
               </div>
@@ -226,12 +277,6 @@ export default function NotificationsClient(props: Props = {}) {
             </div>
           </Card>
 
-          {/* Save Button */}
-          <div className="flex justify-end">
-            <Button variant="primary" onClick={handleSave} disabled={loading}>
-              Save preferences
-            </Button>
-          </div>
         </div>
       )}
     </PageContainer>

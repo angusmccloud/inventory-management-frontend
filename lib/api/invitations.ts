@@ -61,3 +61,16 @@ export async function acceptInvitation(
     false // No auth required
   );
 }
+
+/**
+ * Resend an expired invitation with new token and extended expiration
+ */
+export async function resendInvitation(
+  familyId: string,
+  invitationId: string
+): Promise<Invitation> {
+  return apiClient.post<Invitation>(
+    `/families/${familyId}/invitations/${invitationId}/resend`,
+    {}
+  );
+}

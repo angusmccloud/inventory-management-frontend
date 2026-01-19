@@ -20,6 +20,7 @@ export default function StoreForm({
   const [name, setName] = useState(initialData?.name || '');
   const [address, setAddress] = useState(initialData?.address || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuickAdding, setIsQuickAdding] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const isNameValid = name.trim().length > 0 && name.trim().length <= 100;
@@ -31,6 +32,7 @@ export default function StoreForm({
     if (!canSubmit) return;
 
     setIsSubmitting(true);
+    setIsQuickAdding(keepModalOpen);
     setSubmitError(null);
 
     try {
@@ -55,6 +57,7 @@ export default function StoreForm({
       setSubmitError(err instanceof Error ? err.message : 'Failed to save store');
     } finally {
       setIsSubmitting(false);
+      setIsQuickAdding(false);
     }
   }
 
@@ -83,7 +86,7 @@ export default function StoreForm({
             : `${name.length}/100 characters`
         }
         autoFocus
-        disabled={isSubmitting}
+        disabled={isSubmitting && !isQuickAdding}
       />
 
       <div>

@@ -7,6 +7,7 @@
 'use client';
 
 import * as React from 'react';
+import Alert from '@/components/common/Alert/Alert';
 
 export type SnackbarVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -137,29 +138,24 @@ const SnackbarComponent: React.FC<{
   snackbar: SnackbarState;
   onClose: () => void;
 }> = ({ snackbar, onClose }) => {
-  // Lazy import Alert to avoid circular dependencies
-  const Alert = React.lazy(() => import('@/components/common/Alert/Alert'));
-
   if (!snackbar.isOpen) {
     return null;
   }
 
   return (
     <div
-      className="animate-in slide-in-from-bottom-2 fixed bottom-4 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 duration-300"
+      className="animate-in slide-in-from-bottom-2 fixed bottom-4 left-4 z-50 w-full max-w-md px-4 duration-300"
       role="region"
       aria-label="Notification"
     >
-      <React.Suspense fallback={null}>
-        <Alert
-          severity={snackbar.variant}
-          dismissible
-          onDismiss={onClose}
-          className="bg-surface shadow-lg"
-        >
-          {snackbar.text}
-        </Alert>
-      </React.Suspense>
+      <Alert
+        severity={snackbar.variant}
+        dismissible
+        onDismiss={onClose}
+        className="bg-surface shadow-lg"
+      >
+        {snackbar.text}
+      </Alert>
     </div>
   );
 };

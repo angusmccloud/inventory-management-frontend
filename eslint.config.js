@@ -7,7 +7,7 @@ const nextFlat = Array.isArray(nextConfig) ? nextConfig : [nextConfig];
 export default [
   ...nextFlat,
   {
-    ignores: ['node_modules/**', '.next/**', 'dist/**'],
+    ignores: ['node_modules/**', '.next/**', 'dist/**', 'build/**', 'coverage/**', 'out/**', '*.min.js'],
   },
   {
     files: ['**/*.{ts,tsx}'],

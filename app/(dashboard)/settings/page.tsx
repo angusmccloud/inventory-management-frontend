@@ -54,9 +54,11 @@ import {
   deleteStore,
 } from '@/lib/api/reference-data';
 import { listMembers, updateMember, removeMember } from '@/lib/api/members';
-import { listInvitations, createInvitation, revokeInvitation } from '@/lib/api/invitations';
+import { listInvitations, createInvitation, revokeInvitation, resendInvitation } from '@/lib/api/invitations';
 import { getErrorMessage } from '@/lib/api-client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
+import { UserSettingsProvider } from '../../settings/user-settings/useUserSettings';
+import UserSettingsPanel from '../../settings/user-settings/user-settings-panel';
 
 type DialogState =
   | { type: 'none' }
@@ -93,7 +95,10 @@ export default function SettingsPage() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const tabParam = searchParams.get('tab');
-    if (tabParam && ['members', 'theme', 'stores', 'locations', 'notifications'].includes(tabParam)) {
+    if (
+      tabParam &&
+      ['members', 'theme', 'stores', 'locations', 'notifications', 'user-settings'].includes(tabParam)
+    ) {
       setActiveTab(tabParam);
     }
   }, []);
@@ -266,6 +271,21 @@ export default function SettingsPage() {
     }
   };
 
+  const handleResendInvitation = async (invitationId: string) => {
+    if (!userContext?.familyId) return;
+
+    try {
+      await resendInvitation(userContext.familyId, invitationId);
+      showSnackbar({ variant: 'success', text: 'Invitation resent with new expiration date' });
+
+      // Refresh invitations
+      const invitationsData = await listInvitations(userContext.familyId, 'pending');
+      setInvitations(invitationsData);
+    } catch (err) {
+      showSnackbar({ variant: 'error', text: getErrorMessage(err) });
+    }
+  };
+
   const handleUpdateRole = async (memberId: string, newRole: MemberRole) => {
     if (!userContext?.familyId) return;
 
@@ -364,6 +384,7 @@ export default function SettingsPage() {
     { id: 'members', label: 'Family', badge: summary?.total },
     { id: 'theme', label: 'App Theme' },
     { id: 'notifications', label: 'Notifications' },
+    // { id: 'user-settings', label: 'User Settings' },
     { id: 'stores', label: 'Manage Stores', badge: stores.length },
     { id: 'locations', label: 'Manage Storage Locations', badge: locations.length },
   ];
@@ -444,7 +465,11 @@ export default function SettingsPage() {
                     <Text variant="h4" className="mb-4 mt-8 text-text-default">
                       Pending Invitations
                     </Text>
-                    <InvitationList invitations={invitations} onRevoke={handleRevokeInvitation} />
+                    <InvitationList
+                      invitations={invitations}
+                      onRevoke={handleRevokeInvitation}
+                      onResend={handleResendInvitation}
+                    />
                   </>
                 )}
               </>
@@ -534,6 +559,13 @@ export default function SettingsPage() {
           <div>
             <NotificationsClient familyId={userContext.familyId} memberId={userContext.memberId} />
           </div>
+        )}
+
+        {/* User Settings Tab */}
+        {activeTab === 'user-settings' && (
+          <UserSettingsProvider>
+            <UserSettingsPanel />
+          </UserSettingsProvider>
         )}
       </div>
 

@@ -23,6 +23,7 @@ export default function StorageLocationForm({
   const [name, setName] = useState(initialData?.name || '');
   const [description, setDescription] = useState(initialData?.description || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuickAdding, setIsQuickAdding] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const isNameValid = name.trim().length > 0 && name.trim().length <= 50;
@@ -34,6 +35,7 @@ export default function StorageLocationForm({
     if (!canSubmit) return;
 
     setIsSubmitting(true);
+    setIsQuickAdding(keepModalOpen);
     setSubmitError(null);
 
     try {
@@ -58,6 +60,7 @@ export default function StorageLocationForm({
       setSubmitError(err instanceof Error ? err.message : 'Failed to save storage location');
     } finally {
       setIsSubmitting(false);
+      setIsQuickAdding(false);
     }
   }
 
@@ -86,7 +89,7 @@ export default function StorageLocationForm({
             : `${name.length}/50 characters`
         }
         autoFocus
-        disabled={isSubmitting}
+        disabled={isSubmitting && !isQuickAdding}
       />
 
       <div>
