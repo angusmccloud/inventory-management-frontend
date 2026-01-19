@@ -77,6 +77,11 @@ export type { EmptyStateProps } from './EmptyState/EmptyState.types';
 export { default as Modal } from './Modal/Modal';
 export type { ModalProps, ModalSize } from './Modal/Modal.types';
 
+export { InvitationDecisionModal } from './InvitationDecisionModal';
+export type { InvitationDecisionModalProps } from './InvitationDecisionModal';
+export { InvitationDecisionList } from './InvitationDecisionList';
+export type { InvitationDecisionListProps } from './InvitationDecisionList';
+
 // Navigation
 export { Link } from './Link/Link';
 export type { LinkProps, LinkVariant } from './Link/Link.types';

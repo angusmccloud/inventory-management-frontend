@@ -45,16 +45,16 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
           if (userContext?.memberId) {
             // Fetch from backend
             const serverTheme = await getThemePreference(userContext.memberId);
-            console.log('[ThemeProvider] Loaded theme from server:', serverTheme);
+            // console.log('[ThemeProvider] Loaded theme from server:', serverTheme);
 
             // Only update if different from current (localStorage cache)
             if (serverTheme !== mode) {
-              console.log(
-                '[ThemeProvider] Server theme differs from cache, updating from',
-                mode,
-                'to',
-                serverTheme
-              );
+              // console.log(
+              //   '[ThemeProvider] Server theme differs from cache, updating from',
+              //   mode,
+              //   'to',
+              //   serverTheme
+              // );
               setModeState(serverTheme);
               ThemeStorage.set(serverTheme); // Update cache
 
@@ -62,14 +62,15 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
               const html = document.documentElement;
               if (serverTheme === 'light') {
                 html.classList.remove('dark');
-                console.log('[ThemeProvider] Updated to light theme from server');
+                // console.log('[ThemeProvider] Updated to light theme from server');
               } else if (serverTheme === 'dark') {
                 html.classList.add('dark');
-                console.log('[ThemeProvider] Updated to dark theme from server');
+                // console.log('[ThemeProvider] Updated to dark theme from server');
               }
-            } else {
-              console.log('[ThemeProvider] Server theme matches cache:', serverTheme);
-            }
+            } 
+            // else {
+            //   console.log('[ThemeProvider] Server theme matches cache:', serverTheme);
+            // }
 
             setSynced(true);
             return;
@@ -88,7 +89,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Apply theme based on mode
   useEffect(() => {
-    console.log('[ThemeProvider] Applying theme mode:', mode);
+    // console.log('[ThemeProvider] Applying theme mode:', mode);
 
     // Force remove/add classes to ensure state is correct
     const html = document.documentElement;

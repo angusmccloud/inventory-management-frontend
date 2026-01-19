@@ -12,7 +12,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUserContext } from '@/lib/auth';
+import { getUserContext, setUserContext as saveUserContext } from '@/lib/auth';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import {
   TabNavigation,
@@ -55,6 +55,7 @@ import {
 } from '@/lib/api/reference-data';
 import { listMembers, updateMember, removeMember } from '@/lib/api/members';
 import { listInvitations, createInvitation, revokeInvitation, resendInvitation } from '@/lib/api/invitations';
+import { listUserFamilies } from '@/lib/api/families';
 import { getErrorMessage } from '@/lib/api-client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import { UserSettingsProvider } from '../../settings/user-settings/useUserSettings';
@@ -74,6 +75,7 @@ export default function SettingsPage() {
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<string>('members');
+  const isAdmin = userContext?.role === 'admin';
 
   // Reference data state
   const [locations, setLocations] = useState<StorageLocation[]>([]);
@@ -95,13 +97,20 @@ export default function SettingsPage() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const tabParam = searchParams.get('tab');
-    if (
-      tabParam &&
-      ['members', 'theme', 'stores', 'locations', 'notifications', 'user-settings'].includes(tabParam)
-    ) {
+    const allowedTabs = isAdmin
+      ? ['members', 'theme', 'stores', 'locations', 'notifications', 'user-settings']
+      : ['members', 'theme', 'notifications', 'user-settings'];
+
+    if (tabParam && allowedTabs.includes(tabParam)) {
       setActiveTab(tabParam);
     }
-  }, []);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin && (activeTab === 'stores' || activeTab === 'locations')) {
+      setActiveTab('members');
+    }
+  }, [activeTab, isAdmin]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -121,7 +130,28 @@ export default function SettingsPage() {
       return;
     }
     setUserContext(context);
-    setLoading(false);
+
+    const refreshUserRole = async () => {
+      try {
+        const families = await listUserFamilies();
+        if (families && families.length > 0 && families[0]) {
+          const family = families[0];
+          const updatedContext = {
+            ...context,
+            familyId: family.familyId,
+            role: family.role as 'admin' | 'suggester',
+          };
+          saveUserContext(updatedContext);
+          setUserContext(updatedContext);
+        }
+      } catch (error) {
+        console.error('Failed to refresh user role for settings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    refreshUserRole();
   }, [router]);
 
   // Load reference data when user context is available
@@ -131,11 +161,11 @@ export default function SettingsPage() {
     setLoadingData(true);
     setError(null);
     try {
-      const [locationsData, storesData, membersData, invitationsData] = await Promise.all([
+          const [locationsData, storesData, membersData, invitationsData] = await Promise.all([
         listStorageLocations(userContext.familyId),
         listStores(userContext.familyId),
         listMembers(userContext.familyId, false),
-        listInvitations(userContext.familyId, 'pending'),
+        isAdmin ? listInvitations(userContext.familyId, 'all') : Promise.resolve([]),
       ]);
       setLocations(locationsData);
       setStores(storesData);
@@ -148,13 +178,13 @@ export default function SettingsPage() {
     } finally {
       setLoadingData(false);
     }
-  }, [userContext?.familyId]);
+  }, [userContext?.familyId, userContext?.role]);
 
   useEffect(() => {
-    if (userContext?.familyId) {
+    if (!loading && userContext?.familyId) {
       loadData();
     }
-  }, [userContext?.familyId, loadData]);
+  }, [loading, userContext?.familyId, loadData]);
 
   // Storage Location handlers
   const handleCreateLocation = async (
@@ -249,7 +279,7 @@ export default function SettingsPage() {
       setDialogState({ type: 'none' });
 
       // Refresh invitations
-      const invitationsData = await listInvitations(userContext.familyId, 'pending');
+      const invitationsData = await listInvitations(userContext.familyId, 'all');
       setInvitations(invitationsData);
     } catch (err) {
       throw err; // Let the form handle the error
@@ -264,7 +294,7 @@ export default function SettingsPage() {
       showSnackbar({ variant: 'success', text: 'Invitation revoked' });
 
       // Refresh invitations
-      const invitationsData = await listInvitations(userContext.familyId, 'pending');
+      const invitationsData = await listInvitations(userContext.familyId, 'all');
       setInvitations(invitationsData);
     } catch (err) {
       showSnackbar({ variant: 'error', text: getErrorMessage(err) });
@@ -279,7 +309,7 @@ export default function SettingsPage() {
       showSnackbar({ variant: 'success', text: 'Invitation resent with new expiration date' });
 
       // Refresh invitations
-      const invitationsData = await listInvitations(userContext.familyId, 'pending');
+      const invitationsData = await listInvitations(userContext.familyId, 'all');
       setInvitations(invitationsData);
     } catch (err) {
       showSnackbar({ variant: 'error', text: getErrorMessage(err) });
@@ -352,7 +382,6 @@ export default function SettingsPage() {
     return null;
   }
 
-  const isAdmin = userContext.role === 'admin';
   const isLastAdmin = summary ? summary.admins === 1 && userContext.role === 'admin' : false;
 
   const headerAction = isAdmin
@@ -385,8 +414,12 @@ export default function SettingsPage() {
     { id: 'theme', label: 'App Theme' },
     { id: 'notifications', label: 'Notifications' },
     // { id: 'user-settings', label: 'User Settings' },
-    { id: 'stores', label: 'Manage Stores', badge: stores.length },
-    { id: 'locations', label: 'Manage Storage Locations', badge: locations.length },
+    ...(isAdmin
+      ? [
+          { id: 'stores', label: 'Manage Stores', badge: stores.length },
+          { id: 'locations', label: 'Manage Storage Locations', badge: locations.length },
+        ]
+      : []),
   ];
 
   return (
@@ -463,7 +496,7 @@ export default function SettingsPage() {
                 {isAdmin && invitations.length > 0 && (
                   <>
                     <Text variant="h4" className="mb-4 mt-8 text-text-default">
-                      Pending Invitations
+                      Invitations
                     </Text>
                     <InvitationList
                       invitations={invitations}

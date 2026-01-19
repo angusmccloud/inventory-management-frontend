@@ -11,6 +11,13 @@ import {
   ListInvitationsResponse,
   AcceptInvitationResponse,
 } from '@/types/entities';
+import type {
+  PendingInvitationList,
+  AcceptPendingInviteRequest,
+  DeclinePendingInviteRequest,
+  DeclineAllPendingInvitesRequest,
+  PendingInviteDecisionResponse,
+} from '@/types/invitations';
 
 /**
  * Create a new invitation
@@ -27,7 +34,7 @@ export async function createInvitation(
  */
 export async function listInvitations(
   familyId: string,
-  status: 'pending' | 'accepted' | 'expired' | 'revoked' | 'all' = 'pending'
+  status: 'pending' | 'accepted' | 'expired' | 'revoked' | 'declined' | 'all' = 'pending'
 ): Promise<Invitation[]> {
   const response = await apiClient.get<ListInvitationsResponse>(
     `/families/${familyId}/invitations?status=${status}`
@@ -73,4 +80,46 @@ export async function resendInvitation(
     `/families/${familyId}/invitations/${invitationId}/resend`,
     {}
   );
+}
+
+/**
+ * Fetch pending invitations for the authenticated user
+ */
+export async function getPendingInvitations(): Promise<PendingInvitationList> {
+  return apiClient.get<PendingInvitationList>('/pending-invitations');
+}
+
+/**
+ * Accept a pending invitation detected during signup
+ */
+export async function acceptPendingInvitation(
+  inviteId: string,
+  request: AcceptPendingInviteRequest
+): Promise<PendingInviteDecisionResponse> {
+  return apiClient.post<PendingInviteDecisionResponse>(
+    `/pending-invitations/${inviteId}/accept`,
+    request
+  );
+}
+
+/**
+ * Decline a specific pending invitation
+ */
+export async function declinePendingInvitation(
+  inviteId: string,
+  request: DeclinePendingInviteRequest
+): Promise<PendingInviteDecisionResponse> {
+  return apiClient.post<PendingInviteDecisionResponse>(
+    `/pending-invitations/${inviteId}/decline`,
+    request
+  );
+}
+
+/**
+ * Decline all pending invitations (create own family path)
+ */
+export async function declineAllPendingInvitations(
+  request: DeclineAllPendingInvitesRequest
+): Promise<PendingInviteDecisionResponse> {
+  return apiClient.post<PendingInviteDecisionResponse>('/pending-invitations/decline-all', request);
 }

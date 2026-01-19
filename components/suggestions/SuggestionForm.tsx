@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button, Input, Select, Card, Text } from '@/components/common';
 import { InventoryItem, SuggestionType } from '@/types/entities';
 import { listInventoryItems } from '@/lib/api/inventory';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 interface SuggestionFormProps {
   familyId: string;
@@ -45,6 +46,7 @@ export function SuggestionForm({
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [isLoadingItems, setIsLoadingItems] = useState(false);
   const [error, setError] = useState('');
+  const { showSnackbar } = useSnackbar();
 
   // Set prefilled item ID when provided
   useEffect(() => {
@@ -111,6 +113,11 @@ export function SuggestionForm({
           notes: notes || undefined,
         });
       }
+      showSnackbar({
+        variant: 'info',
+        text: 'Suggestion submitted successfully!',
+      });
+      onCancel?.();
     } catch (err) {
       setError((err as Error).message || 'Failed to create suggestion');
     }

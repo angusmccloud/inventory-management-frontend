@@ -46,8 +46,7 @@ type ModalState =
 type DialogState =
   | { type: 'none' }
   | { type: 'confirm'; item: ShoppingListItem; action: 'remove' }
-  | { type: 'error'; message: string }
-  | { type: 'success'; message: string };
+  | { type: 'error'; message: string };
 
 export default function ShoppingList({ familyId }: ShoppingListProps) {
   const { showSnackbar } = useSnackbar();
@@ -263,11 +262,6 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
   const handleCreateSuggestion = async (data: SuggestionFormData) => {
     try {
       await createSuggestion(familyId, data);
-      setModalState({ type: 'none' });
-      setDialogState({
-        type: 'success',
-        message: 'Suggestion submitted successfully! An admin will review it soon.',
-      });
     } catch (err) {
       throw err; // Let form handle the error
     }
@@ -496,18 +490,6 @@ export default function ShoppingList({ familyId }: ShoppingListProps) {
         />
       )}
 
-      {dialogState.type === 'success' && (
-        <Dialog
-          isOpen={true}
-          type="secondary"
-          title="Success"
-          message={dialogState.message}
-          confirmLabel="OK"
-          cancelLabel=""
-          onConfirm={() => setDialogState({ type: 'none' })}
-          onCancel={() => setDialogState({ type: 'none' })}
-        />
-      )}
     </div>
   );
 }

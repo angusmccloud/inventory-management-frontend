@@ -45,6 +45,7 @@ export function InvitationList({ invitations, onRevoke, onResend }: InvitationLi
     accepted: 'success',
     expired: 'default',
     revoked: 'error',
+    declined: 'warning',
   };
 
   const roleVariants: Record<string, BadgeVariant> = {
@@ -94,6 +95,23 @@ export function InvitationList({ invitations, onRevoke, onResend }: InvitationLi
                   Invited by {invitation.invitedByName || 'Unknown'} on{' '}
                   {new Date(invitation.createdAt).toLocaleDateString()}
                 </Text>
+
+                {invitation.status === 'declined' && (
+                  <Text variant="caption" color="secondary" className="mt-1">
+                    {invitation.decisionSource === 'pending-detection'
+                      ? 'Declined via pending flow'
+                      : 'Declined'}{' '}
+                    {invitation.consumedAt
+                      ? `on ${new Date(invitation.consumedAt).toLocaleDateString()}`
+                      : ''}
+                  </Text>
+                )}
+
+                {invitation.status === 'declined' && invitation.declineReason && (
+                  <Text variant="caption" color="secondary" className="mt-1">
+                    Reason: {invitation.declineReason}
+                  </Text>
+                )}
               </div>
 
               <div className="ml-4 flex gap-2">

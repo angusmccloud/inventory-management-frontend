@@ -17,6 +17,7 @@ import {
 import { listNotifications } from '@/lib/api/notifications';
 import { listInventoryItems } from '@/lib/api/inventory';
 import { listUserFamilies } from '@/lib/api/families';
+import { listSuggestions } from '@/lib/api/suggestions';
 import { getNavigationItems, isNavItemActive } from '@/lib/navigation';
 import { UserContext } from '@/types/entities';
 import { PageLoading } from '@/components/common';
@@ -29,6 +30,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeNotificationCount, setActiveNotificationCount] = useState<number>(0);
+  const [activeSuggestionCount, setActiveSuggestionCount] = useState<number>(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // Get navigation items filtered by user role
@@ -56,6 +58,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       // Silently fail - notification count is not critical
       console.error('Failed to fetch notification count:', error);
       setActiveNotificationCount(0);
+    }
+  }, []);
+
+  // Fetch active suggestion count by comparing suggestions to active inventory items
+  const fetchSuggestionCount = useCallback(async (familyId: string) => {
+    try {
+      // Fetch pending suggestions and active inventory items in parallel
+      const [suggestionsData, inventoryData] = await Promise.all([
+        listSuggestions(familyId, { status: 'pending' }),
+        listInventoryItems(familyId),
+      ]);
+
+      const activeItemIds = new Set((inventoryData.items || []).map((i) => i.itemId));
+
+      const activeCount = (suggestionsData.suggestions || []).filter((s) => {
+        if (s.itemId) {
+          return activeItemIds.has(s.itemId);
+        }
+        return true;
+      }).length;
+
+      setActiveSuggestionCount(activeCount);
+    } catch (error) {
+      // Silently fail - suggestion count is not critical
+      console.error('Failed to fetch suggestion count:', error);
+      setActiveSuggestionCount(0);
     }
   }, []);
 
@@ -88,6 +116,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           // Fetch notification count with the updated family ID
           if (updatedContext.familyId) {
             fetchNotificationCount(updatedContext.familyId);
+            fetchSuggestionCount(updatedContext.familyId);
           }
         }
       } catch (error) {
@@ -98,7 +127,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
 
     loadUserRole();
-  }, [router, fetchNotificationCount]);
+  }, [router, fetchNotificationCount, fetchSuggestionCount]);
 
   if (loading) {
     return <PageLoading message="Loading..." />;
@@ -119,7 +148,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="hidden md:flex md:space-x-2 lg:space-x-4">
               {navItems.map((item) => {
                 const isActive = isNavItemActive(item, pathname);
-                const showBadge = item.badge === 'notifications' && activeNotificationCount > 0;
+                const badgeCount =
+                  item.badge === 'notifications'
+                    ? activeNotificationCount
+                    : item.badge === 'suggestions'
+                      ? activeSuggestionCount
+                      : 0;
+                const showBadge = badgeCount > 0;
+                const badgeTestId =
+                  item.badge === 'notifications'
+                    ? 'notification-badge'
+                    : item.badge === 'suggestions'
+                      ? 'suggestion-badge'
+                      : undefined;
 
                 return (
                   <a
@@ -135,9 +176,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {showBadge && (
                       <span
                         className="ml-2 inline-flex min-w-[20px] items-center justify-center rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-warning-contrast"
-                        data-testid="notification-badge"
+                        data-testid={badgeTestId}
                       >
-                        {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                        {badgeCount > 9 ? '9+' : badgeCount}
                       </span>
                     )}
                   </a>
@@ -211,7 +252,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="space-y-1">
                 {navItems.map((item) => {
                   const isActive = isNavItemActive(item, pathname);
-                  const showBadge = item.badge === 'notifications' && activeNotificationCount > 0;
+                  const badgeCount =
+                    item.badge === 'notifications'
+                      ? activeNotificationCount
+                      : item.badge === 'suggestions'
+                        ? activeSuggestionCount
+                        : 0;
+                  const showBadge = badgeCount > 0;
 
                   return (
                     <a
@@ -226,7 +273,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       <span>{item.label}</span>
                       {showBadge && (
                         <span className="ml-2 inline-flex items-center rounded-full bg-error px-2 py-0.5 text-xs font-bold text-error-contrast">
-                          {activeNotificationCount > 9 ? '9+' : activeNotificationCount}
+                          {badgeCount > 9 ? '9+' : badgeCount}
                         </span>
                       )}
                     </a>

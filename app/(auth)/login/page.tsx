@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { login, register, confirmEmail, forgotPassword, confirmForgotPassword } from '@/lib/auth';
 import { Button, Alert, PageLoading, Input } from '@/components/common';
 import { Text } from '@/components/common/Text/Text';
+import { getPendingInvitations } from '@/lib/api/invitations';
 type ViewMode = 'login' | 'register' | 'verify' | 'forgot-password' | 'reset-password';
 
 function LoginForm() {
@@ -117,7 +118,16 @@ function LoginForm() {
         const response = await login(email, password);
 
         if (response.success) {
-          router.push('/dashboard');
+          try {
+            const pendingInvites = await getPendingInvitations();
+            if (pendingInvites.invites.length > 0) {
+              router.push('/register/pending-invite');
+            } else {
+              router.push('/dashboard');
+            }
+          } catch {
+            router.push('/dashboard');
+          }
         } else if (response.requiresVerification) {
           setError('Please verify your email first. Check your inbox for a verification code.');
           setViewMode('verify');

@@ -59,10 +59,12 @@ export default function InventoryPage() {
   const [locationMap, setLocationMap] = useState<Map<string, StorageLocation>>(new Map());
   const [storeMap, setStoreMap] = useState<Map<string, Store>>(new Map());
 
-  const tabs: Tab[] = [
-    { id: 'inventory', label: 'Inventory' },
-    { id: 'tracking-lists', label: 'Tracking Lists' },
-  ];
+  const tabs: Tab[] = isAdmin
+    ? [
+        { id: 'inventory', label: 'Inventory' },
+        { id: 'tracking-lists', label: 'Tracking Lists' },
+      ]
+    : [{ id: 'inventory', label: 'Inventory' }];
 
   // Helper function to enrich an item with location and store names
   const enrichItem = (item: InventoryItem): InventoryItem => ({
@@ -128,10 +130,17 @@ export default function InventoryPage() {
 
     // Persist tab selection via `tab` query param (e.g. ?tab=tracking-lists)
     const tab = searchParams.get('tab');
-    if (tab && ['inventory', 'tracking-lists'].includes(tab)) {
+    const allowedTabs = isAdmin ? ['inventory', 'tracking-lists'] : ['inventory'];
+    if (tab && allowedTabs.includes(tab)) {
       setActiveTab(tab);
     }
-  }, [searchParams]);
+  }, [searchParams, isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin && activeTab === 'tracking-lists') {
+      setActiveTab('inventory');
+    }
+  }, [activeTab, isAdmin]);
 
   const loadInventory = async (): Promise<void> => {
     if (!familyId) return;
@@ -320,7 +329,9 @@ export default function InventoryPage() {
       )}
 
       {/* Tab Navigation */}
-      <TabNavigation tabs={tabs} activeTab={activeTab} onChange={handleTabChange} />
+      {tabs.length > 1 && (
+        <TabNavigation tabs={tabs} activeTab={activeTab} onChange={handleTabChange} />
+      )}
 
       {/* Inventory Tab */}
       {activeTab === 'inventory' && (
@@ -337,7 +348,7 @@ export default function InventoryPage() {
       )}
 
       {/* Tracking Lists Tab */}
-      {activeTab === 'tracking-lists' && (
+      {isAdmin && activeTab === 'tracking-lists' && (
         <DashboardManager
           ref={dashboardManagerRef}
           familyId={familyId}

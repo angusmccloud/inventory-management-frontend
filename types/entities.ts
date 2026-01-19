@@ -79,7 +79,7 @@ export interface Member {
 /**
  * Invitation Status
  */
-export type InvitationStatus = 'pending' | 'accepted' | 'expired' | 'revoked';
+export type InvitationStatus = 'pending' | 'accepted' | 'expired' | 'revoked' | 'declined';
 
 /**
  * Invitation Entity
@@ -97,6 +97,10 @@ export interface Invitation {
   acceptedAt: string | null;
   revokedBy: string | null;
   revokedAt: string | null;
+  declineReason?: string | null;
+  decisionSource?: 'link' | 'pending-detection';
+  lastDecisionId?: string | null;
+  consumedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }

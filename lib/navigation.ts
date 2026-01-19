@@ -10,7 +10,7 @@ export interface NavItem {
   href: string;
   icon?: string;
   requiresAdmin?: boolean;
-  badge?: 'notifications';
+  badge?: 'notifications' | 'suggestions';
   matchPaths?: string[]; // Additional paths that should show this item as active
 }
 
@@ -39,6 +39,7 @@ export const navigationItems: NavItem[] = [
     label: 'Suggestions',
     href: '/suggestions',
     matchPaths: ['/suggestions/suggest'],
+    badge: 'suggestions',
   },
   {
     id: 'notifications',
