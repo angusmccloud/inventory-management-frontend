@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Card, Badge, Button, Text } from '@/components/common';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 import { Suggestion } from '@/types/entities';
 
 interface SuggestionCardProps {
@@ -16,14 +17,23 @@ export function SuggestionCard({ suggestion, isAdmin, onApprove, onReject }: Sug
   const [isRejecting, setIsRejecting] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectionNotes, setRejectionNotes] = useState('');
+  const { showSnackbar } = useSnackbar();
 
   const handleApprove = async () => {
     if (!onApprove) return;
     try {
       setIsApproving(true);
       await onApprove(suggestion.suggestionId);
+      showSnackbar({
+        variant: 'success',
+        text: 'Suggestion approved.',
+      });
     } catch (error) {
       console.error('Failed to approve suggestion:', error);
+      showSnackbar({
+        variant: 'error',
+        text: 'Failed to approve suggestion. Please try again.',
+      });
     } finally {
       setIsApproving(false);
     }
@@ -36,8 +46,16 @@ export function SuggestionCard({ suggestion, isAdmin, onApprove, onReject }: Sug
       await onReject(suggestion.suggestionId, rejectionNotes || undefined);
       setShowRejectModal(false);
       setRejectionNotes('');
+      showSnackbar({
+        variant: 'success',
+        text: 'Suggestion rejected.',
+      });
     } catch (error) {
       console.error('Failed to reject suggestion:', error);
+      showSnackbar({
+        variant: 'error',
+        text: 'Failed to reject suggestion. Please try again.',
+      });
     } finally {
       setIsRejecting(false);
     }

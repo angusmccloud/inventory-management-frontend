@@ -14,7 +14,7 @@ import { useSnackbar } from '@/contexts/SnackbarContext';
 
 const NOTIFICATION_TYPES = [
   { key: 'LOW_STOCK', label: 'Low Stock' },
-  { key: 'SUGGESTION', label: 'Suggestion' },
+  { key: 'SUGGESTION', label: 'Suggestion (Coming Soon)' },
 ];
 const CHANNELS = ['EMAIL', 'IN_APP'];
 const EMAIL_FREQUENCIES = [
