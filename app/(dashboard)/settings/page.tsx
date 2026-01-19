@@ -161,7 +161,7 @@ export default function SettingsPage() {
     setLoadingData(true);
     setError(null);
     try {
-          const [locationsData, storesData, membersData, invitationsData] = await Promise.all([
+      const [locationsData, storesData, membersData, invitationsData] = await Promise.all([
         listStorageLocations(userContext.familyId),
         listStores(userContext.familyId),
         listMembers(userContext.familyId, false),
@@ -169,6 +169,8 @@ export default function SettingsPage() {
       ]);
       setLocations(locationsData);
       setStores(storesData);
+      // Sort ascending by name
+      membersData.members.sort((a, b) => a.name.localeCompare(b.name));
       setMembers(membersData.members);
       setSummary(membersData.summary);
       setInvitations(invitationsData);
